@@ -17,6 +17,7 @@
 #include "Deer/Scene/Enviroment.h"
 #include "Deer/Scene/Components.h"
 #include "Deer/Scene/Entity.h"
+#include "Deer/Scene/Scene.h"
 
 #include "DeerStudio/Editor/EnviromentTreePannel.h"
 #include "DeerStudio/Editor/PropertiesPannel.h"
@@ -29,11 +30,13 @@ namespace Deer {
 		void onAttach() override;
 		void onUpdate(Timestep delta) override;
 
+		void loadScene();
+		void unloadScene();
+
 		void onEvent(Event& e) override;
 
 		void onImGUI() override;
 		void drawMenuBar();
-		void drawWindows();
 	private:
 		unsigned int vertexArray;
 		Ref<VertexBuffer> m_vertexBuffer;
@@ -53,9 +56,10 @@ namespace Deer {
 		glm::vec2 m_viewportPannelSize;
 		float fov = 45;
 	private:
-		Ref<Environment> m_enviroment;
+		Ref<Scene> m_scene;
 		Ref<PropertiesPannel> m_propertiesPannel;
 		Ref<ViewportPannel> m_viewportPannel;
+
 		std::vector<Ref<EditorPannel>> pannels;
 		VirtualCamera m_virtualCamera;
 

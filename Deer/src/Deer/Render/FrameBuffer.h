@@ -1,5 +1,6 @@
 #pragma once
 #include "Deer/Core/Core.h"
+#include "Deer/Core/Log.h"
 
 namespace Deer {
 	struct FrameBufferSpecification {
@@ -14,7 +15,7 @@ namespace Deer {
 
 	class FrameBuffer {
 	public:
-		virtual ~FrameBuffer() = default;
+		virtual ~FrameBuffer() { DEER_CORE_TRACE("Destroying frame buffer"); }
 		virtual const FrameBufferSpecification& getSpecification() = 0;
 
 		virtual void bind() = 0;

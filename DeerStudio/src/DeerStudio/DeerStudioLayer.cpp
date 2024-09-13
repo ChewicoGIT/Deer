@@ -19,19 +19,9 @@ namespace Deer {
         //ImGui::PushFont(font1);
         ImGui_ImplOpenGL3_CreateFontsTexture();
 
-        m_enviroment = Ref<Environment>(new Environment());
-        m_propertiesPannel = Ref<PropertiesPannel>(new PropertiesPannel());
-        auto m_enviromentTreePannel = Ref<EnviromentTreePannel>(new EnviromentTreePannel(m_enviroment, "World tree"));
-        
-        m_enviromentTreePannel->setActiveEntity(&m_activeEntity);
-
         m_vertexArray = VertexArray::create();
         m_camera = Scope<Camera>(new Camera(16 / 9, 50, 0.05f, 100));
         m_texture = Texture2D::create("assets/test_texture.png");
-
-        FrameBufferSpecification bufferSpecs(Application::s_application->m_window->getWitdth(),
-            Application::s_application->m_window->getHeight());
-        DEER_CORE_INFO(Application::s_application->m_window->getHeight());
 
         float vertices[] = {
             -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
@@ -92,21 +82,7 @@ namespace Deer {
 		)";
 
         m_shader = Shader::create(vertexSource, fragmentSrc);
-        MeshRenderComponent& mrc = m_enviroment->createEntity("Square").addComponent<MeshRenderComponent>();
-        mrc.mesh = m_vertexArray;
-        mrc.shader = m_shader;
 
-        Entity camEntity = m_enviroment->createEntity("Camera");
-        camEntity.addComponent<CameraComponent>();
-        camEntity.getComponent<TransformComponent>().position = glm::vec3(0, 0, -3);
-
-        m_viewportPannel = Ref<ViewportPannel>(new ViewportPannel(m_enviroment, "Scene viewport"));
-
-        pannels.push_back(m_propertiesPannel);
-        pannels.push_back(m_enviromentTreePannel);
-        pannels.push_back(m_viewportPannel);
-
-        m_enviroment->setMainCamera(camEntity);
     }
 
     void DeerStudioLayer::onUpdate(Timestep delta) {
@@ -127,13 +103,41 @@ namespace Deer {
         m_camera->recalculateMatrices();
     }
 
+    void DeerStudioLayer::loadScene() {
+
+        m_scene = Ref<Scene>(new Scene());
+        m_propertiesPannel = Ref<PropertiesPannel>(new PropertiesPannel());
+        m_viewportPannel = Ref<ViewportPannel>(new ViewportPannel(m_scene->getMainEnviroment(), "Scene viewport"));
+
+        auto m_enviromentTreePannel = Ref<EnviromentTreePannel>(new EnviromentTreePannel(m_scene->getMainEnviroment(), "World tree"));
+
+        m_enviromentTreePannel->setActiveEntity(&m_activeEntity);
+
+        pannels.push_back(m_propertiesPannel);
+        pannels.push_back(m_enviromentTreePannel);
+        pannels.push_back(m_viewportPannel);
+
+        MeshRenderComponent& mrc = m_scene->getMainEnviroment()->createEntity("Square").addComponent<MeshRenderComponent>();
+        mrc.mesh = m_vertexArray;
+        mrc.shader = m_shader;
+    }
+
+    void DeerStudioLayer::unloadScene() {
+        pannels.clear();
+
+        m_scene.reset();
+        m_propertiesPannel.reset();
+        m_viewportPannel.reset();
+    }
+
     void DeerStudioLayer::onEvent(Event& e) {
 
     }
 
     void DeerStudioLayer::onImGUI() {
 
-        m_viewportPannel->m_entity = m_activeEntity;
+        if (m_viewportPannel)
+            m_viewportPannel->m_entity = m_activeEntity;
 
         static bool opt_fullscreen = true;
         static bool opt_padding = false;
@@ -167,18 +171,28 @@ namespace Deer {
             ImGui::EndMenuBar();
         }
 
-        m_propertiesPannel->setEntity(m_activeEntity);
+        if (m_propertiesPannel)
+            m_propertiesPannel->setEntity(m_activeEntity);
+
         for (auto pannel : pannels) {
             pannel->onImGui();
         }
 
-        drawWindows();
         ImGui::End();
 	}
 
     void DeerStudioLayer::drawMenuBar() {
 
         if (ImGui::BeginMenu("Project")) {
+            if (ImGui::MenuItem("LoadScene")) {
+                loadScene();
+            }
+            if (ImGui::MenuItem("UnloadScene")) {
+                unloadScene();
+            }
+            if (ImGui::MenuItem("Test")) {
+                
+            }
             //ImGui::MenuItem("New project");
             //ImGui::MenuItem("Open project");
 
@@ -194,25 +208,5 @@ namespace Deer {
             ImGui::EndMenu();
         }
 
-    }
-    void DeerStudioLayer::drawWindows() {
-
-        ImGui::Begin("Debug pos");
-        ImGui::DragFloat3("camPos", &pos.x, 0.01f);
-        ImGui::DragFloat3("camRotation", &rotation.x, 0.01f);
-        ImGui::Spacing();
-        ImGui::DragFloat("fov", &fov, 0.07f);
-        ImGui::Spacing();
-        ImGui::DragFloat3("objectPos", &m_transform.position.x, 0.01f);
-        ImGui::DragFloat3("objectRotation", &objectRotation.x, 0.01f);
-        ImGui::DragFloat3("objectScale", &m_transform.scale.x, 0.01f);
-
-        m_transform.setEulerAngles(objectRotation);
-
-        m_camera->setFov(fov);
-        m_camera->setPosition(pos);
-        m_camera->setRotation(glm::quat(rotation));
-        m_camera->recalculateMatrices();
-        ImGui::End();
     }
 }
