@@ -47,6 +47,7 @@ namespace Deer {
 			meshRender.shader->bind();
 			meshRender.shader->uploadUniformMat4("u_viewMatrix", cameraProjectionMatrix);
 			meshRender.shader->uploadUniformMat4("u_worldMatrix", matrix);
+			meshRender.shader->uploadUniformMat4("u_objectID", (int)entityId);
 
 			meshRender.shader->bind();
 			meshRender.mesh->bind();
@@ -77,6 +78,7 @@ namespace Deer {
 			meshRender.shader->bind();
 			meshRender.shader->uploadUniformMat4("u_viewMatrix", cameraProjectionMatrix);
 			meshRender.shader->uploadUniformMat4("u_worldMatrix", matrix);
+			meshRender.shader->uploadUniformInt("u_objectID", (int)entityId);
 
 			meshRender.shader->bind();
 			meshRender.mesh->bind();

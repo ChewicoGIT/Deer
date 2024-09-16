@@ -4,6 +4,7 @@
 #include "Deer/Core/Window.h"
 #include "Deer/Core/Log.h"
 #include "DeerStudio/Editor/ViewportPannel.h"
+#include "DeerStudio/Editor/ActiveEntity.h"
 #include "backends/imgui_impl_opengl3.h"
 #include "Style.h"
 
@@ -15,7 +16,7 @@ namespace Deer {
         io.Fonts->Clear(); 
         setNatureStyle();
 
-        ImFont* font1 = io.Fonts->AddFontFromFileTTF("C:\\Chewico\\Projects\\Deer\\DeerStudio\\editor\\fonts\\OpenSans-VariableFont_wdth,wght.ttf", 20.0f);
+        ImFont* font1 = io.Fonts->AddFontFromFileTTF("editor\\fonts\\OpenSans-VariableFont_wdth,wght.ttf", 20.0f);
         //ImGui::PushFont(font1);
         ImGui_ImplOpenGL3_CreateFontsTexture();
 
@@ -69,15 +70,18 @@ namespace Deer {
         std::string fragmentSrc = R"(
 			#version 410 core	
 			
-            out vec4 fragColor;
+            layout(location = 0) out vec4 fragColor;
+            layout(location = 1) out int objectID;
+
             in vec2 textCoord;
 
             uniform sampler2D u_texture;
+            uniform int u_objectID;
 
 			void main()
 			{
 				fragColor = texture(u_texture, textCoord);
-                //fragColor = vec4(textCoord, 0, 1);
+                objectID = u_objectID;
 			}
 		)";
 
@@ -93,7 +97,6 @@ namespace Deer {
         m_texture->bind(0);
         m_shader->uploadUniformInt("u_texture", 0);
 
-
         int windowWidth = Application::s_application->m_window->getWitdth();
         int windowHeight = Application::s_application->m_window->getHeight();
 
@@ -106,13 +109,13 @@ namespace Deer {
     void DeerStudioLayer::loadScene() {
 
         m_scene = Ref<Scene>(new Scene());
-        m_propertiesPannel = Ref<PropertiesPannel>(new PropertiesPannel());
-        m_viewportPannel = Ref<ViewportPannel>(new ViewportPannel(m_scene->getMainEnviroment(), "Scene viewport"));
+        Ref<ActiveEntity> activeEntity = Ref<ActiveEntity>(new ActiveEntity());
 
-        auto m_enviromentTreePannel = Ref<EnviromentTreePannel>(new EnviromentTreePannel(m_scene->getMainEnviroment(), "World tree"));
+        auto m_propertiesPannel = Ref<PropertiesPannel>(new PropertiesPannel(activeEntity));
+        auto m_viewportPannel = Ref<ViewportPannel>(new ViewportPannel(m_scene->getMainEnviroment(), "Scene viewport", activeEntity));
+        auto m_enviromentTreePannel = Ref<EnviromentTreePannel>(new EnviromentTreePannel(m_scene->getMainEnviroment(), "World tree", activeEntity));
 
-        m_enviromentTreePannel->setActiveEntity(&m_activeEntity);
-
+        pannels.clear();
         pannels.push_back(m_propertiesPannel);
         pannels.push_back(m_enviromentTreePannel);
         pannels.push_back(m_viewportPannel);
@@ -123,21 +126,17 @@ namespace Deer {
     }
 
     void DeerStudioLayer::unloadScene() {
-        pannels.clear();
-
         m_scene.reset();
-        m_propertiesPannel.reset();
-        m_viewportPannel.reset();
+        m_activeEntity.reset();
+        pannels.clear();
     }
 
     void DeerStudioLayer::onEvent(Event& e) {
-
+        for (auto& pannel : pannels)
+            pannel->onEvent(e);
     }
 
     void DeerStudioLayer::onImGUI() {
-
-        if (m_viewportPannel)
-            m_viewportPannel->m_entity = m_activeEntity;
 
         static bool opt_fullscreen = true;
         static bool opt_padding = false;
@@ -170,9 +169,6 @@ namespace Deer {
             drawMenuBar();
             ImGui::EndMenuBar();
         }
-
-        if (m_propertiesPannel)
-            m_propertiesPannel->setEntity(m_activeEntity);
 
         for (auto pannel : pannels) {
             pannel->onImGui();

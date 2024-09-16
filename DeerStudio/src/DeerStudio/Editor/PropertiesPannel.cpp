@@ -1,8 +1,9 @@
 #include "PropertiesPannel.h"
+#include "Deer/Core/Input.h"
+#include "Deer/Core/KeyCodes.h"
 #include "imgui.h"
 
 namespace Deer {
-
 	bool* getIsEditingState(ImGuiID id)
 	{
 		ImGuiStorage* storage = ImGui::GetStateStorage();
@@ -21,13 +22,15 @@ namespace Deer {
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(20, 20));
 		ImGui::Begin("Properties");
 
-		if (!m_entity.isValid()) {
+		if (m_activeEntity->count() == 0) {
 			ImGui::End();
 			ImGui::PopStyleVar();
 			return;
 		}
 
-		auto& tag = m_entity.getComponent<TagComponent>();
+		Entity activeEntity = m_activeEntity->getEntity(0);
+
+		auto& tag = activeEntity.getComponent<TagComponent>();
 		if (tag.tag == "")
 			ImGui::Text("-");
 		else
@@ -40,7 +43,7 @@ namespace Deer {
 		if (collapsingComponentHeader<TransformComponent>("Transform Component", false))
 		{
 
-			auto& transform = m_entity.getComponent<TransformComponent>();
+			auto& transform = activeEntity.getComponent<TransformComponent>();
 			ImGui::Dummy(ImVec2(0.0f, 10.0f));
 			ImGui::Indent();
 
@@ -64,7 +67,7 @@ namespace Deer {
 			ImGui::Dummy(ImVec2(0.0f, 10.0f));
 			ImGui::Indent();
 
-			auto& mesh = m_entity.getComponent<MeshRenderComponent>();
+			auto& mesh = activeEntity.getComponent<MeshRenderComponent>();
 
 			if (mesh.mesh == nullptr)
 				ImGui::Text("Current mesh: null");
@@ -80,7 +83,7 @@ namespace Deer {
 			ImGui::Dummy(ImVec2(0.0f, 10.0f));
 			ImGui::Indent();
 
-			auto& camera = m_entity.getComponent<CameraComponent>();
+			auto& camera = activeEntity.getComponent<CameraComponent>();
 
 			float fov = glm::degrees(camera.fov);
 			ImGui::SliderFloat("Fov", &fov, 1, 180);
@@ -203,11 +206,11 @@ namespace Deer {
 	template<typename T>
 	inline bool PropertiesPannel::collapsingComponentHeader(const std::string& componentName, bool canDelete)
 	{
-		if (!m_entity.hasComponent<T>())
+		if (!m_activeEntity->shareComponent<T>())
 			return false;
 
 		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_CollapsingHeader | ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnArrow;
-		bool collapsingHeader = m_entity.hasComponent<T>() && ImGui::TreeNodeEx(componentName.c_str(), flags);
+		bool collapsingHeader = m_activeEntity->shareComponent<T>() && ImGui::TreeNodeEx(componentName.c_str(), flags);
 
 		if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
 			ImGui::OpenPopup(componentName.c_str());
@@ -217,14 +220,18 @@ namespace Deer {
 		if (ImGui::BeginPopup(componentName.c_str())) {
 
 			if (ImGui::Selectable("reset")) {
-				m_entity.getComponent<T>() = T();
+				for (auto& entity : *m_activeEntity)
+					entity.getComponent<T>() = T();
+
 				ImGui::CloseCurrentPopup();
 			}
 
 			if (canDelete && ImGui::Selectable("delete")) {
-				m_entity.removeComponent<T>();
+				for (auto entity : *m_activeEntity)
+					entity.removeComponent<T>();
+
 				ImGui::CloseCurrentPopup();
-				// Force false to avoid not found errors
+
 				ImGui::EndPopup();
 				ImGui::PopStyleVar();
 				return false;
@@ -240,9 +247,14 @@ namespace Deer {
 	template<typename T>
 	void PropertiesPannel::addComponentButton(const std::string& componentName)
 	{
-		ImGuiSelectableFlags selectableFlag = (m_entity.hasComponent<T>()) ? ImGuiSelectableFlags_Disabled : ImGuiSelectableFlags_None;
+		ImGuiSelectableFlags selectableFlag = (m_activeEntity->shareComponent<T>()) ? ImGuiSelectableFlags_Disabled : ImGuiSelectableFlags_None;
 		if (ImGui::Selectable(componentName.c_str(), false, selectableFlag)) {
-			m_entity.addComponent<T>();
+			
+			for (auto& entity : *m_activeEntity) {
+				if (!entity.hasComponent<T>())
+					entity.addComponent<T>();
+			}
+
 			ImGui::CloseCurrentPopup();
 		}
 	}

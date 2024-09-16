@@ -32,9 +32,11 @@ namespace Deer {
 
 		virtual void clear() = 0;
 		virtual void resize(unsigned int width, unsigned int height) = 0;
+	
+		virtual unsigned int getTextureBufferID(int id = 0) = 0;
+		virtual void clearBuffer(unsigned int bufferId, void* data) = 0;
 
-		virtual unsigned int getTextureBufferID(int id) = 0;
-		virtual void clearBuffer()
+		virtual int getTextureBufferPixel(int id, unsigned int x, unsigned int y) = 0;
 
 		static Ref<FrameBuffer> create(const FrameBufferSpecification& spec);
 	};
