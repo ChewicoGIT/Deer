@@ -8,6 +8,8 @@
 namespace Deer {
     Ref<FrameBuffer> FrameBuffer::create(const FrameBufferSpecification& spec)
     {
+        DEER_CORE_TRACE("Creating frame buffer");
+
         switch (Render::getAPI())
         {
         case RenderAPI::API::None: DEER_CORE_ERROR("There is no render api selected"); return nullptr;

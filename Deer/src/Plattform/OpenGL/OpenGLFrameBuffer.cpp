@@ -11,9 +11,11 @@ namespace Deer {
 	}
 
 	OpenGLFrameBuffer::~OpenGLFrameBuffer() {
-		glDeleteFramebuffers(1, &m_frameBuffer);
-		glDeleteTextures(1, &m_colorAttachment);
-		glDeleteTextures(1, &m_depthAttachment);
+		if (m_frameBuffer != 0) {
+			glDeleteFramebuffers(1, &m_frameBuffer);
+			glDeleteTextures(1, &m_colorAttachment);
+			glDeleteRenderbuffers(1, &m_depthAttachment);
+		}
 	}
 
 	void OpenGLFrameBuffer::bind() {
@@ -44,7 +46,7 @@ namespace Deer {
 
 	void OpenGLFrameBuffer::invalidate() {
 
-		if (m_frameBuffer != 1000) {
+		if (m_frameBuffer != 0) {
 			glDeleteFramebuffers(1, &m_frameBuffer);
 			glDeleteTextures(1, &m_colorAttachment);
 			glDeleteRenderbuffers(1, &m_depthAttachment);

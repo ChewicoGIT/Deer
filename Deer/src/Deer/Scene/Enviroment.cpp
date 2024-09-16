@@ -7,18 +7,19 @@
 
 namespace Deer {
 	Environment::Environment(const std::string& rootName) {
+		DEER_CORE_TRACE("Creating enviroment with root : {0}", rootName.c_str());
 		m_rootEntity = new Entity(m_registry.create(), this);
+
 		m_rootEntity->addComponent<TagComponent>(rootName.c_str());
 		m_rootEntity->addComponent<RelationshipComponent>();
 		m_rootEntity->addComponent<TransformComponent>();
-
 		m_rootEntity->setRoot(true);
-		//m_entities.insert({ (uid)m_rootEntity->getParentUID(), m_rootEntity });
+
 		m_camera = Scope<Entity>(new Entity());
 	}
 
 	Environment::~Environment() {
-
+		DEER_CORE_TRACE("Destroying enviroment with root : {0}", m_rootEntity->getComponent<TagComponent>().tag.c_str());
 	}
 
 	void Environment::render(Entity& camera) {
