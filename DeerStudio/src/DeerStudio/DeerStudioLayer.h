@@ -57,13 +57,11 @@ namespace Deer {
 		float fov = 45;
 	private:
 		Ref<Scene> m_scene;
-		Ref<PropertiesPannel> m_propertiesPannel;
-		Ref<ViewportPannel> m_viewportPannel;
-
+		Ref<ActiveEntity> m_activeEntity;
 		std::vector<Ref<EditorPannel>> pannels;
+
 		VirtualCamera m_virtualCamera;
 
-		Entity m_activeEntity;
 	};
 }
 

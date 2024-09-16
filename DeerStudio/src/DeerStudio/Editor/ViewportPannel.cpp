@@ -11,10 +11,10 @@
 #include <string>
 
 namespace Deer {
-	ViewportPannel::ViewportPannel(Ref<Environment>& environment, const std::string& windowName)
-		: m_environment(environment), m_windowName(windowName) {
+	ViewportPannel::ViewportPannel(Ref<Environment>& enviroment, const std::string& windowName, Ref<ActiveEntity>& activeEntity)
+		: m_environment(enviroment), m_windowName(windowName), m_activeEntity(activeEntity) {
 
-        m_frameBuffer = FrameBuffer::create(FrameBufferSpecification(100, 100, 1, false));
+        m_frameBuffer = FrameBuffer::create(FrameBufferSpecification(100, 100, { TextureBufferType::RGBA8, TextureBufferType::RED_INTEGER}, 1, false));
         m_virtualCamera.transform.position = glm::vec3(0, 0, -3);
 	}
 
@@ -25,6 +25,11 @@ namespace Deer {
         ImVec2 contentRegionMin = ImGui::GetWindowContentRegionMin();
         ImVec2 pos = ImGui::GetWindowPos();
         pos.y += contentRegionMin.y;
+
+        if (ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup | ImGuiHoveredFlags_AllowWhenBlockedByActiveItem)
+            && ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
+            ImGui::SetWindowFocus();
+        }
 
         m_isActive = ImGui::IsWindowFocused();
         ImVec2 windowSize = ImGui::GetContentRegionAvail();
@@ -37,12 +42,40 @@ namespace Deer {
 
         m_frameBuffer->bind();
         m_frameBuffer->clear();
+        int clearData = -1;
+        m_frameBuffer->clearBuffer(1, &clearData);
+
         m_environment->render(m_virtualCamera);
+
+        ImGui::Image((void*)m_frameBuffer->getTextureBufferID(0), windowSize);
+        bool isUsingDrawGizmo = drawGizmos(pos.x, pos.y, windowSize.x, windowSize.y);
+
+        if (!isUsingDrawGizmo && m_handleClick) {
+            int relativeX, relativeY;
+
+            ImVec2 mPos = ImGui::GetMousePos();
+            relativeX = mPos.x - pos.x;
+            relativeY = mPos.y - pos.y;
+
+            if (relativeX >= 0 && relativeX < windowSize.x &&
+                relativeY >= 0 && relativeY < windowSize.y) {
+
+                int id = m_frameBuffer->getTextureBufferPixel(1, relativeX, relativeY);
+
+                if (!(Input::isKeyPressed(DEER_KEY_LEFT_CONTROL) || Input::isKeyPressed(DEER_KEY_LEFT_ALT)))
+                    m_activeEntity->clear();
+
+                if (id >= 0) {
+                    Entity selectedEntity = m_environment->tryGetEntity((uid)id);
+                    m_activeEntity->addEntity(selectedEntity);
+                }
+
+            }
+        }
+
+        m_handleClick = false;
+
         m_frameBuffer->unbind();
-
-        ImGui::Image((void*)m_frameBuffer->getColorBufferID(), windowSize);
-        drawGizmos(pos.x, pos.y, windowSize.x, windowSize.y);
-
         ImGui::End();
         ImGui::PopStyleVar();
 	}
@@ -91,9 +124,32 @@ namespace Deer {
 
             m_lastMousePos = newMousePos;
             m_lastMousePressedButton1 = true;
-        }
-        else
+        } else
             m_lastMousePressedButton1 = false;
+
+    }
+
+    void ViewportPannel::onEvent(Event& e) {
+        EventDispatcher dispatcher(e);
+
+        dispatcher.dispatch<MouseButtonPressedEvent>(std::bind(&ViewportPannel::onClickEvent, this, std::placeholders::_1));
+        dispatcher.dispatch<KeyPressedEvent>(std::bind(&ViewportPannel::onKeyEvent, this, std::placeholders::_1));
+    }
+
+    bool ViewportPannel::onClickEvent(MouseButtonPressedEvent mouseEvent) {
+        if (!m_isActive)
+            return false;
+
+        if (mouseEvent.getMouseButton() == DEER_MOUSE_BUTTON_1)
+            m_handleClick = true;
+
+        return false;
+    }
+
+    bool ViewportPannel::onKeyEvent(KeyPressedEvent keyEvent)
+    {
+        if (!m_isActive)
+            return false;
 
         if (Input::isKeyPressed(DEER_KEY_T))
             m_transformMode = TransformMode::Translate;
@@ -102,21 +158,25 @@ namespace Deer {
         if (Input::isKeyPressed(DEER_KEY_Y))
             m_transformMode = TransformMode::Scale;
 
+        return false;
     }
 
-    void ViewportPannel::drawGizmos(int wPosX, int wPosY, int wSizeX, int wSizeY) {
+    bool ViewportPannel::drawGizmos(int wPosX, int wPosY, int wSizeX, int wSizeY) {
 
         ImGuizmo::SetOrthographic(false);
         ImGuizmo::SetDrawlist();
+
         glm::mat4 camMatrix = glm::inverse(m_virtualCamera.transform.getMatrix());//
         glm::mat4 projectionMatrix = m_virtualCamera.camera.getMatrix() * glm::scale(glm::mat4(1.0f), glm::vec3(1, 1, -1));
 
         ImGuizmo::SetRect(wPosX, wPosY, wSizeX, wSizeY);
-        
         ImGuizmo::DrawGrid(glm::value_ptr(camMatrix), glm::value_ptr(projectionMatrix), glm::value_ptr(glm::mat4(1.0f)), 4.f);
 
-        if (m_entity.isValid()) {
-            glm::mat4 entity_matrix = m_entity.getWorldMatrix();
+        if (m_activeEntity->count() != 0) {
+
+            Entity& currentEntity = m_activeEntity->getEntity(0);
+
+            glm::mat4 entity_matrix = currentEntity.getWorldMatrix();
 
             ImGuizmo::OPERATION operations;
 
@@ -124,16 +184,19 @@ namespace Deer {
                 ImGuizmo::MODE::LOCAL, glm::value_ptr(entity_matrix));
 
             if (ImGuizmo::IsUsing()) {
-                glm::mat4 parentMatrix = m_entity.getParent().getWorldMatrix();
+                glm::mat4 parentMatrix = currentEntity.getParent().getWorldMatrix();
                 glm::mat4 relativeMatrix = glm::inverse(parentMatrix) * entity_matrix;
 
                 glm::vec3 skew;
                 glm::vec4 perspective;
 
-                TransformComponent& t = m_entity.getComponent<TransformComponent>();
+                TransformComponent& t = currentEntity.getComponent<TransformComponent>();
                 glm::decompose(relativeMatrix, t.scale, t.rotation, t.position, skew, perspective);
 
+                return true;
             }
         }
+
+        return false;
     }
 }

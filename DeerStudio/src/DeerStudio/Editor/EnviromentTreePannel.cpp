@@ -3,13 +3,15 @@
 #include "Deer/Scene/Components.h"
 #include "Deer/Scene/Entity.h"
 #include "Deer/Core/Log.h"
+#include "Deer/Core/Input.h"
+#include "Deer/Core/KeyCodes.h"
 
 #include <string.h>
 
 #include "Plattform/OpenGL/imgui_impl_opengl3.h"
 
 namespace Deer {
-	EnviromentTreePannel::EnviromentTreePannel(const Ref<Environment>& enviroment, const std::string& name, Entity* activeEntity)
+	EnviromentTreePannel::EnviromentTreePannel(const Ref<Environment>& enviroment, const std::string& name, Ref<ActiveEntity>& activeEntity)
 		: m_enviroment(enviroment), m_treeName(name), m_activeEntity(activeEntity) { }
 
 	void EnviromentTreePannel::onImGui() {
@@ -35,13 +37,17 @@ namespace Deer {
 
 	}
 
-	void EnviromentTreePannel::setActiveEntity(Entity& entity) {
-		if (m_activeEntity != nullptr)
-			*m_activeEntity = entity;
-	}
+	void EnviromentTreePannel::clickEntity(Entity& entity) {
 
-	bool EnviromentTreePannel::isActiveEntity(Entity& entity) {
-		return false;
+		if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
+			if (!(Input::isKeyPressed(DEER_KEY_LEFT_CONTROL) || Input::isKeyPressed(DEER_KEY_LEFT_ALT)))
+				m_activeEntity->clear();
+
+			if (Input::isKeyPressed(DEER_KEY_LEFT_ALT))
+				m_activeEntity->removeEntity(entity);
+			else
+				m_activeEntity->addEntity(entity);
+		}
 	}
 
 	void EnviromentTreePannel::updateEntity(Entity& entity) {
@@ -57,26 +63,25 @@ namespace Deer {
 		//End of the tree
 		if (relationship.children.size() == 0) {
 			ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_SpanFullWidth;
-			if (entity == *m_activeEntity)
+			if (m_activeEntity->contains(entity))
 				flags |= ImGuiTreeNodeFlags_Selected;
 
 			ImGui::TreeNodeEx(entityID, flags, name.c_str());
 			if (!updateDragPayload(entity, tag.tag))
 				updateReciveDragPayload(entity);
 
-			if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
-				*m_activeEntity = entity;
+			clickEntity(entity);
 
 			if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
 				m_contextMenuEntity = entity;
 				ImGui::OpenPopup("Entity Context Menu");
 			}
-
+			 
 			return;
 		}
 
 		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanFullWidth;
-		if (entity == *m_activeEntity)
+		if (m_activeEntity->contains(entity))
 			flags |= ImGuiTreeNodeFlags_Selected;
 
 		// for the moment i prefer to default open all
@@ -90,10 +95,9 @@ namespace Deer {
 			if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
 				m_contextMenuEntity = entity;
 				ImGui::OpenPopup("Entity Context Menu");
-			}
+			}	
 
-			if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
-				*m_activeEntity = entity;
+			clickEntity(entity);
 
 			for (auto& entityID : entity.getChildren()) {
 				updateReciveDragPayload(entity);
@@ -106,8 +110,7 @@ namespace Deer {
 			ImGui::TreePop();
 		}
 		else {
-			if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
-				*m_activeEntity = entity;
+			clickEntity(entity);
 
 			if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
 				m_contextMenuEntity = entity;
