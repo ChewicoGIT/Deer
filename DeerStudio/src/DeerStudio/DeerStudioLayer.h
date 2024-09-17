@@ -18,6 +18,7 @@
 #include "Deer/Scene/Components.h"
 #include "Deer/Scene/Entity.h"
 #include "Deer/Scene/Scene.h"
+#include "Deer/Scene/SceneSerializer.h"
 
 #include "DeerStudio/Editor/EnviromentTreePannel.h"
 #include "DeerStudio/Editor/PropertiesPannel.h"
@@ -58,6 +59,7 @@ namespace Deer {
 	private:
 		Ref<Scene> m_scene;
 		Ref<ActiveEntity> m_activeEntity;
+		Ref<SceneSerializer> m_sceneSerializer;
 		std::vector<Ref<EditorPannel>> pannels;
 
 		VirtualCamera m_virtualCamera;

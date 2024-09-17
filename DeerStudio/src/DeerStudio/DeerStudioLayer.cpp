@@ -109,6 +109,8 @@ namespace Deer {
     void DeerStudioLayer::loadScene() {
 
         m_scene = Ref<Scene>(new Scene());
+        m_sceneSerializer = Ref<SceneSerializer>(new SceneSerializer(m_scene));
+
         Ref<ActiveEntity> activeEntity = Ref<ActiveEntity>(new ActiveEntity());
 
         auto m_propertiesPannel = Ref<PropertiesPannel>(new PropertiesPannel(activeEntity));
@@ -127,6 +129,7 @@ namespace Deer {
 
     void DeerStudioLayer::unloadScene() {
         m_scene.reset();
+        m_sceneSerializer.reset();
         m_activeEntity.reset();
         pannels.clear();
     }
@@ -186,8 +189,8 @@ namespace Deer {
             if (ImGui::MenuItem("UnloadScene")) {
                 unloadScene();
             }
-            if (ImGui::MenuItem("Test")) {
-                
+            if (ImGui::MenuItem("Serialize Scene")) {
+                m_sceneSerializer->serialize("plsWork.txty");
             }
             //ImGui::MenuItem("New project");
             //ImGui::MenuItem("Open project");

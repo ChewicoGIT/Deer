@@ -8,19 +8,17 @@
 namespace Deer {
 	Environment::Environment(const std::string& rootName) {
 		DEER_CORE_TRACE("Creating enviroment with root : {0}", rootName.c_str());
-		m_rootEntity = new Entity(m_registry.create(), this);
+		auto rootEntity = new Entity(m_registry.create(), this);
 
-		m_rootEntity->addComponent<TagComponent>(rootName.c_str());
-		m_rootEntity->addComponent<RelationshipComponent>();
-		m_rootEntity->addComponent<TransformComponent>();
-		m_rootEntity->setRoot(true);
+		rootEntity->addComponent<TagComponent>(rootName.c_str());
+		rootEntity->addComponent<RelationshipComponent>();
+		rootEntity->addComponent<TransformComponent>();
+		rootEntity->setRoot(true);
 
-		m_camera = Scope<Entity>(new Entity());
+		m_rootEntity = rootEntity->m_entityHandle;
 	}
 
-	Environment::~Environment() {
-		DEER_CORE_TRACE("Destroying enviroment with root : {0}", m_rootEntity->getComponent<TagComponent>().tag.c_str());
-	}
+	Environment::~Environment() { }
 
 	void Environment::render(Entity& camera) {
 		DEER_CORE_ASSERT(camera.isValid(), "Rendering camera is not valid");
@@ -100,10 +98,14 @@ namespace Deer {
 		entity.addComponent<RelationshipComponent>();
 		entity.addComponent<TransformComponent>();
 
-		entity.setParent(*m_rootEntity);
+		Entity root = getRoot();
+		entity.setParent(root);
 
 		return entity;
 	}
 
-	void Environment::setMainCamera(Entity& entity) { *m_camera = entity; }
+	Entity Environment::getRoot() {
+		return Entity(m_rootEntity, this);
+	}
+
 }

@@ -24,7 +24,8 @@ project "Deer"
 	  "vendor/glm",
 	  "vendor/stb",
 	  "vendor/ImGuizmo",
-	  "vendor/entt/include"
+	  "vendor/entt/include",
+	  "vendor/cereal/include"
    }
 
    targetdir ("../bin/" .. OutputDir .. "/%{prj.name}")

@@ -17,7 +17,8 @@ namespace Deer {
 	void EnviromentTreePannel::onImGui() {
 		ImGui::ShowDemoWindow();
 		ImGui::Begin(m_treeName.c_str());
-		updateReciveDragPayload(m_enviroment->getRoot());
+		Entity root = m_enviroment->getRoot();
+		updateReciveDragPayload(root);
 
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
 		for (auto& entityID : m_enviroment->getRoot().getChildren()) {
@@ -31,7 +32,8 @@ namespace Deer {
 		ImGui::Spacing();
 		ImVec2 spaceSize(ImGui::GetWindowContentRegionWidth(), 40);
 		ImGui::InvisibleButton("DragDropSpace", spaceSize);
-		updateReciveDragPayload(m_enviroment->getRoot());
+
+		updateReciveDragPayload(root);
 
 		ImGui::End();
 

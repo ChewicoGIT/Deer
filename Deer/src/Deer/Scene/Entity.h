@@ -53,7 +53,7 @@ namespace Deer {
 		bool isDescendant(Entity& parent);
 
 		entt::entity getParentUID();
-		uid getUID() { return (uid)m_entityHandle; }
+		uid getUID() const { return (uid)m_entityHandle; }
 		void setParentUID(entt::entity parentUid);
 		std::vector<entt::entity>& getChildren();
 

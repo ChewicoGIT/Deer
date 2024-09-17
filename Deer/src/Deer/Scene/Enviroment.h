@@ -9,7 +9,6 @@
 
 namespace Deer {
 	class Entity;
-	using EntityMap = std::unordered_map<uid, Entity>;
 
 	struct VirtualCamera {
 		TransformComponent transform;
@@ -27,16 +26,10 @@ namespace Deer {
 		Entity tryGetEntity(uid id);
 		Entity createEntity(const std::string& name = std::string());
 
-		Entity& getRoot() { return *m_rootEntity; }
-
-		Entity& getMainCamera() { return *m_camera; }
-		void setMainCamera(Entity& entity);
+		Entity getRoot();
 	public:
 		entt::registry m_registry;
-		
-		std::unordered_map<uid, Entity> m_entities;
-		Scope<Entity> m_camera;
-		Entity* m_rootEntity;
+		entt::entity m_rootEntity;
 
 		friend class Entity;
 	};
