@@ -1,4 +1,5 @@
 #include "Enviroment.h"
+#include "Deer/Core/Application.h"
 #include "Deer/Scene/Entity.h"
 #include "Deer/Scene/Components.h"
 #include "Deer/Render/Render.h"
@@ -36,7 +37,10 @@ namespace Deer {
 		auto view = m_registry.view<MeshRenderComponent>();
 		for (auto entityId : view) {
 			auto meshRender = view.get<MeshRenderComponent>(entityId);
-			if (meshRender.mesh == nullptr || meshRender.shader == nullptr)
+			if (meshRender.shader == nullptr)
+				continue;
+
+			if (meshRender.meshAssetID == 0)
 				continue;
 			
 			Entity entity = tryGetEntity((uid)entityId);
@@ -48,9 +52,13 @@ namespace Deer {
 			meshRender.shader->uploadUniformMat4("u_objectID", (int)entityId);
 
 			meshRender.shader->bind();
-			meshRender.mesh->bind();
 
-			Render::submit(meshRender.mesh);
+			Ref<Asset>& meshAsset = Application::s_application->m_assetManager.getAsset(meshRender.meshAssetID);
+			MeshAsset* mesh = (MeshAsset*)meshAsset.get();
+
+			mesh->m_mesh->bind();
+
+			Render::submit(mesh->m_mesh);
 		}
 	}
 
@@ -67,7 +75,10 @@ namespace Deer {
 		auto view = m_registry.view<MeshRenderComponent>();
 		for (auto entityId : view) {
 			auto meshRender = view.get<MeshRenderComponent>(entityId);
-			if (meshRender.mesh == nullptr || meshRender.shader == nullptr)
+			if (meshRender.shader == nullptr)
+				continue;
+
+			if (meshRender.meshAssetID == 0)
 				continue;
 
 			Entity entity = tryGetEntity((uid)entityId);
@@ -76,12 +87,16 @@ namespace Deer {
 			meshRender.shader->bind();
 			meshRender.shader->uploadUniformMat4("u_viewMatrix", cameraProjectionMatrix);
 			meshRender.shader->uploadUniformMat4("u_worldMatrix", matrix);
-			meshRender.shader->uploadUniformInt("u_objectID", (int)entityId);
+			meshRender.shader->uploadUniformMat4("u_objectID", (int)entityId);
 
 			meshRender.shader->bind();
-			meshRender.mesh->bind();
 
-			Render::submit(meshRender.mesh);
+			Ref<Asset>& meshAsset = Application::s_application->m_assetManager.getAsset(meshRender.meshAssetID);
+			MeshAsset* mesh = (MeshAsset*)meshAsset.get();
+
+			mesh->m_mesh->bind();
+
+			Render::submit(mesh->m_mesh);
 		}
 	}
 

@@ -69,10 +69,7 @@ namespace Deer {
 
 			auto& mesh = activeEntity.getComponent<MeshRenderComponent>();
 
-			if (mesh.mesh == nullptr)
-				ImGui::Text("Current mesh: null");
-			else
-				ImGui::Text("Current mesh: null");
+			ImGui::Text("Current mesh: %u", mesh.meshAssetID);
 
 			ImGui::Unindent();
 			ImGui::Dummy(ImVec2(0.0f, 10.0f));

@@ -13,6 +13,8 @@
 #include "Deer/Render/Render.h"
 #include "Deer/Render/Camera.h"
 
+#include "Deer/Asset/AssetManager.h"
+
 namespace Deer {
 	class Application
 	{
@@ -29,6 +31,7 @@ namespace Deer {
 		void run();
 
 		Scope<Window> m_window;
+		AssetManager m_assetManager;
 	private:
 		bool onWindowClose(WindowCloseEvent& e);
 

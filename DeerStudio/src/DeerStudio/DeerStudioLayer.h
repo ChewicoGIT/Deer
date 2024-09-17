@@ -57,6 +57,8 @@ namespace Deer {
 		glm::vec2 m_viewportPannelSize;
 		float fov = 45;
 	private:
+		uid m_meshID = 0;
+
 		Ref<Scene> m_scene;
 		Ref<ActiveEntity> m_activeEntity;
 		Ref<SceneSerializer> m_sceneSerializer;

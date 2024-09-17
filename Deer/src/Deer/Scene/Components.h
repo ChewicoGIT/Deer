@@ -47,10 +47,10 @@ namespace Deer {
 	struct MeshRenderComponent {
 		MeshRenderComponent() = default;
 		MeshRenderComponent(const MeshRenderComponent&) = default;
-		MeshRenderComponent(Ref<Mesh> _mesh, Ref<Shader> _shader) : shader(_shader), mesh(_mesh) { }
+		MeshRenderComponent(uid _mesh, Ref<Shader> _shader) : shader(_shader), meshAssetID(_mesh) { }
 
 		Ref<Shader> shader;
-		Ref<Mesh> mesh;
+		uid meshAssetID = 0;
 	};
 
 	// This requires mesh component to render

@@ -19,35 +19,9 @@ namespace Deer {
         ImFont* font1 = io.Fonts->AddFontFromFileTTF("editor\\fonts\\OpenSans-VariableFont_wdth,wght.ttf", 20.0f);
         //ImGui::PushFont(font1);
         ImGui_ImplOpenGL3_CreateFontsTexture();
-
-        m_vertexArray = VertexArray::create();
-        m_camera = Scope<Camera>(new Camera(16 / 9, 50, 0.05f, 100));
         m_texture = Texture2D::create("assets/test_texture.png");
 
-        float vertices[] = {
-            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
-             0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-            -0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
-             0.5f,  0.5f, 0.0f, 1.0f, 1.0f
-        };
-
-        m_vertexBuffer = VertexBuffer::create(vertices, sizeof(vertices));
-
-        BufferLayout bufferLayout({
-            {"a_Position", DataType::Float3, ShaderDataType::FloatingPoint },
-            {"a_Color", DataType::Float2, ShaderDataType::FloatingPoint },
-            });
-
-        m_vertexBuffer->setLayout(bufferLayout);
-        m_vertexArray->addVertexBuffer(m_vertexBuffer);
-
-        unsigned int indices[] = {
-            0, 2, 1,
-            1, 2, 3
-        };
-
-        m_indexBuffer = IndexBuffer::create(indices, sizeof(indices), IndexDataType::Unsigned_Int);
-        m_vertexArray->setIndexBuffer(m_indexBuffer);
+        m_meshID = Application::s_application->m_assetManager.loadAsset(AssetType::Mesh, "simpleMesh.obj");
 
         std::string vertexSource = R"(
 			#version 410 core	
@@ -100,10 +74,6 @@ namespace Deer {
         int windowWidth = Application::s_application->m_window->getWitdth();
         int windowHeight = Application::s_application->m_window->getHeight();
 
-        m_camera->setAspect((float)windowWidth / (float)windowHeight);
-        m_camera->setPosition(pos);
-        m_camera->setRotation(glm::quat(rotation));
-        m_camera->recalculateMatrices();
     }
 
     void DeerStudioLayer::loadScene() {
@@ -123,7 +93,7 @@ namespace Deer {
         pannels.push_back(m_viewportPannel);
 
         MeshRenderComponent& mrc = m_scene->getMainEnviroment()->createEntity("Square").addComponent<MeshRenderComponent>();
-        mrc.mesh = m_vertexArray;
+        mrc.meshAssetID = m_meshID;
         mrc.shader = m_shader;
     }
 
