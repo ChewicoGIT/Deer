@@ -1,6 +1,7 @@
 #include "OpenGLVertexArray.h"
 #include "Plattform/OpenGL/OpenGLBuffer.h"
 #include "Deer/Core/Log.h"
+#include "objload.h"
 
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
@@ -8,6 +9,50 @@
 namespace Deer {
 	OpenGLVertexArray::OpenGLVertexArray() {
 		glGenVertexArrays(1, &m_vertexArray);
+	}
+
+	OpenGLVertexArray::OpenGLVertexArray(const std::string& filePath) {
+		Ref<VertexBuffer> m_vertexBuffer;
+		Ref<VertexBuffer> m_uvBuffer;
+		Ref<VertexBuffer> m_normalBuffer;
+		Ref<IndexBuffer> m_indexBuffer;
+
+		obj::Model model = obj::loadModelFromFile(filePath);
+		std::vector<unsigned short>& triangles = model.faces.at("default");
+
+		glGenVertexArrays(1, &m_vertexArray);
+
+		m_vertexBuffer = VertexBuffer::create(&model.vertex[0], model.vertex.size() * sizeof(float));
+
+		BufferLayout vertexbufferLayout({
+			{"a_Position", DataType::Float3, ShaderDataType::FloatingPoint }
+		});
+
+		m_vertexBuffer->setLayout(vertexbufferLayout);
+		addVertexBuffer(m_vertexBuffer);
+
+		m_uvBuffer = VertexBuffer::create(&model.texCoord[0], model.texCoord.size() * sizeof(float));
+
+		BufferLayout uvbufferLayout({
+			{"a_uv", DataType::Float2, ShaderDataType::FloatingPoint }
+			});
+
+
+		m_uvBuffer->setLayout(uvbufferLayout);
+		addVertexBuffer(m_uvBuffer);
+
+		m_normalBuffer = VertexBuffer::create(&model.normal[0], model.normal.size() * sizeof(float));
+
+		BufferLayout normalBufferLayout({
+			{"a_normal", DataType::Float3, ShaderDataType::NormalizedFloatingPoint }
+			});
+
+
+		m_normalBuffer->setLayout(normalBufferLayout);
+		addVertexBuffer(m_normalBuffer);
+
+		m_indexBuffer = IndexBuffer::create(&triangles[0], triangles.size() * sizeof(unsigned short), IndexDataType::Unsigned_Short);
+		setIndexBuffer(m_indexBuffer);
 	}
 
 	OpenGLVertexArray::~OpenGLVertexArray() {
@@ -29,7 +74,6 @@ namespace Deer {
 		glBindVertexArray(m_vertexArray);
 		vertexBuffer->bind();
 
-		unsigned int index = 0;
 		BufferLayout& layout = vertexBuffer->getLayout();
 		for (auto& element : layout) {
 			glEnableVertexAttribArray(index);

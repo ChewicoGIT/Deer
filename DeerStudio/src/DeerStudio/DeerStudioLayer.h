@@ -40,10 +40,6 @@ namespace Deer {
 		void drawMenuBar();
 	private:
 		unsigned int vertexArray;
-		Ref<VertexBuffer> m_vertexBuffer;
-		Ref<IndexBuffer> m_indexBuffer;
-		Ref<VertexArray> m_vertexArray;
-		Ref<Shader> m_shader;
 		Ref<Texture2D> m_texture;
 		Scope<Camera> m_camera;
 		Transform m_transform;
@@ -58,6 +54,7 @@ namespace Deer {
 		float fov = 45;
 	private:
 		uid m_meshID = 0;
+		uid m_shaderID = 0;
 
 		Ref<Scene> m_scene;
 		Ref<ActiveEntity> m_activeEntity;

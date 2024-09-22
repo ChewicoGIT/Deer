@@ -31,7 +31,6 @@ namespace Deer {
 		void run();
 
 		Scope<Window> m_window;
-		AssetManager m_assetManager;
 	private:
 		bool onWindowClose(WindowCloseEvent& e);
 
