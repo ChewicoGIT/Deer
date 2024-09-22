@@ -11,10 +11,14 @@
 
 namespace Deer {
 	OpenGLShader::OpenGLShader(const std::string& filePath) {
-		std::string shaderSrc = readFile(filePath);
-		std::unordered_map<unsigned int, std::string> sources = preProcess(shaderSrc);
+		//std::string shaderSrc = readFile(filePath);
+		//std::unordered_map<unsigned int, std::string> sources = preProcess(shaderSrc);
+		//
+		//compile(sources[GL_VERTEX_SHADER], sources[GL_FRAGMENT_SHADER]);
+		std::string fragmentShader = readFile(filePath + ".frag.glsl");
+		std::string vertexShader = readFile(filePath + ".vert.glsl");
 
-		compile(sources[GL_VERTEX_SHADER], sources[GL_FRAGMENT_SHADER]);
+		compile(vertexShader, fragmentShader);
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& vertexSource, const std::string& fragmentSource) {
@@ -32,7 +36,7 @@ namespace Deer {
 	void OpenGLShader::uploadUniformFloat(const std::string& name, float value) {
 		int location = glGetUniformLocation(m_shaderID, name.c_str());
 		if (location == -1) {
-			DEER_CORE_ERROR("OpenGL did not find float uniform {0}", name.c_str());
+			DEER_CORE_WARN("OpenGL did not find float uniform {0}", name.c_str());
 			return;
 		}
 		glUniform1f(location, value);
@@ -41,7 +45,7 @@ namespace Deer {
 	void OpenGLShader::uploadUniformFloat2(const std::string& name, const glm::vec2& value) {
 		int location = glGetUniformLocation(m_shaderID, name.c_str());
 		if (location == -1) {
-			DEER_CORE_ERROR("OpenGL did not find float2 uniform {0}", name.c_str());
+			DEER_CORE_WARN("OpenGL did not find float2 uniform {0}", name.c_str());
 			return;
 		}
 		glUniform2f(location, value.x, value.y);
@@ -50,7 +54,7 @@ namespace Deer {
 	void OpenGLShader::uploadUniformFloat3(const std::string& name, const glm::vec3& value) {
 		int location = glGetUniformLocation(m_shaderID, name.c_str());
 		if (location == -1) {
-			DEER_CORE_ERROR("OpenGL did not find float3 uniform {0}", name.c_str());
+			DEER_CORE_WARN("OpenGL did not find float3 uniform {0}", name.c_str());
 			return;
 		}
 		glUniform3f(location, value.x, value.y, value.z);
@@ -59,7 +63,7 @@ namespace Deer {
 	void OpenGLShader::uploadUniformFloat4(const std::string& name, const glm::vec4& value) {
 		int location = glGetUniformLocation(m_shaderID, name.c_str());
 		if (location == -1) {
-			DEER_CORE_ERROR("OpenGL did not find float4 uniform {0}", name.c_str());
+			DEER_CORE_WARN("OpenGL did not find float4 uniform {0}", name.c_str());
 			return;
 		}
 		glUniform4f(location, value.x, value.y, value.z, value.w);
@@ -68,7 +72,7 @@ namespace Deer {
 	void OpenGLShader::uploadUniformInt(const std::string& name, int value) {
 		int location = glGetUniformLocation(m_shaderID, name.c_str());
 		if (location == -1) {
-			DEER_CORE_ERROR("OpenGL did not find uniform {0}", name.c_str());
+			DEER_CORE_WARN("OpenGL did not find uniform {0}", name.c_str());
 			return;
 		}
 		glUniform1i(location, value);
@@ -77,7 +81,7 @@ namespace Deer {
 	void OpenGLShader::uploadUniformMat4(const std::string& name, const glm::mat4 mat) {
 		int location = glGetUniformLocation(m_shaderID, name.c_str());
 		if (location == -1) {
-			DEER_CORE_ERROR("OpenGL did not find uniform {0}", name.c_str());
+			DEER_CORE_WARN("OpenGL did not find uniform {0}", name.c_str());
 			return;
 		}
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(mat));
@@ -104,8 +108,8 @@ namespace Deer {
 	std::unordered_map<unsigned int, std::string> OpenGLShader::preProcess(const std::string& source) {
 		std::unordered_map<unsigned int, std::string> shaderSource;
 
-		std::string shaders_str; // The shader file's contents as a string
-		std::regex r("#type (.*)(?:\n|\r)((?:(?!#type )(?:.|\n|\r))*)");
+		std::string shaders_str = source;
+		std::regex r("#type (.*)(?:\\n|\\r)((?:(?!#type )(?:.|\\n|\\r))*)");
 
 		while (!shaders_str.empty()) {
 			std::smatch match;

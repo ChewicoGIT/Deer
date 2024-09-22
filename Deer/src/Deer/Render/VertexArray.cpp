@@ -16,5 +16,16 @@ namespace Deer {
         DEER_CORE_ERROR("Unkown render API");
         return nullptr;
 	}
+
+    Ref<VertexArray> VertexArray::create(const std::string& filePath) {
+        switch (Render::getAPI())
+        {
+        case RenderAPI::API::None: DEER_CORE_ERROR("There is no render api selected"); return nullptr;
+        case RenderAPI::API::OpenGL: return Ref<VertexArray>(new OpenGLVertexArray(filePath));
+        }
+
+        DEER_CORE_ERROR("Unkown render API");
+        return nullptr;
+    }
 }
 

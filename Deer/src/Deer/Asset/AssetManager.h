@@ -10,13 +10,22 @@ namespace Deer {
 
 	class AssetManager {
 	public:
-		AssetManager() { m_assets.push_back(Ref<Asset>(new Asset())); }
+		AssetManager() { m_assets.push_back(Asset<void>()); }
 
-		Ref<Asset>& getAsset(uid assetID);
-		uid loadAsset(AssetType assetType, const std::string& assetLocation);
+		template<typename T>
+		Asset<T>& getAsset(uid assetID) { return *(Asset<T>*)&(m_assets[assetID]); }
+
+		template<typename T>
+		uid loadAsset(const std::string& assetLocation) {
+			uid assetID = m_assets.size();
+
+			Asset<T> asset(assetID, assetLocation);
+			m_assets.push_back(*(Asset<void>*)&(asset));
+			return assetID;
+		}
 
 	private:
-		std::vector<Ref<Asset>> m_assets;
+		std::vector<Asset<void>> m_assets;
 	};
 }
 

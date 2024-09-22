@@ -1,5 +1,6 @@
 #include "Enviroment.h"
 #include "Deer/Core/Application.h"
+#include "Deer/Core/Project.h"
 #include "Deer/Scene/Entity.h"
 #include "Deer/Scene/Components.h"
 #include "Deer/Render/Render.h"
@@ -37,28 +38,27 @@ namespace Deer {
 		auto view = m_registry.view<MeshRenderComponent>();
 		for (auto entityId : view) {
 			auto meshRender = view.get<MeshRenderComponent>(entityId);
-			if (meshRender.shader == nullptr)
+			if (meshRender.shaderAssetID == 0)
 				continue;
 
 			if (meshRender.meshAssetID == 0)
 				continue;
-			
+
 			Entity entity = tryGetEntity((uid)entityId);
-			
+
 			glm::mat4 matrix = entity.getWorldMatrix();
-			meshRender.shader->bind();
-			meshRender.shader->uploadUniformMat4("u_viewMatrix", cameraProjectionMatrix);
-			meshRender.shader->uploadUniformMat4("u_worldMatrix", matrix);
-			meshRender.shader->uploadUniformMat4("u_objectID", (int)entityId);
+			Asset<Shader>& shaderAsset = Project::m_assetManager.getAsset<Shader>(meshRender.shaderAssetID);
+			shaderAsset.value->bind();
+			shaderAsset.value->uploadUniformMat4("u_viewMatrix", cameraProjectionMatrix);
+			shaderAsset.value->uploadUniformMat4("u_worldMatrix", matrix);
+			shaderAsset.value->uploadUniformMat4("u_objectID", (int)entityId);
 
-			meshRender.shader->bind();
+			shaderAsset.value->bind();
 
-			Ref<Asset>& meshAsset = Application::s_application->m_assetManager.getAsset(meshRender.meshAssetID);
-			MeshAsset* mesh = (MeshAsset*)meshAsset.get();
+			Asset<Mesh>& meshAsset = Project::m_assetManager.getAsset<Mesh>(meshRender.meshAssetID);
+			meshAsset.value->bind();
 
-			mesh->m_mesh->bind();
-
-			Render::submit(mesh->m_mesh);
+			Render::submit(meshAsset.value);
 		}
 	}
 
@@ -75,7 +75,7 @@ namespace Deer {
 		auto view = m_registry.view<MeshRenderComponent>();
 		for (auto entityId : view) {
 			auto meshRender = view.get<MeshRenderComponent>(entityId);
-			if (meshRender.shader == nullptr)
+			if (meshRender.shaderAssetID == 0)
 				continue;
 
 			if (meshRender.meshAssetID == 0)
@@ -84,19 +84,18 @@ namespace Deer {
 			Entity entity = tryGetEntity((uid)entityId);
 
 			glm::mat4 matrix = entity.getWorldMatrix();
-			meshRender.shader->bind();
-			meshRender.shader->uploadUniformMat4("u_viewMatrix", cameraProjectionMatrix);
-			meshRender.shader->uploadUniformMat4("u_worldMatrix", matrix);
-			meshRender.shader->uploadUniformMat4("u_objectID", (int)entityId);
+			Asset<Shader>& shaderAsset = Project::m_assetManager.getAsset<Shader>(meshRender.shaderAssetID);
+			shaderAsset.value->bind();
+			shaderAsset.value->uploadUniformMat4("u_viewMatrix", cameraProjectionMatrix);
+			shaderAsset.value->uploadUniformMat4("u_worldMatrix", matrix);
+			shaderAsset.value->uploadUniformInt("u_objectID", (int)entityId);
 
-			meshRender.shader->bind();
+			shaderAsset.value->bind();
 
-			Ref<Asset>& meshAsset = Application::s_application->m_assetManager.getAsset(meshRender.meshAssetID);
-			MeshAsset* mesh = (MeshAsset*)meshAsset.get();
+			Asset<Mesh>& meshAsset = Project::m_assetManager.getAsset<Mesh>(meshRender.meshAssetID);
+			meshAsset.value->bind();
 
-			mesh->m_mesh->bind();
-
-			Render::submit(mesh->m_mesh);
+			Render::submit(meshAsset.value);
 		}
 	}
 

@@ -25,7 +25,8 @@ project "Deer"
 	  "vendor/stb",
 	  "vendor/ImGuizmo",
 	  "vendor/entt/include",
-	  "vendor/cereal/include"
+	  "vendor/cereal/include",
+	  "vendor/objload/include/objload"
    }
 
    targetdir ("../bin/" .. OutputDir .. "/%{prj.name}")

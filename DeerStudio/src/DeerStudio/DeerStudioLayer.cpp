@@ -8,6 +8,8 @@
 #include "backends/imgui_impl_opengl3.h"
 #include "Style.h"
 
+#include "Deer/Core/Project.h"
+
 const float toolbarSize = 50;
 namespace Deer {
     void DeerStudioLayer::onAttach() {
@@ -19,47 +21,10 @@ namespace Deer {
         ImFont* font1 = io.Fonts->AddFontFromFileTTF("editor\\fonts\\OpenSans-VariableFont_wdth,wght.ttf", 20.0f);
         //ImGui::PushFont(font1);
         ImGui_ImplOpenGL3_CreateFontsTexture();
-        m_texture = Texture2D::create("assets/test_texture.png");
+        m_texture = Texture2D::create("assets/skull.jpg");
 
-        m_meshID = Application::s_application->m_assetManager.loadAsset(AssetType::Mesh, "simpleMesh.obj");
-
-        std::string vertexSource = R"(
-			#version 410 core	
-			layout(location = 0) in vec3 a_position;
-			layout(location = 1) in vec2 a_uv;
-
-            out vec2 textCoord;
-			
-			uniform mat4 u_viewMatrix;
-			uniform mat4 u_worldMatrix;
-			void main()
-			{
-				//gl_Position = vec4(a_position, 1.0) * u_projectionMatrix * u_viewMatrix;
-				gl_Position = u_viewMatrix * u_worldMatrix * vec4(a_position,1.0);
-
-                textCoord = a_uv;
-			}
-		)";
-
-        std::string fragmentSrc = R"(
-			#version 410 core	
-			
-            layout(location = 0) out vec4 fragColor;
-            layout(location = 1) out int objectID;
-
-            in vec2 textCoord;
-
-            uniform sampler2D u_texture;
-            uniform int u_objectID;
-
-			void main()
-			{
-				fragColor = texture(u_texture, textCoord);
-                objectID = u_objectID;
-			}
-		)";
-
-        m_shader = Shader::create(vertexSource, fragmentSrc);
+        m_meshID = Project::m_assetManager.loadAsset<Mesh>("assets/skull.obj");
+        m_shaderID = Project::m_assetManager.loadAsset<Shader>("assets/Shaders/SimpleShader");
 
     }
 
@@ -69,11 +34,11 @@ namespace Deer {
         }
 
         m_texture->bind(0);
-        m_shader->uploadUniformInt("u_texture", 0);
+        Asset<Shader>& shaderAsset = Project::m_assetManager.getAsset<Shader>(m_shaderID);
+        shaderAsset.value->uploadUniformInt("u_texture", 0);
 
         int windowWidth = Application::s_application->m_window->getWitdth();
         int windowHeight = Application::s_application->m_window->getHeight();
-
     }
 
     void DeerStudioLayer::loadScene() {
@@ -94,7 +59,7 @@ namespace Deer {
 
         MeshRenderComponent& mrc = m_scene->getMainEnviroment()->createEntity("Square").addComponent<MeshRenderComponent>();
         mrc.meshAssetID = m_meshID;
-        mrc.shader = m_shader;
+        mrc.shaderAssetID = m_shaderID;
     }
 
     void DeerStudioLayer::unloadScene() {

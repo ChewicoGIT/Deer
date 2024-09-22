@@ -2,6 +2,7 @@
 #include "Deer/Render/Buffer.h"
 
 #include <memory>
+#include <string>
 
 namespace Deer {
 	class VertexArray;
@@ -20,6 +21,7 @@ namespace Deer {
 		virtual const Ref<IndexBuffer>& getIndexBuffer() = 0;
 
 		static Ref<VertexArray> create();
+		static Ref<VertexArray> create(const std::string& filePath);
 	};
 }
 

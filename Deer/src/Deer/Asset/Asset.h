@@ -4,50 +4,38 @@
 #include <string>
 
 namespace Deer {
-	class Texture;
-	class VertexArray;
-
-	enum class AssetType {
-		None = 0,
-		Texture,
-		Mesh
-	};
-
+	template <typename T>
 	class Asset {
 	public:
 		Asset() : m_assetID(0), m_assetLocation("null") { }
 		Asset(uid id, const std::string& assetLocation)
-			: m_assetID(id), m_assetLocation(assetLocation) { }
-		virtual ~Asset() = default;
-
-		static AssetType getAssetTypeStatic() { return AssetType::None; }
-		virtual AssetType getAssetType() { return AssetType::None; }
+			: m_assetID(id), m_assetLocation(assetLocation) {
+			value = T::create(assetLocation);
+		}
 
 		inline uid getAssetID() const { return m_assetID; }
 		inline std::string& getAssetLocation() { return m_assetLocation; }
+
+		Ref<T> value;
 	private:
 		uid m_assetID;
 		std::string m_assetLocation;
 	};
 
-	class TextureAsset : public Asset {
+	template <>
+	class Asset<void> {
 	public:
-		TextureAsset(uid id, const std::string& assetLocation);
+		Asset() : m_assetID(0), m_assetLocation("null") { }
+		Asset(uid id, const std::string& assetLocation)
+			: m_assetID(id), m_assetLocation(assetLocation) { }
 
-		static AssetType getAssetTypeStatic() { return AssetType::Texture; }
-		AssetType getAssetType() override { return AssetType::Texture; }
-		
-		Ref<Texture> m_texture;
-	};
+		inline uid getAssetID() const { return m_assetID; }
+		inline std::string& getAssetLocation() { return m_assetLocation; }
 
-	class MeshAsset : public Asset {
-	public:
-		MeshAsset(uid id, const std::string& assetLocation);
-
-		static AssetType getAssetTypeStatic() { return AssetType::Mesh; }
-		AssetType getAssetType() override { return AssetType::Mesh; }
-
-		Ref<VertexArray> m_mesh;
+		Ref<void> value;
+	private:
+		uid m_assetID;
+		std::string m_assetLocation;
 	};
 }
 
