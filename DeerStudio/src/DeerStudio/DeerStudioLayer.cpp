@@ -127,6 +127,9 @@ namespace Deer {
             if (ImGui::MenuItem("Serialize Scene")) {
                 m_sceneSerializer->serialize("plsWork.txty");
             }
+            if (ImGui::MenuItem("Deserialize Scene")) {
+                m_sceneSerializer->deserialize("plsWork.txty");
+            }
             //ImGui::MenuItem("New project");
             //ImGui::MenuItem("Open project");
 

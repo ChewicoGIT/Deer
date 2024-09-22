@@ -16,7 +16,7 @@ namespace Deer {
 		Entity() { }
 
 		template <typename T, typename...Args>
-		T& addComponent(Args&&... args) {
+		T& addComponent(Args&&... args) const {
 			DEER_CORE_ASSERT(!m_environment->m_registry.all_of<T>(m_entityHandle),
 				"Entity already have component {0}", typeid(T).name());
 
@@ -24,7 +24,7 @@ namespace Deer {
 		}
 
 		template<typename T>
-		T& getComponent() {
+		T& getComponent() const {
 			DEER_CORE_ASSERT(m_environment->m_registry.all_of<T>(m_entityHandle),
 				"Entity has no component {0}", typeid(T).name());
 
@@ -32,12 +32,12 @@ namespace Deer {
 		}
 
 		template<typename T>
-		bool hasComponent() {
+		bool hasComponent() const {
 			return m_environment->m_registry.all_of<T>(m_entityHandle);
 		}
 
 		template<typename T>
-		void removeComponent() {
+		void removeComponent() const {
 			DEER_CORE_ASSERT(m_environment->m_registry.all_of<T>(m_entityHandle),
 				"Entity does not have component {0}", typeid(T).name());
 
@@ -54,6 +54,7 @@ namespace Deer {
 
 		entt::entity getParentUID();
 		uid getUID() const { return (uid)m_entityHandle; }
+		Environment* getEnvironment() const { return m_environment; }
 		void setParentUID(entt::entity parentUid);
 		std::vector<entt::entity>& getChildren();
 

@@ -15,6 +15,8 @@ namespace Deer {
 		template<typename T>
 		Asset<T>& getAsset(uid assetID) { return *(Asset<T>*)&(m_assets[assetID]); }
 
+		const std::string& getAssetLocation (uid assetID) { return m_assets[assetID].getAssetLocation(); }
+
 		template<typename T>
 		uid loadAsset(const std::string& assetLocation) {
 			uid assetID = m_assets.size();

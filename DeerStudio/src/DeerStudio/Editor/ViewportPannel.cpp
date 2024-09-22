@@ -44,6 +44,8 @@ namespace Deer {
         m_frameBuffer->clear();
         int clearData = -1;
         m_frameBuffer->clearBuffer(1, &clearData);
+        unsigned char clearColor[4]{ 0, 0, 0, 255 };
+        m_frameBuffer->clearBuffer(0, &clearColor);
 
         m_environment->render(m_virtualCamera);
 

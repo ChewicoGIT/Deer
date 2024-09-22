@@ -13,6 +13,9 @@ namespace Deer {
 	}
 
 	void SceneSerializer::deserialize(const std::string& filePath) {
+		std::ifstream file(filePath);
+		cereal::JSONInputArchive archive(file);
 
+		archive(cereal::make_nvp("scene", m_scene));
 	}
 }
