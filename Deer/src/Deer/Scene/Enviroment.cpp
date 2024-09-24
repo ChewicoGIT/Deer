@@ -10,17 +10,32 @@
 namespace Deer {
 	Environment::Environment(const std::string& rootName) {
 		DEER_CORE_TRACE("Creating enviroment with root : {0}", rootName.c_str());
-		auto rootEntity = new Entity(m_registry.create(), this);
 
-		rootEntity->addComponent<TagComponent>(rootName.c_str());
-		rootEntity->addComponent<RelationshipComponent>();
-		rootEntity->addComponent<TransformComponent>();
-		rootEntity->setRoot(true);
+		uid id = m_idCreationOffset + 1;
+		m_idCreationOffset++;
 
-		m_rootEntity = rootEntity->m_entityHandle;
+		entt::entity entityID = m_registry.create();
+		Entity entity = { entityID, this };
+		entity.addComponent<TagComponent>(rootName, id);
+		entity.addComponent<RelationshipComponent>();
+		entity.addComponent<TransformComponent>();
+
+		entity.m_isRoot = true;
+		entity.m_entityUID = id;
+		m_entities.insert({ id, entity });
+
+		auto& rootEntity = m_entities[id];
+		m_rootEntity = &rootEntity;
 	}
 
 	Environment::~Environment() { }
+
+	void Environment::clear() {
+		m_registry.clear();
+		m_entities.clear();
+		m_rootEntity = nullptr;
+		m_idCreationOffset = 0;
+	}
 
 	void Environment::render(Entity& camera) {
 		DEER_CORE_ASSERT(camera.isValid(), "Rendering camera is not valid");
@@ -72,23 +87,24 @@ namespace Deer {
 		// Lets invert the z axis for engine convenience
 		glm::mat4 cameraProjectionMatrix = invertY * projectionMatrix * invertZ * camMatrix;
 
-		auto view = m_registry.view<MeshRenderComponent>();
+		auto view = m_registry.view<MeshRenderComponent, TagComponent>();
 		for (auto entityId : view) {
-			auto meshRender = view.get<MeshRenderComponent>(entityId);
+			auto& meshRender = view.get<MeshRenderComponent>(entityId);
 			if (meshRender.shaderAssetID == 0)
 				continue;
 
 			if (meshRender.meshAssetID == 0)
 				continue;
 
-			Entity entity = tryGetEntity((uid)entityId);
+			auto& tag = view.get<TagComponent>(entityId);
+			Entity& entity = tryGetEntity(tag.entityUID);
 
 			glm::mat4 matrix = entity.getWorldMatrix();
 			Asset<Shader>& shaderAsset = Project::m_assetManager.getAsset<Shader>(meshRender.shaderAssetID);
 			shaderAsset.value->bind();
 			shaderAsset.value->uploadUniformMat4("u_viewMatrix", cameraProjectionMatrix);
 			shaderAsset.value->uploadUniformMat4("u_worldMatrix", matrix);
-			shaderAsset.value->uploadUniformInt("u_objectID", (int)entityId);
+			shaderAsset.value->uploadUniformInt("u_objectID", tag.entityUID);
 
 			shaderAsset.value->bind();
 
@@ -99,27 +115,41 @@ namespace Deer {
 		}
 	}
 
-	Entity Environment::tryGetEntity(uid id) {
-		if (m_registry.valid((entt::entity)id))
-			return Entity((entt::entity)id, this);
-		return Entity();
+	Entity& Environment::tryGetEntity(uid id) {
+		return m_entities[id];
 	}
 	
-	Entity Environment::createEntity(const std::string& name)
+	Entity& Environment::createEntity(const std::string& name)
 	{
-		Entity entity = { m_registry.create(), this };
-		entity.addComponent<TagComponent>(name);
+		uid id;
+		do {
+			id = m_idCreationOffset + 1;
+			m_idCreationOffset++;
+		} while (m_entities.contains(id));
+
+		entt::entity entityID = m_registry.create();
+		Entity entity = { entityID, this };
+		entity.addComponent<TagComponent>(name, id);
 		entity.addComponent<RelationshipComponent>();
 		entity.addComponent<TransformComponent>();
 
-		Entity root = getRoot();
-		entity.setParent(root);
+		entity.m_entityUID = id;
+		entity.setParent(getRoot());
+
+		m_entities.insert({ id, entity });
+		return m_entities[id];
+	}
+
+	Entity& Environment::createEmptyEntity()
+	{
+		entt::entity entityID = m_registry.create();
+		Entity entity = { entityID, this };
 
 		return entity;
 	}
 
-	Entity Environment::getRoot() {
-		return Entity(m_rootEntity, this);
+	Entity& Environment::getRoot() {
+		return *m_rootEntity;
 	}
 
 }

@@ -26,6 +26,7 @@ namespace Deer {
         m_meshID = Project::m_assetManager.loadAsset<Mesh>("assets/skull.obj");
         m_shaderID = Project::m_assetManager.loadAsset<Shader>("assets/Shaders/SimpleShader");
 
+        m_activeEntity = Ref<ActiveEntity>(new ActiveEntity());
     }
 
     void DeerStudioLayer::onUpdate(Timestep delta) {
@@ -46,18 +47,17 @@ namespace Deer {
         m_scene = Ref<Scene>(new Scene());
         m_sceneSerializer = Ref<SceneSerializer>(new SceneSerializer(m_scene));
 
-        Ref<ActiveEntity> activeEntity = Ref<ActiveEntity>(new ActiveEntity());
-
-        auto m_propertiesPannel = Ref<PropertiesPannel>(new PropertiesPannel(activeEntity));
-        auto m_viewportPannel = Ref<ViewportPannel>(new ViewportPannel(m_scene->getMainEnviroment(), "Scene viewport", activeEntity));
-        auto m_enviromentTreePannel = Ref<EnviromentTreePannel>(new EnviromentTreePannel(m_scene->getMainEnviroment(), "World tree", activeEntity));
+        auto m_propertiesPannel = Ref<PropertiesPannel>(new PropertiesPannel(m_activeEntity));
+        auto m_viewportPannel = Ref<ViewportPannel>(new ViewportPannel(m_scene->getMainEnviroment(), "Scene viewport", m_activeEntity));
+        auto m_enviromentTreePannel = Ref<EnviromentTreePannel>(new EnviromentTreePannel(m_scene->getMainEnviroment(), "World tree", m_activeEntity));
 
         pannels.clear();
         pannels.push_back(m_propertiesPannel);
         pannels.push_back(m_enviromentTreePannel);
         pannels.push_back(m_viewportPannel);
 
-        MeshRenderComponent& mrc = m_scene->getMainEnviroment()->createEntity("Square").addComponent<MeshRenderComponent>();
+        auto& entity = m_scene->getMainEnviroment()->createEntity("Square");
+        MeshRenderComponent& mrc = entity.addComponent<MeshRenderComponent>();
         mrc.meshAssetID = m_meshID;
         mrc.shaderAssetID = m_shaderID;
     }
@@ -129,9 +129,8 @@ namespace Deer {
             }
             if (ImGui::MenuItem("Deserialize Scene")) {
                 m_sceneSerializer->deserialize("plsWork.txty");
+                m_activeEntity->clear();
             }
-            //ImGui::MenuItem("New project");
-            //ImGui::MenuItem("Open project");
 
             ImGui::EndMenu();
         }

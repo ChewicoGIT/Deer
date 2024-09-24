@@ -28,7 +28,7 @@ namespace Deer {
 			return;
 		}
 
-		Entity activeEntity = m_activeEntity->getEntity(0);
+		Entity& activeEntity = m_activeEntity->getEntity(0);
 
 		auto& tag = activeEntity.getComponent<TagComponent>();
 		if (tag.tag == "")
@@ -218,14 +218,14 @@ namespace Deer {
 
 			if (ImGui::Selectable("reset")) {
 				for (auto& entity : *m_activeEntity)
-					entity.getComponent<T>() = T();
+					entity->getComponent<T>() = T();
 
 				ImGui::CloseCurrentPopup();
 			}
 
 			if (canDelete && ImGui::Selectable("delete")) {
-				for (auto entity : *m_activeEntity)
-					entity.removeComponent<T>();
+				for (auto& entity : *m_activeEntity)
+					entity->removeComponent<T>();
 
 				ImGui::CloseCurrentPopup();
 
@@ -248,8 +248,8 @@ namespace Deer {
 		if (ImGui::Selectable(componentName.c_str(), false, selectableFlag)) {
 			
 			for (auto& entity : *m_activeEntity) {
-				if (!entity.hasComponent<T>())
-					entity.addComponent<T>();
+				if (!entity->hasComponent<T>())
+					entity->addComponent<T>();
 			}
 
 			ImGui::CloseCurrentPopup();

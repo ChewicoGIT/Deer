@@ -68,7 +68,7 @@ namespace Deer {
                     m_activeEntity->clear();
 
                 if (id >= 0) {
-                    Entity selectedEntity = m_environment->tryGetEntity((uid)id);
+                    Entity& selectedEntity = m_environment->tryGetEntity((uid)id);
                     m_activeEntity->addEntity(selectedEntity);
                 }
 

@@ -9,6 +9,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <unordered_map>
 
 namespace Deer {
 	class Entity {
@@ -44,36 +45,40 @@ namespace Deer {
 			m_environment->m_registry.remove<T>(m_entityHandle);
 		}
 
-		Entity duplicate();
+		Entity& duplicate();
 		void destroy();
 
-		Entity getParent();
-		// To do, enable transfer entitys from difrent enviroments
+		Entity& getParent();
+		// TODO, enable transfer entitys from difrent enviroments
 		void setParent(Entity& parent);
 		bool isDescendant(Entity& parent);
 
-		entt::entity getParentUID();
-		uid getUID() const { return (uid)m_entityHandle; }
-		Environment* getEnvironment() const { return m_environment; }
-		void setParentUID(entt::entity parentUid);
-		std::vector<entt::entity>& getChildren();
+		uid getParentUID() const { return m_parentUID; }
+		uid getUID() const { return m_entityUID; }
 
-		bool isRoot() { return getComponent<RelationshipComponent>().root; }
+		Environment* getEnvironment() const { return m_environment; }
+		std::vector<uid>& getChildren();
+
+		bool isRoot() { return m_isRoot; }
 		glm::mat4 getWorldMatrix();
 		glm::mat4 getRelativeMatrix();
 
-		inline bool isValid() const { return m_environment != nullptr && m_environment->m_registry.valid(m_entityHandle); }
-		inline bool operator== (const Entity& b) const { return m_environment == b.m_environment && m_entityHandle == b.m_entityHandle; }
+		void update();
+
+		inline bool isValid() const { return m_entityUID != 0 && m_environment != nullptr && m_environment->m_registry.valid(m_entityHandle); }
+		inline bool operator== (const Entity& b) const { return m_environment == b.m_environment && m_entityUID == b.m_entityUID; }
 	private:
 		Entity(entt::entity handle, Environment* scene);
 		bool removeChild(Entity& child);
-
-		void setRoot(bool value) { getComponent<RelationshipComponent>().root = value; }
 		
 		entt::entity m_entityHandle = entt::null;
 		Environment* m_environment = nullptr;
+		uid m_entityUID = 0;
+		uid m_parentUID = 0;
+		bool m_isRoot = false;
 
 		friend class Environment;
+		friend class std::unordered_map<uid, Entity>;
 	};
 }
 

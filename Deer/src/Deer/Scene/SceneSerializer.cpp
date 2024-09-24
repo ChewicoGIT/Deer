@@ -16,6 +16,8 @@ namespace Deer {
 		std::ifstream file(filePath);
 		cereal::JSONInputArchive archive(file);
 
+		m_scene->getMainEnviroment()->clear();
+
 		archive(cereal::make_nvp("scene", m_scene));
 	}
 }

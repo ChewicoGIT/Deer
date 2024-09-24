@@ -1,11 +1,11 @@
 #pragma once
 #include "Deer/Core/Core.h"
-#include "glm/gtc/quaternion.hpp"
 #include "Deer/Render/VertexArray.h"
 #include "Deer/Render/Shader.h"
-#include "glm/glm.hpp"
+
 #include "glm/gtc/quaternion.hpp"
-#include "entt/entt.hpp"
+#include "glm/gtc/quaternion.hpp"
+#include "glm/glm.hpp"
 
 #include <string>
 #include <vector>
@@ -13,20 +13,20 @@
 namespace Deer {
 	struct TagComponent {
 		std::string tag;
+		uid entityUID;
 
 		TagComponent() = default;
 		TagComponent(const TagComponent&) = default;
-		TagComponent(std::string name) : tag(name) { }
+		TagComponent(std::string name, uid _id = 0) : tag(name), entityUID(_id) { }
 	};
 
 	struct RelationshipComponent {
-		entt::entity parent_handle = entt::null;
-		std::vector<entt::entity> children;
-		bool root = false;
+		uid parent_UID = 0;
+		std::vector<uid> children;
 
 		RelationshipComponent() = default;
 		RelationshipComponent(const RelationshipComponent&) = default;
-		RelationshipComponent(entt::entity parent) : parent_handle(parent) { }
+		RelationshipComponent(uid parent) : parent_UID(parent) { }
 	};
 
 	struct TransformComponent {

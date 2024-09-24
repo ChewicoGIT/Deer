@@ -25,7 +25,7 @@ namespace Deer {
 		Ref<ActiveEntity> m_activeEntity;
 
 		std::string m_treeName;
-		Entity m_contextMenuEntity;
+		Entity* m_contextMenuEntity;
 	};
 }
 
