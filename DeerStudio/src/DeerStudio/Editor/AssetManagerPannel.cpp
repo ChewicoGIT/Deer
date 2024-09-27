@@ -1,6 +1,8 @@
 #include "AssetManagerPannel.h"
 #include "Deer/Core/Log.h"
 #include "Deer/Render/Texture.h"
+#include "Deer/Scene/Scene.h"
+#include "Deer/Scene/SceneSerializer.h"
 #include "imgui.h"
 
 namespace Deer {
@@ -71,10 +73,21 @@ namespace Deer {
     void AssetManagerPannel::updateContextMenu() {
 
         if (ImGui::BeginPopup("AssetManagerPopUp")) {
+            ImGui::Spacing();
             if (ImGui::MenuItem("New Folder")) {
 
                 std::filesystem::path path = m_currentPath / "newFolder";
                 std::filesystem::create_directory(path);
+            }
+
+            if (ImGui::MenuItem("New Scene")) {
+                Ref<Scene> newScene = Ref<Scene>(new Scene());
+                Ref<SceneSerializer> sceneSerializer = Ref<SceneSerializer>(new SceneSerializer(newScene));
+
+                std::filesystem::path savePath = "assets" / m_currentPath / "newScene.dscn";
+
+                sceneSerializer->serialize(savePath.string());
+
             }
             
             ImGui::EndPopup();

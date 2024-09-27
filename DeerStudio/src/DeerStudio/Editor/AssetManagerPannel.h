@@ -6,10 +6,11 @@
 
 namespace Deer {
 	class Texture2D;
+	class SceneSerializer;
 
 	class AssetManagerPannel : public EditorPannel{
 	public:
-		AssetManagerPannel();
+		AssetManagerPannel(); // Ref<SceneSerializer> sceneSerializer
 		void onImGui() override;
 	private:
 		void drawFolder(std::filesystem::path);
@@ -19,6 +20,7 @@ namespace Deer {
 		std::filesystem::path m_currentPath; // Assets/path...
 		Ref<Texture2D> m_folderIcon;
 		Ref<Texture2D> m_fileIcon;
+		Ref<SceneSerializer> m_sceneSerializer;
 
 		int m_iconMinSize = 130;
 	};

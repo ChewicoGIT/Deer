@@ -32,9 +32,6 @@ namespace Deer {
 		void onAttach() override;
 		void onUpdate(Timestep delta) override;
 
-		void loadEditor();
-		void unloadEditor();
-
 		void loadScene();
 		void unloadScene();
 
@@ -61,8 +58,9 @@ namespace Deer {
 		uid m_shaderID = 0;
 
 		Ref<Scene> m_scene;
-		Ref<ActiveEntity> m_activeEntity;
 		Ref<SceneSerializer> m_sceneSerializer;
+
+		Ref<ActiveEntity> m_activeEntity;
 		std::vector<Ref<EditorPannel>> pannels;
 
 		VirtualCamera m_virtualCamera;

@@ -23,7 +23,7 @@ namespace Deer {
         ImGui_ImplOpenGL3_CreateFontsTexture();
         m_texture = Texture2D::create("assets/skull.jpg");
 
-        m_meshID = Project::m_assetManager.loadAsset<Mesh>("assets/skull.obj");
+        //m_meshID = Project::m_assetManager.loadAsset<Mesh>("assets/skull.obj");
         m_shaderID = Project::m_assetManager.loadAsset<Shader>("assets/Shaders/SimpleShader");
 
         m_activeEntity = Ref<ActiveEntity>(new ActiveEntity());
@@ -59,10 +59,10 @@ namespace Deer {
         pannels.push_back(m_viewportPannel);
         pannels.push_back(m_assetPannel);
 
-        auto& entity = m_scene->getMainEnviroment()->createEntity("Square");
-        MeshRenderComponent& mrc = entity.addComponent<MeshRenderComponent>();
-        mrc.meshAssetID = m_meshID;
-        mrc.shaderAssetID = m_shaderID;
+        //auto& entity = m_scene->getMainEnviroment()->createEntity("Square");
+        //MeshRenderComponent& mrc = entity.addComponent<MeshRenderComponent>();
+        //mrc.meshAssetID = m_meshID;
+        //mrc.shaderAssetID = m_shaderID;
     }
 
     void DeerStudioLayer::unloadScene() {
