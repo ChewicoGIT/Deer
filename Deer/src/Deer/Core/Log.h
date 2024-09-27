@@ -29,4 +29,4 @@ namespace Deer {
 #define DEER_CORE_WARN( ... ) Deer::Log::getCoreLogger()->warn(__VA_ARGS__)
 #define DEER_CORE_ERROR( ... ) Deer::Log::getCoreLogger()->error(__VA_ARGS__)
 
-#define DEER_CORE_ASSERT(condition , ... ) if (!(condition)) Deer::Log::getCoreLogger()->error(__VA_ARGS__)
+#define DEER_CORE_ASSERT(condition , ... ) if (!(condition)) {Deer::Log::getCoreLogger()->error(__VA_ARGS__);__debugbreak();}

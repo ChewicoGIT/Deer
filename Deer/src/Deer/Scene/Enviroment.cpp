@@ -116,6 +116,7 @@ namespace Deer {
 	}
 
 	Entity& Environment::tryGetEntity(uid id) {
+		DEER_CORE_ASSERT(m_entities.contains(id), "Entity id : {0} does not exist", id);
 		return m_entities[id];
 	}
 	

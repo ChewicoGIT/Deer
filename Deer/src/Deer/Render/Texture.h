@@ -10,6 +10,7 @@ namespace Deer {
 
 		virtual unsigned int getWidth() = 0;
 		virtual unsigned int getHeight() = 0;
+		virtual unsigned int getTextureID() = 0;
 
 		virtual void bind(unsigned int slot) = 0;
 	};

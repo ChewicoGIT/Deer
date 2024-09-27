@@ -18,6 +18,12 @@ namespace Deer {
 		ImGui::ShowDemoWindow();
 		ImGui::Begin(m_treeName.c_str());
 		Entity& root = m_enviroment->getRoot();
+
+		if (ImGui::Button("Options")) {
+			m_contextMenuEntity = &root;
+			ImGui::OpenPopup("Entity Context Menu");
+		}
+
 		updateReciveDragPayload(root);
 
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
@@ -30,7 +36,8 @@ namespace Deer {
 		updateContextMenu();
 
 		ImGui::Spacing();
-		ImVec2 spaceSize(ImGui::GetWindowContentRegionWidth(), 40);
+		ImVec2 spaceSize(ImGui::GetWindowContentRegionWidth(), 80);
+
 		ImGui::InvisibleButton("DragDropSpace", spaceSize);
 
 		updateReciveDragPayload(root);
@@ -69,7 +76,7 @@ namespace Deer {
 				flags |= ImGuiTreeNodeFlags_Selected;
 
 			ImGui::TreeNodeEx(entityID, flags, name.c_str());
-			if (!updateDragPayload(entity, tag.tag))
+			if (!updateDragPayload(&entity, tag.tag))
 				updateReciveDragPayload(entity);
 
 			clickEntity(entity);
@@ -91,7 +98,7 @@ namespace Deer {
 
 		if (ImGui::TreeNodeEx(entityID, flags, name.c_str())) {
 			if (!entity.isRoot())
-				updateDragPayload(entity, tag.tag);
+				updateDragPayload(&entity, tag.tag);
 			updateReciveDragPayload(entity);
 
 			if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
@@ -120,18 +127,19 @@ namespace Deer {
 			}
 
 			if (!entity.isRoot())
-				updateDragPayload(entity, tag.tag);
+				updateDragPayload(&entity, tag.tag);
 			updateReciveDragPayload(entity);
 		}
 
 	}
 
 
-	bool EnviromentTreePannel::updateDragPayload(Entity& entity, const std::string& name) {
+	bool EnviromentTreePannel::updateDragPayload(Entity* entity, const std::string& name) {
 		if (!ImGui::BeginDragDropSource())
 			return false;
 
-		ImGui::SetDragDropPayload("_ENTITY", &entity, sizeof(entity));
+		ImGui::SetDragDropPayload("_ENTITY", &entity, sizeof(Entity*));
+		DEER_CORE_INFO((unsigned long long)entity);
 		ImGui::Text(name.c_str());
 		ImGui::EndDragDropSource();
 		return true;
@@ -140,7 +148,8 @@ namespace Deer {
 	void EnviromentTreePannel::updateReciveDragPayload(Entity& entity) {
 		if (ImGui::BeginDragDropTarget()) {
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("_ENTITY")) {
-				Entity* receivedData = (Entity*)payload->Data;
+				Entity* receivedData = *(Entity**)payload->Data;
+				DEER_CORE_INFO((unsigned long long)receivedData);
 
 				if (!entity.isDescendant(*receivedData))
 					receivedData->setParent(entity);
@@ -158,17 +167,19 @@ namespace Deer {
 			if (ImGui::MenuItem("New Entity")) {
 				Entity& entity = m_enviroment->createEntity("new entity");
 				entity.setParent(*m_contextMenuEntity);
+
 				ImGui::CloseCurrentPopup();
 			}
 			if (!m_contextMenuEntity->isRoot() && ImGui::MenuItem("Delete")) {
 				m_contextMenuEntity->destroy();
+				m_activeEntity->clear();
 				ImGui::CloseCurrentPopup();
 			}
-			if (ImGui::MenuItem("Rename")) {
+			if (!m_contextMenuEntity->isRoot() && ImGui::MenuItem("Rename")) {
 				callRename = true;
 				ImGui::CloseCurrentPopup();
 			}
-			if (ImGui::MenuItem("Duplicate")) {
+			if (!m_contextMenuEntity->isRoot() && ImGui::MenuItem("Duplicate")) {
 				m_contextMenuEntity->duplicate();
 				ImGui::CloseCurrentPopup();
 			}

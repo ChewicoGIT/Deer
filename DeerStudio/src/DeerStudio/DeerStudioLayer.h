@@ -23,6 +23,7 @@
 #include "DeerStudio/Editor/EnviromentTreePannel.h"
 #include "DeerStudio/Editor/PropertiesPannel.h"
 #include "DeerStudio/Editor/ViewportPannel.h"
+#include "DeerStudio/Editor/AssetManagerPannel.h"
 
 #include <vector>
 
@@ -30,6 +31,9 @@ namespace Deer {
 	class DeerStudioLayer : public Layer {
 		void onAttach() override;
 		void onUpdate(Timestep delta) override;
+
+		void loadEditor();
+		void unloadEditor();
 
 		void loadScene();
 		void unloadScene();

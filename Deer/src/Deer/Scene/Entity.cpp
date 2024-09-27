@@ -28,10 +28,16 @@ namespace Deer {
 		if (m_parentUID == parent.m_entityUID)
 			return;
 
-		Entity& current_parent = getParent();
+		if (m_parentUID != 0){
+			Entity& current_parent = getParent();
 
-		if (current_parent.isValid())
+			if (parent.isDescendant(*this)) {
+				DEER_CORE_INFO("Blocked");
+				return;
+			}
+
 			current_parent.removeChild(*this);
+		}
 
 		m_parentUID = parent.m_entityUID;
 		getComponent<RelationshipComponent>().parent_UID = parent.m_entityUID;
@@ -53,7 +59,7 @@ namespace Deer {
 		Entity& creation = m_environment->createEntity(getComponent<TagComponent>().tag + " (duplicated)");
 
 		creation.getComponent<TransformComponent>() = getComponent<TransformComponent>();
-		Entity& parent = m_environment->tryGetEntity((uid)getComponent<RelationshipComponent>().parent_UID);
+		Entity& parent = m_environment->tryGetEntity(m_parentUID);
 		creation.setParent(parent);
 
 		if (m_environment->m_registry.any_of<MeshRenderComponent>(m_entityHandle))
@@ -70,12 +76,13 @@ namespace Deer {
 		getParent().removeChild(*this);
 
 		for (auto entt : getChildren()) {
-			m_environment->tryGetEntity((uid)entt).destroy();
+			m_environment->tryGetEntity(entt).destroy();
 		}
 
 		m_environment->m_registry.destroy(m_entityHandle);
 		m_entityHandle = entt::null;
 		m_environment = nullptr;
+		m_entityUID = 0;
 	}
 
 	Entity& Entity::getParent() {

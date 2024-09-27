@@ -44,17 +44,20 @@ namespace Deer {
 
     void DeerStudioLayer::loadScene() {
 
+        m_activeEntity->clear();
         m_scene = Ref<Scene>(new Scene());
         m_sceneSerializer = Ref<SceneSerializer>(new SceneSerializer(m_scene));
 
         auto m_propertiesPannel = Ref<PropertiesPannel>(new PropertiesPannel(m_activeEntity));
         auto m_viewportPannel = Ref<ViewportPannel>(new ViewportPannel(m_scene->getMainEnviroment(), "Scene viewport", m_activeEntity));
         auto m_enviromentTreePannel = Ref<EnviromentTreePannel>(new EnviromentTreePannel(m_scene->getMainEnviroment(), "World tree", m_activeEntity));
+        auto m_assetPannel = Ref<AssetManagerPannel>(new AssetManagerPannel());
 
         pannels.clear();
         pannels.push_back(m_propertiesPannel);
         pannels.push_back(m_enviromentTreePannel);
         pannels.push_back(m_viewportPannel);
+        pannels.push_back(m_assetPannel);
 
         auto& entity = m_scene->getMainEnviroment()->createEntity("Square");
         MeshRenderComponent& mrc = entity.addComponent<MeshRenderComponent>();
@@ -65,7 +68,7 @@ namespace Deer {
     void DeerStudioLayer::unloadScene() {
         m_scene.reset();
         m_sceneSerializer.reset();
-        m_activeEntity.reset();
+        m_activeEntity->clear();
         pannels.clear();
     }
 

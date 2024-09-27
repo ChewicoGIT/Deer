@@ -16,7 +16,7 @@ namespace Deer {
 
 		void clickEntity(Entity& entity);
 		void updateEntity(Entity& entity);
-		bool updateDragPayload(Entity& entity, const std::string& name);
+		bool updateDragPayload(Entity* entity, const std::string& name);
 		void updateReciveDragPayload(Entity& entity);
 		void updateContextMenu();
 

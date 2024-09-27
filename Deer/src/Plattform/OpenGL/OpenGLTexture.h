@@ -9,6 +9,7 @@ namespace Deer {
 
 		unsigned int getWidth() override { return m_width; }
 		unsigned int getHeight() override { return m_height; }
+		unsigned int getTextureID() override { return m_textureID; }
 
 		void bind(unsigned int slot) override;
 	private:
