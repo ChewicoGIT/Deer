@@ -9,4 +9,8 @@ namespace Deer {
 	Scene::~Scene() {
 		DEER_CORE_TRACE("Destroying scene");
 	}
+
+	void Scene::clear() {
+		m_enviroment->clear();
+	}
 }

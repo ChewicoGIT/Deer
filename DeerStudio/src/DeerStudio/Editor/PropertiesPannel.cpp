@@ -1,6 +1,7 @@
 #include "PropertiesPannel.h"
 #include "Deer/Core/Input.h"
 #include "Deer/Core/KeyCodes.h"
+#include "Deer/Core/Project.h"
 #include "imgui.h"
 
 namespace Deer {
@@ -62,14 +63,26 @@ namespace Deer {
 			ImGui::Dummy(ImVec2(0.0f, 10.0f));
 		}
 
-		if (collapsingComponentHeader<MeshRenderComponent>("MeshRender Component"))
-		{
+		if (collapsingComponentHeader<MeshRenderComponent>("MeshRender Component")) {
 			ImGui::Dummy(ImVec2(0.0f, 10.0f));
 			ImGui::Indent();
 
 			auto& mesh = activeEntity.getComponent<MeshRenderComponent>();
 
-			ImGui::Text("Current mesh: %u", mesh.meshAssetID);
+			const char* meshName;
+			if (mesh.meshAssetID == 0)
+				meshName = "null";
+			else
+				meshName = Project::m_assetManager.getAssetLocation(mesh.meshAssetID).c_str();
+
+			ImGui::Text("Current mesh: %s", meshName);
+			if (ImGui::BeginDragDropTarget()) {
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("_MESH")) {
+					std::string receivedData = **(std::string**)payload->Data;
+					mesh.meshAssetID = Project::m_assetManager.loadAsset<Mesh>(receivedData);
+				}
+				ImGui::EndDragDropTarget();
+			}
 
 			ImGui::Unindent();
 			ImGui::Dummy(ImVec2(0.0f, 10.0f));

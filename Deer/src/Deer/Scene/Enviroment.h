@@ -30,14 +30,19 @@ namespace Deer {
 		Entity& createEntity(const std::string& name = std::string());
 		Entity& createEmptyEntity();
 
+		Entity& tryGetMainCamera();
+		void setMainCamera(Entity& entity);
+
 		Entity& getRoot();
 	public:
+		const std::string m_rootName;
 		entt::registry m_registry;
 
 		Entity* m_rootEntity;
 		EntityMap m_entities;
 
 		uid m_idCreationOffset = 0;
+		uid m_mainCamera = 0;
 
 		friend class Entity;
 	};

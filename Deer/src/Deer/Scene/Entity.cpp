@@ -32,7 +32,6 @@ namespace Deer {
 			Entity& current_parent = getParent();
 
 			if (parent.isDescendant(*this)) {
-				DEER_CORE_INFO("Blocked");
 				return;
 			}
 

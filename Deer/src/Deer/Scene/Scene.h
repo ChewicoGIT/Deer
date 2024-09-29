@@ -10,6 +10,8 @@ namespace Deer {
 		Scene();
 		~Scene();
 
+		void clear();
+
 		inline Ref<Environment>& getMainEnviroment() { return m_enviroment; }
 	private:
 		Ref<Environment> m_enviroment;
