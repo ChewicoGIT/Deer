@@ -33,6 +33,7 @@ namespace Deer {
         m_fileIcon = Texture2D::create("editor/icons/file.png");
         m_scneIcon = Texture2D::create("editor/icons/scene.png");
         m_objectIcon = Texture2D::create("editor/icons/object.png");
+        m_shaderIcon = Texture2D::create("editor/icons/shader.png");
     }
 
     void AssetManagerPannel::onImGui() {
@@ -140,6 +141,16 @@ namespace Deer {
                 ImGui::EndDragDropSource();
             }
         
+        } else if (extension == ".glsl") {
+            ImGui::Image((void*)m_shaderIcon->getTextureID(), ImVec2(m_iconMinSize, m_iconMinSize), ImVec2(0, 1), ImVec2(1, 0));
+
+            if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID)) {
+                std::string pathString = path.string();
+                ImGui::SetDragDropPayload("_SHADER", pathString.c_str(), pathString.size() + 1);
+                ImGui::Text(path.string().c_str());
+                ImGui::EndDragDropSource();
+            }
+
         } else if (extension == ".png" || extension == ".jpg") {
             uid textureID = Project::m_assetManager.loadAsset<Texture2D>(path.string());
             Asset<Texture2D>& textureAsset = Project::m_assetManager.getAsset<Texture2D>(textureID);

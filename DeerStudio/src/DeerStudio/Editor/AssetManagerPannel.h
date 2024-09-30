@@ -28,6 +28,7 @@ namespace Deer {
 		Ref<Texture2D> m_fileIcon;
 		Ref<Texture2D> m_scneIcon;
 		Ref<Texture2D> m_objectIcon;
+		Ref<Texture2D> m_shaderIcon;
 
 		int m_iconMinSize = 110;
 		bool m_clickHandled = false;
