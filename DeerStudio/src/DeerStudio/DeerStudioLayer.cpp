@@ -3,8 +3,11 @@
 #include "Deer/Render/Render.h"
 #include "Deer/Core/Window.h"
 #include "Deer/Core/Log.h"
+
 #include "DeerStudio/Editor/ViewportPannel.h"
 #include "DeerStudio/Editor/ActiveEntity.h"
+#include "DeerStudio/Editor/GamePannel.h"
+
 #include "backends/imgui_impl_opengl3.h"
 #include "Style.h"
 
@@ -34,12 +37,14 @@ namespace Deer {
         auto m_viewportPannel = Ref<ViewportPannel>(new ViewportPannel(m_scene->getMainEnviroment(), "Scene viewport", m_activeEntity));
         auto m_enviromentTreePannel = Ref<EnviromentTreePannel>(new EnviromentTreePannel(m_scene->getMainEnviroment(), "World tree", m_activeEntity));
         auto m_assetPannel = Ref<AssetManagerPannel>(new AssetManagerPannel(m_sceneSerializer, m_activeEntity));
+        auto m_gamePannel = Ref<GamePannel>(new GamePannel(m_scene));
 
         pannels.clear();
         pannels.push_back(m_propertiesPannel);
         pannels.push_back(m_enviromentTreePannel);
         pannels.push_back(m_viewportPannel);
         pannels.push_back(m_assetPannel);
+        pannels.push_back(m_gamePannel);
 
         auto& entity = m_scene->getMainEnviroment()->createEntity("Square");
         MeshRenderComponent& mrc = entity.addComponent<MeshRenderComponent>();

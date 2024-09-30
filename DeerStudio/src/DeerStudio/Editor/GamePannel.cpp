@@ -1,10 +1,11 @@
 #include "GamePannel.h"
 #include "Deer/Scene/Enviroment.h"
+#include "Deer/Scene/Scene.h"
 #include "imgui.h"
 
 namespace Deer {
-    GamePannel::GamePannel(Ref<Environment> environment) 
-        : m_environment(environment){
+    GamePannel::GamePannel(Ref<Scene> scene) 
+        : m_scene(scene){
         FrameBufferSpecification fbSpecs = FrameBufferSpecification(100, 100, { TextureBufferType::RGBA8 }, 1, false);
         m_frameBuffer = FrameBuffer::create(fbSpecs);
     }
@@ -12,6 +13,18 @@ namespace Deer {
     void GamePannel::onImGui() {
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
         ImGui::Begin("Game Window");
+        ImGui::PopStyleVar();
+
+        Ref<Environment> environment = m_scene->getMainEnviroment();
+        uid cameraUID = environment->tryGetMainCamera();
+
+        if (cameraUID == 0) {
+            ImGui::TextColored(ImVec4(.3f, .3f, .8f, 1.0f), "There is no camera");
+            ImGui::End();
+            return;
+        }
+
+        ImGui::End();
         /*
         ImVec2 contentRegionMin = ImGui::GetWindowContentRegionMin();
         ImVec2 pos = ImGui::GetWindowPos();

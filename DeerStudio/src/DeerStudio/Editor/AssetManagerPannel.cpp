@@ -127,7 +127,7 @@ namespace Deer {
                     m_currentScenePath = path;
                 }
                 catch ( ... ) {
-                    DEER_CORE_ERROR("Error while loading scene {0}", path.string().c_str());
+                    DEER_CORE_ERROR("Error while loading scene {0}, file might be corrupt", path.string().c_str());
                 }
             }
 

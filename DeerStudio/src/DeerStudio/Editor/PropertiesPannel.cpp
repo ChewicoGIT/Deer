@@ -116,6 +116,13 @@ namespace Deer {
 
 			auto& camera = activeEntity.getComponent<CameraComponent>();
 
+			uid currentMainCamera = activeEntity.getEnvironment()->tryGetMainCamera();
+			if (currentMainCamera == activeEntity.getUID())
+				ImGui::Button("This is the main camera");
+			else if (ImGui::Button("Set main camera")) {
+				activeEntity.getEnvironment()->setMainCamera(activeEntity);
+			}
+
 			float fov = glm::degrees(camera.fov);
 			ImGui::SliderFloat("Fov", &fov, 1, 180);
 			camera.fov = glm::radians(fov);

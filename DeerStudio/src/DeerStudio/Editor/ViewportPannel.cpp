@@ -158,7 +158,7 @@ namespace Deer {
             m_transformMode = TransformMode::Translate;
         if (Input::isKeyPressed(DEER_KEY_R))
             m_transformMode = TransformMode::Rotate;
-        if (Input::isKeyPressed(DEER_KEY_Y))
+        if (Input::isKeyPressed(DEER_KEY_G))
             m_transformMode = TransformMode::Scale;
 
         if (Input::isKeyPressed(DEER_KEY_D) && Input::isKeyPressed(DEER_KEY_LEFT_CONTROL)) {

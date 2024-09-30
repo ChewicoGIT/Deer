@@ -111,9 +111,11 @@ namespace Deer {
 		m_parentUID = relation.parent_UID;
 		m_isRoot = relation.parent_UID == 0;
 
-		m_environment->m_entities[tag.entityUID] = *this;
-		if (m_isRoot)
+		if (m_isRoot) {
+			m_environment->m_registry.destroy(m_environment->m_rootEntity->m_entityHandle);
 			m_environment->m_rootEntity = &m_environment->m_entities[tag.entityUID];
+		}
+		m_environment->m_entities[tag.entityUID] = *this;
 	}
 }
 

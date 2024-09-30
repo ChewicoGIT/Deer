@@ -4,20 +4,19 @@
 #include "glm/glm.hpp"
 
 namespace Deer {
-	class Environment;
+	class Scene;
 	class FrameBuffer;
 
 	class GamePannel : public EditorPannel {
 	public:
-		GamePannel(Ref<Environment>);
+		GamePannel(Ref<Scene> scene);
 		void onImGui() override;
 
 	private:
-		Ref<Environment> m_environment;
+		Ref<Scene> m_scene;
 		Ref<FrameBuffer> m_frameBuffer;
 
 		glm::vec2 m_lastWindowSize;
-
 	};
 }
 
