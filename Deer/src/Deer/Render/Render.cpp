@@ -1,5 +1,6 @@
 #include "Render.h"
 #include "Deer/Render/RenderCommand.h"
+#include "Deer/Render/VertexArray.h"
 
 namespace Deer {
 

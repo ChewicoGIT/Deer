@@ -1,9 +1,10 @@
 #pragma once
-#include "Deer/Render/VertexArray.h"
 #include "Deer/Core/Core.h"
 #include "glm/glm.hpp"
 
 namespace Deer {
+	class VertexArray;
+
 	class RenderAPI {
 	public:
 		enum class API {

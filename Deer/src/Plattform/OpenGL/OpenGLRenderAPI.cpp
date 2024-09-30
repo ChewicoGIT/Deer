@@ -1,5 +1,6 @@
 #include "OpenGLRenderAPI.h"
 #include "Plattform/OpenGL/OpenGLBuffer.h"
+#include "Deer/Render/VertexArray.h"
 
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"

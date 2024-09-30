@@ -23,8 +23,8 @@ namespace Deer {
         ImGui_ImplOpenGL3_CreateFontsTexture();
         m_texture = Texture2D::create("assets/skull.jpg");
 
-        m_meshID = Project::m_assetManager.loadAsset<Mesh>("assets/skull.obj");
-        m_shaderID = Project::m_assetManager.loadAsset<Shader>("assets/Shaders/SimpleShader");
+        m_meshID = Project::m_assetManager.loadAsset<Mesh>(std::filesystem::path("assets/skull.obj"));
+        m_shaderID = Project::m_assetManager.loadAsset<Shader>(std::filesystem::path("assets/Shaders/SimpleShader.glsl"));
 
         m_activeEntity = Ref<ActiveEntity>(new ActiveEntity());
         m_scene = Ref<Scene>(new Scene());

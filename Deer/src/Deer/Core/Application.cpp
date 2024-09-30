@@ -3,6 +3,7 @@
 #include "Deer/Core/Timestep.h"
 
 #include "Deer/Render/RenderCommand.h"
+#include "Deer/Render/Render.h"
 
 #include <functional>
 

@@ -1,8 +1,8 @@
 #pragma once
-#include "Deer/Render/VertexArray.h"
 #include "Deer/Render/RenderAPI.h"
 
 namespace Deer {
+	class VertexArray;
 
 	class Render {
 	public:

@@ -32,37 +32,6 @@
                 "hasMeshRenderComponent": false
             },
             {
-                "id": 2,
-                "name": "Square",
-                "transform": {
-                    "position": {
-                        "x": -0.1276601254940033,
-                        "y": 0.035632193088531497,
-                        "z": -0.22990402579307557
-                    },
-                    "scale": {
-                        "x": 9.005828857421875,
-                        "y": 0.0010000000474974514,
-                        "z": 6.4884562492370609
-                    },
-                    "rotation": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0,
-                        "w": 1.0
-                    }
-                },
-                "relationship": {
-                    "parentUID": 1,
-                    "childrensUIDs": []
-                },
-                "hasMeshRenderComponent": true,
-                "meshRenderComponent": {
-                    "mesh": "assets/skull.obj",
-                    "shader": "assets/Shaders/SimpleShader"
-                }
-            },
-            {
                 "id": 3,
                 "name": "Square (duplicated)",
                 "transform": {
@@ -90,8 +59,69 @@
                 "hasMeshRenderComponent": true,
                 "meshRenderComponent": {
                     "mesh": "assets/skull.obj",
-                    "shader": "assets/Shaders/SimpleShader"
+                    "shader": "assets/Shaders/SimpleShader.glsl"
                 }
+            },
+            {
+                "id": 2,
+                "name": "Square",
+                "transform": {
+                    "position": {
+                        "x": -3.230085611343384,
+                        "y": 1.0152355432510377,
+                        "z": 2.8137316703796388
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
+                    }
+                },
+                "relationship": {
+                    "parentUID": 1,
+                    "childrensUIDs": []
+                },
+                "hasMeshRenderComponent": true,
+                "meshRenderComponent": {
+                    "mesh": "assets\\cube.obj",
+                    "shader": "assets/Shaders/SimpleShader.glsl"
+                }
+            },
+            {
+                "id": 1,
+                "name": "Scene Root",
+                "transform": {
+                    "position": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
+                    }
+                },
+                "relationship": {
+                    "parentUID": 0,
+                    "childrensUIDs": [
+                        2,
+                        3
+                    ]
+                },
+                "hasMeshRenderComponent": false
             },
             {
                 "id": 1,

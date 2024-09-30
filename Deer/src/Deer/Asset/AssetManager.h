@@ -15,10 +15,10 @@ namespace Deer {
 		template<typename T>
 		Asset<T>& getAsset(uid assetID) { return *(Asset<T>*)&(m_assets[assetID]); }
 
-		const std::string& getAssetLocation (uid assetID) { return m_assets[assetID].getAssetLocation(); }
+		const std::filesystem::path getAssetLocation (uid assetID) { return m_assets[assetID].getAssetLocation(); }
 
 		template<typename T>
-		uid loadAsset(const std::string& assetLocation) {
+		uid loadAsset(const std::filesystem::path& assetLocation) {
 			
 			for (size_t id = 0; id < m_assets.size(); ++id) {
 				if (m_assets[id].getAssetLocation() == assetLocation)

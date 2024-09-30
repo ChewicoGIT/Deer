@@ -135,7 +135,7 @@ namespace Deer {
 
             if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID)) {
                 std::string pathString = path.string();
-                ImGui::SetDragDropPayload("_MESH", &pathString, sizeof(std::string));
+                ImGui::SetDragDropPayload("_MESH", pathString.c_str(), pathString.size() + 1);
                 ImGui::Text(path.string().c_str());
                 ImGui::EndDragDropSource();
             }

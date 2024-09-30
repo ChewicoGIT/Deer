@@ -69,17 +69,38 @@ namespace Deer {
 
 			auto& mesh = activeEntity.getComponent<MeshRenderComponent>();
 
-			const char* meshName;
+			// ------ MESH -----
+			std::string meshName;
 			if (mesh.meshAssetID == 0)
-				meshName = "null";
+				meshName = " null ";
 			else
-				meshName = Project::m_assetManager.getAssetLocation(mesh.meshAssetID).c_str();
+				meshName = Project::m_assetManager.getAssetLocation(mesh.meshAssetID).string();
 
-			ImGui::Text("Current mesh: %s", meshName);
+			ImGui::Text("Mesh   : ");
+			ImGui::SameLine();
+			ImGui::Button(meshName.c_str());
 			if (ImGui::BeginDragDropTarget()) {
 				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("_MESH")) {
-					std::string receivedData = **(std::string**)payload->Data;
+					std::string receivedData = std::string((const char*)payload->Data);
 					mesh.meshAssetID = Project::m_assetManager.loadAsset<Mesh>(receivedData);
+				}
+				ImGui::EndDragDropTarget();
+			}
+
+			// ------ Shader -----
+			std::string shaderName;
+			if (mesh.shaderAssetID == 0)
+				shaderName = " null ";
+			else
+				shaderName = Project::m_assetManager.getAssetLocation(mesh.shaderAssetID).string();
+
+			ImGui::Text("Shader : ");
+			ImGui::SameLine();
+			ImGui::Button(shaderName.c_str());
+			if (ImGui::BeginDragDropTarget()) {
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("_SHADER")) {
+					std::string receivedData = std::string((const char*)payload->Data);
+					mesh.shaderAssetID = Project::m_assetManager.loadAsset<Shader>(receivedData);
 				}
 				ImGui::EndDragDropTarget();
 			}

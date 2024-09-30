@@ -1,7 +1,7 @@
 #pragma once
 #include "Deer/Core/Core.h"
-#include "Deer/Render/FrameBuffer.h"
 #include "Deer/Scene/Components.h"
+#include "Deer/Render/FrameBuffer.h"
 #include "entt/entt.hpp"
 
 #include <string>
@@ -26,11 +26,11 @@ namespace Deer {
 		void render(Entity& camera);
 		void render(VirtualCamera& camera);
 
-		Entity& tryGetEntity(uid id);
+		Entity& getEntity(uid id);
 		Entity& createEntity(const std::string& name = std::string());
 		Entity& createEmptyEntity();
 
-		Entity& tryGetMainCamera();
+		uid tryGetMainCamera();
 		void setMainCamera(Entity& entity);
 
 		Entity& getRoot();

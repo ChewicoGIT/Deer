@@ -58,7 +58,7 @@ namespace Deer {
 		Entity& creation = m_environment->createEntity(getComponent<TagComponent>().tag + " (duplicated)");
 
 		creation.getComponent<TransformComponent>() = getComponent<TransformComponent>();
-		Entity& parent = m_environment->tryGetEntity(m_parentUID);
+		Entity& parent = m_environment->getEntity(m_parentUID);
 		creation.setParent(parent);
 
 		if (m_environment->m_registry.any_of<MeshRenderComponent>(m_entityHandle))
@@ -75,7 +75,7 @@ namespace Deer {
 		getParent().removeChild(*this);
 
 		for (auto entt : getChildren()) {
-			m_environment->tryGetEntity(entt).destroy();
+			m_environment->getEntity(entt).destroy();
 		}
 
 		m_environment->m_registry.destroy(m_entityHandle);
@@ -85,7 +85,7 @@ namespace Deer {
 	}
 
 	Entity& Entity::getParent() {
-		return m_environment->tryGetEntity(m_parentUID);
+		return m_environment->getEntity(m_parentUID);
 	}
 
 	std::vector<uid>& Entity::getChildren() {

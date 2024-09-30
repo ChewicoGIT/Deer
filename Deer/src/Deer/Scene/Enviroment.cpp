@@ -62,7 +62,7 @@ namespace Deer {
 			if (meshRender.meshAssetID == 0)
 				continue;
 
-			Entity entity = tryGetEntity((uid)entityId);
+			Entity entity = getEntity((uid)entityId);
 
 			glm::mat4 matrix = entity.getWorldMatrix();
 			Asset<Shader>& shaderAsset = Project::m_assetManager.getAsset<Shader>(meshRender.shaderAssetID);
@@ -100,7 +100,7 @@ namespace Deer {
 				continue;
 
 			auto& tag = view.get<TagComponent>(entityId);
-			Entity& entity = tryGetEntity(tag.entityUID);
+			Entity& entity = getEntity(tag.entityUID);
 
 			glm::mat4 matrix = entity.getWorldMatrix();
 			Asset<Shader>& shaderAsset = Project::m_assetManager.getAsset<Shader>(meshRender.shaderAssetID);
@@ -118,7 +118,7 @@ namespace Deer {
 		}
 	}
 
-	Entity& Environment::tryGetEntity(uid id) {
+	Entity& Environment::getEntity(uid id) {
 		DEER_CORE_ASSERT(m_entities.contains(id), "Entity id : {0} does not exist", id);
 		return m_entities[id];
 	}
@@ -150,6 +150,14 @@ namespace Deer {
 		Entity entity = { entityID, this };
 
 		return entity;
+	}
+
+	uid Environment::tryGetMainCamera() {
+		return m_mainCamera;
+	}
+
+	void Environment::setMainCamera(Entity& entity) {
+		m_mainCamera = entity.m_entityUID;
 	}
 
 	Entity& Environment::getRoot() {

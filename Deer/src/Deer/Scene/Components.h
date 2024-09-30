@@ -3,7 +3,7 @@
 #include "Deer/Render/VertexArray.h"
 #include "Deer/Render/Shader.h"
 
-#include "glm/gtc/quaternion.hpp"
+#define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtc/quaternion.hpp"
 #include "glm/glm.hpp"
 

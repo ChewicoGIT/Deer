@@ -28,7 +28,7 @@ namespace Deer {
 
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
 		for (auto& entityID : m_enviroment->getRoot().getChildren()) {
-			Entity& childEntity = m_enviroment->tryGetEntity(entityID);
+			Entity& childEntity = m_enviroment->getEntity(entityID);
 			updateEntity(childEntity);
 		}
 		ImGui::PopStyleVar();
@@ -111,7 +111,7 @@ namespace Deer {
 			for (auto& entityID : entity.getChildren()) {
 				updateReciveDragPayload(entity);
 
-				Entity& childEntity = m_enviroment->tryGetEntity(entityID);
+				Entity& childEntity = m_enviroment->getEntity(entityID);
 				updateEntity(childEntity);
 			}
 

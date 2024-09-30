@@ -40,9 +40,9 @@ namespace Deer {
     void save(Archive& archive,
         MeshRenderComponent const& meshRender) {
 
-        std::string meshLocation = Project::m_assetManager.getAssetLocation(meshRender.meshAssetID);
+        std::string meshLocation = Project::m_assetManager.getAssetLocation(meshRender.meshAssetID).string();
         archive(cereal::make_nvp("mesh", meshLocation));
-        std::string shaderLocation = Project::m_assetManager.getAssetLocation(meshRender.shaderAssetID);
+        std::string shaderLocation = Project::m_assetManager.getAssetLocation(meshRender.shaderAssetID).string();
         archive(cereal::make_nvp("shader", shaderLocation));
     }
 
@@ -55,8 +55,8 @@ namespace Deer {
         std::string shaderLocation;
         archive(cereal::make_nvp("shader", shaderLocation));
 
-        meshRender.meshAssetID = Project::m_assetManager.loadAsset<Mesh>(meshLocation);
-        meshRender.shaderAssetID = Project::m_assetManager.loadAsset<Shader>(shaderLocation);
+        meshRender.meshAssetID = Project::m_assetManager.loadAsset<Mesh>(std::filesystem::path(meshLocation));
+        meshRender.shaderAssetID = Project::m_assetManager.loadAsset<Shader>(std::filesystem::path(shaderLocation));
     }
 
     template<class Archive>
@@ -140,7 +140,7 @@ namespace Deer {
 
         for (auto entity : view) {
             TagComponent& tag = view.get<TagComponent>(entity);
-            entityMap.push_back(m_environment->tryGetEntity(tag.entityUID));
+            entityMap.push_back(m_environment->getEntity(tag.entityUID));
         }
 
         archive(cereal::make_size_tag(static_cast<cereal::size_type>(entityMap.size()))); // number of elements
