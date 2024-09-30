@@ -139,7 +139,7 @@ namespace Deer {
 			return false;
 
 		ImGui::SetDragDropPayload("_ENTITY", &entity, sizeof(Entity*));
-		DEER_CORE_INFO((unsigned long long)entity);
+
 		ImGui::Text(name.c_str());
 		ImGui::EndDragDropSource();
 		return true;
@@ -149,7 +149,6 @@ namespace Deer {
 		if (ImGui::BeginDragDropTarget()) {
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("_ENTITY")) {
 				Entity* receivedData = *(Entity**)payload->Data;
-				DEER_CORE_INFO((unsigned long long)receivedData);
 
 				if (!entity.isDescendant(*receivedData))
 					receivedData->setParent(entity);

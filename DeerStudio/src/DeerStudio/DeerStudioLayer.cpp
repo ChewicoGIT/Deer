@@ -18,15 +18,34 @@ namespace Deer {
         io.Fonts->Clear(); 
         setNatureStyle();
 
-        ImFont* font1 = io.Fonts->AddFontFromFileTTF("editor\\fonts\\OpenSans-VariableFont_wdth,wght.ttf", 20.0f);
+        ImFont* font1 = io.Fonts->AddFontFromFileTTF("editor\\fonts\\OpenSans-VariableFont_wdth,wght.ttf", 19.0f);
         //ImGui::PushFont(font1);
         ImGui_ImplOpenGL3_CreateFontsTexture();
         m_texture = Texture2D::create("assets/skull.jpg");
 
-        //m_meshID = Project::m_assetManager.loadAsset<Mesh>("assets/skull.obj");
+        m_meshID = Project::m_assetManager.loadAsset<Mesh>("assets/skull.obj");
         m_shaderID = Project::m_assetManager.loadAsset<Shader>("assets/Shaders/SimpleShader");
 
         m_activeEntity = Ref<ActiveEntity>(new ActiveEntity());
+        m_scene = Ref<Scene>(new Scene());
+        m_sceneSerializer = Ref<SceneSerializer>(new SceneSerializer(m_scene));
+
+        auto m_propertiesPannel = Ref<PropertiesPannel>(new PropertiesPannel(m_activeEntity));
+        auto m_viewportPannel = Ref<ViewportPannel>(new ViewportPannel(m_scene->getMainEnviroment(), "Scene viewport", m_activeEntity));
+        auto m_enviromentTreePannel = Ref<EnviromentTreePannel>(new EnviromentTreePannel(m_scene->getMainEnviroment(), "World tree", m_activeEntity));
+        auto m_assetPannel = Ref<AssetManagerPannel>(new AssetManagerPannel(m_sceneSerializer, m_activeEntity));
+
+        pannels.clear();
+        pannels.push_back(m_propertiesPannel);
+        pannels.push_back(m_enviromentTreePannel);
+        pannels.push_back(m_viewportPannel);
+        pannels.push_back(m_assetPannel);
+
+        auto& entity = m_scene->getMainEnviroment()->createEntity("Square");
+        MeshRenderComponent& mrc = entity.addComponent<MeshRenderComponent>();
+        mrc.meshAssetID = m_meshID;
+        mrc.shaderAssetID = m_shaderID;
+
     }
 
     void DeerStudioLayer::onUpdate(Timestep delta) {
@@ -44,25 +63,6 @@ namespace Deer {
 
     void DeerStudioLayer::loadScene() {
 
-        m_activeEntity->clear();
-        m_scene = Ref<Scene>(new Scene());
-        m_sceneSerializer = Ref<SceneSerializer>(new SceneSerializer(m_scene));
-
-        auto m_propertiesPannel = Ref<PropertiesPannel>(new PropertiesPannel(m_activeEntity));
-        auto m_viewportPannel = Ref<ViewportPannel>(new ViewportPannel(m_scene->getMainEnviroment(), "Scene viewport", m_activeEntity));
-        auto m_enviromentTreePannel = Ref<EnviromentTreePannel>(new EnviromentTreePannel(m_scene->getMainEnviroment(), "World tree", m_activeEntity));
-        auto m_assetPannel = Ref<AssetManagerPannel>(new AssetManagerPannel());
-
-        pannels.clear();
-        pannels.push_back(m_propertiesPannel);
-        pannels.push_back(m_enviromentTreePannel);
-        pannels.push_back(m_viewportPannel);
-        pannels.push_back(m_assetPannel);
-
-        //auto& entity = m_scene->getMainEnviroment()->createEntity("Square");
-        //MeshRenderComponent& mrc = entity.addComponent<MeshRenderComponent>();
-        //mrc.meshAssetID = m_meshID;
-        //mrc.shaderAssetID = m_shaderID;
     }
 
     void DeerStudioLayer::unloadScene() {
@@ -121,24 +121,20 @@ namespace Deer {
     void DeerStudioLayer::drawMenuBar() {
 
         if (ImGui::BeginMenu("Project")) {
-            if (ImGui::MenuItem("LoadScene")) {
-                loadScene();
-            }
-            if (ImGui::MenuItem("UnloadScene")) {
-                unloadScene();
-            }
-            if (ImGui::MenuItem("Serialize Scene")) {
-                m_sceneSerializer->serialize("plsWork.txty");
-            }
-            if (ImGui::MenuItem("Deserialize Scene")) {
-                m_sceneSerializer->deserialize("plsWork.txty");
-                m_activeEntity->clear();
-            }
 
             ImGui::EndMenu();
         }
 
         if (ImGui::BeginMenu("Edit")) {
+            if (ImGui::MenuItem("New scene")) {
+                m_activeEntity->clear();
+                m_scene->clear();
+                m_sceneSerializer->serialize("assets/newScene.dscn");
+            }
+
+            if (m_sceneSerializer->getCurrentScenePath() != "_NO_INITIALIZED_" && ImGui::MenuItem("Save scene")) {
+                m_sceneSerializer->serialize(m_sceneSerializer->getCurrentScenePath());
+            }
             ImGui::EndMenu();
         }
 

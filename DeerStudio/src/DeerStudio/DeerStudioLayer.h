@@ -25,6 +25,7 @@
 #include "DeerStudio/Editor/ViewportPannel.h"
 #include "DeerStudio/Editor/AssetManagerPannel.h"
 
+#include <filesystem>
 #include <vector>
 
 namespace Deer {
@@ -40,19 +41,8 @@ namespace Deer {
 		void onImGUI() override;
 		void drawMenuBar();
 	private:
-		unsigned int vertexArray;
 		Ref<Texture2D> m_texture;
-		Scope<Camera> m_camera;
-		Transform m_transform;
-		Entity m_entity1;
-		Entity m_entity2;
 
-		glm::vec3 pos;
-		glm::vec3 objectRotation;
-		glm::vec3 rotation;
-
-		glm::vec2 m_viewportPannelSize;
-		float fov = 45;
 	private:
 		uid m_meshID = 0;
 		uid m_shaderID = 0;
@@ -62,8 +52,6 @@ namespace Deer {
 
 		Ref<ActiveEntity> m_activeEntity;
 		std::vector<Ref<EditorPannel>> pannels;
-
-		VirtualCamera m_virtualCamera;
 
 	};
 }
