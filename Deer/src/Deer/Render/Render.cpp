@@ -17,4 +17,9 @@ namespace Deer {
 		RenderCommand::drawIndex(vertexArray);
 	}
 
+	void Render::submitLine(const Ref<VertexArray>& vertexArray) {
+		vertexArray->bind();
+		RenderCommand::drawLines(vertexArray);
+	}
+
 }

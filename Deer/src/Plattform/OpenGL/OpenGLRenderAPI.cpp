@@ -27,4 +27,8 @@ namespace Deer {
 	void OpenGLRenderAPI::drawIndex(const Ref<VertexArray>& vertexArray) {
 		glDrawElements(GL_TRIANGLES, vertexArray->getIndexBuffer()->getCount(), getOpenGLIndexDataType(vertexArray->getIndexBuffer()->getIndexDataType()), nullptr);
 	}
+
+	void OpenGLRenderAPI::drawLines(const Ref<VertexArray>& vertexArray) {
+		glDrawElements(GL_LINES, vertexArray->getIndexBuffer()->getCount(), getOpenGLIndexDataType(vertexArray->getIndexBuffer()->getIndexDataType()), nullptr);
+	}
 }

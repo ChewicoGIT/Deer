@@ -48,8 +48,8 @@ namespace Deer {
 
         m_scene->render();
         m_frameBuffer->unbind();
-        ImGui::Image((void*)m_frameBuffer->getTextureBufferID(0), windowSize);
 
+        ImGui::Image((void*)m_frameBuffer->getTextureBufferID(0), windowSize);
         ImGui::End();
         /*
         ImVec2 contentRegionMin = ImGui::GetWindowContentRegionMin();

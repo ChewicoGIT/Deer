@@ -19,6 +19,7 @@ namespace Deer {
 		virtual void clear() = 0;
 
 		virtual void drawIndex(const Ref<VertexArray>& vertexArray) = 0;
+		virtual void drawLines(const Ref<VertexArray>& vertexArray) = 0;
 
 		inline static API getAPI() { return s_API; }
 	private:

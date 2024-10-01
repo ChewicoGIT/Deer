@@ -28,7 +28,8 @@
                         "childrensUIDs": [
                             2,
                             3,
-                            4
+                            4,
+                            5
                         ]
                     },
                     "hasMeshRenderComponent": false,
@@ -61,8 +62,8 @@
                     },
                     "hasMeshRenderComponent": true,
                     "meshRenderComponent": {
-                        "mesh": "assets/skull.obj",
-                        "shader": "assets/Shaders/LitShader.glsl"
+                        "mesh": "assets/cube.obj",
+                        "shader": "assets/Shaders/SimpleShader.glsl"
                     },
                     "hasCameraComponent": false
                 },
@@ -103,9 +104,9 @@
                     "name": "Camera",
                     "transform": {
                         "position": {
-                            "x": -0.22805023193359376,
+                            "x": -1.1277730464935303,
                             "y": 1.3090105056762696,
-                            "z": -2.818058490753174
+                            "z": -5.500376224517822
                         },
                         "scale": {
                             "x": 0.9999999403953552,
@@ -126,7 +127,41 @@
                     "hasMeshRenderComponent": false,
                     "hasCameraComponent": true,
                     "cameraComponent": {
-                        "aspect": 0.56695157289505,
+                        "aspect": 0.851311981678009,
+                        "fov": 1.5362387895584107,
+                        "farZ": 117.0,
+                        "nearZ": 0.10000000149011612
+                    }
+                },
+                {
+                    "id": 5,
+                    "name": "Camera (duplicated)",
+                    "transform": {
+                        "position": {
+                            "x": 3.369239568710327,
+                            "y": 1.3090105056762696,
+                            "z": -4.197110176086426
+                        },
+                        "scale": {
+                            "x": 0.9999999403953552,
+                            "y": 1.0,
+                            "z": 0.9999999403953552
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": -0.14057275652885438,
+                            "z": 0.0,
+                            "w": 0.9900703430175781
+                        }
+                    },
+                    "relationship": {
+                        "parentUID": 1,
+                        "childrensUIDs": []
+                    },
+                    "hasMeshRenderComponent": false,
+                    "hasCameraComponent": true,
+                    "cameraComponent": {
+                        "aspect": 0.851311981678009,
                         "fov": 1.5362387895584107,
                         "farZ": 117.0,
                         "nearZ": 0.10000000149011612

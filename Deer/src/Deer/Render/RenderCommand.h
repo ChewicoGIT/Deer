@@ -21,6 +21,11 @@ namespace Deer {
 		static inline void drawIndex(const Ref<VertexArray>& vertexArray) {
 			s_renderAPI->drawIndex(vertexArray);
 		}
+
+		static inline void drawLines(const Ref<VertexArray>& vertexArray) {
+			s_renderAPI->drawLines(vertexArray);
+		}
+
 	private:
 		static Scope<RenderAPI> s_renderAPI;
 	};

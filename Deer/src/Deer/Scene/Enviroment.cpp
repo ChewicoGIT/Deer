@@ -4,6 +4,7 @@
 #include "Deer/Scene/Entity.h"
 #include "Deer/Scene/Components.h"
 #include "Deer/Render/Render.h"
+#include "Deer/Render/RenderUtils.h"
 
 #include "Deer/Core/Log.h"
 
@@ -116,6 +117,15 @@ namespace Deer {
 
 			Render::submit(meshAsset.value);
 		}
+
+		RenderUtils::m_lineShader->bind();
+		RenderUtils::m_lineShader->uploadUniformMat4("u_viewMatrix", cameraProjectionMatrix);
+		RenderUtils::m_lineShader->uploadUniformFloat3("u_posA", glm::vec3(0, 0, 0));
+		RenderUtils::m_lineShader->uploadUniformFloat3("u_posB", glm::vec3(0, 10, 0));
+		RenderUtils::m_lineShader->uploadUniformFloat3("u_color", glm::vec3(1, 1, 1));
+
+		Render::submitLine(RenderUtils::m_lineVertexArray);
+
 	}
 
 	Entity& Environment::getEntity(uid id) {

@@ -1,6 +1,7 @@
 #pragma once
 #include "Deer/Core/Application.h"
 #include "Deer/Core/Log.h"
+#include "Deer/Render/RenderUtils.h"
 
 extern Deer::Application* createApplication(int argc, char** argv);
 
@@ -10,6 +11,8 @@ namespace Deer {
 		DEER_CORE_TRACE("Creating app");
 
 		Application* app = createApplication(argc, argv);
+		RenderUtils::initializeRenderUtils();
+
 		app->run();
 		delete app;
 
