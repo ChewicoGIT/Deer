@@ -119,27 +119,35 @@ namespace Deer {
 			}
 		}
 
-		// Draw Grid
-		RenderUtils::m_lineShader->bind();
-		RenderUtils::m_lineShader->uploadUniformMat4("u_viewMatrix", cameraProjectionMatrix);
-		RenderUtils::m_lineShader->uploadUniformFloat3("u_color", glm::vec3(.5f, .5f, .5f));
-		for (int x = 0; x < 11; x++) {
-			RenderUtils::m_lineShader->uploadUniformFloat3("u_posA", glm::vec3(x * 2 - 10, 0, -10));
-			RenderUtils::m_lineShader->uploadUniformFloat3("u_posB", glm::vec3(x * 2 - 10, 0, 10));
+		{
+			// Draw Grid
+			RenderUtils::m_lineShader->bind();
+			RenderUtils::m_lineShader->uploadUniformMat4("u_viewMatrix", cameraProjectionMatrix);
+			RenderUtils::m_lineShader->uploadUniformFloat3("u_color", glm::vec3(.5f, .5f, .5f));
+			for (int x = 0; x < 11; x++) {
+				RenderUtils::m_lineShader->uploadUniformFloat3("u_posA", glm::vec3(x * 2 - 10, 0, -10));
+				RenderUtils::m_lineShader->uploadUniformFloat3("u_posB", glm::vec3(x * 2 - 10, 0, 10));
 
-			Render::submitLine(RenderUtils::m_lineVertexArray);
-		}
-		for (int z = 0; z < 11; z++) {
-			RenderUtils::m_lineShader->uploadUniformFloat3("u_posA", glm::vec3(-10, 0, z * 2 -10));
-			RenderUtils::m_lineShader->uploadUniformFloat3("u_posB", glm::vec3(10, 0, z * 2 - 10));
+				Render::submitLine(RenderUtils::m_lineVertexArray);
+			}
+			for (int z = 0; z < 11; z++) {
+				RenderUtils::m_lineShader->uploadUniformFloat3("u_posA", glm::vec3(-10, 0, z * 2 - 10));
+				RenderUtils::m_lineShader->uploadUniformFloat3("u_posB", glm::vec3(10, 0, z * 2 - 10));
 
-			Render::submitLine(RenderUtils::m_lineVertexArray);
+				Render::submitLine(RenderUtils::m_lineVertexArray);
+			}
 		}
 
 		{
+			RenderUtils::m_lineShader->bind();
+			RenderUtils::m_lineShader->uploadUniformMat4("u_viewMatrix", cameraProjectionMatrix);
+			RenderUtils::m_lineShader->uploadUniformFloat3("u_color", glm::vec3(.5f, .7f, .8f));
+
 			auto view = m_registry.view<CameraComponent, TagComponent>();
 			for (auto entityId : view) {
-				CameraComponent& cameraComponent = view.get<CameraComponent>(entityId);
+				CameraComponent cameraComponent = view.get<CameraComponent>(entityId);
+				cameraComponent.nearZ = .5f;
+				cameraComponent.farZ = 2;
 				TagComponent& tag = view.get<TagComponent>(entityId);
 
 				Entity& entity = getEntity(tag.entityUID);
@@ -148,23 +156,56 @@ namespace Deer {
 				glm::mat4 camPrespective = glm::inverse(cameraComponent.getMatrix());
 
 				glm::mat4 cameraMatrix = camPrespective;
+				glm::vec3 cameraAxisPoints[2 * 2 * 2];
+
+				// Generate 8 Points
+				for (int x = 0; x < 2; x++) {
+					for (int y = 0; y < 2; y++) {
+						for (int z = 0; z < 2; z++) {
+							glm::vec4 endPos = invertZ * camPrespective * glm::vec4(x * 2 - 1, y * 2 - 1, z, 1);
+							endPos = endPos * endPos.w;
+							endPos.w = 1;
+
+							cameraAxisPoints[z * 4 + y * 2 + x] = matrix * endPos;
+						}
+					}
+				}
 
 				for (int x = 0; x < 2; x++) {
 					for (int y = 0; y < 2; y++) {
-						glm::vec3 camEnd = cameraMatrix * glm::vec4(x * 2 - 1, y * 2 - 1, 1, 1); // cameraMatrix * 
-						glm::vec3 camStart = cameraMatrix * glm::vec4(x * 2 - 1, y * 2 - 1, 0, 1);
+						int posA = 0 * 4 + y * 2 + x;
+						int posB = 1 * 4 + y * 2 + x;
 
-						RenderUtils::m_lineShader->uploadUniformFloat3("u_posA", camEnd);
-						RenderUtils::m_lineShader->uploadUniformFloat3("u_posB", camStart);
+						RenderUtils::m_lineShader->uploadUniformFloat3("u_posA", cameraAxisPoints[posA]);
+						RenderUtils::m_lineShader->uploadUniformFloat3("u_posB", cameraAxisPoints[posB]);
 
-						Render::submitLine(RenderUtils::m_lineVertexArray);
-
-						camEnd = cameraMatrix * glm::vec4(0, 0, 0, 1);
-						RenderUtils::m_lineShader->uploadUniformFloat3("u_posA", camEnd);
 						Render::submitLine(RenderUtils::m_lineVertexArray);
 					}
 				}
 
+				for (int x = 0; x < 2; x++) {
+					for (int z = 0; z < 2; z++) {
+						int posA = z * 4 + 0 * 2 + x;
+						int posB = z * 4 + 1 * 2 + x;
+
+						RenderUtils::m_lineShader->uploadUniformFloat3("u_posA", cameraAxisPoints[posA]);
+						RenderUtils::m_lineShader->uploadUniformFloat3("u_posB", cameraAxisPoints[posB]);
+
+						Render::submitLine(RenderUtils::m_lineVertexArray);
+					}
+				}
+
+				for (int y = 0; y < 2; y++) {
+					for (int z = 0; z < 2; z++) {
+						int posA = z * 4 + y * 2 + 0;
+						int posB = z * 4 + y * 2 + 1;
+
+						RenderUtils::m_lineShader->uploadUniformFloat3("u_posA", cameraAxisPoints[posA]);
+						RenderUtils::m_lineShader->uploadUniformFloat3("u_posB", cameraAxisPoints[posB]);
+
+						Render::submitLine(RenderUtils::m_lineVertexArray);
+					}
+				}
 			}
 		}
 
