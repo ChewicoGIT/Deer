@@ -43,33 +43,33 @@ namespace Deer {
 	void Environment::render(Entity& camera) {
 		DEER_CORE_ASSERT(camera.isValid(), "Rendering camera is not valid");
 		
-		auto& cameraComponent = camera.getComponent<CameraComponent>();
+		CameraComponent& cameraComponent = camera.getComponent<CameraComponent>();
 		
 		glm::mat4 camMatrix = glm::inverse(camera.getWorldMatrix());
 		glm::mat4 projectionMatrix = cameraComponent.getMatrix();
 		glm::mat4 invertZ = glm::scale(glm::mat4(1.0f), glm::vec3(1, 1, -1));
 		glm::mat4 invertY = glm::scale(glm::mat4(1.0f), glm::vec3(1, -1, 1));
 		
-		// Lets invert the z axis for engine convenience
+		// Invert the z axis for engine convenience
 		glm::mat4 cameraProjectionMatrix = invertY * projectionMatrix * invertZ * camMatrix;
 
-		auto view = m_registry.view<MeshRenderComponent>();
+		auto view = m_registry.view<MeshRenderComponent, TagComponent>();
 		for (auto entityId : view) {
-			auto meshRender = view.get<MeshRenderComponent>(entityId);
+			auto& meshRender = view.get<MeshRenderComponent>(entityId);
 			if (meshRender.shaderAssetID == 0)
 				continue;
 
 			if (meshRender.meshAssetID == 0)
 				continue;
 
-			Entity entity = getEntity((uid)entityId);
+			auto& tag = view.get<TagComponent>(entityId);
+			Entity& entity = getEntity(tag.entityUID);
 
 			glm::mat4 matrix = entity.getWorldMatrix();
 			Asset<Shader>& shaderAsset = Project::m_assetManager.getAsset<Shader>(meshRender.shaderAssetID);
 			shaderAsset.value->bind();
 			shaderAsset.value->uploadUniformMat4("u_viewMatrix", cameraProjectionMatrix);
 			shaderAsset.value->uploadUniformMat4("u_worldMatrix", matrix);
-			shaderAsset.value->uploadUniformMat4("u_objectID", (int)entityId);
 
 			shaderAsset.value->bind();
 

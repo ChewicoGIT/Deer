@@ -10,6 +10,7 @@ namespace Deer {
 		Scene();
 		~Scene();
 
+		void render();
 		void clear();
 
 		inline Ref<Environment>& getMainEnviroment() { return m_enviroment; }

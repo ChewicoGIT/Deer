@@ -47,12 +47,22 @@ namespace Deer {
 
 namespace Deer {
     template<class Archive>
+    void serialize(Archive& archive,
+        CameraComponent& camera) {
+
+        archive(cereal::make_nvp("aspect", camera.aspect));
+        archive(cereal::make_nvp("fov", camera.fov));
+        archive(cereal::make_nvp("farZ", camera.farZ));
+        archive(cereal::make_nvp("nearZ", camera.nearZ));
+    }
+
+    template<class Archive>
     void save(Archive& archive,
         MeshRenderComponent const& meshRender) {
 
-        std::string meshLocation = Project::m_assetManager.getAssetLocation(meshRender.meshAssetID).string();
+        std::string meshLocation = Project::m_assetManager.getAssetLocation(meshRender.meshAssetID).generic_string();
         archive(cereal::make_nvp("mesh", meshLocation));
-        std::string shaderLocation = Project::m_assetManager.getAssetLocation(meshRender.shaderAssetID).string();
+        std::string shaderLocation = Project::m_assetManager.getAssetLocation(meshRender.shaderAssetID).generic_string();
         archive(cereal::make_nvp("shader", shaderLocation));
     }
 
@@ -109,6 +119,13 @@ namespace Deer {
             MeshRenderComponent& meshRender = m_entity.getComponent<MeshRenderComponent>();
             archive(cereal::make_nvp("meshRenderComponent", meshRender));
         }
+
+        bool hasCameraComponent = m_entity.hasComponent<CameraComponent>();
+        archive(cereal::make_nvp("hasCameraComponent", hasCameraComponent));
+        if (hasCameraComponent) {
+            CameraComponent& camera = m_entity.getComponent<CameraComponent>();
+            archive(cereal::make_nvp("cameraComponent", camera));
+        }
     }
 
     template<class Archive>
@@ -122,9 +139,6 @@ namespace Deer {
 
         m_entity.addComponent<TagComponent>() = TagComponent(name, id);
 
-        DEER_CORE_INFO("id : {0}", id);
-        DEER_CORE_INFO("name : {0}", name);
-
         m_entity.addComponent<TransformComponent>();
         archive(cereal::make_nvp("transform", m_entity.getComponent<TransformComponent>()));
 
@@ -134,8 +148,15 @@ namespace Deer {
         bool hasMeshRenderComponent;
         archive(cereal::make_nvp("hasMeshRenderComponent", hasMeshRenderComponent));
         if (hasMeshRenderComponent) {
-            m_entity.addComponent<MeshRenderComponent>();
-            archive(cereal::make_nvp("meshRenderComponent", m_entity.getComponent<MeshRenderComponent>()));
+            MeshRenderComponent& meshRender = m_entity.addComponent<MeshRenderComponent>();
+            archive(cereal::make_nvp("meshRenderComponent", meshRender));
+        }
+
+        bool hasCameraComponent;
+        archive(cereal::make_nvp("hasCameraComponent", hasCameraComponent));
+        if (hasCameraComponent) {
+            CameraComponent& camera = m_entity.addComponent<CameraComponent>();
+            archive(cereal::make_nvp("cameraComponent", camera));
         }
 
         m_entity.update();

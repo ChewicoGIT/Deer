@@ -113,7 +113,6 @@ namespace Deer {
     }
 
     void AssetManagerPannel::drawFile(const std::filesystem::path& path) {
-        
         std::string extension = path.filename().extension().string();
 
         if (extension == ".dscn") {
@@ -130,7 +129,6 @@ namespace Deer {
                     DEER_CORE_ERROR("Error while loading scene {0}, file might be corrupt", path.string().c_str());
                 }
             }
-
         } else if (extension == ".obj") {
             ImGui::Image((void*)m_objectIcon->getTextureID(), ImVec2(m_iconMinSize, m_iconMinSize), ImVec2(0, 1), ImVec2(1, 0));
 
@@ -140,7 +138,6 @@ namespace Deer {
                 ImGui::Text(path.string().c_str());
                 ImGui::EndDragDropSource();
             }
-        
         } else if (extension == ".glsl") {
             ImGui::Image((void*)m_shaderIcon->getTextureID(), ImVec2(m_iconMinSize, m_iconMinSize), ImVec2(0, 1), ImVec2(1, 0));
 
@@ -150,7 +147,6 @@ namespace Deer {
                 ImGui::Text(path.string().c_str());
                 ImGui::EndDragDropSource();
             }
-
         } else if (extension == ".png" || extension == ".jpg") {
             uid textureID = Project::m_assetManager.loadAsset<Texture2D>(path.string());
             Asset<Texture2D>& textureAsset = Project::m_assetManager.getAsset<Texture2D>(textureID);

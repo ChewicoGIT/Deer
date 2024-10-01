@@ -1,6 +1,7 @@
 #include "GamePannel.h"
 #include "Deer/Scene/Enviroment.h"
 #include "Deer/Scene/Scene.h"
+#include "Deer/Scene/Entity.h"
 #include "imgui.h"
 
 namespace Deer {
@@ -23,6 +24,31 @@ namespace Deer {
             ImGui::End();
             return;
         }
+
+        Entity& cameraEntity = environment->getEntity(cameraUID);
+        CameraComponent& cameraComponent = cameraEntity.getComponent<CameraComponent>();
+
+        ImVec2 contentRegionMin = ImGui::GetWindowContentRegionMin();
+        ImVec2 pos = ImGui::GetWindowPos();
+        pos.y += contentRegionMin.y;
+
+        ImVec2 windowSize = ImGui::GetContentRegionAvail();
+
+        if (m_lastWindowSize != *(glm::vec2*)&windowSize) {
+            m_lastWindowSize = { windowSize.x, windowSize.y };
+            m_frameBuffer->resize(windowSize.x, windowSize.y);
+
+            cameraComponent.aspect = windowSize.x / windowSize.y;
+        }
+
+        m_frameBuffer->bind();
+        m_frameBuffer->clear();
+        unsigned char clearColor[4]{ 0, 0, 0, 255 };
+        m_frameBuffer->clearBuffer(0, &clearColor);
+
+        m_scene->render();
+        m_frameBuffer->unbind();
+        ImGui::Image((void*)m_frameBuffer->getTextureBufferID(0), windowSize);
 
         ImGui::End();
         /*

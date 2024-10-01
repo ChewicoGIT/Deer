@@ -74,7 +74,7 @@ namespace Deer {
 			if (mesh.meshAssetID == 0)
 				meshName = " null ";
 			else
-				meshName = Project::m_assetManager.getAssetLocation(mesh.meshAssetID).string();
+				meshName = Project::m_assetManager.getAssetLocation(mesh.meshAssetID).generic_string();
 
 			ImGui::Text("Mesh   : ");
 			ImGui::SameLine();
@@ -92,7 +92,7 @@ namespace Deer {
 			if (mesh.shaderAssetID == 0)
 				shaderName = " null ";
 			else
-				shaderName = Project::m_assetManager.getAssetLocation(mesh.shaderAssetID).string();
+				shaderName = Project::m_assetManager.getAssetLocation(mesh.shaderAssetID).generic_string();
 
 			ImGui::Text("Shader : ");
 			ImGui::SameLine();

@@ -86,7 +86,6 @@ namespace Deer {
 
 		if (e.getKeyCode() == DEER_KEY_BACKSPACE) {
 			io.KeysDown[ImGuiKey::ImGuiKey_Backspace];
-			DEER_CORE_INFO("Back");
 		}
 
 		io.KeyCtrl = io.KeysDown[GLFW_KEY_LEFT_CONTROL] || io.KeysDown[GLFW_KEY_RIGHT_CONTROL];
@@ -110,7 +109,6 @@ namespace Deer {
 
 		if (e.getKeyCode() == DEER_KEY_BACKSPACE) {
 			io.AddInputCharacter(ImGuiKey::ImGuiKey_Backspace);
-			DEER_CORE_INFO("Back");
 		}
 
 		return false;

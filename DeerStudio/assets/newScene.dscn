@@ -31,14 +31,15 @@
                             4
                         ]
                     },
-                    "hasMeshRenderComponent": false
+                    "hasMeshRenderComponent": false,
+                    "hasCameraComponent": false
                 },
                 {
                     "id": 2,
-                    "name": "Skull_1",
+                    "name": "Skull",
                     "transform": {
                         "position": {
-                            "x": -1.4058024883270264,
+                            "x": -1.596469521522522,
                             "y": 0.0,
                             "z": 0.0
                         },
@@ -61,15 +62,16 @@
                     "hasMeshRenderComponent": true,
                     "meshRenderComponent": {
                         "mesh": "assets/skull.obj",
-                        "shader": "assets\\Shaders\\LitShader.glsl"
-                    }
+                        "shader": "assets/Shaders/LitShader.glsl"
+                    },
+                    "hasCameraComponent": false
                 },
                 {
                     "id": 3,
-                    "name": "Skull_2",
+                    "name": "Lit Skull",
                     "transform": {
                         "position": {
-                            "x": 1.645439624786377,
+                            "x": 1.7167439460754395,
                             "y": 0.0,
                             "z": 0.0
                         },
@@ -92,35 +94,43 @@
                     "hasMeshRenderComponent": true,
                     "meshRenderComponent": {
                         "mesh": "assets/skull.obj",
-                        "shader": "assets/Shaders/SimpleShader.glsl"
-                    }
+                        "shader": "assets/Shaders/LitShader.glsl"
+                    },
+                    "hasCameraComponent": false
                 },
                 {
                     "id": 4,
                     "name": "Camera",
                     "transform": {
                         "position": {
-                            "x": 0.0,
-                            "y": 1.267460584640503,
-                            "z": 3.6841087341308595
+                            "x": -0.22805023193359376,
+                            "y": 1.3090105056762696,
+                            "z": -2.818058490753174
                         },
                         "scale": {
-                            "x": 0.9999982118606567,
+                            "x": 0.9999999403953552,
                             "y": 1.0,
-                            "z": 0.9999982118606567
+                            "z": 0.9999999403953552
                         },
                         "rotation": {
                             "x": 0.0,
-                            "y": 0.9998999834060669,
+                            "y": -0.14057275652885438,
                             "z": 0.0,
-                            "w": -0.014142694883048535
+                            "w": 0.9900703430175781
                         }
                     },
                     "relationship": {
                         "parentUID": 1,
                         "childrensUIDs": []
                     },
-                    "hasMeshRenderComponent": false
+                    "hasMeshRenderComponent": false,
+                    "hasCameraComponent": true,
+                    "cameraComponent": {
+                        "aspect": 0.56695157289505,
+                        "fov": 1.5362387895584107,
+                        "farZ": 117.0,
+                        "nearZ": 0.10000000149011612
+                    }
                 }
             ],
             "mainCameraUID": 4
