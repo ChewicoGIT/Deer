@@ -90,41 +90,84 @@ namespace Deer {
 
 		// Lets invert the z axis for engine convenience
 		glm::mat4 cameraProjectionMatrix = invertY * projectionMatrix * invertZ * camMatrix;
+		{
+			auto view = m_registry.view<MeshRenderComponent, TagComponent>();
+			for (auto entityId : view) {
+				auto& meshRender = view.get<MeshRenderComponent>(entityId);
+				if (meshRender.shaderAssetID == 0)
+					continue;
 
-		auto view = m_registry.view<MeshRenderComponent, TagComponent>();
-		for (auto entityId : view) {
-			auto& meshRender = view.get<MeshRenderComponent>(entityId);
-			if (meshRender.shaderAssetID == 0)
-				continue;
+				if (meshRender.meshAssetID == 0)
+					continue;
 
-			if (meshRender.meshAssetID == 0)
-				continue;
+				auto& tag = view.get<TagComponent>(entityId);
+				Entity& entity = getEntity(tag.entityUID);
 
-			auto& tag = view.get<TagComponent>(entityId);
-			Entity& entity = getEntity(tag.entityUID);
+				glm::mat4 matrix = entity.getWorldMatrix();
+				Asset<Shader>& shaderAsset = Project::m_assetManager.getAsset<Shader>(meshRender.shaderAssetID);
+				shaderAsset.value->bind();
+				shaderAsset.value->uploadUniformMat4("u_viewMatrix", cameraProjectionMatrix);
+				shaderAsset.value->uploadUniformMat4("u_worldMatrix", matrix);
+				shaderAsset.value->uploadUniformInt("u_objectID", tag.entityUID);
 
-			glm::mat4 matrix = entity.getWorldMatrix();
-			Asset<Shader>& shaderAsset = Project::m_assetManager.getAsset<Shader>(meshRender.shaderAssetID);
-			shaderAsset.value->bind();
-			shaderAsset.value->uploadUniformMat4("u_viewMatrix", cameraProjectionMatrix);
-			shaderAsset.value->uploadUniformMat4("u_worldMatrix", matrix);
-			shaderAsset.value->uploadUniformInt("u_objectID", tag.entityUID);
+				shaderAsset.value->bind();
 
-			shaderAsset.value->bind();
+				Asset<Mesh>& meshAsset = Project::m_assetManager.getAsset<Mesh>(meshRender.meshAssetID);
+				meshAsset.value->bind();
 
-			Asset<Mesh>& meshAsset = Project::m_assetManager.getAsset<Mesh>(meshRender.meshAssetID);
-			meshAsset.value->bind();
-
-			Render::submit(meshAsset.value);
+				Render::submit(meshAsset.value);
+			}
 		}
 
+		// Draw Grid
 		RenderUtils::m_lineShader->bind();
 		RenderUtils::m_lineShader->uploadUniformMat4("u_viewMatrix", cameraProjectionMatrix);
-		RenderUtils::m_lineShader->uploadUniformFloat3("u_posA", glm::vec3(0, 0, 0));
-		RenderUtils::m_lineShader->uploadUniformFloat3("u_posB", glm::vec3(0, 10, 0));
-		RenderUtils::m_lineShader->uploadUniformFloat3("u_color", glm::vec3(1, 1, 1));
+		RenderUtils::m_lineShader->uploadUniformFloat3("u_color", glm::vec3(.5f, .5f, .5f));
+		for (int x = 0; x < 11; x++) {
+			RenderUtils::m_lineShader->uploadUniformFloat3("u_posA", glm::vec3(x * 2 - 10, 0, -10));
+			RenderUtils::m_lineShader->uploadUniformFloat3("u_posB", glm::vec3(x * 2 - 10, 0, 10));
 
-		Render::submitLine(RenderUtils::m_lineVertexArray);
+			Render::submitLine(RenderUtils::m_lineVertexArray);
+		}
+		for (int z = 0; z < 11; z++) {
+			RenderUtils::m_lineShader->uploadUniformFloat3("u_posA", glm::vec3(-10, 0, z * 2 -10));
+			RenderUtils::m_lineShader->uploadUniformFloat3("u_posB", glm::vec3(10, 0, z * 2 - 10));
+
+			Render::submitLine(RenderUtils::m_lineVertexArray);
+		}
+
+		{
+			auto view = m_registry.view<CameraComponent, TagComponent>();
+			for (auto entityId : view) {
+				CameraComponent& cameraComponent = view.get<CameraComponent>(entityId);
+				TagComponent& tag = view.get<TagComponent>(entityId);
+
+				Entity& entity = getEntity(tag.entityUID);
+
+				glm::mat4 matrix = entity.getWorldMatrix();
+				glm::mat4 camPrespective = glm::inverse(cameraComponent.getMatrix());
+
+				glm::mat4 cameraMatrix = camPrespective;
+
+				for (int x = 0; x < 2; x++) {
+					for (int y = 0; y < 2; y++) {
+						glm::vec3 camEnd = cameraMatrix * glm::vec4(x * 2 - 1, y * 2 - 1, 1, 1); // cameraMatrix * 
+						glm::vec3 camStart = cameraMatrix * glm::vec4(x * 2 - 1, y * 2 - 1, 0, 1);
+
+						RenderUtils::m_lineShader->uploadUniformFloat3("u_posA", camEnd);
+						RenderUtils::m_lineShader->uploadUniformFloat3("u_posB", camStart);
+
+						Render::submitLine(RenderUtils::m_lineVertexArray);
+
+						camEnd = cameraMatrix * glm::vec4(0, 0, 0, 1);
+						RenderUtils::m_lineShader->uploadUniformFloat3("u_posA", camEnd);
+						Render::submitLine(RenderUtils::m_lineVertexArray);
+					}
+				}
+
+			}
+		}
+
 
 	}
 

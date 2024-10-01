@@ -17,7 +17,7 @@ namespace Deer {
 
 		Ref<VertexArray> vertexArray = VertexArray::create();
 		Ref<VertexBuffer> vertexBuffer = VertexBuffer::create(vertices, sizeof(vertices));
-		Ref<IndexBuffer> indexBuffer = IndexBuffer::create(vertices, 2, IndexDataType::Unsigned_Int);
+		Ref<IndexBuffer> indexBuffer = IndexBuffer::create(vertices, sizeof(vertices), IndexDataType::Unsigned_Int);
 		
 		BufferLayout layout({
 			{"a_vertexID", DataType::Unsigned_Int, ShaderDataType::Integer}
@@ -43,16 +43,15 @@ uniform vec3 u_posB;
 
 void main()
 {
+
 	vec3 pos;
 	if (a_vertexID == 0) {
 		pos = u_posA;
-		gl_Position = vec4(0, 0, 0, 1);
 	} else {
 		pos = u_posB;
-		gl_Position = vec4(1, 1, 0, 1);
 	}
 	
-	//gl_Position = u_viewMatrix * vec4(pos,1.0);
+	gl_Position = u_viewMatrix * vec4(pos,1.0);
 })";
 
 		std::string fragmentSrc = R"(

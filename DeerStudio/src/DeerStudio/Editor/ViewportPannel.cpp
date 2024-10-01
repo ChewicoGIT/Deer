@@ -178,8 +178,6 @@ namespace Deer {
         glm::mat4 projectionMatrix = m_virtualCamera.camera.getMatrix() * glm::scale(glm::mat4(1.0f), glm::vec3(1, 1, -1));
 
         ImGuizmo::SetRect(wPosX, wPosY, wSizeX, wSizeY);
-        ImGuizmo::DrawGrid(glm::value_ptr(camMatrix), glm::value_ptr(projectionMatrix), glm::value_ptr(glm::mat4(1.0f)), 4.f);
-
         if (m_activeEntity->count() != 0) {
 
             Entity& currentEntity = m_activeEntity->getEntity(0);
