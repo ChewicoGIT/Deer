@@ -11,7 +11,7 @@ namespace Deer {
 		Asset() : m_assetID(0), m_assetLocation("null") { }
 		Asset(uid id, const std::filesystem::path& assetLocation)
 			: m_assetID(id), m_assetLocation(assetLocation) {
-			value = T::create(assetLocation.string());
+			value = T::create(assetLocation.generic_string());
 		}
 
 		inline uid getAssetID() const { return m_assetID; }

@@ -43,6 +43,13 @@ namespace Deer {
         ImGui::PopStyleVar();
 
         float width = ImGui::GetWindowContentRegionWidth();
+
+        if (width < m_iconMinSize + 40) {
+            ImGui::Text("Window too small");
+            ImGui::End();
+            return;
+        }
+
         int cols = (int)ceilf(width / (m_iconMinSize + 40));
         float componentWidth = width / (float)cols;
 
@@ -147,11 +154,18 @@ namespace Deer {
                 ImGui::Text(path.string().c_str());
                 ImGui::EndDragDropSource();
             }
-        } else if (extension == ".png" || extension == ".jpg") {
+        } else if (extension == ".png" || extension == ".jpg" || extension == ".jpeg") {
             uid textureID = Project::m_assetManager.loadAsset<Texture2D>(path.string());
             Asset<Texture2D>& textureAsset = Project::m_assetManager.getAsset<Texture2D>(textureID);
 
             ImGui::Image((void*)textureAsset.value->getTextureID(), ImVec2(m_iconMinSize, m_iconMinSize), ImVec2(0, 1), ImVec2(1, 0));
+        
+            if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID)) {
+                std::string pathString = path.string();
+                ImGui::SetDragDropPayload("_TEXTURE2D", pathString.c_str(), pathString.size() + 1);
+                ImGui::Text(path.string().c_str());
+                ImGui::EndDragDropSource();
+            }
         } else {
             ImGui::Image((void*)m_fileIcon->getTextureID(), ImVec2(m_iconMinSize, m_iconMinSize), ImVec2(0, 1), ImVec2(1, 0));
         }

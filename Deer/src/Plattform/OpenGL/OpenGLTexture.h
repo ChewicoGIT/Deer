@@ -12,6 +12,7 @@ namespace Deer {
 		unsigned int getTextureID() override { return m_textureID; }
 
 		void bind(unsigned int slot) override;
+		void unbind(unsigned int slot) override;
 	private:
 		std::string m_pathFile;
 		unsigned int m_width;

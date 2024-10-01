@@ -4,6 +4,7 @@
 #include "Deer/Scene/Enviroment.h"
 #include "Deer/Scene/Entity.h"
 #include "Deer/Scene/Scene.h"
+#include "Deer/Render/Texture.h"
 #include "cereal/cereal.hpp"
 #include "cereal/types/vector.hpp"
 #include "cereal/types/string.hpp"
@@ -43,9 +44,64 @@ namespace Deer {
         EntityVector_Environment(const Ref<Environment>& _environment)
             : environment(_environment) { }
     };
+
+    struct TextureBinding {
+        std::string texturePath;
+        unsigned char bindingID;
+
+        TextureBinding() = default;
+        TextureBinding(std::string _texturePath, unsigned char _bindingID) : texturePath(_texturePath), bindingID(_bindingID) { }
+    };
 }
 
 namespace Deer {
+
+    template<class Archive>
+    void serialize(Archive& archive,
+        TextureBinding& textureBinding) {
+
+        archive(cereal::make_nvp("texturePath", textureBinding.texturePath));
+        archive(cereal::make_nvp("bindingID", textureBinding.bindingID));
+    }
+
+    template<class Archive>
+    void save(Archive& archive,
+        TextureBindingComponent const& textureBinding) {
+        std::vector<TextureBinding> bindings;
+
+        for (int x = 0; x < MAX_TEXTURE_BINDINGS; x++) {
+            if (textureBinding.textureAssetID[x] != 0) {
+                bindings.push_back(TextureBinding(
+                    Project::m_assetManager.getAssetLocation(textureBinding.textureAssetID[x]).generic_string(),
+                    textureBinding.textureBindID[x]
+                ));
+            }
+        }
+
+        std::sort(bindings.begin(), bindings.end(), [](TextureBinding& a, TextureBinding& b) {
+            return a.bindingID < b.bindingID; });
+
+        archive(cereal::make_nvp("bindings", bindings));
+    }
+
+    template<class Archive>
+    void load(Archive& archive,
+        TextureBindingComponent& textureBinding) {
+        std::vector<TextureBinding> bindings;
+
+        archive(cereal::make_nvp("bindings", bindings));
+
+        int id = 0;
+        for (auto& binding : bindings) {
+            if (id >= MAX_TEXTURE_BINDINGS)
+                break;
+
+            textureBinding.textureAssetID[id] = Project::m_assetManager.loadAsset<Texture2D>(
+                std::filesystem::path(binding.texturePath));
+            textureBinding.textureBindID[id] = binding.bindingID;
+        }
+    }
+
     template<class Archive>
     void serialize(Archive& archive,
         CameraComponent& camera) {
@@ -126,6 +182,13 @@ namespace Deer {
             CameraComponent& camera = m_entity.getComponent<CameraComponent>();
             archive(cereal::make_nvp("cameraComponent", camera));
         }
+
+        bool hasTextureBindingComponent = m_entity.hasComponent<TextureBindingComponent>();
+        archive(cereal::make_nvp("hasTextureBindingComponent", hasTextureBindingComponent));
+        if (hasTextureBindingComponent) {
+            TextureBindingComponent& textureBinding = m_entity.getComponent<TextureBindingComponent>();
+            archive(cereal::make_nvp("textureBindingComponent", textureBinding));
+        }
     }
 
     template<class Archive>
@@ -157,6 +220,13 @@ namespace Deer {
         if (hasCameraComponent) {
             CameraComponent& camera = m_entity.addComponent<CameraComponent>();
             archive(cereal::make_nvp("cameraComponent", camera));
+        }
+
+        bool hasTextureBindingComponent;
+        archive(cereal::make_nvp("hasTextureBindingComponent", hasTextureBindingComponent));
+        if (hasTextureBindingComponent) {
+            TextureBindingComponent& textureBinding = m_entity.addComponent<TextureBindingComponent>();
+            archive(cereal::make_nvp("textureBindingComponent", textureBinding));
         }
 
         m_entity.update();

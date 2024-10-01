@@ -33,14 +33,15 @@
                         ]
                     },
                     "hasMeshRenderComponent": false,
-                    "hasCameraComponent": false
+                    "hasCameraComponent": false,
+                    "hasTextureBindingComponent": false
                 },
                 {
                     "id": 2,
-                    "name": "Skull",
+                    "name": "Skull1",
                     "transform": {
                         "position": {
-                            "x": -1.596469521522522,
+                            "x": -1.1876044273376465,
                             "y": 0.0,
                             "z": 0.0
                         },
@@ -65,14 +66,23 @@
                         "mesh": "assets/cube.obj",
                         "shader": "assets/Shaders/SimpleShader.glsl"
                     },
-                    "hasCameraComponent": false
+                    "hasCameraComponent": false,
+                    "hasTextureBindingComponent": true,
+                    "textureBindingComponent": {
+                        "bindings": [
+                            {
+                                "texturePath": "assets/Skull.jpg",
+                                "bindingID": 0
+                            }
+                        ]
+                    }
                 },
                 {
                     "id": 3,
-                    "name": "Lit Skull",
+                    "name": "Skull2",
                     "transform": {
                         "position": {
-                            "x": 1.7167439460754395,
+                            "x": 4.1646552085876469,
                             "y": 0.0,
                             "z": 0.0
                         },
@@ -95,63 +105,79 @@
                     "hasMeshRenderComponent": true,
                     "meshRenderComponent": {
                         "mesh": "assets/skull.obj",
-                        "shader": "assets/Shaders/LitShader.glsl"
+                        "shader": "assets/Shaders/SimpleShader.glsl"
                     },
-                    "hasCameraComponent": false
+                    "hasCameraComponent": false,
+                    "hasTextureBindingComponent": true,
+                    "textureBindingComponent": {
+                        "bindings": [
+                            {
+                                "texturePath": "assets/test_texture.png",
+                                "bindingID": 0
+                            }
+                        ]
+                    }
                 },
                 {
                     "id": 4,
-                    "name": "Camera",
+                    "name": "Skull2 (duplicated)",
                     "transform": {
                         "position": {
-                            "x": -1.1277730464935303,
-                            "y": 1.3090105056762696,
-                            "z": -5.500376224517822
+                            "x": 1.608313798904419,
+                            "y": 0.0,
+                            "z": 0.0
                         },
                         "scale": {
-                            "x": 0.9999999403953552,
+                            "x": 1.0,
                             "y": 1.0,
-                            "z": 0.9999999403953552
+                            "z": 1.0
                         },
                         "rotation": {
                             "x": 0.0,
-                            "y": -0.14057275652885438,
+                            "y": 0.0,
                             "z": 0.0,
-                            "w": 0.9900703430175781
+                            "w": 1.0
                         }
                     },
                     "relationship": {
                         "parentUID": 1,
                         "childrensUIDs": []
                     },
-                    "hasMeshRenderComponent": false,
-                    "hasCameraComponent": true,
-                    "cameraComponent": {
-                        "aspect": 0.851311981678009,
-                        "fov": 1.5362387895584107,
-                        "farZ": 117.0,
-                        "nearZ": 0.10000000149011612
+                    "hasMeshRenderComponent": true,
+                    "meshRenderComponent": {
+                        "mesh": "assets/skull.obj",
+                        "shader": "assets/Shaders/SimpleShader.glsl"
+                    },
+                    "hasCameraComponent": false,
+                    "hasTextureBindingComponent": true,
+                    "textureBindingComponent": {
+                        "bindings": [
+                            {
+                                "texturePath": "assets/Skull.jpg",
+                                "bindingID": 0
+                            }
+                        ]
                     }
                 },
                 {
                     "id": 5,
-                    "name": "Camera (duplicated)",
+                    "name": "Camera",
                     "transform": {
                         "position": {
-                            "x": 3.369239568710327,
-                            "y": 1.3090105056762696,
-                            "z": -4.197110176086426
+                            "x": 1.266955018043518,
+                            "y": 1.3802015781402588,
+                            "z": 6.402083873748779
                         },
                         "scale": {
-                            "x": 0.9999999403953552,
+                            "x": 0.9999963045120239,
                             "y": 1.0,
-                            "z": 0.9999999403953552
+                            "z": 0.9999963045120239
                         },
                         "rotation": {
                             "x": 0.0,
-                            "y": -0.14057275652885438,
+                            "y": 0.9979519844055176,
                             "z": 0.0,
-                            "w": 0.9900703430175781
+                            "w": 0.06396745890378952
                         }
                     },
                     "relationship": {
@@ -161,14 +187,15 @@
                     "hasMeshRenderComponent": false,
                     "hasCameraComponent": true,
                     "cameraComponent": {
-                        "aspect": 0.851311981678009,
-                        "fov": 1.5362387895584107,
-                        "farZ": 117.0,
+                        "aspect": 1.6891757249832154,
+                        "fov": 0.8116129636764526,
+                        "farZ": 100.0,
                         "nearZ": 0.10000000149011612
-                    }
+                    },
+                    "hasTextureBindingComponent": false
                 }
             ],
-            "mainCameraUID": 4
+            "mainCameraUID": 5
         }
     }
 }

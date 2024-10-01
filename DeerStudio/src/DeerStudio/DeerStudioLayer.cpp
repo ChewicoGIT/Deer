@@ -24,7 +24,6 @@ namespace Deer {
         ImFont* font1 = io.Fonts->AddFontFromFileTTF("editor\\fonts\\OpenSans-VariableFont_wdth,wght.ttf", 19.0f);
         //ImGui::PushFont(font1);
         ImGui_ImplOpenGL3_CreateFontsTexture();
-        m_texture = Texture2D::create("assets/skull.jpg");
 
         m_meshID = Project::m_assetManager.loadAsset<Mesh>(std::filesystem::path("assets/skull.obj"));
         m_shaderID = Project::m_assetManager.loadAsset<Shader>(std::filesystem::path("assets/Shaders/SimpleShader.glsl"));
@@ -58,7 +57,6 @@ namespace Deer {
             pannel->onUpdate(delta);
         }
 
-        m_texture->bind(0);
         Asset<Shader>& shaderAsset = Project::m_assetManager.getAsset<Shader>(m_shaderID);
         shaderAsset.value->uploadUniformInt("u_texture", 0);
 

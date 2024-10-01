@@ -10,6 +10,8 @@
 #include <string>
 #include <vector>
 
+#define MAX_TEXTURE_BINDINGS 4
+
 namespace Deer {
 	struct TagComponent {
 		std::string tag;
@@ -43,7 +45,6 @@ namespace Deer {
 		glm::mat4 getMatrix();
 	};
 
-	// This requires mesh component to render
 	struct MeshRenderComponent {
 		MeshRenderComponent() = default;
 		MeshRenderComponent(const MeshRenderComponent&) = default;
@@ -53,7 +54,19 @@ namespace Deer {
 		uid meshAssetID = 0;
 	};
 
-	// This requires mesh component to render
+	struct TextureBindingComponent {
+		TextureBindingComponent() {
+			for (int x = 0; x < MAX_TEXTURE_BINDINGS; x++) {
+				textureAssetID[x] = 0;
+				textureBindID[x] = 0;
+			}
+		}
+		TextureBindingComponent(const TextureBindingComponent&) = default;
+
+		uid textureAssetID[MAX_TEXTURE_BINDINGS];
+		unsigned char textureBindID[MAX_TEXTURE_BINDINGS];
+	};
+
 	struct CameraComponent {
 		CameraComponent() = default;
 		CameraComponent(const CameraComponent&) = default;

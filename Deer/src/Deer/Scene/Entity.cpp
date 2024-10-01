@@ -67,6 +67,9 @@ namespace Deer {
 		if (m_environment->m_registry.any_of<CameraComponent>(m_entityHandle))
 			creation.addComponent<CameraComponent>(getComponent<CameraComponent>());
 
+		if (m_environment->m_registry.any_of<TextureBindingComponent>(m_entityHandle))
+			creation.addComponent<TextureBindingComponent>(getComponent<TextureBindingComponent>());
+
 		return creation;
 	}
 

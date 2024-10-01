@@ -56,8 +56,14 @@ namespace Deer {
 	}
 
 	void OpenGLTexture2D::bind(unsigned int slot) {
+
 		glActiveTexture(GL_TEXTURE0 + slot);
 		glBindTexture(GL_TEXTURE_2D, m_textureID);
+	}
+
+	void OpenGLTexture2D::unbind(unsigned int slot) {
+		glActiveTexture(GL_TEXTURE0 + slot);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
 }

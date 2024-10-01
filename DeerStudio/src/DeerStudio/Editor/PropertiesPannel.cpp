@@ -2,6 +2,7 @@
 #include "Deer/Core/Input.h"
 #include "Deer/Core/KeyCodes.h"
 #include "Deer/Core/Project.h"
+#include "Deer/Render/Texture.h"
 #include "imgui.h"
 
 namespace Deer {
@@ -63,7 +64,7 @@ namespace Deer {
 			ImGui::Dummy(ImVec2(0.0f, 10.0f));
 		}
 
-		if (collapsingComponentHeader<MeshRenderComponent>("MeshRender Component")) {
+		if (collapsingComponentHeader<MeshRenderComponent>("Mesh Render Component")) {
 			ImGui::Dummy(ImVec2(0.0f, 10.0f));
 			ImGui::Indent();
 
@@ -103,6 +104,80 @@ namespace Deer {
 					mesh.shaderAssetID = Project::m_assetManager.loadAsset<Shader>(receivedData);
 				}
 				ImGui::EndDragDropTarget();
+			}
+
+			ImGui::Unindent();
+			ImGui::Dummy(ImVec2(0.0f, 10.0f));
+		}
+
+		if (collapsingComponentHeader<TextureBindingComponent>("Texture Binding Component"))
+		{
+			ImGui::Dummy(ImVec2(0.0f, 10.0f));
+			ImGui::Indent();
+
+			TextureBindingComponent& textureBinding = activeEntity.getComponent<TextureBindingComponent>();
+
+			int textureBindingCount = 0;
+			for (int x = 0; x < MAX_TEXTURE_BINDINGS; x++) {
+				if (textureBinding.textureAssetID[x] == 0)
+					continue;
+
+				ImGui::PushID(x);
+
+				textureBindingCount++;
+
+				std::string textureBindingName = Project::m_assetManager.getAssetLocation(textureBinding.textureAssetID[x]).generic_string();
+				int currentID = textureBinding.textureBindID[x];
+
+				ImGui::Text("Texture : ");
+				ImGui::SameLine();
+				ImGui::Button(textureBindingName.c_str());
+
+				if (ImGui::BeginDragDropTarget()) {
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("_TEXTURE2D")) {
+						std::string receivedData = std::string((const char*)payload->Data);
+
+						textureBinding.textureAssetID[x]
+							= Project::m_assetManager.loadAsset<Texture2D>(std::filesystem::path(receivedData));
+					}
+					ImGui::EndDragDropTarget();
+				}
+
+				ImGui::Text("Binding location");
+				ImGui::SameLine();
+				ImGui::InputInt("#bindingInputID", &currentID, 0);
+
+				currentID = (currentID < 0) ? 0 : (currentID > 12) ? 12 : currentID;
+				textureBinding.textureBindID[x] = currentID;
+
+				if (ImGui::Button("Delete texture binding"))
+					textureBinding.textureAssetID[x] = 0;
+
+				ImGui::Spacing();
+				ImGui::PopID();
+			}
+
+			ImGui::Spacing();
+
+			if (textureBindingCount < 4) {
+				ImGui::Button("Add texture binding");
+
+				if (ImGui::BeginDragDropTarget()) {
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("_TEXTURE2D")) {
+						std::string receivedData = std::string((const char*)payload->Data);
+
+						for (int x = 0; x < 4; x++) {
+							if (textureBinding.textureAssetID[x] != 0)
+								continue;
+
+							textureBinding.textureAssetID[x] = Project::m_assetManager.loadAsset<Texture2D>(std::filesystem::path(receivedData));
+							textureBinding.textureBindID[x] = 0;
+							break;
+						}
+
+					}
+					ImGui::EndDragDropTarget();
+				}
 			}
 
 			ImGui::Unindent();
@@ -158,6 +233,7 @@ namespace Deer {
 		{
 			
 			addComponentButton<MeshRenderComponent>("Mesh Render Component");
+			addComponentButton<TextureBindingComponent>("Texture Binding Component");
 			addComponentButton<CameraComponent>("Camera Component");
 
 			ImGui::EndPopup();  // End the popup

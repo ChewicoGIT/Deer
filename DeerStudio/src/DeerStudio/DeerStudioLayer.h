@@ -41,9 +41,6 @@ namespace Deer {
 		void onImGUI() override;
 		void drawMenuBar();
 	private:
-		Ref<Texture2D> m_texture;
-
-	private:
 		uid m_meshID = 0;
 		uid m_shaderID = 0;
 
