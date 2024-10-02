@@ -10,6 +10,9 @@ namespace Deer {
 		void serialize(const std::string& filePath);
 		void deserialize(const std::string& filePath);
 
+		void serializeBinary(const std::string& filePath);
+		void deserializeBinary(const std::string& filePath);
+
 		const std::string& getCurrentScenePath() { return m_currentScenePath; }
 
 	private:

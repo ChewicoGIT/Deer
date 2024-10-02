@@ -2,6 +2,8 @@
 #include "Deer/Core/Core.h"
 
 namespace Deer {
+	Entity Entity::nullEntity = Entity();
+
 	Entity::Entity(entt::entity handle, Environment* scene)
 		: m_entityHandle(handle), m_environment(scene) {
 	}
@@ -76,6 +78,9 @@ namespace Deer {
 	void Entity::destroy() {
 		DEER_CORE_ASSERT(!isRoot(), "Can not destroy the root");
 		getParent().removeChild(*this);
+
+		if (m_environment->tryGetMainCamera() == m_entityUID)
+			m_environment->setMainCamera(nullEntity);
 
 		for (auto entt : getChildren()) {
 			m_environment->getEntity(entt).destroy();

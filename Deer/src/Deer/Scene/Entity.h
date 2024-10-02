@@ -16,6 +16,8 @@ namespace Deer {
 	public:
 		Entity() { }
 
+		static Entity nullEntity;
+
 		template <typename T, typename...Args>
 		T& addComponent(Args&&... args) const {
 			DEER_CORE_ASSERT(!m_environment->m_registry.all_of<T>(m_entityHandle),

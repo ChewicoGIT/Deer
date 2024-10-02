@@ -7,6 +7,7 @@
 #include "Deer/Core/KeyCodes.h"
 
 #include <string.h>
+#include <functional>
 
 #include "Plattform/OpenGL/imgui_impl_opengl3.h"
 
@@ -17,14 +18,15 @@ namespace Deer {
 	void EnviromentTreePannel::onImGui() {
 		ImGui::ShowDemoWindow();
 		ImGui::Begin(m_treeName.c_str());
-		Entity& root = m_enviroment->getRoot();
 
-		if (ImGui::Button("Options")) {
-			m_contextMenuEntity = &root;
-			ImGui::OpenPopup("Entity Context Menu");
+		if (m_openRenamePopUp) {
+			m_openRenamePopUp = false;
+
+			ImGui::OpenPopup("Rename Entity Menu");
 		}
 
-		updateReciveDragPayload(root);
+		m_isRightClickHandled = false;
+		Entity& root = m_enviroment->getRoot();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
 		for (auto& entityID : m_enviroment->getRoot().getChildren()) {
@@ -39,11 +41,24 @@ namespace Deer {
 		ImVec2 spaceSize(ImGui::GetWindowContentRegionWidth(), 80);
 
 		ImGui::InvisibleButton("DragDropSpace", spaceSize);
-
 		updateReciveDragPayload(root);
 
-		ImGui::End();
+		if (!m_isRightClickHandled && ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup | ImGuiHoveredFlags_AllowWhenBlockedByActiveItem) &&
+			ImGui::IsMouseClicked(ImGuiMouseButton_Right) &&
+			!ImGui::IsAnyItemHovered()) {
 
+			m_contextMenuEntity = &root;
+			ImGui::OpenPopup("Entity Context Menu");
+		}
+
+		updateReciveDragPayload(root);
+		ImGui::End();
+	}
+
+	void EnviromentTreePannel::onEvent(Event& e) {
+		EventDispatcher dispatcher(e);
+
+		dispatcher.dispatch<KeyPressedEvent>(std::bind(&EnviromentTreePannel::onKeyPressed, this, std::placeholders::_1));
 	}
 
 	void EnviromentTreePannel::clickEntity(Entity& entity) {
@@ -57,6 +72,18 @@ namespace Deer {
 			else
 				m_activeEntity->addEntity(entity);
 		}
+	}
+
+	bool EnviromentTreePannel::onKeyPressed(KeyPressedEvent& keyPressed) {
+
+		if (keyPressed.getKeyCode() == DEER_KEY_F2) {
+			if (m_activeEntity->count() > 0) {
+				m_contextMenuEntity = &m_activeEntity->getEntity(0);
+				m_openRenamePopUp = true;
+			}
+		}
+
+		return false;
 	}
 
 	void EnviromentTreePannel::updateEntity(Entity& entity) {
@@ -83,6 +110,7 @@ namespace Deer {
 
 			if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
 				m_contextMenuEntity = &entity;
+				m_isRightClickHandled = true;
 				ImGui::OpenPopup("Entity Context Menu");
 			}
 			 
@@ -103,6 +131,7 @@ namespace Deer {
 
 			if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
 				m_contextMenuEntity = &entity;
+				m_isRightClickHandled = true;
 				ImGui::OpenPopup("Entity Context Menu");
 			}	
 
@@ -123,6 +152,7 @@ namespace Deer {
 
 			if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
 				m_contextMenuEntity = &entity;
+				m_isRightClickHandled = true;
 				ImGui::OpenPopup("Entity Context Menu");
 			}
 
@@ -195,8 +225,9 @@ namespace Deer {
 			strcpy_s(nameBuffer, 256, name.c_str());
 			
 			ImGui::Text("Rename");
-			if (ImGui::InputText("##", nameBuffer, 256)) {
+			if (ImGui::InputText("##", nameBuffer, 256, ImGuiInputTextFlags_EnterReturnsTrue)) {
 				m_contextMenuEntity->getComponent<TagComponent>().tag = nameBuffer;
+				ImGui::CloseCurrentPopup();
 			}
 
 			ImGui::EndPopup();

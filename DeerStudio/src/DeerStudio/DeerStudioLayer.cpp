@@ -11,6 +11,7 @@
 #include "backends/imgui_impl_opengl3.h"
 #include "Style.h"
 
+#include <filesystem>
 #include "Deer/Core/Project.h"
 
 const float toolbarSize = 50;
@@ -138,6 +139,21 @@ namespace Deer {
             if (m_sceneSerializer->getCurrentScenePath() != "_NO_INITIALIZED_" && ImGui::MenuItem("Save scene")) {
                 m_sceneSerializer->serialize(m_sceneSerializer->getCurrentScenePath());
             }
+
+            if (m_sceneSerializer->getCurrentScenePath() != "_NO_INITIALIZED_" && ImGui::MenuItem("Save Scene Binary")) {
+                m_activeEntity->clear();
+                m_scene->clear();
+                const std::string path = std::string("binTest.bscn");
+                m_sceneSerializer->serializeBinary(path);
+            }
+
+            if (ImGui::MenuItem("Load Scene Binary")) {
+                m_activeEntity->clear();
+                m_scene->clear();
+                const std::string path = std::string("binTest.bscn");
+                m_sceneSerializer->deserializeBinary(path);
+            }
+
             ImGui::EndMenu();
         }
 
