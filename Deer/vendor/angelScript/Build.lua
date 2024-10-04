@@ -7,7 +7,8 @@ project "angelScript"
 
    files {
    "src/**.h",
-   "src/**.cpp"
+   "src/**.cpp",
+   "src/as_callfunc_x64_msvc_asm.asm"
    }
 
    includedirs
@@ -19,23 +20,35 @@ project "angelScript"
 	targetdir ("../../../bin/" .. OutputDir .. "/%{prj.name}")
 	objdir ("../../../bin/int/" .. OutputDir .. "/%{prj.name}")
 
+	defines {
+	"ANGELSCRIPT_EXPORT",
+    "_LIB",
+	"AS_X64_MSVC"}
+
    filter "system:windows"
        systemversion "latest"
        defines { }
 
    filter "configurations:Debug"
-       defines { "DEBUG" }
+       defines { "DEBUG" , 
+		"AS_DEBUG",
+		"_DEBUG" }
+		
        runtime "Debug"
        symbols "On"
 
    filter "configurations:Release"
-       defines { "RELEASE" }
+       defines { "RELEASE" , 
+		"NDEBUG" }
+		
        runtime "Release"
        optimize "On"
        symbols "On"
 
    filter "configurations:Dist"
-       defines { "DIST" }
+       defines { "DIST" , 
+		"NDEBUG"}
+		
        runtime "Release"
        optimize "On"
        symbols "Off"

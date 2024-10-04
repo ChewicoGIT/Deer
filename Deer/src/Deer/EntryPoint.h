@@ -3,6 +3,9 @@
 #include "Deer/Core/Log.h"
 #include "Deer/Render/RenderUtils.h"
 
+//Temp
+#include "Deer/Core/Project.h"
+
 extern Deer::Application* createApplication(int argc, char** argv);
 
 namespace Deer {
@@ -10,6 +13,11 @@ namespace Deer {
 		Log::init();
 		DEER_CORE_TRACE("Creating app");
 
+		Project::m_scriptEngine.initScriptEngine();
+		Project::m_scriptEngine.loadRoeModule(std::filesystem::path("roe_scripts/simpleScript.as"));
+		Project::m_scriptEngine.test();
+
+		return 0;
 		Application* app = createApplication(argc, argv);
 		RenderUtils::initializeRenderUtils();
 
