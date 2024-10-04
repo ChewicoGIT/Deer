@@ -32,7 +32,7 @@ namespace Deer {
 		archive(cereal::make_nvp("scene", m_scene));
 	}
 
-	void SceneSerializer::serializeBinary(const std::string& filePath) {
+	void SceneSerializer::deserializeBinary(const std::string& filePath) {
 		std::ifstream file(filePath);
 		cereal::BinaryInputArchive archive(file);
 

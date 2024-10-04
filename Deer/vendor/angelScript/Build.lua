@@ -1,4 +1,4 @@
-project "Deer"
+project "angelScript"
    kind "StaticLib"
    language "C++"
    cppdialect "C++20"
@@ -7,30 +7,17 @@ project "Deer"
 
    files {
    "src/**.h",
-   "src/**.cpp",
-   "vendor/ImGuizmo/**.cpp",
-   "vendor/stb/stb_image.cpp"
+   "src/**.cpp"
    }
-
-   links { "spdlog", "GLFW", "glad", "ImGui", "angelScript" } 
 
    includedirs
    {
       "src",
-	  "vendor/spdlog/include",
-	  "vendor/GLFW/include",
-	  "vendor/glad/include",
-	  "vendor/imgui",
-	  "vendor/glm",
-	  "vendor/stb",
-	  "vendor/ImGuizmo",
-	  "vendor/entt/include",
-	  "vendor/cereal/include",
-	  "vendor/objload/include/objload"
+	  "include"
    }
 
-   targetdir ("../bin/" .. OutputDir .. "/%{prj.name}")
-   objdir ("../bin/int/" .. OutputDir .. "/%{prj.name}")
+	targetdir ("../../../bin/" .. OutputDir .. "/%{prj.name}")
+	objdir ("../../../bin/int/" .. OutputDir .. "/%{prj.name}")
 
    filter "system:windows"
        systemversion "latest"
