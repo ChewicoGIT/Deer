@@ -1,21 +1,32 @@
 
 Total count
-RET        : 1
-CALLSYS    : 1
-SUSPEND    : 2
+PSF        : 7
+CALL       : 1
+RET        : 4
+CALLSYS    : 5
+SUSPEND    : 5
+ALLOC      : 1
+FREE       : 1
+LOADOBJ    : 1
+STOREOBJ   : 1
+SetV4      : 1
+CpyGtoV4   : 1
+WRTV4      : 1
 PGA        : 1
+SetG4      : 1
+iTOi64     : 1
+LoadThisR  : 1
+PshV8      : 1
 
 Never executed
 PopPtr    
 PshGPtr   
 PshC4     
 PshV4     
-PSF       
 SwapPtr   
 NOT       
 PshG4     
 LdGRdR4   
-CALL      
 JMP       
 JZ        
 JNZ       
@@ -67,10 +78,6 @@ PopRPtr
 PshRPtr   
 STR       
 CALLBND   
-ALLOC     
-FREE      
-LOADOBJ   
-STOREOBJ  
 GETOBJ    
 REFCPY    
 CHKREF    
@@ -80,7 +87,6 @@ PshNull
 ClrVPtr   
 OBJTYPE   
 TYPEID    
-SetV4     
 SetV8     
 ADDSi     
 CpyVtoV4  
@@ -90,10 +96,8 @@ CpyVtoR8
 CpyVtoG4  
 CpyRtoV4  
 CpyRtoV8  
-CpyGtoV4  
 WRTV1     
 WRTV2     
-WRTV4     
 WRTV8     
 RDR1      
 RDR2      
@@ -138,7 +142,6 @@ MULIi
 ADDIf     
 SUBIf     
 MULIf     
-SetG4     
 ChkRefS   
 ChkNullV  
 CALLINTF  
@@ -149,7 +152,6 @@ SetV2
 Cast      
 i64TOi    
 uTOi64    
-iTOi64    
 fTOi64    
 dTOi64    
 fTOu64    
@@ -180,8 +182,6 @@ ClrHi
 JitEntry  
 CallPtr   
 FuncPtr   
-LoadThisR 
-PshV8     
 DIVu      
 MODu      
 DIVu64    
@@ -205,8 +205,31 @@ POWu64
 Thiscall1 
 
 Sequences
+PSF       , PSF        : 1
+PSF       , CALLSYS    : 5
+PSF       , ALLOC      : 1
+CALL      , PSF        : 1
+RET       , SUSPEND    : 1
+RET       , LOADOBJ    : 1
+RET       , STOREOBJ   : 1
+CALLSYS   , PSF        : 3
 CALLSYS   , SUSPEND    : 1
-SUSPEND   , RET        : 1
+CALLSYS   , CpyGtoV4   : 1
+SUSPEND   , CALL       : 1
+SUSPEND   , FREE       : 1
+SUSPEND   , SetV4      : 1
 SUSPEND   , PGA        : 1
-PGA       , CALLSYS    : 1
+SUSPEND   , SetG4      : 1
+ALLOC     , SUSPEND    : 1
+FREE      , RET        : 1
+LOADOBJ   , RET        : 1
+STOREOBJ  , SUSPEND    : 1
+SetV4     , LoadThisR  : 1
+CpyGtoV4  , iTOi64     : 1
+WRTV4     , RET        : 1
+PGA       , PSF        : 1
+SetG4     , RET        : 1
+iTOi64    , PshV8      : 1
+LoadThisR , WRTV4      : 1
+PshV8     , PSF        : 1
 LABEL     , SUSPEND    : 1

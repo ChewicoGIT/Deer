@@ -1,0 +1,15 @@
+entity::entity()
+
+Temps: 1
+
+Variables: 
+ 001: int 
+ 000: entity this
+
+
+- 5,8 -
+    0   1 *    SUSPEND
+    1   1 *    SetV4    v1, 0x0          (i:0, f:0)
+    3   1 *    LoadThisR v32, 134217741
+    5   1 *    WRTV4    v1
+    6   1 *    RET      2

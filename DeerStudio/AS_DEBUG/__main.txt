@@ -1,15 +1,43 @@
 void main()
 
-Temps: 
+Temps: 12, 13, 15, 25
 
 Variables: 
+ 002: (heap) entity a
+ 012: string 
+ 013: int 
+ 015: double 
+ 025: string 
 
 
-- 3,2 -
-    0   0 *    SUSPEND
-    1   0 *    PGA      0x6e1e1210          (str:Hi from Angel Script...)
-    4   2 *    CALLSYS  67           (void print(const string&in))
-- 4,2 -
-    6   0 *    SUSPEND
+- 17,2 -
+    0  25 *    SUSPEND
+               VarDecl  0
+    1  25 *    CALL     70           (entity@ entity())
+    3  25 *    STOREOBJ v2
+- 18,2 -
+    4  25 *    SUSPEND
+    5  25 *    PGA      0xec268fc0          (str:Hi from Angel Script...)
+    8  27 *    PSF      v12
+    9  29 *    CALLSYS  20           (string::string(const string&in))
+               ObjInfo  v12, 1
+   11  25 *    CpyGtoV4 v13, 0x272ec25f600          (i:2692611438080, f:1.33033e-311)
+   14  25 *    iTOi64   v15, v13
+   16  25 *    PshV8    v15
+   17  27 *    PSF      v25
+   18  29 *    PSF      v12
+   19  31 *    CALLSYS  42           (string string::opAdd(int64) const)
+               ObjInfo  v25, 1
+   21  25 *    PSF      v12
+   22  27 *    CALLSYS  21           (string::~string())
+               ObjInfo  v12, 0
+   24  25 *    PSF      v25
+   25  27 *    CALLSYS  67           (void print(const string&in))
+   27  25 *    PSF      v25
+   28  27 *    CALLSYS  21           (string::~string())
+- 19,2 -
+               ObjInfo  v25, 0
+   30  25 *    SUSPEND
+   31  25 *    FREE     v2, 0xec25f380          (type:entity)
             0:
-    7   0 *    RET      0
+   34  25 *    RET      0

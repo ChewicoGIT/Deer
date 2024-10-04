@@ -25,6 +25,24 @@ namespace Deer {
 		loadModuleFolder(modulePath, "Roe");
 
 		m_roeModule = m_scriptEngine->GetModule("Roe");
+		int classCount = m_roeModule->GetObjectTypeCount();
+
+		DEER_CORE_INFO("Types : {0}", classCount);
+
+		for (int i = 0; i < classCount; i++) {
+
+			asITypeInfo* type = m_roeModule->GetObjectTypeByIndex(i);
+
+			DEER_CORE_INFO("Inside engine there is : {0}.{1}",
+				type->GetNamespace(), type->GetName());
+
+			int props = type->GetPropertyCount();
+			for (int x = 0; x < props; x++) {
+				const char* subType = type->GetPropertyDeclaration(x, false);
+				DEER_CORE_INFO("Deeper: {0}", subType);
+			}
+		}
+
 	}
 
 	void ScriptEngine::test() {
@@ -53,6 +71,5 @@ namespace Deer {
 		
 		r = builder.BuildModule();
 		DEER_SCRIPT_ASSERT(r >= 0, "Please correct the errors in the script and try again.");
-
 	}
 }
