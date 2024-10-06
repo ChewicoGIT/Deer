@@ -51,27 +51,13 @@ namespace Deer {
 		loadModuleFolder(modulePath, "Deer");
 
 		m_deerModule = m_scriptEngine->GetModule("Deer");
-		m_deerObjects = m_deerModule->GetTypeInfoByName("DeerScript");
+		m_deerScript = m_deerModule->GetTypeInfoByName("DeerScript");
 	}
 
 	uid ScriptEngine::createScriptInstance(uid scriptID) {
 		return uid();
 	}
 
-	void ScriptEngine::test() {
-		asIScriptFunction* func = m_roeModule->GetFunctionByDecl("void main()");
-		DEER_SCRIPT_ASSERT(func != 0, "The script must have the function 'void main()'. Please add it and try again.");
-
-		// Create our context, prepare it, and then execute
-		asIScriptContext* ctx = m_scriptEngine->CreateContext();
-		ctx->Prepare(func);
-		int r = ctx->Execute();
-		if (r != asEXECUTION_FINISHED) {
-			if (r == asEXECUTION_EXCEPTION) {
-				DEER_SCRIPT_ERROR("An exception {0} occurred. Please correct the code and try again.", ctx->GetExceptionString());
-			}
-		}
-	}
 
 	void ScriptEngine::loadModuleFolder(const std::filesystem::path& modulePath, const char* moduleName) {
 		CScriptBuilder builder;

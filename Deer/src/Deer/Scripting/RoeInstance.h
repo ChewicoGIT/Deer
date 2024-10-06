@@ -2,7 +2,8 @@
 
 namespace Deer {
 	class RoeInstance {
-
+	public:
+		RoeInstance();
 
 	};
 }

@@ -25,6 +25,8 @@ namespace Deer {
 		void loadDeerModule(const std::filesystem::path& modulePath);
 
 		uid createScriptInstance(uid scriptID);
+		RoeInstance& getScriptInstance(uid instanceID) { return m_deerObjects[instanceID]; }
+
 		inline std::vector<RoeScript>& getRoeScripts() { return m_deerScripts; }
 
 	private:
