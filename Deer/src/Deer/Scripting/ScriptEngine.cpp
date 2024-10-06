@@ -6,6 +6,11 @@
 #include "angelscript.h"
 #include "scriptbuilder.h"
 #include "scriptstdstring.h"
+#include "Deer/Scripting/RoeScript.h"
+
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 namespace Deer {
 	void ScriptEngine::initScriptEngine() {
@@ -21,28 +26,36 @@ namespace Deer {
 		DEER_SCRIPT_ASSERT(r >= 0, "Error in seting up void print(const string &in)");
 	}
 
+	void ScriptEngine::shutdownScriptEngine() {
+		m_scriptEngine->ShutDownAndRelease();
+	}
+
 	void ScriptEngine::loadRoeModule(const std::filesystem::path& modulePath) {
 		loadModuleFolder(modulePath, "Roe");
-
 		m_roeModule = m_scriptEngine->GetModule("Roe");
+		m_deerScript = m_roeModule->GetTypeInfoByName("DeerScript");
+
 		int classCount = m_roeModule->GetObjectTypeCount();
 
-		DEER_CORE_INFO("Types : {0}", classCount);
-
 		for (int i = 0; i < classCount; i++) {
-
 			asITypeInfo* type = m_roeModule->GetObjectTypeByIndex(i);
 
-			DEER_CORE_INFO("Inside engine there is : {0}.{1}",
-				type->GetNamespace(), type->GetName());
+			asITypeInfo* parent = type->GetBaseType();
 
-			int props = type->GetPropertyCount();
-			for (int x = 0; x < props; x++) {
-				const char* subType = type->GetPropertyDeclaration(x, false);
-				DEER_CORE_INFO("Deeper: {0}", subType);
-			}
+			if (parent == m_deerScript)
+				m_deerScripts.push_back({ type });
 		}
+	}
 
+	void ScriptEngine::loadDeerModule(const std::filesystem::path& modulePath) {
+		loadModuleFolder(modulePath, "Deer");
+
+		m_deerModule = m_scriptEngine->GetModule("Deer");
+		m_deerObjects = m_deerModule->GetTypeInfoByName("DeerScript");
+	}
+
+	uid ScriptEngine::createScriptInstance(uid scriptID) {
+		return uid();
 	}
 
 	void ScriptEngine::test() {
@@ -66,9 +79,20 @@ namespace Deer {
 		int r = builder.StartNewModule(m_scriptEngine, moduleName);
 		DEER_SCRIPT_ASSERT(r >= 0, "Unrecoverable error while starting a new module. {0}", moduleName);
 
-		r = builder.AddSectionFromFile(modulePath.generic_string().c_str());
-		DEER_SCRIPT_ASSERT(r >= 0, "Please correct the errors in the script and try again. {0}", modulePath.generic_string().c_str());
-		
+		try {
+			for (const auto& entry : fs::recursive_directory_iterator(modulePath)) {
+				if (fs::is_regular_file(entry) && entry.path().extension() == ".as") {
+
+					r = builder.AddSectionFromFile(entry.path().generic_string().c_str());
+					DEER_SCRIPT_ASSERT(r >= 0, "Please correct the errors in the script and try again. {0}", entry.path().generic_string().c_str());
+
+					DEER_SCRIPT_TRACE("Loading script : {0}", entry.path().filename().string().c_str());
+				}
+			}
+		} catch (const fs::filesystem_error& e) {
+			DEER_CORE_ERROR("Error while loading scripts, error: {0}", e.what());
+		}
+
 		r = builder.BuildModule();
 		DEER_SCRIPT_ASSERT(r >= 0, "Please correct the errors in the script and try again.");
 	}

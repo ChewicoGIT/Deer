@@ -1,0 +1,12 @@
+void DeerScript::Update()
+
+Temps: 
+
+Variables: 
+ 000: DeerScript this
+
+
+- 6,19 -
+    0   0 *    SUSPEND
+            0:
+    1   0 *    RET      2

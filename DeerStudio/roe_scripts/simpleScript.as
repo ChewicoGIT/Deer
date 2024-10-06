@@ -12,7 +12,7 @@ class entity2{
 	void foo() { }
 }
 
-void main(){
+void main() {
 
 	entity a;
 	print("Hi from Angel Script a: " + variableA);

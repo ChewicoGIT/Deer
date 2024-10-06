@@ -2,6 +2,7 @@
 #include "Deer/Core/Application.h"
 #include "Deer/Core/Log.h"
 #include "Deer/Render/RenderUtils.h"
+#include "Deer/Scripting/RoeScript.h"
 
 //Temp
 #include "Deer/Core/Project.h"
@@ -14,8 +15,12 @@ namespace Deer {
 		DEER_CORE_TRACE("Creating app");
 
 		Project::m_scriptEngine.initScriptEngine();
-		Project::m_scriptEngine.loadRoeModule(std::filesystem::path("roe_scripts/simpleScript.as"));
+		Project::m_scriptEngine.loadRoeModule(std::filesystem::path("roe_scripts"));
 		Project::m_scriptEngine.test();
+
+		for (auto& script : Project::m_scriptEngine.getRoeScripts()) {
+			DEER_CORE_INFO("{0}.{1}", script.getNameSpace(), script.getClassName());
+		}
 
 		return 0;
 		Application* app = createApplication(argc, argv);

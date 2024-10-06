@@ -5,14 +5,18 @@
 class asITypeInfo;
 
 namespace Deer {
+	class ScriptEngine;
+
 	class RoeScript {
 	public:
+		RoeScript(asITypeInfo* typeInfo);
+
+		const char* getClassName();
+		const char* getNameSpace();
 	private:
-		asITypeInfo* typeInfo;
+		asITypeInfo* m_typeInfo;
 
-		const char* name;
-		const char* nameSpace;
-
+		friend ScriptEngine;
 	};
 }
 
