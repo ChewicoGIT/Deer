@@ -1,22 +1,18 @@
 
 Total count
-PSF        : 7
+PSF        : 1
 CALL       : 1
-RET        : 4
-CALLSYS    : 5
-SUSPEND    : 5
+RET        : 5
+PshVPtr    : 1
+CALLSYS    : 1
+SUSPEND    : 4
 ALLOC      : 1
-FREE       : 1
 LOADOBJ    : 1
-STOREOBJ   : 1
 SetV4      : 1
-CpyGtoV4   : 1
 WRTV4      : 1
 PGA        : 1
 SetG4      : 1
-iTOi64     : 1
 LoadThisR  : 1
-PshV8      : 1
 
 Never executed
 PopPtr    
@@ -64,7 +60,6 @@ BSRL
 BSRA      
 COPY      
 PshC8     
-PshVPtr   
 RDSPtr    
 CMPd      
 CMPu      
@@ -78,6 +73,8 @@ PopRPtr
 PshRPtr   
 STR       
 CALLBND   
+FREE      
+STOREOBJ  
 GETOBJ    
 REFCPY    
 CHKREF    
@@ -96,6 +93,7 @@ CpyVtoR8
 CpyVtoG4  
 CpyRtoV4  
 CpyRtoV8  
+CpyGtoV4  
 WRTV1     
 WRTV2     
 WRTV8     
@@ -152,6 +150,7 @@ SetV2
 Cast      
 i64TOi    
 uTOi64    
+iTOi64    
 fTOi64    
 dTOi64    
 fTOu64    
@@ -182,6 +181,7 @@ ClrHi
 JitEntry  
 CallPtr   
 FuncPtr   
+PshV8     
 DIVu      
 MODu      
 DIVu64    
@@ -205,31 +205,22 @@ POWu64
 Thiscall1 
 
 Sequences
-PSF       , PSF        : 1
-PSF       , CALLSYS    : 5
 PSF       , ALLOC      : 1
-CALL      , PSF        : 1
-RET       , SUSPEND    : 1
+CALL      , RET        : 1
+RET       , PSF        : 1
+RET       , SUSPEND    : 2
 RET       , LOADOBJ    : 1
-RET       , STOREOBJ   : 1
-CALLSYS   , PSF        : 3
+PshVPtr   , CALL       : 1
 CALLSYS   , SUSPEND    : 1
-CALLSYS   , CpyGtoV4   : 1
-SUSPEND   , CALL       : 1
-SUSPEND   , FREE       : 1
+SUSPEND   , RET        : 1
 SUSPEND   , SetV4      : 1
 SUSPEND   , PGA        : 1
 SUSPEND   , SetG4      : 1
-ALLOC     , SUSPEND    : 1
-FREE      , RET        : 1
+ALLOC     , PshVPtr    : 1
 LOADOBJ   , RET        : 1
-STOREOBJ  , SUSPEND    : 1
 SetV4     , LoadThisR  : 1
-CpyGtoV4  , iTOi64     : 1
 WRTV4     , RET        : 1
-PGA       , PSF        : 1
+PGA       , CALLSYS    : 1
 SetG4     , RET        : 1
-iTOi64    , PshV8      : 1
 LoadThisR , WRTV4      : 1
-PshV8     , PSF        : 1
 LABEL     , SUSPEND    : 1

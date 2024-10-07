@@ -11,9 +11,9 @@ Variables:
 - 4,8 -
                VarDecl  0
     0   1 *    SUSPEND
-    1   1 *    LoadRObjR v-2, v36, 134217744
+    1   1 *    LoadRObjR v-2, v32, 134217743
     4   1 *    RDR4     v1
-    5   1 *    LoadThisR v36, 134217744
+    5   1 *    LoadThisR v32, 134217743
     7   1 *    WRTV4    v1
     8   1 *    PshVPtr  v-2
     9   3 *    PshVPtr  v0

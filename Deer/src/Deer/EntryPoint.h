@@ -16,13 +16,9 @@ namespace Deer {
 
 		Project::m_scriptEngine.initScriptEngine();
 		Project::m_scriptEngine.loadRoeModule(std::filesystem::path("roe_scripts"));
-		Project::m_scriptEngine.test();
+		Project::m_scriptEngine.createScriptInstance(0);
+		Project::m_scriptEngine.updateRoeInstance(0);
 
-		for (auto& script : Project::m_scriptEngine.getRoeScripts()) {
-			DEER_CORE_INFO("{0}.{1}", script.getNameSpace(), script.getClassName());
-		}
-
-		return 0;
 		Application* app = createApplication(argc, argv);
 		RenderUtils::initializeRenderUtils();
 

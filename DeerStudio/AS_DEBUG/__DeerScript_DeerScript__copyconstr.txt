@@ -1,19 +1,12 @@
 DeerScript::DeerScript(const DeerScript&inout)
 
-Temps: 1
+Temps: 
 
 Variables: 
  -002: const DeerScript& other
- 001: int 
  000: DeerScript this
 
 
-- 4,8 -
                VarDecl  0
-    0   1 *    SUSPEND
-    1   1 *    LoadRObjR v-2, v32, 134217741
-    4   1 *    RDR4     v1
-    5   1 *    LoadThisR v32, 134217741
-    7   1 *    WRTV4    v1
             0:
-    8   1 *    RET      2
+    0   0 *    RET      2

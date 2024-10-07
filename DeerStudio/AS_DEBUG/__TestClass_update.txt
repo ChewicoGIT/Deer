@@ -8,7 +8,7 @@ Variables:
 
 - 7,3 -
     0   0 *    SUSPEND
-    1   0 *    PGA      0x46322e70          (str:hello)
+    1   0 *    PGA      0x73d1300          (str:hello)
     4   2 *    CALLSYS  67           (void print(const string&in))
 - 8,3 -
     6   0 *    SUSPEND

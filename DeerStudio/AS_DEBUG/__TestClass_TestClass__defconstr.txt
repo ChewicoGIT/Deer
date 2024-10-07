@@ -12,6 +12,6 @@ Variables:
 - 4,8 -
     3   1 *    SUSPEND
     4   1 *    SetV4    v1, 0x0          (i:0, f:0)
-    6   1 *    LoadThisR v36, 134217744
+    6   1 *    LoadThisR v32, 134217743
     8   1 *    WRTV4    v1
     9   1 *    RET      2

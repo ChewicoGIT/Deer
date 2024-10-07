@@ -24,9 +24,12 @@ namespace Deer {
 
 		r = m_scriptEngine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(Deer::print), asCALL_CDECL);
 		DEER_SCRIPT_ASSERT(r >= 0, "Error in seting up void print(const string &in)");
+
+		m_context = m_scriptEngine->CreateContext();
 	}
 
 	void ScriptEngine::shutdownScriptEngine() {
+		m_context->Release();
 		m_scriptEngine->ShutDownAndRelease();
 	}
 
@@ -55,9 +58,43 @@ namespace Deer {
 	}
 
 	uid ScriptEngine::createScriptInstance(uid scriptID) {
-		return uid();
+		RoeScript& script = getScript()[scriptID];
+		asITypeInfo* type = script.m_typeInfo;
+		RoeInstance instance;
+
+		std::string factoryString(script.getClassName());
+		factoryString = factoryString + " @" + script.getClassName() + "()";
+
+		asIScriptFunction* function = type->GetFactoryByDecl(factoryString.c_str());
+		DEER_SCRIPT_ASSERT(function, "Function {0} not found", factoryString.c_str());
+
+		int r = m_context->Prepare(function);
+		DEER_SCRIPT_ASSERT(r >= 0, "Failed to prepare function context {0}", factoryString.c_str());
+
+		r = m_context->Execute();
+		DEER_SCRIPT_ASSERT(r >= 0, "Failed to execute function context {0}", factoryString.c_str());
+		asIScriptObject* obj = *(asIScriptObject**)m_context->GetAddressOfReturnValue();
+
+		obj->AddRef();
+
+		asIScriptFunction* updateFunction = type->GetMethodByDecl("void update()");
+		DEER_SCRIPT_ASSERT(updateFunction, "Failed to find update() in {0}", factoryString.c_str());
+		instance.m_updateFunction = updateFunction;
+
+		instance.m_object = obj;
+		m_deerObjects.push_back(instance);
+
+		return m_deerObjects.size() - 1;
 	}
 
+	void ScriptEngine::updateRoeInstance(uid scriptInstance) {
+		RoeInstance& instance = m_deerObjects[scriptInstance];
+
+		m_context->Prepare(instance.m_updateFunction);
+		m_context->SetObject(instance.m_object);
+
+		m_context->Execute();
+	}
 
 	void ScriptEngine::loadModuleFolder(const std::filesystem::path& modulePath, const char* moduleName) {
 		CScriptBuilder builder;

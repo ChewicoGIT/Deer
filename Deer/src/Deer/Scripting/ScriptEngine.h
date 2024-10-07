@@ -10,10 +10,11 @@
 
 class asIScriptEngine;
 class asIScriptModule;
+class asIScriptContext;
+class asIScriptFunction;
 class asITypeInfo;
 
 namespace Deer {
-
 	class ScriptEngine {
 	public:
 		ScriptEngine() = default;
@@ -25,16 +26,17 @@ namespace Deer {
 		void loadDeerModule(const std::filesystem::path& modulePath);
 
 		uid createScriptInstance(uid scriptID);
+		void updateRoeInstance(uid scriptInstance);
+
 		RoeInstance& getScriptInstance(uid instanceID) { return m_deerObjects[instanceID]; }
-
-		inline std::vector<RoeScript>& getRoeScripts() { return m_deerScripts; }
-
+		inline std::vector<RoeScript>& getScript() { return m_deerScripts; }
 	private:
 		asIScriptEngine* m_scriptEngine;
 
 		asIScriptModule* m_roeModule;
 		asIScriptModule* m_deerModule;
 
+		asIScriptContext* m_context;
 		asITypeInfo* m_deerScript;
 
 		std::vector<RoeScript> m_deerScripts;

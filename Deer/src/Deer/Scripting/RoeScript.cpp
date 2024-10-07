@@ -10,6 +10,10 @@ namespace Deer {
 		return m_typeInfo->GetNamespace();
 	}
 
+	RoeInstance RoeScript::createInstance() {
+		return RoeInstance();
+	}
+
 	RoeScript::RoeScript(asITypeInfo* typeInfo)
 		: m_typeInfo(typeInfo){
 
