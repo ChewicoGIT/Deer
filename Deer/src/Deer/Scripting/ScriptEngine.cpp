@@ -6,7 +6,9 @@
 #include "angelscript.h"
 #include "scriptbuilder.h"
 #include "scriptstdstring.h"
-#include "Deer/Scripting/RoeScript.h"
+#include "scriptmath.h"
+
+#include "Deer/Scripting/DeerScript.h"
 
 #include <filesystem>
 
@@ -21,19 +23,26 @@ namespace Deer {
 		DEER_SCRIPT_ASSERT(r >= 0, "Error in seting up angel script");
 
 		RegisterStdString(m_scriptEngine);
+		RegisterScriptMath(m_scriptEngine);
 
 		r = m_scriptEngine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(Deer::print), asCALL_CDECL);
 		DEER_SCRIPT_ASSERT(r >= 0, "Error in seting up void print(const string &in)");
 
-		m_context = m_scriptEngine->CreateContext();
 	}
 
 	void ScriptEngine::shutdownScriptEngine() {
-		m_context->Release();
 		m_scriptEngine->ShutDownAndRelease();
 	}
 
-	void ScriptEngine::loadRoeModule(const std::filesystem::path& modulePath) {
+	void ScriptEngine::beginExecutionContext() {
+		m_context = m_scriptEngine->CreateContext();
+	}
+
+	void ScriptEngine::endExecutionContext() {
+		m_context->Release();
+	}
+
+	void ScriptEngine::loadScripts(const std::filesystem::path& modulePath) {
 		loadModuleFolder(modulePath, "Roe");
 		m_roeModule = m_scriptEngine->GetModule("Roe");
 		m_deerScript = m_roeModule->GetTypeInfoByName("DeerScript");
@@ -50,20 +59,13 @@ namespace Deer {
 		}
 	}
 
-	void ScriptEngine::loadDeerModule(const std::filesystem::path& modulePath) {
-		loadModuleFolder(modulePath, "Deer");
-
-		m_deerModule = m_scriptEngine->GetModule("Deer");
-		m_deerScript = m_deerModule->GetTypeInfoByName("DeerScript");
-	}
-
 	uid ScriptEngine::createScriptInstance(uid scriptID) {
-		RoeScript& script = getScript()[scriptID];
+		DeerScript& script = getScript()[scriptID];
 		asITypeInfo* type = script.m_typeInfo;
-		RoeInstance instance;
+		ScriptInstance instance;
 
-		std::string factoryString(script.getClassName());
-		factoryString = factoryString + " @" + script.getClassName() + "()";
+		std::string factoryString(script.getName());
+		factoryString = factoryString + " @" + script.getName() + "()";
 
 		asIScriptFunction* function = type->GetFactoryByDecl(factoryString.c_str());
 		DEER_SCRIPT_ASSERT(function, "Function {0} not found", factoryString.c_str());
@@ -88,7 +90,7 @@ namespace Deer {
 	}
 
 	void ScriptEngine::updateRoeInstance(uid scriptInstance) {
-		RoeInstance& instance = m_deerObjects[scriptInstance];
+		ScriptInstance& instance = m_deerObjects[scriptInstance];
 
 		m_context->Prepare(instance.m_updateFunction);
 		m_context->SetObject(instance.m_object);

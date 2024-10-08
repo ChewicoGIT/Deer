@@ -1,0 +1,13 @@
+AnotherClass::AnotherClass()
+
+Temps: 
+
+Variables: 
+ 000: AnotherClass this
+
+
+- 7,10 -
+    0   0 *    SUSPEND
+    1   0 *    PshVPtr  v0
+    2   2 *    CALL     98           (DeerScript::DeerScript())
+    4   0 *    RET      2

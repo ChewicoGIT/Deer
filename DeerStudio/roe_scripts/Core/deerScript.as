@@ -1,8 +1,0 @@
-
-class DeerScript{
-
-	void Update() { }
-	
-}
-
-

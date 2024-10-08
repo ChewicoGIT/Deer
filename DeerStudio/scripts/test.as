@@ -1,4 +1,3 @@
-
 class TestClass : DeerScript {
 	
 	float position = 0.0;

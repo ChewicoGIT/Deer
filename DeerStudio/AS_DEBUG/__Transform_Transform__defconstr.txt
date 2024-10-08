@@ -1,4 +1,4 @@
-DeerScript::DeerScript()
+Transform::Transform()
 
 Temps: 1, 2, 3, 5
 
@@ -7,10 +7,10 @@ Variables:
  002: int 
  003: int 
  005: (heap) Vec3@ 
- 000: DeerScript this
+ 000: Transform this
 
 
-- 5,7 -
+- 2,10 -
     0   5 *    SUSPEND
     1   5 *    PshC4    0x0          (i:0, f:0)
     3   6 *    PshC4    0x0          (i:0, f:0)
@@ -19,11 +19,11 @@ Variables:
     9   5 *    STOREOBJ v5
    10   5 *    PshVPtr  v5
    11   7 *    PshVPtr  v0
-   12   9 *    ADDSi    v36, 134217741
+   12   9 *    ADDSi    v32, 134217742
    14   9 *    REFCPY   0x2bb7dd09420          (i:3004292961312, f:1.48432e-311)
-   17   7 *    FREE     v5, 0x7dd09420          (type:Vec3)
-   20   7 *    PopPtr
-- 6,7 -
+   17   7 *    PopPtr
+   18   5 *    FREE     v5, 0x7dd09420          (type:Vec3)
+- 3,10 -
    21   5 *    SUSPEND
    22   5 *    PshC4    0x0          (i:0, f:0)
    24   6 *    PshC4    0x0          (i:0, f:0)
@@ -32,7 +32,8 @@ Variables:
    30   5 *    STOREOBJ v5
    31   5 *    PshVPtr  v5
    32   7 *    PshVPtr  v0
-   33   9 *    ADDSi    v44, 134217741
+   33   9 *    ADDSi    v40, 134217742
    35   9 *    REFCPY   0x2bb7dd09420          (i:3004292961312, f:1.48432e-311)
-   38   7 *    FREE     v5, 0x7dd09420          (type:Vec3)
-   41   5 *    RET      2
+   38   7 *    PopPtr
+   39   5 *    FREE     v5, 0x7dd09420          (type:Vec3)
+   42   5 *    RET      2

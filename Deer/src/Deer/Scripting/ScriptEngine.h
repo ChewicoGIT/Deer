@@ -5,8 +5,8 @@
 #include <string>
 #include <vector>
 
-#include "Deer/Scripting/RoeScript.h"
-#include "Deer/Scripting/RoeInstance.h"
+#include "Deer/Scripting/DeerScript.h"
+#include "Deer/Scripting/ScriptInstance.h"
 
 class asIScriptEngine;
 class asIScriptModule;
@@ -15,6 +15,8 @@ class asIScriptFunction;
 class asITypeInfo;
 
 namespace Deer {
+	class Scene;
+
 	class ScriptEngine {
 	public:
 		ScriptEngine() = default;
@@ -22,25 +24,25 @@ namespace Deer {
 		void initScriptEngine();
 		void shutdownScriptEngine();
 
-		void loadRoeModule(const std::filesystem::path& modulePath);
-		void loadDeerModule(const std::filesystem::path& modulePath);
+		void beginExecutionContext();
+		void endExecutionContext();
+
+		void loadScripts(const std::filesystem::path& modulePath);
 
 		uid createScriptInstance(uid scriptID);
 		void updateRoeInstance(uid scriptInstance);
 
-		RoeInstance& getScriptInstance(uid instanceID) { return m_deerObjects[instanceID]; }
-		inline std::vector<RoeScript>& getScript() { return m_deerScripts; }
+		ScriptInstance& getScriptInstance(uid instanceID) { return m_deerObjects[instanceID]; }
+		inline std::vector<DeerScript>& getScript() { return m_deerScripts; }
 	private:
 		asIScriptEngine* m_scriptEngine;
-
 		asIScriptModule* m_roeModule;
-		asIScriptModule* m_deerModule;
 
 		asIScriptContext* m_context;
 		asITypeInfo* m_deerScript;
 
-		std::vector<RoeScript> m_deerScripts;
-		std::vector<RoeInstance> m_deerObjects;
+		std::vector<DeerScript> m_deerScripts;
+		std::vector<ScriptInstance> m_deerObjects;
 
 		void loadModuleFolder(const std::filesystem::path& modulePath, const char* moduleName);
 	};

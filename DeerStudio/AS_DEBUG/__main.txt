@@ -13,15 +13,15 @@ Variables:
 - 17,2 -
     0  25 *    SUSPEND
                VarDecl  0
-    1  25 *    CALL     75           (entity@ entity())
+    1  25 *    CALL     117           (entity@ entity())
     3  25 *    STOREOBJ v2
 - 18,2 -
     4  25 *    SUSPEND
-    5  25 *    PGA      0x73c6480          (str:Hi from Angel Script...)
+    5  25 *    PGA      0x7dd15b70          (str:Hi from Angel Script...)
     8  27 *    PSF      v12
     9  29 *    CALLSYS  20           (string::string(const string&in))
                ObjInfo  v12, 1
-   11  25 *    CpyGtoV4 v13, 0x1bd073cf1c0          (i:1911381881280, f:9.44348e-312)
+   11  25 *    CpyGtoV4 v13, 0x2bb7dd09f70          (i:3004292964208, f:1.48432e-311)
    14  25 *    iTOi64   v15, v13
    16  25 *    PshV8    v15
    17  27 *    PSF      v25
@@ -32,12 +32,12 @@ Variables:
    22  27 *    CALLSYS  21           (string::~string())
                ObjInfo  v12, 0
    24  25 *    PSF      v25
-   25  27 *    CALLSYS  67           (void print(const string&in))
+   25  27 *    CALLSYS  91           (void print(const string&in))
    27  25 *    PSF      v25
    28  27 *    CALLSYS  21           (string::~string())
 - 19,2 -
                ObjInfo  v25, 0
    30  25 *    SUSPEND
-   31  25 *    FREE     v2, 0x73c99e0          (type:entity)
+   31  25 *    FREE     v2, 0x7dd09650          (type:entity)
             0:
    34  25 *    RET      0

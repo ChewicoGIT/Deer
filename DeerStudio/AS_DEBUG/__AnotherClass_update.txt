@@ -1,16 +1,16 @@
-void TestClass::update()
+void AnotherClass::update()
 
 Temps: 
 
 Variables: 
- 000: TestClass this
+ 000: AnotherClass this
 
 
-- 6,3 -
+- 10,3 -
     0   0 *    SUSPEND
     1   0 *    PGA      0x7dd227b0          (str:hello)
     4   2 *    CALLSYS  91           (void print(const string&in))
-- 7,3 -
+- 11,3 -
     6   0 *    SUSPEND
             0:
     7   0 *    RET      2

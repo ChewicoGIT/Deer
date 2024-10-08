@@ -6,9 +6,9 @@ class asIScriptFunction;
 namespace Deer {
 	class ScriptEngine;
 
-	class RoeInstance {
+	class ScriptInstance {
 	public:
-		RoeInstance() = default;
+		ScriptInstance() = default;
 
 	private:
 		asIScriptObject* m_object;

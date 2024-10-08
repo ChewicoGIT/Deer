@@ -1,0 +1,30 @@
+Vec3::Vec3(float = 0, float = 0, float = 0)
+
+Temps: 
+
+Variables: 
+ -002: float _x
+ -003: float _y
+ -004: float _z
+ 000: Vec3 this
+
+
+- 6,9 -
+               VarDecl  0
+               VarDecl  1
+               VarDecl  2
+    0   0 *    SUSPEND
+    1   0 *    LoadThisR v32, 134217743
+    3   0 *    WRTV4    v-2
+- 7,9 -
+    4   0 *    SUSPEND
+    5   0 *    LoadThisR v36, 134217743
+    7   0 *    WRTV4    v-3
+- 8,9 -
+    8   0 *    SUSPEND
+    9   0 *    LoadThisR v40, 134217743
+   11   0 *    WRTV4    v-4
+- 9,6 -
+   12   0 *    SUSPEND
+            0:
+   13   0 *    RET      5

@@ -1,0 +1,84 @@
+string Vec3::opImplConv() const
+
+Temps: 10, 11, 21
+
+Variables: 
+ 010: string 
+ 011: const int 
+ 021: string 
+ -002: string& 
+ 000: Vec3 this
+
+
+- 47,9 -
+    0  21 *    SUSPEND
+    1  21 *    PGA      0x7dd28c30          (str:()
+    4  23 *    PSF      v10
+    5  25 *    CALLSYS  20           (string::string(const string&in))
+               ObjInfo  v10, 1
+    7  21 *    LoadThisR v32, 134217743
+    9  21 *    RDR4     v11
+   10  21 *    PshV4    v11
+   11  22 *    PSF      v21
+   12  24 *    PSF      v10
+   13  26 *    CALLSYS  38           (string string::opAdd(float) const)
+               ObjInfo  v21, 1
+   15  21 *    PSF      v10
+   16  23 *    CALLSYS  21           (string::~string())
+               ObjInfo  v10, 0
+   18  21 *    PGA      0x7dd2a4b0          (str:, )
+   21  23 *    PSF      v10
+   22  25 *    PSF      v21
+   23  27 *    CALLSYS  26           (string string::opAdd(const string&in) const)
+               ObjInfo  v10, 1
+   25  21 *    PSF      v21
+   26  23 *    CALLSYS  21           (string::~string())
+               ObjInfo  v21, 0
+   28  21 *    LoadThisR v36, 134217743
+   30  21 *    RDR4     v11
+   31  21 *    PshV4    v11
+   32  22 *    PSF      v21
+   33  24 *    PSF      v10
+   34  26 *    CALLSYS  38           (string string::opAdd(float) const)
+               ObjInfo  v21, 1
+   36  21 *    PSF      v10
+   37  23 *    CALLSYS  21           (string::~string())
+               ObjInfo  v10, 0
+   39  21 *    PGA      0x7dd2a4b0          (str:, )
+   42  23 *    PSF      v10
+   43  25 *    PSF      v21
+   44  27 *    CALLSYS  26           (string string::opAdd(const string&in) const)
+               ObjInfo  v10, 1
+   46  21 *    PSF      v21
+   47  23 *    CALLSYS  21           (string::~string())
+               ObjInfo  v21, 0
+   49  21 *    LoadThisR v40, 134217743
+   51  21 *    RDR4     v11
+   52  21 *    PshV4    v11
+   53  22 *    PSF      v21
+   54  24 *    PSF      v10
+   55  26 *    CALLSYS  38           (string string::opAdd(float) const)
+               ObjInfo  v21, 1
+   57  21 *    PSF      v10
+   58  23 *    CALLSYS  21           (string::~string())
+               ObjInfo  v10, 0
+   60  21 *    PGA      0x7dd2a3b0          (str:))
+   63  23 *    PSF      v10
+   64  25 *    PSF      v21
+   65  27 *    CALLSYS  26           (string string::opAdd(const string&in) const)
+               ObjInfo  v10, 1
+   67  21 *    PSF      v21
+   68  23 *    CALLSYS  21           (string::~string())
+               ObjInfo  v21, 0
+   70  21 *    PSF      v10
+   71  23 *    PshVPtr  v-2
+   72  25 *    CALLSYS  20           (string::string(const string&in))
+   74  21 *    PSF      v10
+   75  23 *    CALLSYS  21           (string::~string())
+               ObjInfo  v10, 0
+               ObjInfo  v-2, 1
+            {
+            }
+               ObjInfo  v-2, 0
+            0:
+   77  21 *    RET      4

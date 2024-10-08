@@ -1,24 +1,27 @@
 
 Total count
-PSF        : 1
-CALL       : 1
-RET        : 5
-PshVPtr    : 1
+PopPtr     : 1
+PshC4      : 6
+PshV4      : 6
+PSF        : 3
+CALL       : 3
+RET        : 9
+PshVPtr    : 5
 CALLSYS    : 1
-SUSPEND    : 4
-ALLOC      : 1
-LOADOBJ    : 1
-SetV4      : 1
-WRTV4      : 1
+SUSPEND    : 14
+ALLOC      : 3
+FREE       : 2
+LOADOBJ    : 3
+STOREOBJ   : 2
+REFCPY     : 2
+ADDSi      : 2
+WRTV4      : 6
 PGA        : 1
 SetG4      : 1
-LoadThisR  : 1
+LoadThisR  : 6
 
 Never executed
-PopPtr    
 PshGPtr   
-PshC4     
-PshV4     
 SwapPtr   
 NOT       
 PshG4     
@@ -73,10 +76,7 @@ PopRPtr
 PshRPtr   
 STR       
 CALLBND   
-FREE      
-STOREOBJ  
 GETOBJ    
-REFCPY    
 CHKREF    
 GETOBJREF 
 GETREF    
@@ -84,8 +84,8 @@ PshNull
 ClrVPtr   
 OBJTYPE   
 TYPEID    
+SetV4     
 SetV8     
-ADDSi     
 CpyVtoV4  
 CpyVtoV8  
 CpyVtoR4  
@@ -205,22 +205,39 @@ POWu64
 Thiscall1 
 
 Sequences
+PopPtr    , SUSPEND    : 1
+PshC4     , PshC4      : 4
+PshC4     , CALL       : 2
+PshV4     , PshV4      : 4
+PshV4     , ALLOC      : 2
+PSF       , PshV4      : 2
 PSF       , ALLOC      : 1
-CALL      , RET        : 1
+CALL      , PSF        : 2
+CALL      , SUSPEND    : 1
 RET       , PSF        : 1
-RET       , SUSPEND    : 2
-RET       , LOADOBJ    : 1
+RET       , RET        : 1
+RET       , SUSPEND    : 1
+RET       , LOADOBJ    : 3
+RET       , STOREOBJ   : 2
 PshVPtr   , CALL       : 1
+PshVPtr   , PshVPtr    : 2
+PshVPtr   , ADDSi      : 2
 CALLSYS   , SUSPEND    : 1
-SUSPEND   , RET        : 1
-SUSPEND   , SetV4      : 1
+SUSPEND   , PshC4      : 2
+SUSPEND   , RET        : 3
+SUSPEND   , PshVPtr    : 1
 SUSPEND   , PGA        : 1
 SUSPEND   , SetG4      : 1
-ALLOC     , PshVPtr    : 1
-LOADOBJ   , RET        : 1
-SetV4     , LoadThisR  : 1
-WRTV4     , RET        : 1
+SUSPEND   , LoadThisR  : 6
+ALLOC     , SUSPEND    : 3
+FREE      , PopPtr     : 1
+FREE      , RET        : 1
+LOADOBJ   , RET        : 3
+STOREOBJ  , PshVPtr    : 2
+REFCPY    , FREE       : 2
+ADDSi     , REFCPY     : 2
+WRTV4     , SUSPEND    : 6
 PGA       , CALLSYS    : 1
 SetG4     , RET        : 1
-LoadThisR , WRTV4      : 1
+LoadThisR , WRTV4      : 6
 LABEL     , SUSPEND    : 1
