@@ -7,6 +7,7 @@
 #include "scriptmath.h"
 
 #include "ScriptEngineFunctions.h"
+
 #include "Deer/Scripting/ComponentScript.h"
 
 #include <filesystem>
@@ -21,10 +22,16 @@ namespace Deer {
 		RegisterScriptMath(m_scriptEngine);
 
 		registerDeerFunctions(m_scriptEngine);
+		registerVec3(m_scriptEngine);
 	}
 
 	void ScriptEngine::shutdownScriptEngine() {
 		m_scriptEngine->ShutDownAndRelease();
+	}
+
+	void ScriptEngine::beginExecutionContext(Ref<Scene>& scene) {
+		m_context = m_scriptEngine->CreateContext();
+		m_scene = scene;
 	}
 
 	void ScriptEngine::beginExecutionContext() {
@@ -33,6 +40,7 @@ namespace Deer {
 
 	void ScriptEngine::endExecutionContext() {
 		m_context->Release();
+		m_scene.reset();
 	}
 
 	void ScriptEngine::loadScripts(const std::filesystem::path& modulePath) {
@@ -84,7 +92,7 @@ namespace Deer {
 		asIScriptObject* obj = *(asIScriptObject**)m_context->GetAddressOfReturnValue();
 		obj->AddRef();
 
-		int uidPosition = script.getAttribute("UID").positionID;
+		int uidPosition = script.getAttribute("UID").internalID;
 		unsigned int* objUID = (unsigned int*)obj->GetAddressOfProperty(uidPosition);
 
 		*objUID = 69;
@@ -117,6 +125,8 @@ namespace Deer {
 		}
 
 		r = builder.BuildModule();
-		DEER_SCRIPT_ASSERT(r >= 0, "Please correct the errors in the script and try again.");
+		if (r < 0) {
+			DEER_SCRIPT_INFO("Please correct the errors in the script and try again.");
+		}
 	}
 }

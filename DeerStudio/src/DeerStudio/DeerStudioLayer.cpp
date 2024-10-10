@@ -8,6 +8,8 @@
 #include "DeerStudio/Editor/ActiveEntity.h"
 #include "DeerStudio/Editor/GamePannel.h"
 
+#include "Deer/Asset/AssetManager.h"
+
 #include "backends/imgui_impl_opengl3.h"
 #include "Style.h"
 
@@ -26,8 +28,8 @@ namespace Deer {
         //ImGui::PushFont(font1);
         ImGui_ImplOpenGL3_CreateFontsTexture();
 
-        m_meshID = Project::m_assetManager.loadAsset<Mesh>(std::filesystem::path("assets/skull.obj"));
-        m_shaderID = Project::m_assetManager.loadAsset<Shader>(std::filesystem::path("assets/Shaders/SimpleShader.glsl"));
+        m_meshID = Project::m_assetManager->loadAsset<Mesh>(std::filesystem::path("assets/skull.obj"));
+        m_shaderID = Project::m_assetManager->loadAsset<Shader>(std::filesystem::path("assets/Shaders/SimpleShader.glsl"));
 
         m_activeEntity = Ref<ActiveEntity>(new ActiveEntity());
         m_scene = Ref<Scene>(new Scene());
@@ -58,7 +60,7 @@ namespace Deer {
             pannel->onUpdate(delta);
         }
 
-        Asset<Shader>& shaderAsset = Project::m_assetManager.getAsset<Shader>(m_shaderID);
+        Asset<Shader>& shaderAsset = Project::m_assetManager->getAsset<Shader>(m_shaderID);
         shaderAsset.value->uploadUniformInt("u_texture", 0);
 
         int windowWidth = Application::s_application->m_window->getWitdth();

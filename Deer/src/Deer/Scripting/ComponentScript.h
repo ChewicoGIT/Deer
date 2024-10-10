@@ -1,5 +1,5 @@
 #pragma once
-#include "ScriptingUtils.h"
+#include "ScriptAttributes.h"
 
 #include <string>
 

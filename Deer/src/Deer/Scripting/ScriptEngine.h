@@ -13,6 +13,7 @@ class asIScriptModule;
 class asIScriptContext;
 class asIScriptFunction;
 class asITypeInfo;
+class Scene;
 
 namespace Deer {
 	class Scene;
@@ -27,9 +28,13 @@ namespace Deer {
 		void initScriptEngine();
 		void shutdownScriptEngine();
 
+		void beginExecutionContext(Ref<Scene>& scene);
+		//TEMP
 		void beginExecutionContext();
 		void endExecutionContext();
+
 		inline asIScriptContext* getExecutionContext() { return m_context; }
+		inline Ref<Scene>& getExecutionScene() { return m_scene; }
 
 		void loadScripts(const std::filesystem::path& scriptPath);
 
@@ -43,6 +48,8 @@ namespace Deer {
 
 		asIScriptContext* m_context;
 		ComponentScriptMap m_componentScripts;
+
+		Ref<Scene> m_scene;
 
 		void loadModuleFolder(const std::filesystem::path& modulePath, const char* moduleName);
 	};

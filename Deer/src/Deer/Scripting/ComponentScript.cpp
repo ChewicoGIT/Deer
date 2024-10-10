@@ -3,6 +3,7 @@
 
 #include "Deer/Core/Log.h"
 #include "Deer/Core/Project.h"
+#include "Deer/Scripting/ScriptEngine.h"
 
 namespace Deer {
 	ComponentScript::ComponentScript(asITypeInfo* typeInfo)
@@ -16,10 +17,10 @@ namespace Deer {
 		if (!m_updateFunction)
 			return;
 
-		asIScriptContext* context = Project::m_scriptEngine.getExecutionContext();
+		asIScriptContext* context = Project::m_scriptEngine->getExecutionContext();
+
 		context->Prepare(m_updateFunction);
 		context->SetObject(m_object);
-
 		context->Execute();
 	}
 }

@@ -10,11 +10,11 @@ namespace Deer {
 		std::string name;
 		int typeID;
 		int location;
-		int positionID;
+		int internalID;
 		bool isPrivate;
 
-		ScriptAttribute(const char* _name = "", int _type = 0, bool _isPrivate = 0, int _location = 0, int _positionID = 0)
-			: typeID(_type), name(_name), isPrivate(_isPrivate), location(_location), positionID(_positionID) { }
+		ScriptAttribute(const char* _name = "", int _type = 0, bool _isPrivate = 0, int _location = 0, int _internalID = 0)
+			: typeID(_type), name(_name), isPrivate(_isPrivate), location(_location), internalID(_internalID) { }
 	};
 
 	using ScriptAttributeMap = std::unordered_map<std::string, ScriptAttribute>;

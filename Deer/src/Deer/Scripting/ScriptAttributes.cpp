@@ -1,4 +1,4 @@
-#include "ScriptingUtils.h"
+#include "ScriptAttributes.h"
 #include "Deer/Core/Log.h"
 #include "angelscript.h"
 
@@ -17,7 +17,6 @@ namespace Deer {
 			ScriptAttribute attribute(name, typeID, isPrivate, offset, x);
 
 			DEER_CORE_TRACE("{4} : {0} {1} isP : {2} {3}", typeID, name, isPrivate, offset, typeInfo->GetName());
-
 			m_attributes.insert({ std::string(name), attribute});
 		}
 
