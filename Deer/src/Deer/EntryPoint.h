@@ -2,7 +2,8 @@
 #include "Deer/Core/Application.h"
 #include "Deer/Core/Log.h"
 #include "Deer/Render/RenderUtils.h"
-#include "Deer/Scripting/DeerScript.h"
+#include "Deer/Scripting/ComponentScript.h"
+#include "Deer/Scene/Entity.h"
 
 //Temp
 #include "Deer/Core/Project.h"
@@ -19,8 +20,13 @@ namespace Deer {
 
 		Project::m_scriptEngine.beginExecutionContext();
 
-		Project::m_scriptEngine.createScriptInstance(0);
-		Project::m_scriptEngine.updateRoeInstance(0);
+		for (auto& script : Project::m_scriptEngine.getComponentScripts()) {
+			Ref<ComponentScriptInstance> componentScript = Project::m_scriptEngine.createComponentScriptInstance(
+				script.first, Entity::nullEntity);
+
+			DEER_CORE_INFO("Executing {0}", script.first);
+			componentScript->update();
+		}
 
 		Project::m_scriptEngine.endExecutionContext();
 

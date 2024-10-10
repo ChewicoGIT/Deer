@@ -1,4 +1,5 @@
-#include "ScriptEngineFunction.h"
+#include "ScriptEngineFunctions.h"
+
 #include "angelscript.h"
 #include "Deer/Core/Log.h"
 
@@ -20,5 +21,13 @@ namespace Deer {
 
     void print(std::string& msg) {
         DEER_SCRIPT_INFO(msg.c_str());
+    }
+
+    void registerDeerFunctions(asIScriptEngine* scriptEngine) {
+        int r = scriptEngine->SetMessageCallback(asFUNCTION(Deer::messageCallback), 0, asCALL_CDECL);
+        DEER_SCRIPT_ASSERT(r >= 0, "Error in seting up angel script");
+
+        r = scriptEngine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(Deer::print), asCALL_CDECL);
+        DEER_SCRIPT_ASSERT(r >= 0, "Error in seting up void print(const string &in)");
     }
 }

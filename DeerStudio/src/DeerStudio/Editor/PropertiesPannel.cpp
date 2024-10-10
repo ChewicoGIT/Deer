@@ -335,10 +335,8 @@ namespace Deer {
 
 			if (ImGui::BeginMenu("Scripts")) {
 
-				auto& scripts = Project::m_scriptEngine.getScript();
-
-				for (auto& script : scripts)
-					addScriptButton(script.getName());
+				for (auto& script : Project::m_scriptEngine.getComponentScripts())
+					addScriptButton(script.first.c_str());
 
 				ImGui::EndMenu();
 			}

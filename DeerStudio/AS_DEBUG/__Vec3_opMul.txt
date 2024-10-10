@@ -14,19 +14,19 @@ Variables:
 - 20,9 -
                VarDecl  0
     0   5 *    SUSPEND
-    1   5 *    LoadThisR v40, 134217743
+    1   5 *    LoadThisR v40, 134217744
     3   5 *    RDR4     v1
     4   5 *    MULf     v1, v1, v-2
     6   5 *    PshV4    v1
-    7   6 *    LoadThisR v36, 134217743
+    7   6 *    LoadThisR v36, 134217744
     9   6 *    RDR4     v2
    10   6 *    MULf     v2, v2, v-2
    12   6 *    PshV4    v2
-   13   7 *    LoadThisR v32, 134217743
+   13   7 *    LoadThisR v32, 134217744
    15   7 *    RDR4     v3
    16   7 *    MULf     v3, v3, v-2
    18   7 *    PshV4    v3
-   19   8 *    CALL     107           (Vec3@ Vec3(float = 0, float = 0, float = 0))
+   19   8 *    CALL     108           (Vec3@ Vec3(float = 0, float = 0, float = 0))
    21   5 *    STOREOBJ v5
    22   5 *    ChkNullV v5
             {

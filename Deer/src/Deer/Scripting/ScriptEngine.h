@@ -3,10 +3,10 @@
 
 #include <filesystem>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
-#include "Deer/Scripting/DeerScript.h"
-#include "Deer/Scripting/ScriptInstance.h"
+#include "Deer/Scripting/ComponentScript.h"
 
 class asIScriptEngine;
 class asIScriptModule;
@@ -16,6 +16,9 @@ class asITypeInfo;
 
 namespace Deer {
 	class Scene;
+	class Entity;
+
+	using ComponentScriptMap = std::unordered_map<std::string, ComponentScript>;
 
 	class ScriptEngine {
 	public:
@@ -26,23 +29,20 @@ namespace Deer {
 
 		void beginExecutionContext();
 		void endExecutionContext();
+		inline asIScriptContext* getExecutionContext() { return m_context; }
 
-		void loadScripts(const std::filesystem::path& modulePath);
+		void loadScripts(const std::filesystem::path& scriptPath);
 
-		uid createScriptInstance(uid scriptID);
-		void updateRoeInstance(uid scriptInstance);
-
-		ScriptInstance& getScriptInstance(uid instanceID) { return m_deerObjects[instanceID]; }
-		inline std::vector<DeerScript>& getScript() { return m_deerScripts; }
+		inline ComponentScriptMap& getComponentScripts() { return m_componentScripts; }
+		inline ComponentScript& getComponentScript(const std::string& scriptID) { return m_componentScripts[scriptID]; }
+		
+		Ref<ComponentScriptInstance> createComponentScriptInstance(const std::string& scriptID, Entity& scriptEntity);
 	private:
 		asIScriptEngine* m_scriptEngine;
-		asIScriptModule* m_roeModule;
+		asIScriptModule* m_scriptModule;
 
 		asIScriptContext* m_context;
-		asITypeInfo* m_deerScript;
-
-		std::vector<DeerScript> m_deerScripts;
-		std::vector<ScriptInstance> m_deerObjects;
+		ComponentScriptMap m_componentScripts;
 
 		void loadModuleFolder(const std::filesystem::path& modulePath, const char* moduleName);
 	};

@@ -1,16 +1,38 @@
 void AnotherClass::update()
 
-Temps: 
+Temps: 10, 11, 13, 23
 
 Variables: 
+ 010: string 
+ 011: int 
+ 013: double 
+ 023: string 
  000: AnotherClass this
 
 
-- 10,3 -
-    0   0 *    SUSPEND
-    1   0 *    PGA      0x7dd227b0          (str:hello)
-    4   2 *    CALLSYS  91           (void print(const string&in))
-- 11,3 -
-    6   0 *    SUSPEND
+- 4,3 -
+    0  23 *    SUSPEND
+    1  23 *    PGA      0xcb8c3700          (str:Hello from another c...)
+    4  25 *    PSF      v10
+    5  27 *    CALLSYS  20           (string::string(const string&in))
+               ObjInfo  v10, 1
+    7  23 *    LoadThisR v32, 134217741
+    9  23 *    RDR4     v11
+   10  23 *    uTOi64   v13, v11
+   12  23 *    PshV8    v13
+   13  25 *    PSF      v23
+   14  27 *    PSF      v10
+   15  29 *    CALLSYS  46           (string string::opAdd(uint64) const)
+               ObjInfo  v23, 1
+   17  23 *    PSF      v10
+   18  25 *    CALLSYS  21           (string::~string())
+               ObjInfo  v10, 0
+   20  23 *    PSF      v23
+   21  25 *    CALLSYS  91           (void print(const string&in))
+   23  23 *    PSF      v23
+   24  25 *    CALLSYS  21           (string::~string())
+- 5,3 -
+               ObjInfo  v23, 0
+   26  23 *    SUSPEND
             0:
-    7   0 *    RET      2
+   27  23 *    RET      2

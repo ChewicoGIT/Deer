@@ -1,8 +1,8 @@
-class TestClass : DeerScript {
+class TestClass : ComponentScript {
 	
 	float position = 0.0;
 	
 	void update() {
-		print("hello");
+		print("Hello from Test Class");
 	}
 }

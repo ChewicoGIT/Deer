@@ -15,24 +15,24 @@ Variables:
     1   5 *    PshC4    0x0          (i:0, f:0)
     3   6 *    PshC4    0x0          (i:0, f:0)
     5   7 *    PshC4    0x0          (i:0, f:0)
-    7   8 *    CALL     107           (Vec3@ Vec3(float = 0, float = 0, float = 0))
+    7   8 *    CALL     106           (Vec3@ Vec3(float = 0, float = 0, float = 0))
     9   5 *    STOREOBJ v5
    10   5 *    PshVPtr  v5
    11   7 *    PshVPtr  v0
    12   9 *    ADDSi    v36, 134217741
-   14   9 *    REFCPY   0x2bb7dd09420          (i:3004292961312, f:1.48432e-311)
-   17   7 *    FREE     v5, 0x7dd09420          (type:Vec3)
+   14   9 *    REFCPY   0x1539f049720          (i:1458661791520, f:7.20675e-312)
+   17   7 *    FREE     v5, 0x9f049720          (type:Vec3)
    20   7 *    PopPtr
 - 6,7 -
    21   5 *    SUSPEND
    22   5 *    PshC4    0x0          (i:0, f:0)
    24   6 *    PshC4    0x0          (i:0, f:0)
    26   7 *    PshC4    0x0          (i:0, f:0)
-   28   8 *    CALL     107           (Vec3@ Vec3(float = 0, float = 0, float = 0))
+   28   8 *    CALL     106           (Vec3@ Vec3(float = 0, float = 0, float = 0))
    30   5 *    STOREOBJ v5
    31   5 *    PshVPtr  v5
    32   7 *    PshVPtr  v0
    33   9 *    ADDSi    v44, 134217741
-   35   9 *    REFCPY   0x2bb7dd09420          (i:3004292961312, f:1.48432e-311)
-   38   7 *    FREE     v5, 0x7dd09420          (type:Vec3)
+   35   9 *    REFCPY   0x1539f049720          (i:1458661791520, f:7.20675e-312)
+   38   7 *    FREE     v5, 0x9f049720          (type:Vec3)
    41   5 *    RET      2

@@ -1,0 +1,15 @@
+AnotherClass::AnotherClass(const AnotherClass&inout)
+
+Temps: 
+
+Variables: 
+ -002: const AnotherClass& other
+ 000: AnotherClass this
+
+
+               VarDecl  0
+    0   0 *    PshVPtr  v-2
+    1   2 *    PshVPtr  v0
+    2   4 *    CALL     101           (ComponentScript::ComponentScript(const ComponentScript&inout))
+            0:
+    4   0 *    RET      2

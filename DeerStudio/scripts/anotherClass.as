@@ -1,12 +1,6 @@
-class AnotherClass : DeerScript {
-	
-	private int a;
-    
-    float b;
-    uint c;
-    bool o;
+class AnotherClass : ComponentScript {
 	
 	void update() {
-		print("hello");
+		print("Hello from another class with id:" + UID);
 	}
 }

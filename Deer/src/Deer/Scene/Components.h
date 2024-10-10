@@ -13,7 +13,7 @@
 #define MAX_TEXTURE_BINDINGS 4
 
 namespace Deer {
-	class ScriptInstance;
+	class ComponentScriptInstance;
 
 	struct TagComponent {
 		std::string tag;
@@ -26,7 +26,7 @@ namespace Deer {
 
 	struct ScriptComponent {
 		std::string scriptID;
-		Ref<ScriptInstance> roeInstance;
+		Ref<ComponentScriptInstance> roeInstance;
 
 		ScriptComponent() = default;
 		ScriptComponent(const ScriptComponent&) = default;

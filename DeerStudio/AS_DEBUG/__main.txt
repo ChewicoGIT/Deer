@@ -17,11 +17,11 @@ Variables:
     3  25 *    STOREOBJ v2
 - 18,2 -
     4  25 *    SUSPEND
-    5  25 *    PGA      0x7dd15b70          (str:Hi from Angel Script...)
+    5  25 *    PGA      0x92e86450          (str:Hi from Angel Script...)
     8  27 *    PSF      v12
     9  29 *    CALLSYS  20           (string::string(const string&in))
                ObjInfo  v12, 1
-   11  25 *    CpyGtoV4 v13, 0x2bb7dd09f70          (i:3004292964208, f:1.48432e-311)
+   11  25 *    CpyGtoV4 v13, 0x21f92e7b270          (i:2334631899760, f:1.15346e-311)
    14  25 *    iTOi64   v15, v13
    16  25 *    PshV8    v15
    17  27 *    PSF      v25
@@ -38,6 +38,6 @@ Variables:
 - 19,2 -
                ObjInfo  v25, 0
    30  25 *    SUSPEND
-   31  25 *    FREE     v2, 0x7dd09650          (type:entity)
+   31  25 *    FREE     v2, 0x92e7a950          (type:entity)
             0:
    34  25 *    RET      0

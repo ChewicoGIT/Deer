@@ -1,14 +1,13 @@
 #include "ScriptEngine.h"
 #include "Deer/Core/Log.h"
 
-#include "ScriptEngineFunction.h"
-
 #include "angelscript.h"
 #include "scriptbuilder.h"
 #include "scriptstdstring.h"
 #include "scriptmath.h"
 
-#include "Deer/Scripting/DeerScript.h"
+#include "ScriptEngineFunctions.h"
+#include "Deer/Scripting/ComponentScript.h"
 
 #include <filesystem>
 
@@ -18,16 +17,10 @@ namespace Deer {
 	void ScriptEngine::initScriptEngine() {
 		m_scriptEngine = asCreateScriptEngine();
 
-		// Set the message callback to receive information on errors in human readable form.
-		int r = m_scriptEngine->SetMessageCallback(asFUNCTION(Deer::messageCallback), 0, asCALL_CDECL);
-		DEER_SCRIPT_ASSERT(r >= 0, "Error in seting up angel script");
-
 		RegisterStdString(m_scriptEngine);
 		RegisterScriptMath(m_scriptEngine);
 
-		r = m_scriptEngine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(Deer::print), asCALL_CDECL);
-		DEER_SCRIPT_ASSERT(r >= 0, "Error in seting up void print(const string &in)");
-
+		registerDeerFunctions(m_scriptEngine);
 	}
 
 	void ScriptEngine::shutdownScriptEngine() {
@@ -43,59 +36,64 @@ namespace Deer {
 	}
 
 	void ScriptEngine::loadScripts(const std::filesystem::path& modulePath) {
-		loadModuleFolder(modulePath, "Roe");
-		m_roeModule = m_scriptEngine->GetModule("Roe");
-		m_deerScript = m_roeModule->GetTypeInfoByName("DeerScript");
+		loadModuleFolder(modulePath, "Deer");
+		m_scriptModule = m_scriptEngine->GetModule("Deer");
+		asITypeInfo* m_deerScript = m_scriptModule->GetTypeInfoByName("ComponentScript");
 
-		int classCount = m_roeModule->GetObjectTypeCount();
-
+		int classCount = m_scriptModule->GetObjectTypeCount();
 		for (int i = 0; i < classCount; i++) {
-			asITypeInfo* type = m_roeModule->GetObjectTypeByIndex(i);
-
+			asITypeInfo* type = m_scriptModule->GetObjectTypeByIndex(i);
 			asITypeInfo* parent = type->GetBaseType();
 
-			if (parent == m_deerScript)
-				m_deerScripts.push_back({ type });
+			std::string scriptID = type->GetName();
+
+			if (parent == m_deerScript) {
+				ComponentScript componentScript(type);
+				m_componentScripts.insert({ scriptID, componentScript });
+			}
 		}
 	}
 
-	uid ScriptEngine::createScriptInstance(uid scriptID) {
-		DeerScript& script = getScript()[scriptID];
+	Ref<ComponentScriptInstance> ScriptEngine::createComponentScriptInstance(const std::string& scriptID, Entity& scriptEntity) {
+		ComponentScript& script = getComponentScript(scriptID);
 		asITypeInfo* type = script.m_typeInfo;
-		ScriptInstance instance;
+
+		ComponentScriptInstance* instance = new ComponentScriptInstance();
 
 		std::string factoryString(script.getName());
 		factoryString = factoryString + " @" + script.getName() + "()";
 
 		asIScriptFunction* function = type->GetFactoryByDecl(factoryString.c_str());
-		DEER_SCRIPT_ASSERT(function, "Function {0} not found", factoryString.c_str());
+		if (!function) {
+			DEER_SCRIPT_ERROR("Function constructor not found for class {0}", script.getName());
+			return nullptr;
+		}
 
 		int r = m_context->Prepare(function);
-		DEER_SCRIPT_ASSERT(r >= 0, "Failed to prepare function context {0}", factoryString.c_str());
+		if (r < 0) {
+			DEER_SCRIPT_ERROR("Failed to prepare constructor context for class {0}", script.getName());
+			return nullptr;
+		}
 
 		r = m_context->Execute();
-		DEER_SCRIPT_ASSERT(r >= 0, "Failed to execute function context {0}", factoryString.c_str());
-		asIScriptObject* obj = *(asIScriptObject**)m_context->GetAddressOfReturnValue();
+		if (r < 0) {
+			DEER_SCRIPT_ERROR("Failed to execute constructor for class {0}", script.getName());
+			return nullptr;
+		}
 
+		asIScriptObject* obj = *(asIScriptObject**)m_context->GetAddressOfReturnValue();
 		obj->AddRef();
 
+		int uidPosition = script.getAttribute("UID").positionID;
+		unsigned int* objUID = (unsigned int*)obj->GetAddressOfProperty(uidPosition);
+
+		*objUID = 69;
+	
 		asIScriptFunction* updateFunction = type->GetMethodByDecl("void update()");
-		DEER_SCRIPT_ASSERT(updateFunction, "Failed to find update() in {0}", factoryString.c_str());
-		instance.m_updateFunction = updateFunction;
+		instance->m_updateFunction = updateFunction;
+		instance->m_object = obj;
 
-		instance.m_object = obj;
-		m_deerObjects.push_back(instance);
-
-		return m_deerObjects.size() - 1;
-	}
-
-	void ScriptEngine::updateRoeInstance(uid scriptInstance) {
-		ScriptInstance& instance = m_deerObjects[scriptInstance];
-
-		m_context->Prepare(instance.m_updateFunction);
-		m_context->SetObject(instance.m_object);
-
-		m_context->Execute();
+		return Ref<ComponentScriptInstance>(instance);
 	}
 
 	void ScriptEngine::loadModuleFolder(const std::filesystem::path& modulePath, const char* moduleName) {
