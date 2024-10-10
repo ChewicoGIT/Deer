@@ -388,3 +388,4 @@ FodyWeavers.xsd
 *.vcxproj.filters
 *.vcxproj.user
 *.ini
+AS_DEBUG/
