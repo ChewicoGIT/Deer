@@ -10,6 +10,12 @@ namespace Deer {
 		DEER_CORE_TRACE("Destroying scene");
 	}
 
+	void Scene::beginScene() {
+	}
+
+	void Scene::updateScene() {
+	}
+
 	void Scene::render() {
 		uid mainCamera = m_enviroment->tryGetMainCamera();
 		if (mainCamera == 0)

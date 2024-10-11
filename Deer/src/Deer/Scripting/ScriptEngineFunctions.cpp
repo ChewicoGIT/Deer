@@ -1,5 +1,10 @@
 #include "ScriptEngineFunctions.h"
 
+#include "Deer/Scene/Entity.h"
+#include "Deer/Scene/Scene.h"
+#include "Deer/Scene/Enviroment.h"
+#include "Deer/Core/Project.h"
+#include "Deer/Scripting/ScriptEngine.h"
 #include "angelscript.h"
 #include "Deer/Core/Log.h"
 
@@ -23,6 +28,13 @@ namespace Deer {
 
     void print(std::string& msg) {
         DEER_SCRIPT_INFO(msg.c_str());
+    }
+
+    glm::vec3 getEntityPosition(uid entityUID) {
+        Ref<Environment>& m_environment = Project::m_scriptEngine->getExecutionScene()->getMainEnviroment();
+        Entity& entt = m_environment->getEntity(entityUID);
+
+        return entt.getComponent<TransformComponent>().position;
     }
 
     void registerVec3(asIScriptEngine* engine) {

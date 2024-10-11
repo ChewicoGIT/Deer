@@ -10,6 +10,9 @@ namespace Deer {
 		Scene();
 		~Scene();
 
+		void beginScene();
+		void updateScene();
+
 		void render();
 		void clear();
 
