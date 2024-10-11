@@ -11,7 +11,7 @@ namespace Deer {
 		~Scene();
 
 		void execute();
-		void updateScene();
+		void update();
 		void stop();
 
 		void render();

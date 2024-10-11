@@ -28,16 +28,13 @@ namespace Deer {
         //ImGui::PushFont(font1);
         ImGui_ImplOpenGL3_CreateFontsTexture();
 
-        m_meshID = Project::m_assetManager->loadAsset<Mesh>(std::filesystem::path("assets/skull.obj"));
-        m_shaderID = Project::m_assetManager->loadAsset<Shader>(std::filesystem::path("assets/Shaders/SimpleShader.glsl"));
-
         m_activeEntity = Ref<ActiveEntity>(new ActiveEntity());
 
         auto m_propertiesPannel = Ref<PropertiesPannel>(new PropertiesPannel(m_activeEntity));
         auto m_viewportPannel = Ref<ViewportPannel>(new ViewportPannel(Project::m_scene->getMainEnviroment(), "Scene viewport", m_activeEntity));
         auto m_enviromentTreePannel = Ref<EnviromentTreePannel>(new EnviromentTreePannel(Project::m_scene->getMainEnviroment(), "World tree", m_activeEntity));
         auto m_assetPannel = Ref<AssetManagerPannel>(new AssetManagerPannel(m_activeEntity));
-        auto m_gamePannel = Ref<GamePannel>(new GamePannel());
+        auto m_gamePannel = Ref<GamePannel>(new GamePannel(m_activeEntity));
 
         pannels.clear();
         pannels.push_back(m_propertiesPannel);
@@ -46,23 +43,20 @@ namespace Deer {
         pannels.push_back(m_assetPannel);
         pannels.push_back(m_gamePannel);
 
-        auto& entity = Project::m_scene->getMainEnviroment()->createEntity("Square");
-        MeshRenderComponent& mrc = entity.addComponent<MeshRenderComponent>();
-        mrc.meshAssetID = m_meshID;
-        mrc.shaderAssetID = m_shaderID;
-
     }
 
-    void DeerStudioLayer::onUpdate(Timestep delta) {
+    void DeerStudioLayer::onRender(Timestep delta) {
         for (auto pannel : pannels) {
-            pannel->onUpdate(delta);
+            pannel->onRender(delta);
         }
-
-        Asset<Shader>& shaderAsset = Project::m_assetManager->getAsset<Shader>(m_shaderID);
-        shaderAsset.value->uploadUniformInt("u_texture", 0);
 
         int windowWidth = Application::s_application->m_window->getWitdth();
         int windowHeight = Application::s_application->m_window->getHeight();
+    }
+
+    void DeerStudioLayer::onUpdate(Timestep delta) {
+        if (Project::m_scene->getExecutingState())
+            Project::m_scene->update();
     }
 
     void DeerStudioLayer::loadScene() {

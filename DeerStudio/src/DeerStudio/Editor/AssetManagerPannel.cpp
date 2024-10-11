@@ -132,8 +132,8 @@ namespace Deer {
             // Open scene
             if (ImGui::IsItemClicked(0) && ImGui::IsMouseDoubleClicked(0) && !Project::m_sceneSerializer->getSceneExecutingState()) {
                 try {
-                    Project::m_sceneSerializer->deserialize(path.string());
                     m_activeEntity->clear();
+                    Project::m_sceneSerializer->deserialize(path.string());
                     m_currentScenePath = path;
                 }
                 catch ( ... ) {

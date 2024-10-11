@@ -59,6 +59,13 @@ namespace Deer {
 
     template<class Archive>
     void serialize(Archive& archive,
+        ScriptComponent& scriptComponent) {
+
+        archive(cereal::make_nvp("scriptID", scriptComponent.scriptID));
+    }
+
+    template<class Archive>
+    void serialize(Archive& archive,
         TextureBinding& textureBinding) {
 
         archive(cereal::make_nvp("texturePath", textureBinding.texturePath));
@@ -190,6 +197,13 @@ namespace Deer {
             TextureBindingComponent& textureBinding = m_entity.getComponent<TextureBindingComponent>();
             archive(cereal::make_nvp("textureBindingComponent", textureBinding));
         }
+
+        bool hasScriptComponent = m_entity.hasComponent<ScriptComponent>();
+        archive(cereal::make_nvp("hasScriptComponent", hasScriptComponent));
+        if (hasScriptComponent) {
+            ScriptComponent& scriptComponent = m_entity.getComponent<ScriptComponent>();
+            archive(cereal::make_nvp("scriptComponent", scriptComponent));
+        }
     }
 
     template<class Archive>
@@ -228,6 +242,13 @@ namespace Deer {
         if (hasTextureBindingComponent) {
             TextureBindingComponent& textureBinding = m_entity.addComponent<TextureBindingComponent>();
             archive(cereal::make_nvp("textureBindingComponent", textureBinding));
+        }
+
+        bool hasScriptComponent;
+        archive(cereal::make_nvp("hasScriptComponent", hasScriptComponent));
+        if (hasScriptComponent) {
+            ScriptComponent& scriptComponent = m_entity.addComponent<ScriptComponent>();
+            archive(cereal::make_nvp("scriptComponent", scriptComponent));
         }
 
         m_entity.update();

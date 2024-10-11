@@ -16,28 +16,18 @@ namespace Deer {
 		Log::init();
 		DEER_CORE_TRACE("Creating app");
 
+		Application* app = createApplication(argc, argv);
+
 		Project::initializeBaseSystems();
+		RenderUtils::initializeRenderUtils();
 
 		Project::m_scriptEngine->initScriptEngine();
 		Project::m_scriptEngine->loadScripts(std::filesystem::path("scripts"));
 
-		Project::m_scriptEngine->beginExecutionContext();
-
-		for (auto& script : Project::m_scriptEngine->getComponentScripts()) {
-			Ref<ComponentScriptInstance> componentScript = Project::m_scriptEngine->createComponentScriptInstance(
-				script.first, Entity::nullEntity);
-
-			DEER_CORE_INFO("Executing {0}", script.first);
-			componentScript->update();
-		}
-
-		Project::m_scriptEngine->endExecutionContext();
-
-		Application* app = createApplication(argc, argv);
-		RenderUtils::initializeRenderUtils();
-
 		app->run();
 		delete app;
+
+		Project::releaseBaseSystems();
 
 		DEER_CORE_TRACE("Shuting app");
 		Log::shutdown();

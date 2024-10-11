@@ -24,6 +24,7 @@ namespace Deer {
 
 		registerDeerFunctions(m_scriptEngine);
 		registerVec3(m_scriptEngine);
+		registerEntityTransformFunctions(m_scriptEngine);
 	}
 
 	void ScriptEngine::shutdownScriptEngine() {

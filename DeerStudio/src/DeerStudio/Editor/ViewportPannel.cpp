@@ -82,7 +82,7 @@ namespace Deer {
         ImGui::PopStyleVar();
 	}
 
-    void ViewportPannel::onUpdate(Timestep timestep) {
+    void ViewportPannel::onRender(Timestep timestep) {
         if (!m_isActive)
             return;
 

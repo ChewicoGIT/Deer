@@ -37,6 +37,13 @@ namespace Deer {
         return entt.getComponent<TransformComponent>().position;
     }
 
+    void setEntityPosition(glm::vec3 position, uid entityUID) {
+        Ref<Environment>& m_environment = Project::m_scene->getMainEnviroment();
+        Entity& entt = m_environment->getEntity(entityUID);
+
+        entt.getComponent<TransformComponent>().position = position;
+    }
+
     void registerVec3(asIScriptEngine* engine) {
         engine->RegisterObjectType("Vec3", sizeof(glm::vec3), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<glm::vec3>());
 
@@ -101,6 +108,14 @@ namespace Deer {
 
         r = scriptEngine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(Deer::print), asCALL_CDECL);
         DEER_SCRIPT_ASSERT(r >= 0, "Error in seting up void print(const string &in)");
+    }
+
+    void registerEntityTransformFunctions(asIScriptEngine* scriptEngine) {
+        int r = scriptEngine->RegisterGlobalFunction("Vec3 getEntityPosition(uint)", asFUNCTION(Deer::getEntityPosition), asCALL_CDECL);
+        DEER_SCRIPT_ASSERT(r >= 0, "Error in seting up Vec3 getEntityPosition(uint)");
+        
+        scriptEngine->RegisterGlobalFunction("void setEntityPosition(Vec3 position, uint)", asFUNCTION(Deer::setEntityPosition), asCALL_CDECL);
+        DEER_SCRIPT_ASSERT(r >= 0, "Error in seting up setEntityPosition(Vec3 position, uint)");
     }
 
 }

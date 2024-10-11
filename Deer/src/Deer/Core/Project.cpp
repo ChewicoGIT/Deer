@@ -20,4 +20,11 @@ namespace Deer {
 		m_scene = Ref<Scene>(new Scene());
 		m_sceneSerializer = Ref<SceneSerializer>(new SceneSerializer(Project::m_scene));
 	}
+
+	void Project::releaseBaseSystems() {
+		m_assetManager.reset();
+		m_scriptEngine.reset();
+		m_scene.reset();
+		m_sceneSerializer.reset();
+	}
 }

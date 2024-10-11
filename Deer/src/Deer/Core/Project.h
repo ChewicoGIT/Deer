@@ -16,6 +16,7 @@ namespace Deer {
 		static Ref<SceneSerializer> m_sceneSerializer;
 
 		static void initializeBaseSystems();
+		static void releaseBaseSystems();
 	};
 }
 

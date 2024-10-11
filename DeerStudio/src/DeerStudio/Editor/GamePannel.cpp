@@ -2,12 +2,15 @@
 #include "Deer/Scene/Enviroment.h"
 #include "Deer/Scene/Scene.h"
 #include "Deer/Scene/Entity.h"
+#include "Deer/Scene/SceneSerializer.h"
 #include "Deer/Core/Project.h"
 
 #include "imgui.h"
+#include <filesystem>
 
 namespace Deer {
-    GamePannel::GamePannel() {
+    GamePannel::GamePannel(Ref<ActiveEntity>& activeEntity)
+        : m_activeEntity(activeEntity) {
         FrameBufferSpecification fbSpecs = FrameBufferSpecification(100, 100, { TextureBufferType::RGBA8 }, 1, false);
         m_frameBuffer = FrameBuffer::create(fbSpecs);
     }
@@ -25,12 +28,16 @@ namespace Deer {
 
             if (!Project::m_scene->getExecutingState()) {
                 if (ImGui::Button("Execute")) {
+                    m_activeEntity->clear();
+                    Project::m_sceneSerializer->serializeBinary("temp_scene.dbscn");
                     Project::m_scene->execute();
                 }
             }
             else {
                 if (ImGui::Button("Stop")) {
+                    m_activeEntity->clear();
                     Project::m_scene->stop();
+                    Project::m_sceneSerializer->deserializeBinary("temp_scene.dbscn");
                 }
             }
 
@@ -69,12 +76,16 @@ namespace Deer {
 
         if (!Project::m_scene->getExecutingState()) {
             if (ImGui::Button("Execute")) {
+                m_activeEntity->clear();
+                Project::m_sceneSerializer->serializeBinary("temp_scene.dbscn");
                 Project::m_scene->execute();
             }
         }
         else {
             if (ImGui::Button("Stop")) {
+                m_activeEntity->clear();
                 Project::m_scene->stop();
+                Project::m_sceneSerializer->deserializeBinary("temp_scene.dbscn");
             }
         }
 

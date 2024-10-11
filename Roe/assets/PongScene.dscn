@@ -34,7 +34,8 @@
                     },
                     "hasMeshRenderComponent": false,
                     "hasCameraComponent": false,
-                    "hasTextureBindingComponent": false
+                    "hasTextureBindingComponent": false,
+                    "hasScriptComponent": false
                 },
                 {
                     "id": 2,
@@ -66,7 +67,8 @@
                     },
                     "hasMeshRenderComponent": false,
                     "hasCameraComponent": false,
-                    "hasTextureBindingComponent": false
+                    "hasTextureBindingComponent": false,
+                    "hasScriptComponent": false
                 },
                 {
                     "id": 3,
@@ -99,7 +101,8 @@
                         "shader": "assets/shaders/BasicShader.glsl"
                     },
                     "hasCameraComponent": false,
-                    "hasTextureBindingComponent": false
+                    "hasTextureBindingComponent": false,
+                    "hasScriptComponent": false
                 },
                 {
                     "id": 4,
@@ -132,7 +135,8 @@
                         "shader": "assets/shaders/BasicShader.glsl"
                     },
                     "hasCameraComponent": false,
-                    "hasTextureBindingComponent": false
+                    "hasTextureBindingComponent": false,
+                    "hasScriptComponent": false
                 },
                 {
                     "id": 5,
@@ -165,7 +169,11 @@
                         "shader": "assets/shaders/BasicShader.glsl"
                     },
                     "hasCameraComponent": false,
-                    "hasTextureBindingComponent": false
+                    "hasTextureBindingComponent": false,
+                    "hasScriptComponent": true,
+                    "scriptComponent": {
+                        "scriptID": "PlayerScript"
+                    }
                 },
                 {
                     "id": 6,
@@ -198,7 +206,8 @@
                         "shader": "assets/shaders/BasicShader.glsl"
                     },
                     "hasCameraComponent": false,
-                    "hasTextureBindingComponent": false
+                    "hasTextureBindingComponent": false,
+                    "hasScriptComponent": false
                 },
                 {
                     "id": 7,
@@ -228,12 +237,13 @@
                     "hasMeshRenderComponent": false,
                     "hasCameraComponent": true,
                     "cameraComponent": {
-                        "aspect": 1.8528951406478882,
+                        "aspect": 1.4662004709243775,
                         "fov": 0.5714905858039856,
                         "farZ": 100.0,
                         "nearZ": 0.10000000149011612
                     },
-                    "hasTextureBindingComponent": false
+                    "hasTextureBindingComponent": false,
+                    "hasScriptComponent": false
                 }
             ],
             "mainCameraUID": 7

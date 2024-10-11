@@ -139,7 +139,7 @@ namespace Deer {
         glfwTerminate();
     }
 
-    void WindowsWindow::onUpdate()
+    void WindowsWindow::onRender()
     {
         glfwPollEvents();
         m_renderContext->swapBuffers();

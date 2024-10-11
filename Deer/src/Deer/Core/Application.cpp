@@ -35,46 +35,74 @@ namespace Deer {
 	}
 
 	void Application::run() {
-		s_application = this;
-		m_running = true;
+        s_application = this;
+        m_running = true;
 
-		m_imGuiLayer.onAttach();
-		for (auto it : m_layerStack) {
-			it->onAttach();
-		}
-		onInit();
+        const double targetUpdateTime = 1.0 / 60.0;  // Fixed 60 FPS update
+        double targetRenderTime = 1.0 / 120.0;  // User-defined render FPS
 
-		while (m_running) {
-			// Temp, implement time implementation per plattform
-			float time = (float)glfwGetTime();
-			Timestep timestep = time - m_lastFrameTime;
-			m_lastFrameTime = time;
+        auto previousTime = std::chrono::high_resolution_clock::now();
+        double accumulatedUpdateTime = 0.0;
+        double accumulatedRenderTime = 0.0;
 
-			RenderCommand::setClearColor({ 0.2f, 0.2f, 0.3f, 1.0f });
-			RenderCommand::clear();
+        m_imGuiLayer.onAttach();
+        for (auto it : m_layerStack) {
+            it->onAttach();
+        }
+        onInit();
 
-			Render::execute();
-			for (auto it : m_layerStack) {
-				it->onUpdate(timestep);
-			}
-			Render::stop();
+        while (m_running) {
+            // Time handling
+            auto currentTime = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double> deltaTime = currentTime - previousTime;
+            previousTime = currentTime;
 
-			ImGuiIO& io = ImGui::GetIO();
-			io.DeltaTime = timestep.getSeconds();
-			m_imGuiLayer.begin();
-			for (auto it : m_layerStack) {
-				it->onImGUI();
-			}
-			m_imGuiLayer.end();
+            accumulatedUpdateTime += deltaTime.count();
+            accumulatedRenderTime += deltaTime.count();
 
-			m_window->onUpdate();
-		}
+            // Fixed Update loop (60 FPS)
+            while (accumulatedUpdateTime >= targetUpdateTime) {
+                Timestep timestep = (float)targetUpdateTime;
+                for (auto it : m_layerStack) {
+                    it->onUpdate(timestep);
+                }
+                accumulatedUpdateTime -= targetUpdateTime;
+            }
 
-		//Deatach all layers before shuting down
-		for (auto it = m_layerStack.begin(); it != m_layerStack.end(); it++) {
-			(*it)->onDetach();
-		}
-		m_imGuiLayer.onDetach();
+            // Render loop (User-defined FPS)
+            if (accumulatedRenderTime >= targetRenderTime) {
+                RenderCommand::setClearColor({ 0.2f, 0.2f, 0.3f, 1.0f });
+                RenderCommand::clear();
+
+                Render::execute();
+                for (auto it : m_layerStack) {
+                    it->onRender(Timestep((float)targetRenderTime));
+                }
+                Render::stop();
+
+                ImGuiIO& io = ImGui::GetIO();
+                io.DeltaTime = (float)targetRenderTime;
+                m_imGuiLayer.begin();
+                for (auto it : m_layerStack) {
+                    it->onImGUI();
+                }
+                m_imGuiLayer.end();
+
+                accumulatedRenderTime -= targetRenderTime;
+
+                // Handle window events and update (if necessary)
+                m_window->onRender();
+            }
+
+            // Optional: Sleep to avoid CPU overuse
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        }
+
+        // Detach all layers before shutting down
+        for (auto it = m_layerStack.begin(); it != m_layerStack.end(); it++) {
+            (*it)->onDetach();
+        }
+        m_imGuiLayer.onDetach();
 	}
 
 	bool Application::onWindowClose(WindowCloseEvent& e)

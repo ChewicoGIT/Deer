@@ -33,8 +33,13 @@ namespace Deer {
 
 	}
 
-	void Scene::updateScene() {
-
+	void Scene::update() {
+		// Update all scripts
+		auto view = m_enviroment->m_registry.view<ScriptComponent>();
+		for (auto& entID : view) {
+			auto& componentScript = view.get<ScriptComponent>(entID);
+			componentScript.roeInstance->update();
+		}
 	}
 
 	void Scene::stop() {
