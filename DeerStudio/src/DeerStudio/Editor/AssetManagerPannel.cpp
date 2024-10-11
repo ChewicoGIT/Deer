@@ -5,6 +5,9 @@
 #include "Deer/Scene/SceneSerializer.h"
 #include "Deer/Asset/AssetManager.h"
 #include "DeerStudio/Editor/ActiveEntity.h"
+
+#include "Deer/Core/Project.h"
+
 #include "imgui.h"
 
 #include <string>
@@ -27,8 +30,8 @@ namespace Deer {
 
     namespace fs = std::filesystem;
 
-    AssetManagerPannel::AssetManagerPannel(Ref<SceneSerializer> sceneSerializer, Ref<ActiveEntity> activeEntity)
-        : m_currentPath("assets"), m_sceneSerializer(sceneSerializer), m_activeEntity(activeEntity){
+    AssetManagerPannel::AssetManagerPannel(Ref<ActiveEntity> activeEntity)
+        : m_currentPath("assets"), m_activeEntity(activeEntity){
 
         m_folderIcon = Texture2D::create("editor/icons/folder.png");
         m_fileIcon = Texture2D::create("editor/icons/file.png");
@@ -127,9 +130,9 @@ namespace Deer {
             ImGui::Image((void*)m_scneIcon->getTextureID(), ImVec2(m_iconMinSize, m_iconMinSize), ImVec2(0, 1), ImVec2(1, 0));
 
             // Open scene
-            if (ImGui::IsItemClicked(0) && ImGui::IsMouseDoubleClicked(0)) {
+            if (ImGui::IsItemClicked(0) && ImGui::IsMouseDoubleClicked(0) && !Project::m_sceneSerializer->getSceneExecutingState()) {
                 try {
-                    m_sceneSerializer->deserialize(path.string());
+                    Project::m_sceneSerializer->deserialize(path.string());
                     m_activeEntity->clear();
                     m_currentScenePath = path;
                 }

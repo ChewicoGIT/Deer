@@ -12,7 +12,7 @@ namespace Deer {
 
 	class AssetManagerPannel : public EditorPannel{
 	public:
-		AssetManagerPannel(Ref<SceneSerializer>, Ref<ActiveEntity>);
+		AssetManagerPannel(Ref<ActiveEntity>);
 		void onImGui() override;
 	private:
 		void drawFolder(const std::filesystem::path&);
@@ -20,7 +20,6 @@ namespace Deer {
 		void updateContextMenu();
 	private:
 		std::filesystem::path m_currentScenePath;
-		Ref<SceneSerializer> m_sceneSerializer;
 		Ref<ActiveEntity> m_activeEntity;
 
 		std::filesystem::path m_currentPath; // Assets/path...

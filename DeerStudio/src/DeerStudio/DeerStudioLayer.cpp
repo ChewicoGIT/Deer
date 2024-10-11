@@ -32,14 +32,12 @@ namespace Deer {
         m_shaderID = Project::m_assetManager->loadAsset<Shader>(std::filesystem::path("assets/Shaders/SimpleShader.glsl"));
 
         m_activeEntity = Ref<ActiveEntity>(new ActiveEntity());
-        m_scene = Ref<Scene>(new Scene());
-        m_sceneSerializer = Ref<SceneSerializer>(new SceneSerializer(m_scene));
 
         auto m_propertiesPannel = Ref<PropertiesPannel>(new PropertiesPannel(m_activeEntity));
-        auto m_viewportPannel = Ref<ViewportPannel>(new ViewportPannel(m_scene->getMainEnviroment(), "Scene viewport", m_activeEntity));
-        auto m_enviromentTreePannel = Ref<EnviromentTreePannel>(new EnviromentTreePannel(m_scene->getMainEnviroment(), "World tree", m_activeEntity));
-        auto m_assetPannel = Ref<AssetManagerPannel>(new AssetManagerPannel(m_sceneSerializer, m_activeEntity));
-        auto m_gamePannel = Ref<GamePannel>(new GamePannel(m_scene));
+        auto m_viewportPannel = Ref<ViewportPannel>(new ViewportPannel(Project::m_scene->getMainEnviroment(), "Scene viewport", m_activeEntity));
+        auto m_enviromentTreePannel = Ref<EnviromentTreePannel>(new EnviromentTreePannel(Project::m_scene->getMainEnviroment(), "World tree", m_activeEntity));
+        auto m_assetPannel = Ref<AssetManagerPannel>(new AssetManagerPannel(m_activeEntity));
+        auto m_gamePannel = Ref<GamePannel>(new GamePannel());
 
         pannels.clear();
         pannels.push_back(m_propertiesPannel);
@@ -48,7 +46,7 @@ namespace Deer {
         pannels.push_back(m_assetPannel);
         pannels.push_back(m_gamePannel);
 
-        auto& entity = m_scene->getMainEnviroment()->createEntity("Square");
+        auto& entity = Project::m_scene->getMainEnviroment()->createEntity("Square");
         MeshRenderComponent& mrc = entity.addComponent<MeshRenderComponent>();
         mrc.meshAssetID = m_meshID;
         mrc.shaderAssetID = m_shaderID;
@@ -72,8 +70,8 @@ namespace Deer {
     }
 
     void DeerStudioLayer::unloadScene() {
-        m_scene.reset();
-        m_sceneSerializer.reset();
+        Project::m_scene.reset();
+        Project::m_sceneSerializer.reset();
         m_activeEntity->clear();
         pannels.clear();
     }
@@ -134,26 +132,26 @@ namespace Deer {
         if (ImGui::BeginMenu("Edit")) {
             if (ImGui::MenuItem("New scene")) {
                 m_activeEntity->clear();
-                m_scene->clear();
-                m_sceneSerializer->serialize("assets/newScene.dscn");
+                Project::m_scene->clear();
+                Project::m_sceneSerializer->serialize("assets/newScene.dscn");
             }
 
-            if (m_sceneSerializer->getCurrentScenePath() != "_NO_INITIALIZED_" && ImGui::MenuItem("Save scene")) {
-                m_sceneSerializer->serialize(m_sceneSerializer->getCurrentScenePath());
+            if (Project::m_sceneSerializer->getCurrentScenePath() != "_NO_INITIALIZED_" && ImGui::MenuItem("Save scene")) {
+                Project::m_sceneSerializer->serialize(Project::m_sceneSerializer->getCurrentScenePath());
             }
 
-            if (m_sceneSerializer->getCurrentScenePath() != "_NO_INITIALIZED_" && ImGui::MenuItem("Save Scene Binary")) {
+            if (Project::m_sceneSerializer->getCurrentScenePath() != "_NO_INITIALIZED_" && ImGui::MenuItem("Save Scene Binary")) {
                 m_activeEntity->clear();
-                m_scene->clear();
+                Project::m_scene->clear();
                 const std::string path = std::string("binTest.bscn");
-                m_sceneSerializer->serializeBinary(path);
+                Project::m_sceneSerializer->serializeBinary(path);
             }
 
             if (ImGui::MenuItem("Load Scene Binary")) {
                 m_activeEntity->clear();
-                m_scene->clear();
+                Project::m_scene->clear();
                 const std::string path = std::string("binTest.bscn");
-                m_sceneSerializer->deserializeBinary(path);
+                Project::m_sceneSerializer->deserializeBinary(path);
             }
 
             ImGui::EndMenu();

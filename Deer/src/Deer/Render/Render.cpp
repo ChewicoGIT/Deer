@@ -4,11 +4,11 @@
 
 namespace Deer {
 
-	void Render::beginScene() {
+	void Render::execute() {
 
 	}
 
-	void Render::endScene() {
+	void Render::stop() {
 
 	}
 

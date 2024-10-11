@@ -6,8 +6,8 @@ namespace Deer {
 
 	class Render {
 	public:
-		static void beginScene();
-		static void endScene();
+		static void execute();
+		static void stop();
 
 		static void submit(const Ref<VertexArray>& vertexArray);
 		static void submitLine(const Ref<VertexArray>& vertexArray);

@@ -13,6 +13,10 @@ namespace Deer {
 		m_attributes = Utils::extractAttributes(typeInfo);
 	}
 
+	ComponentScriptInstance::~ComponentScriptInstance() {
+		m_object->Release();
+	}
+
 	void ComponentScriptInstance::update() {
 		if (!m_updateFunction)
 			return;

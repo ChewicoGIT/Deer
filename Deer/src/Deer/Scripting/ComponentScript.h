@@ -14,6 +14,7 @@ namespace Deer {
 	class ComponentScriptInstance {
 	public:
 		ComponentScriptInstance() = default;
+		~ComponentScriptInstance();
 
 		void update();
 	private:

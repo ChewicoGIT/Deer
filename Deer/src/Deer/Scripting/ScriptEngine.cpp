@@ -9,6 +9,7 @@
 #include "ScriptEngineFunctions.h"
 
 #include "Deer/Scripting/ComponentScript.h"
+#include "Deer/Scene/Entity.h"
 
 #include <filesystem>
 
@@ -29,18 +30,12 @@ namespace Deer {
 		m_scriptEngine->ShutDownAndRelease();
 	}
 
-	void ScriptEngine::beginExecutionContext(Ref<Scene>& scene) {
-		m_context = m_scriptEngine->CreateContext();
-		m_scene = scene;
-	}
-
 	void ScriptEngine::beginExecutionContext() {
 		m_context = m_scriptEngine->CreateContext();
 	}
 
 	void ScriptEngine::endExecutionContext() {
 		m_context->Release();
-		m_scene.reset();
 	}
 
 	void ScriptEngine::loadScripts(const std::filesystem::path& modulePath) {
@@ -95,7 +90,7 @@ namespace Deer {
 		int uidPosition = script.getAttribute("UID").internalID;
 		unsigned int* objUID = (unsigned int*)obj->GetAddressOfProperty(uidPosition);
 
-		*objUID = 69;
+		*objUID = scriptEntity.getUID();
 	
 		asIScriptFunction* updateFunction = type->GetMethodByDecl("void update()");
 		instance->m_updateFunction = updateFunction;

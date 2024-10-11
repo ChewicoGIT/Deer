@@ -53,11 +53,11 @@ namespace Deer {
 			RenderCommand::setClearColor({ 0.2f, 0.2f, 0.3f, 1.0f });
 			RenderCommand::clear();
 
-			Render::beginScene();
+			Render::execute();
 			for (auto it : m_layerStack) {
 				it->onUpdate(timestep);
 			}
-			Render::endScene();
+			Render::stop();
 
 			ImGuiIO& io = ImGui::GetIO();
 			io.DeltaTime = timestep.getSeconds();

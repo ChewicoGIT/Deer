@@ -31,7 +31,7 @@ namespace Deer {
     }
 
     glm::vec3 getEntityPosition(uid entityUID) {
-        Ref<Environment>& m_environment = Project::m_scriptEngine->getExecutionScene()->getMainEnviroment();
+        Ref<Environment>& m_environment = Project::m_scene->getMainEnviroment();
         Entity& entt = m_environment->getEntity(entityUID);
 
         return entt.getComponent<TransformComponent>().position;

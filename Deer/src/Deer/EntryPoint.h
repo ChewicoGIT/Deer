@@ -16,6 +16,8 @@ namespace Deer {
 		Log::init();
 		DEER_CORE_TRACE("Creating app");
 
+		Project::initializeBaseSystems();
+
 		Project::m_scriptEngine->initScriptEngine();
 		Project::m_scriptEngine->loadScripts(std::filesystem::path("scripts"));
 
@@ -31,7 +33,6 @@ namespace Deer {
 
 		Project::m_scriptEngine->endExecutionContext();
 
-		return 0;
 		Application* app = createApplication(argc, argv);
 		RenderUtils::initializeRenderUtils();
 

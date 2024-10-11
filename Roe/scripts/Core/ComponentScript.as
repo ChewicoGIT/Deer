@@ -1,7 +1,6 @@
 
 class ComponentScript{
-	private uint UID;
-
+	uint UID;
 }
 
 
