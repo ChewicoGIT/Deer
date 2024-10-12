@@ -5,10 +5,10 @@ class PlayerScript : ComponentScript {
 		
 
 		if (isKeyPressed(DeerKey::KEY_A)){
-		Vec3 position = entity.getPosition();
-		position = position + (Vec3(0, 1, 0) * 1 / 60);
-		entity.setPosition(position);
-		entity.setScale(entity.getScale() + Vec3(0.01, 0, 0));
+			Vec3 position = entity.getPosition();
+			position = position + (Vec3(0, 1, 0) * 1 / 60);
+			entity.setPosition(position);
+			entity.setScale(entity.getScale() + Vec3(0.01, 0, 0));
 		}
 	}
 }
