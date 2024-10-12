@@ -2,6 +2,7 @@
 #include <string>
 #include "glm/glm.hpp"
 #include "Deer/Core/Core.h"
+#include <stb_image.cpp>
 
 struct asSMessageInfo;
 class asIScriptEngine;
@@ -21,5 +22,6 @@ namespace Deer {
     void registerEntity(asIScriptEngine* engine);
 
     void registerDeerFunctions(asIScriptEngine* scriptEngine);
+    void registerInputFunctions(asIScriptEngine* scriptEngine);
     void registerEntityTransformFunctions(asIScriptEngine* scriptEngine);
 }

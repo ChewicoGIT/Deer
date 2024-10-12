@@ -7,6 +7,7 @@
 #include "Deer/Scripting/ScriptEngine.h"
 #include "angelscript.h"
 #include "Deer/Core/Log.h"
+#include "Deer/Core/Input.h"
 
 #include "glm/glm.hpp"
 
@@ -129,6 +130,10 @@ namespace Deer {
         DEER_SCRIPT_ASSERT(r >= 0, "Error in seting up void print(const string &in)");
     }
 
+    void registerInputFunctions(asIScriptEngine* scriptEngine) {
+        int r = scriptEngine->RegisterGlobalFunction("bool isKeyPressed(int)", asFUNCTION(Deer::Input::isKeyPressed), asCALL_CDECL);
+        DEER_SCRIPT_ASSERT(r >= 0, "Error in seting up bool isKeyPressed(int)");
+    }
     void registerEntityTransformFunctions(asIScriptEngine* scriptEngine) {
         int r = scriptEngine->RegisterObjectMethod("Entity", "Vec3 getPosition()", asFUNCTION(Deer::getEntityPosition), asCALL_CDECL_OBJLAST);
         DEER_SCRIPT_ASSERT(r >= 0, "Error in seting up Vec3 getPosition()");
