@@ -1,6 +1,6 @@
 
 class ComponentScript{
-	uint UID;
+	Entity entity;
 }
 
 

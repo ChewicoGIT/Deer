@@ -22,8 +22,10 @@ namespace Deer {
 		RegisterStdString(m_scriptEngine);
 		RegisterScriptMath(m_scriptEngine);
 
-		registerDeerFunctions(m_scriptEngine);
 		registerVec3(m_scriptEngine);
+		registerEntity(m_scriptEngine);
+
+		registerDeerFunctions(m_scriptEngine);
 		registerEntityTransformFunctions(m_scriptEngine);
 	}
 
@@ -88,10 +90,10 @@ namespace Deer {
 		asIScriptObject* obj = *(asIScriptObject**)m_context->GetAddressOfReturnValue();
 		obj->AddRef();
 
-		int uidPosition = script.getAttribute("UID").internalID;
-		unsigned int* objUID = (unsigned int*)obj->GetAddressOfProperty(uidPosition);
+		int entityPosition = script.getAttribute("entity").internalID;
+		unsigned int* entityValue = (unsigned int*)obj->GetAddressOfProperty(entityPosition);
 
-		*objUID = scriptEntity.getUID();
+		*entityValue = scriptEntity.getUID();
 	
 		asIScriptFunction* updateFunction = type->GetMethodByDecl("void update()");
 		instance->m_updateFunction = updateFunction;

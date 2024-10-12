@@ -388,4 +388,5 @@ FodyWeavers.xsd
 *.vcxproj.filters
 *.vcxproj.user
 *.ini
+*.dbscn
 AS_DEBUG/

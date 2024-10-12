@@ -88,11 +88,11 @@ namespace Deer {
 
         if (!Input::isKeyPressed(DEER_KEY_LEFT_CONTROL)) {
 
-            float vel = 1;
+            float vel = 6;
             if (Input::isKeyPressed(DEER_KEY_LEFT_SHIFT))
-                vel = 4;
+                vel = 14;
             if (Input::isKeyPressed(DEER_KEY_LEFT_ALT))
-                vel = .25f;
+                vel = 1.0f;
 
             if (Input::isKeyPressed(DEER_KEY_W))
                 m_virtualCamera.transform.position += m_virtualCamera.transform.rotation * glm::vec3(0, 0, 1) * timestep.getSeconds() * vel;

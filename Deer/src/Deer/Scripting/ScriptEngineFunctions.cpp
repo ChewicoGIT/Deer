@@ -30,18 +30,32 @@ namespace Deer {
         DEER_SCRIPT_INFO(msg.c_str());
     }
 
-    glm::vec3 getEntityPosition(uid entityUID) {
+    glm::vec3 getEntityPosition(uid& entityUID) {
         Ref<Environment>& m_environment = Project::m_scene->getMainEnviroment();
         Entity& entt = m_environment->getEntity(entityUID);
 
         return entt.getComponent<TransformComponent>().position;
     }
 
-    void setEntityPosition(glm::vec3 position, uid entityUID) {
+    void setEntityPosition(glm::vec3 position, uid& entityUID) {
         Ref<Environment>& m_environment = Project::m_scene->getMainEnviroment();
         Entity& entt = m_environment->getEntity(entityUID);
 
         entt.getComponent<TransformComponent>().position = position;
+    }
+
+    glm::vec3 getEntityScale(uid& entityUID) {
+        Ref<Environment>& m_environment = Project::m_scene->getMainEnviroment();
+        Entity& entt = m_environment->getEntity(entityUID);
+
+        return entt.getComponent<TransformComponent>().scale;
+    }
+
+    void setEntityScale(glm::vec3 scale, uid& entityUID) {
+        Ref<Environment>& m_environment = Project::m_scene->getMainEnviroment();
+        Entity& entt = m_environment->getEntity(entityUID);
+
+        entt.getComponent<TransformComponent>().scale = scale;
     }
 
     void registerVec3(asIScriptEngine* engine) {
@@ -102,6 +116,11 @@ namespace Deer {
                 }, (const glm::vec3&), std::string), asCALL_CDECL_OBJFIRST);
     }
 
+    void registerEntity(asIScriptEngine* engine) {
+        engine->RegisterObjectType("Entity", sizeof(unsigned int), asOBJ_VALUE | asOBJ_POD | asOBJ_APP_PRIMITIVE);
+        engine->RegisterObjectProperty("Entity", "uint uid", 0);
+    }
+
     void registerDeerFunctions(asIScriptEngine* scriptEngine) {
         int r = scriptEngine->SetMessageCallback(asFUNCTION(Deer::messageCallback), 0, asCALL_CDECL);
         DEER_SCRIPT_ASSERT(r >= 0, "Error in seting up angel script");
@@ -111,11 +130,17 @@ namespace Deer {
     }
 
     void registerEntityTransformFunctions(asIScriptEngine* scriptEngine) {
-        int r = scriptEngine->RegisterGlobalFunction("Vec3 getEntityPosition(uint)", asFUNCTION(Deer::getEntityPosition), asCALL_CDECL);
-        DEER_SCRIPT_ASSERT(r >= 0, "Error in seting up Vec3 getEntityPosition(uint)");
+        int r = scriptEngine->RegisterObjectMethod("Entity", "Vec3 getPosition()", asFUNCTION(Deer::getEntityPosition), asCALL_CDECL_OBJLAST);
+        DEER_SCRIPT_ASSERT(r >= 0, "Error in seting up Vec3 getPosition()");
         
-        scriptEngine->RegisterGlobalFunction("void setEntityPosition(Vec3 position, uint)", asFUNCTION(Deer::setEntityPosition), asCALL_CDECL);
-        DEER_SCRIPT_ASSERT(r >= 0, "Error in seting up setEntityPosition(Vec3 position, uint)");
+        scriptEngine->RegisterObjectMethod("Entity", "void setPosition(Vec3)", asFUNCTION(Deer::setEntityPosition), asCALL_CDECL_OBJLAST);
+        DEER_SCRIPT_ASSERT(r >= 0, "Error in seting up void setPosition(Vec3)");
+        
+        r = scriptEngine->RegisterObjectMethod("Entity", "Vec3 getScale()", asFUNCTION(Deer::getEntityScale), asCALL_CDECL_OBJLAST);
+        DEER_SCRIPT_ASSERT(r >= 0, "Error in seting up Vec3 getScale()");
+
+        scriptEngine->RegisterObjectMethod("Entity", "void setScale(Vec3)", asFUNCTION(Deer::setEntityScale), asCALL_CDECL_OBJLAST);
+        DEER_SCRIPT_ASSERT(r >= 0, "Error in seting up void setScale(Vec3)");
     }
 
 }

@@ -1,8 +1,11 @@
 
 class PlayerScript : ComponentScript {
 	void update() {
-		Vec3 position = getEntityPosition(UID);
+		print("" + entity.uid);
+		Vec3 position = entity.getPosition();
 		position = position + (Vec3(0, 1, 0) * 1 / 60);
-		setEntityPosition(position, UID);
+		entity.setPosition(position);
+
+		entity.setScale(entity.getScale() + Vec3(0.01, 0, 0));
 	}
 }
