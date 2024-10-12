@@ -19,12 +19,14 @@ namespace Deer {
 	void ScriptEngine::initScriptEngine() {
 		m_scriptEngine = asCreateScriptEngine();
 
-		// Regist data types
 		RegisterStdString(m_scriptEngine);
 		RegisterScriptMath(m_scriptEngine);
 
+		// Regist data types
 		registerEntity(m_scriptEngine);
 		registerVec3(m_scriptEngine);
+
+		// Regist functions
 		registerDeerFunctions(m_scriptEngine);
 		registerInputFunctions(m_scriptEngine);
 		registerEntityTransformFunctions(m_scriptEngine);
