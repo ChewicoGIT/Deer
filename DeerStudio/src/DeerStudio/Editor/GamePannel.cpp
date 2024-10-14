@@ -4,6 +4,7 @@
 #include "Deer/Scene/Entity.h"
 #include "Deer/Scene/SceneSerializer.h"
 #include "Deer/Core/Project.h"
+#include "Deer/Scripting/ScriptEngine.h"
 
 #include "imgui.h"
 #include <filesystem>
@@ -27,7 +28,7 @@ namespace Deer {
             ImGui::TextColored(ImVec4(.3f, .3f, .8f, 1.0f), "There is no camera");
 
             if (!Project::m_scene->getExecutingState()) {
-                if (ImGui::Button("Execute")) {
+                if (Project::m_scriptEngine->isScriptValid() && ImGui::Button("Execute")) {
                     m_activeEntity->clear();
                     Project::m_sceneSerializer->serializeBinary("temp_scene.dbscn");
                     Project::m_scene->execute();
@@ -75,7 +76,7 @@ namespace Deer {
         ImGui::SetCursorPos(cursorPos);
 
         if (!Project::m_scene->getExecutingState()) {
-            if (ImGui::Button("Execute")) {
+            if (Project::m_scriptEngine->isScriptValid() && ImGui::Button("Execute")) {
                 m_activeEntity->clear();
                 Project::m_sceneSerializer->serializeBinary("temp_scene.dbscn");
                 Project::m_scene->execute();

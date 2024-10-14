@@ -46,6 +46,7 @@ namespace Deer {
 	}
 
 	void ScriptEngine::loadScripts(const std::filesystem::path& modulePath) {
+		m_isValid = true;
 		loadModuleFolder(modulePath, "Deer");
 		m_scriptModule = m_scriptEngine->GetModule("Deer");
 		asITypeInfo* m_deerScript = m_scriptModule->GetTypeInfoByName("ComponentScript");
@@ -131,6 +132,7 @@ namespace Deer {
 		r = builder.BuildModule();
 		if (r < 0) {
 			DEER_SCRIPT_INFO("Please correct the errors in the script and try again.");
+			m_isValid = false;
 		}
 	}
 }

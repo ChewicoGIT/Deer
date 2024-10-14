@@ -154,12 +154,10 @@ namespace Deer {
         }
 
         if (ImGui::BeginMenu("Scripts")) {
-            if (ImGui::MenuItem("Reload scripts")) {
-
+            if (ImGui::MenuItem("Reload scripts") && !Project::m_scene->getExecutingState()) {
                 Project::m_scriptEngine->shutdownScriptEngine();
                 Project::m_scriptEngine->initScriptEngine();
                 Project::m_scriptEngine->loadScripts(std::filesystem::path("scripts"));
-
             }
 
             ImGui::EndMenu();

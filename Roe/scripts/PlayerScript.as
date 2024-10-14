@@ -2,11 +2,13 @@
 class PlayerScript : ComponentScript {
 	Entity parent;
 
-	void update() {
-
-		parent = entity.getParent();
-		print("" + entity.uid);
+	void start() {
+		parent = entity;
+		print("" + parent.uid);
 		
+	}
+
+	void update() {
 		if (isKeyPressed(DeerKey::KEY_A)){
 			Vec3 position = parent.getPosition();
 			position = position + (Vec3(0, 1, 0) * 1 / 60);
