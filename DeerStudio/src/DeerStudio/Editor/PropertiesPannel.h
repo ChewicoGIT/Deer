@@ -23,6 +23,8 @@ namespace Deer {
 		template<typename T>
 		void addComponentButton(const std::string& componentName);
 
+		void addScriptButton(const std::string& scriptID);
+
 		void drawMagicSlider(const std::string& text, float* value);
 		void drawMagicSlider3f(const std::string& text, float* value, float defaultValue = 0);
 

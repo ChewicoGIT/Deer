@@ -19,7 +19,7 @@ namespace Deer {
 		WindowsWindow(const WindowProps& props);
 		virtual ~WindowsWindow();
 
-		void onUpdate() override;
+		void onRender() override;
 		void clear() override;
 
 		inline int getWitdth() const override { return m_data.width; }

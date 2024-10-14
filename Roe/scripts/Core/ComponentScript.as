@@ -1,0 +1,7 @@
+
+class ComponentScript{
+	Entity entity;
+}
+
+
+

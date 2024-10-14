@@ -10,6 +10,7 @@ namespace Deer {
 		void clear() override;
 
 		void drawIndex(const Ref<VertexArray>& vertexArray) override;
+		void drawLines(const Ref<VertexArray>& vertexArray) override;
 
 	};
 }

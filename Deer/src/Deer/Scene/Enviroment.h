@@ -1,7 +1,7 @@
 #pragma once
 #include "Deer/Core/Core.h"
-#include "Deer/Render/FrameBuffer.h"
 #include "Deer/Scene/Components.h"
+#include "Deer/Render/FrameBuffer.h"
 #include "entt/entt.hpp"
 
 #include <string>
@@ -21,22 +21,28 @@ namespace Deer {
 		Environment(const std::string& rootName = "root");
 		~Environment();
 
+		void clear();
+
 		void render(Entity& camera);
 		void render(VirtualCamera& camera);
 
-		Entity tryGetEntity(uid id);
-		Entity createEntity(const std::string& name = std::string());
+		Entity& getEntity(uid id);
+		Entity& createEntity(const std::string& name = std::string());
+		Entity& createEmptyEntity();
 
-		Entity& getRoot() { return *m_rootEntity; }
-
-		Entity& getMainCamera() { return *m_camera; }
+		uid tryGetMainCamera();
 		void setMainCamera(Entity& entity);
+
+		Entity& getRoot();
 	public:
+		const std::string m_rootName;
 		entt::registry m_registry;
-		
-		std::unordered_map<uid, Entity> m_entities;
-		Scope<Entity> m_camera;
+
 		Entity* m_rootEntity;
+		EntityMap m_entities;
+
+		uid m_idCreationOffset = 0;
+		uid m_mainCamera = 0;
 
 		friend class Entity;
 	};

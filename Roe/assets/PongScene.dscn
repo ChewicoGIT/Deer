@@ -1,0 +1,252 @@
+{
+    "scene": {
+        "main_environment": {
+            "entities": [
+                {
+                    "id": 1,
+                    "name": "Scene Root",
+                    "transform": {
+                        "position": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 1.0
+                        }
+                    },
+                    "relationship": {
+                        "parentUID": 0,
+                        "childrensUIDs": [
+                            2,
+                            5,
+                            6,
+                            7
+                        ]
+                    },
+                    "hasMeshRenderComponent": false,
+                    "hasCameraComponent": false,
+                    "hasTextureBindingComponent": false,
+                    "hasScriptComponent": false
+                },
+                {
+                    "id": 2,
+                    "name": "Scenary",
+                    "transform": {
+                        "position": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 1.0
+                        }
+                    },
+                    "relationship": {
+                        "parentUID": 1,
+                        "childrensUIDs": [
+                            3,
+                            4
+                        ]
+                    },
+                    "hasMeshRenderComponent": false,
+                    "hasCameraComponent": false,
+                    "hasTextureBindingComponent": false,
+                    "hasScriptComponent": false
+                },
+                {
+                    "id": 3,
+                    "name": "Base",
+                    "transform": {
+                        "position": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 10.0,
+                            "y": 0.25,
+                            "z": 1.0
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 1.0
+                        }
+                    },
+                    "relationship": {
+                        "parentUID": 2,
+                        "childrensUIDs": []
+                    },
+                    "hasMeshRenderComponent": true,
+                    "meshRenderComponent": {
+                        "mesh": "assets/cube.obj",
+                        "shader": "assets/shaders/BasicShader.glsl"
+                    },
+                    "hasCameraComponent": false,
+                    "hasTextureBindingComponent": false,
+                    "hasScriptComponent": false
+                },
+                {
+                    "id": 4,
+                    "name": "Top",
+                    "transform": {
+                        "position": {
+                            "x": 0.0,
+                            "y": 10.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 10.0,
+                            "y": 0.25,
+                            "z": 1.0
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 1.0
+                        }
+                    },
+                    "relationship": {
+                        "parentUID": 2,
+                        "childrensUIDs": []
+                    },
+                    "hasMeshRenderComponent": true,
+                    "meshRenderComponent": {
+                        "mesh": "assets/cube.obj",
+                        "shader": "assets/shaders/BasicShader.glsl"
+                    },
+                    "hasCameraComponent": false,
+                    "hasTextureBindingComponent": false,
+                    "hasScriptComponent": false
+                },
+                {
+                    "id": 5,
+                    "name": "Player",
+                    "transform": {
+                        "position": {
+                            "x": 9.0,
+                            "y": 5.650000095367432,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 0.25,
+                            "y": 1.0,
+                            "z": 0.5
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 1.0
+                        }
+                    },
+                    "relationship": {
+                        "parentUID": 1,
+                        "childrensUIDs": []
+                    },
+                    "hasMeshRenderComponent": true,
+                    "meshRenderComponent": {
+                        "mesh": "assets/cube.obj",
+                        "shader": "assets/shaders/BasicShader.glsl"
+                    },
+                    "hasCameraComponent": false,
+                    "hasTextureBindingComponent": false,
+                    "hasScriptComponent": true,
+                    "scriptComponent": {
+                        "scriptID": "PlayerScript"
+                    }
+                },
+                {
+                    "id": 6,
+                    "name": "Enemy",
+                    "transform": {
+                        "position": {
+                            "x": -9.0,
+                            "y": 5.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 0.25,
+                            "y": 1.0,
+                            "z": 0.5
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 1.0
+                        }
+                    },
+                    "relationship": {
+                        "parentUID": 1,
+                        "childrensUIDs": []
+                    },
+                    "hasMeshRenderComponent": true,
+                    "meshRenderComponent": {
+                        "mesh": "assets/cube.obj",
+                        "shader": "assets/shaders/BasicShader.glsl"
+                    },
+                    "hasCameraComponent": false,
+                    "hasTextureBindingComponent": false,
+                    "hasScriptComponent": false
+                },
+                {
+                    "id": 7,
+                    "name": "Camera",
+                    "transform": {
+                        "position": {
+                            "x": -3.5067137105215809e-7,
+                            "y": 5.0,
+                            "z": 25.0
+                        },
+                        "scale": {
+                            "x": 0.9999988079071045,
+                            "y": 1.0,
+                            "z": 0.9999988079071045
+                        },
+                        "rotation": {
+                            "x": -4.371138828673793e-8,
+                            "y": 1.0,
+                            "z": -4.371138828673793e-8,
+                            "w": 1.910685465164705e-15
+                        }
+                    },
+                    "relationship": {
+                        "parentUID": 1,
+                        "childrensUIDs": []
+                    },
+                    "hasMeshRenderComponent": false,
+                    "hasCameraComponent": true,
+                    "cameraComponent": {
+                        "aspect": 1.4662004709243775,
+                        "fov": 0.5714905858039856,
+                        "farZ": 100.0,
+                        "nearZ": 0.10000000149011612
+                    },
+                    "hasTextureBindingComponent": false,
+                    "hasScriptComponent": false
+                }
+            ],
+            "mainCameraUID": 7
+        }
+    }
+}

@@ -23,7 +23,7 @@ namespace Deer {
 		ViewportPannel(Ref<Environment>& enviroment, const std::string& windowName, Ref<ActiveEntity>& activeEntity);
 		
 		void onImGui() override;
-		void onUpdate(Timestep timestep) override;
+		void onRender(Timestep timestep) override;
 		void onEvent(Event& e) override;
 		bool onClickEvent(MouseButtonPressedEvent mouseEvent);
 		bool onKeyEvent(KeyPressedEvent keyEvent);

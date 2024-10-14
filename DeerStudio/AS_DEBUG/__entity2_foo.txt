@@ -1,0 +1,12 @@
+void entity2::foo()
+
+Temps: 
+
+Variables: 
+ 000: entity2 this
+
+
+- 12,16 -
+    0   0 *    SUSPEND
+            0:
+    1   0 *    RET      2

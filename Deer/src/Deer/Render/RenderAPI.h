@@ -1,9 +1,10 @@
 #pragma once
-#include "Deer/Render/VertexArray.h"
 #include "Deer/Core/Core.h"
 #include "glm/glm.hpp"
 
 namespace Deer {
+	class VertexArray;
+
 	class RenderAPI {
 	public:
 		enum class API {
@@ -18,6 +19,7 @@ namespace Deer {
 		virtual void clear() = 0;
 
 		virtual void drawIndex(const Ref<VertexArray>& vertexArray) = 0;
+		virtual void drawLines(const Ref<VertexArray>& vertexArray) = 0;
 
 		inline static API getAPI() { return s_API; }
 	private:

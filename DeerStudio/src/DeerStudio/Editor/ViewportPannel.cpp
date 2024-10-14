@@ -44,6 +44,8 @@ namespace Deer {
         m_frameBuffer->clear();
         int clearData = -1;
         m_frameBuffer->clearBuffer(1, &clearData);
+        unsigned char clearColor[4]{ 0, 0, 0, 255 };
+        m_frameBuffer->clearBuffer(0, &clearColor);
 
         m_environment->render(m_virtualCamera);
 
@@ -66,7 +68,7 @@ namespace Deer {
                     m_activeEntity->clear();
 
                 if (id >= 0) {
-                    Entity selectedEntity = m_environment->tryGetEntity((uid)id);
+                    Entity& selectedEntity = m_environment->getEntity((uid)id);
                     m_activeEntity->addEntity(selectedEntity);
                 }
 
@@ -80,33 +82,34 @@ namespace Deer {
         ImGui::PopStyleVar();
 	}
 
-    void ViewportPannel::onUpdate(Timestep timestep) {
+    void ViewportPannel::onRender(Timestep timestep) {
         if (!m_isActive)
             return;
 
-        float vel = 1;
-        if (Input::isKeyPressed(DEER_KEY_LEFT_SHIFT))
-            vel = 4;
-        if (Input::isKeyPressed(DEER_KEY_LEFT_ALT))
-            vel = .25f;
+        if (!Input::isKeyPressed(DEER_KEY_LEFT_CONTROL)) {
 
-        if (Input::isKeyPressed(DEER_KEY_W))
-            m_virtualCamera.transform.position += m_virtualCamera.transform.rotation * glm::vec3(0, 0, 1) * timestep.getSeconds() * vel;
+            float vel = 6;
+            if (Input::isKeyPressed(DEER_KEY_LEFT_SHIFT))
+                vel = 14;
+            if (Input::isKeyPressed(DEER_KEY_LEFT_ALT))
+                vel = 1.0f;
 
-        if (Input::isKeyPressed(DEER_KEY_S))
-            m_virtualCamera.transform.position += m_virtualCamera.transform.rotation * glm::vec3(0, 0, -1) * timestep.getSeconds() * vel;
+            if (Input::isKeyPressed(DEER_KEY_W))
+                m_virtualCamera.transform.position += m_virtualCamera.transform.rotation * glm::vec3(0, 0, 1) * timestep.getSeconds() * vel;
 
-        if (Input::isKeyPressed(DEER_KEY_D))
-            m_virtualCamera.transform.position += m_virtualCamera.transform.rotation * glm::vec3(1, 0, 0) * timestep.getSeconds() * vel;
+            if (Input::isKeyPressed(DEER_KEY_S))
+                m_virtualCamera.transform.position += m_virtualCamera.transform.rotation * glm::vec3(0, 0, -1) * timestep.getSeconds() * vel;
 
-        if (Input::isKeyPressed(DEER_KEY_A))
-            m_virtualCamera.transform.position += m_virtualCamera.transform.rotation * glm::vec3(-1, 0, 0) * timestep.getSeconds() * vel;
-            
-        if (Input::isKeyPressed(DEER_KEY_SPACE))
-            m_virtualCamera.transform.position.y += timestep.getSeconds();
+            if (Input::isKeyPressed(DEER_KEY_D))
+                m_virtualCamera.transform.position += m_virtualCamera.transform.rotation * glm::vec3(1, 0, 0) * timestep.getSeconds() * vel;
 
-        if (Input::isKeyPressed(DEER_KEY_LEFT_CONTROL))
-            m_virtualCamera.transform.position.y += -timestep.getSeconds();
+            if (Input::isKeyPressed(DEER_KEY_A))
+                m_virtualCamera.transform.position += m_virtualCamera.transform.rotation * glm::vec3(-1, 0, 0) * timestep.getSeconds() * vel;
+
+            if (Input::isKeyPressed(DEER_KEY_SPACE))
+                m_virtualCamera.transform.position.y += timestep.getSeconds();
+
+        }
 
         if (Input::isMouseButtonPressed(DEER_MOUSE_BUTTON_2)) {
             float posX, posY;
@@ -155,8 +158,13 @@ namespace Deer {
             m_transformMode = TransformMode::Translate;
         if (Input::isKeyPressed(DEER_KEY_R))
             m_transformMode = TransformMode::Rotate;
-        if (Input::isKeyPressed(DEER_KEY_Y))
+        if (Input::isKeyPressed(DEER_KEY_G))
             m_transformMode = TransformMode::Scale;
+
+        if (Input::isKeyPressed(DEER_KEY_D) && Input::isKeyPressed(DEER_KEY_LEFT_CONTROL)) {
+            if (m_activeEntity->count() > 0)
+                m_activeEntity->getEntity(0).duplicate();
+        }
 
         return false;
     }
@@ -170,8 +178,6 @@ namespace Deer {
         glm::mat4 projectionMatrix = m_virtualCamera.camera.getMatrix() * glm::scale(glm::mat4(1.0f), glm::vec3(1, 1, -1));
 
         ImGuizmo::SetRect(wPosX, wPosY, wSizeX, wSizeY);
-        ImGuizmo::DrawGrid(glm::value_ptr(camMatrix), glm::value_ptr(projectionMatrix), glm::value_ptr(glm::mat4(1.0f)), 4.f);
-
         if (m_activeEntity->count() != 0) {
 
             Entity& currentEntity = m_activeEntity->getEntity(0);

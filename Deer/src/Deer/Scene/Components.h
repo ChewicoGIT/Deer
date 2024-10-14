@@ -1,32 +1,45 @@
 #pragma once
 #include "Deer/Core/Core.h"
-#include "glm/gtc/quaternion.hpp"
 #include "Deer/Render/VertexArray.h"
 #include "Deer/Render/Shader.h"
-#include "glm/glm.hpp"
+
+#define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtc/quaternion.hpp"
-#include "entt/entt.hpp"
+#include "glm/glm.hpp"
 
 #include <string>
 #include <vector>
 
+#define MAX_TEXTURE_BINDINGS 4
+
 namespace Deer {
+	class ComponentScriptInstance;
+
 	struct TagComponent {
 		std::string tag;
+		uid entityUID;
 
 		TagComponent() = default;
 		TagComponent(const TagComponent&) = default;
-		TagComponent(std::string name) : tag(name) { }
+		TagComponent(std::string name, uid _id = 0) : tag(name), entityUID(_id) { }
+	};
+
+	struct ScriptComponent {
+		std::string scriptID;
+		Ref<ComponentScriptInstance> roeInstance;
+
+		ScriptComponent() = default;
+		ScriptComponent(const ScriptComponent&) = default;
+		ScriptComponent(std::string _scriptID) : scriptID(_scriptID) { }
 	};
 
 	struct RelationshipComponent {
-		entt::entity parent_handle = entt::null;
-		std::vector<entt::entity> children;
-		bool root = false;
+		uid parent_UID = 0;
+		std::vector<uid> children;
 
 		RelationshipComponent() = default;
 		RelationshipComponent(const RelationshipComponent&) = default;
-		RelationshipComponent(entt::entity parent) : parent_handle(parent) { }
+		RelationshipComponent(uid parent) : parent_UID(parent) { }
 	};
 
 	struct TransformComponent {
@@ -43,17 +56,28 @@ namespace Deer {
 		glm::mat4 getMatrix();
 	};
 
-	// This requires mesh component to render
 	struct MeshRenderComponent {
 		MeshRenderComponent() = default;
 		MeshRenderComponent(const MeshRenderComponent&) = default;
-		MeshRenderComponent(Ref<Mesh> _mesh, Ref<Shader> _shader) : shader(_shader), mesh(_mesh) { }
+		MeshRenderComponent(uid _mesh, uid _shader) : shaderAssetID(_shader), meshAssetID(_mesh) { }
 
-		Ref<Shader> shader;
-		Ref<Mesh> mesh;
+		uid shaderAssetID = 0;
+		uid meshAssetID = 0;
 	};
 
-	// This requires mesh component to render
+	struct TextureBindingComponent {
+		TextureBindingComponent() {
+			for (int x = 0; x < MAX_TEXTURE_BINDINGS; x++) {
+				textureAssetID[x] = 0;
+				textureBindID[x] = 0;
+			}
+		}
+		TextureBindingComponent(const TextureBindingComponent&) = default;
+
+		uid textureAssetID[MAX_TEXTURE_BINDINGS];
+		unsigned char textureBindID[MAX_TEXTURE_BINDINGS];
+	};
+
 	struct CameraComponent {
 		CameraComponent() = default;
 		CameraComponent(const CameraComponent&) = default;

@@ -13,8 +13,10 @@ namespace Deer {
 	OpenGLShader::OpenGLShader(const std::string& filePath) {
 		std::string shaderSrc = readFile(filePath);
 		std::unordered_map<unsigned int, std::string> sources = preProcess(shaderSrc);
-
+		
 		compile(sources[GL_VERTEX_SHADER], sources[GL_FRAGMENT_SHADER]);
+		//std::string fragmentShader = readFile(filePath + ".frag.glsl");
+		//std::string vertexShader = readFile(filePath + ".vert.glsl");
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& vertexSource, const std::string& fragmentSource) {
@@ -32,7 +34,7 @@ namespace Deer {
 	void OpenGLShader::uploadUniformFloat(const std::string& name, float value) {
 		int location = glGetUniformLocation(m_shaderID, name.c_str());
 		if (location == -1) {
-			DEER_CORE_ERROR("OpenGL did not find float uniform {0}", name.c_str());
+			DEER_CORE_WARN("OpenGL did not find float uniform {0}", name.c_str());
 			return;
 		}
 		glUniform1f(location, value);
@@ -41,7 +43,7 @@ namespace Deer {
 	void OpenGLShader::uploadUniformFloat2(const std::string& name, const glm::vec2& value) {
 		int location = glGetUniformLocation(m_shaderID, name.c_str());
 		if (location == -1) {
-			DEER_CORE_ERROR("OpenGL did not find float2 uniform {0}", name.c_str());
+			DEER_CORE_WARN("OpenGL did not find float2 uniform {0}", name.c_str());
 			return;
 		}
 		glUniform2f(location, value.x, value.y);
@@ -50,7 +52,7 @@ namespace Deer {
 	void OpenGLShader::uploadUniformFloat3(const std::string& name, const glm::vec3& value) {
 		int location = glGetUniformLocation(m_shaderID, name.c_str());
 		if (location == -1) {
-			DEER_CORE_ERROR("OpenGL did not find float3 uniform {0}", name.c_str());
+			DEER_CORE_WARN("OpenGL did not find float3 uniform {0}", name.c_str());
 			return;
 		}
 		glUniform3f(location, value.x, value.y, value.z);
@@ -59,7 +61,7 @@ namespace Deer {
 	void OpenGLShader::uploadUniformFloat4(const std::string& name, const glm::vec4& value) {
 		int location = glGetUniformLocation(m_shaderID, name.c_str());
 		if (location == -1) {
-			DEER_CORE_ERROR("OpenGL did not find float4 uniform {0}", name.c_str());
+			DEER_CORE_WARN("OpenGL did not find float4 uniform {0}", name.c_str());
 			return;
 		}
 		glUniform4f(location, value.x, value.y, value.z, value.w);
@@ -68,7 +70,7 @@ namespace Deer {
 	void OpenGLShader::uploadUniformInt(const std::string& name, int value) {
 		int location = glGetUniformLocation(m_shaderID, name.c_str());
 		if (location == -1) {
-			DEER_CORE_ERROR("OpenGL did not find uniform {0}", name.c_str());
+			DEER_CORE_WARN("OpenGL did not find uniform {0}", name.c_str());
 			return;
 		}
 		glUniform1i(location, value);
@@ -77,7 +79,7 @@ namespace Deer {
 	void OpenGLShader::uploadUniformMat4(const std::string& name, const glm::mat4 mat) {
 		int location = glGetUniformLocation(m_shaderID, name.c_str());
 		if (location == -1) {
-			DEER_CORE_ERROR("OpenGL did not find uniform {0}", name.c_str());
+			DEER_CORE_WARN("OpenGL did not find uniform {0}", name.c_str());
 			return;
 		}
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(mat));
@@ -104,18 +106,25 @@ namespace Deer {
 	std::unordered_map<unsigned int, std::string> OpenGLShader::preProcess(const std::string& source) {
 		std::unordered_map<unsigned int, std::string> shaderSource;
 
-		std::string shaders_str; // The shader file's contents as a string
-		std::regex r("#type (.*)(?:\n|\r)((?:(?!#type )(?:.|\n|\r))*)");
+		const std::string typeToken = "#type ";
+		size_t pos = 0;
 
-		while (!shaders_str.empty()) {
-			std::smatch match;
-			std::regex_search(shaders_str, match, r);
-			std::string shader_type = match[1];
-			std::string shader_source = match[2];
+		while (pos < source.size()) {
+			size_t typePos = source.find(typeToken, pos);
+			if (typePos == std::string::npos) break;
 
-			shaderSource[getOpenGLShaderType(shader_type)] = shaders_str;
-			shaders_str = match.suffix();
+			size_t typeEnd = source.find_first_of("\n\r", typePos);
+			if (typeEnd == std::string::npos) break;
+
+			std::string shaderType = source.substr(typePos + typeToken.size(), typeEnd - typePos - typeToken.size());
+			size_t nextTypePos = source.find(typeToken, typeEnd);
+
+			std::string shaderSourceStr = source.substr(typeEnd + 1, nextTypePos - typeEnd - 1);
+			shaderSource[getOpenGLShaderType(shaderType)] = shaderSourceStr;
+
+			pos = nextTypePos;
 		}
+
 		return shaderSource;
 	}
 

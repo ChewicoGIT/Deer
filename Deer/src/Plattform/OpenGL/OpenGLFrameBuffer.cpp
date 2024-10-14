@@ -123,7 +123,7 @@ namespace Deer {
 			id++;
 		}
 
-		glDrawBuffers(attachments.size(), attachments.data());
+		glDrawBuffers(attachments.size(), &attachments[0]);
 
 		// Depth buffer
 		glGenRenderbuffers(1, &m_depthAttachment);

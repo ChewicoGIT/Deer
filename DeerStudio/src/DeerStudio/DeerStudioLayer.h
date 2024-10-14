@@ -18,16 +18,20 @@
 #include "Deer/Scene/Components.h"
 #include "Deer/Scene/Entity.h"
 #include "Deer/Scene/Scene.h"
+#include "Deer/Scene/SceneSerializer.h"
 
 #include "DeerStudio/Editor/EnviromentTreePannel.h"
 #include "DeerStudio/Editor/PropertiesPannel.h"
 #include "DeerStudio/Editor/ViewportPannel.h"
+#include "DeerStudio/Editor/AssetManagerPannel.h"
 
+#include <filesystem>
 #include <vector>
 
 namespace Deer {
 	class DeerStudioLayer : public Layer {
 		void onAttach() override;
+		void onRender(Timestep delta) override;
 		void onUpdate(Timestep delta) override;
 
 		void loadScene();
@@ -38,29 +42,14 @@ namespace Deer {
 		void onImGUI() override;
 		void drawMenuBar();
 	private:
-		unsigned int vertexArray;
-		Ref<VertexBuffer> m_vertexBuffer;
-		Ref<IndexBuffer> m_indexBuffer;
-		Ref<VertexArray> m_vertexArray;
-		Ref<Shader> m_shader;
-		Ref<Texture2D> m_texture;
-		Scope<Camera> m_camera;
-		Transform m_transform;
-		Entity m_entity1;
-		Entity m_entity2;
+		uid m_meshID = 0;
+		uid m_shaderID = 0;
 
-		glm::vec3 pos;
-		glm::vec3 objectRotation;
-		glm::vec3 rotation;
-
-		glm::vec2 m_viewportPannelSize;
-		float fov = 45;
-	private:
 		Ref<Scene> m_scene;
+		Ref<SceneSerializer> m_sceneSerializer;
+
 		Ref<ActiveEntity> m_activeEntity;
 		std::vector<Ref<EditorPannel>> pannels;
-
-		VirtualCamera m_virtualCamera;
 
 	};
 }

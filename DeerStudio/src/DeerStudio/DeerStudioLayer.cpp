@@ -3,10 +3,18 @@
 #include "Deer/Render/Render.h"
 #include "Deer/Core/Window.h"
 #include "Deer/Core/Log.h"
+
 #include "DeerStudio/Editor/ViewportPannel.h"
 #include "DeerStudio/Editor/ActiveEntity.h"
+#include "DeerStudio/Editor/GamePannel.h"
+
+#include "Deer/Asset/AssetManager.h"
+
 #include "backends/imgui_impl_opengl3.h"
 #include "Style.h"
+
+#include <filesystem>
+#include "Deer/Core/Project.h"
 
 const float toolbarSize = 50;
 namespace Deer {
@@ -16,118 +24,49 @@ namespace Deer {
         io.Fonts->Clear(); 
         setNatureStyle();
 
-        ImFont* font1 = io.Fonts->AddFontFromFileTTF("editor\\fonts\\OpenSans-VariableFont_wdth,wght.ttf", 20.0f);
+        ImFont* font1 = io.Fonts->AddFontFromFileTTF("editor\\fonts\\OpenSans-VariableFont_wdth,wght.ttf", 19.0f);
         //ImGui::PushFont(font1);
         ImGui_ImplOpenGL3_CreateFontsTexture();
 
-        m_vertexArray = VertexArray::create();
-        m_camera = Scope<Camera>(new Camera(16 / 9, 50, 0.05f, 100));
-        m_texture = Texture2D::create("assets/test_texture.png");
+        m_activeEntity = Ref<ActiveEntity>(new ActiveEntity());
 
-        float vertices[] = {
-            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
-             0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-            -0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
-             0.5f,  0.5f, 0.0f, 1.0f, 1.0f
-        };
-
-        m_vertexBuffer = VertexBuffer::create(vertices, sizeof(vertices));
-
-        BufferLayout bufferLayout({
-            {"a_Position", DataType::Float3, ShaderDataType::FloatingPoint },
-            {"a_Color", DataType::Float2, ShaderDataType::FloatingPoint },
-            });
-
-        m_vertexBuffer->setLayout(bufferLayout);
-        m_vertexArray->addVertexBuffer(m_vertexBuffer);
-
-        unsigned int indices[] = {
-            0, 2, 1,
-            1, 2, 3
-        };
-
-        m_indexBuffer = IndexBuffer::create(indices, sizeof(indices), IndexDataType::Unsigned_Int);
-        m_vertexArray->setIndexBuffer(m_indexBuffer);
-
-        std::string vertexSource = R"(
-			#version 410 core	
-			layout(location = 0) in vec3 a_position;
-			layout(location = 1) in vec2 a_uv;
-
-            out vec2 textCoord;
-			
-			uniform mat4 u_viewMatrix;
-			uniform mat4 u_worldMatrix;
-			void main()
-			{
-				//gl_Position = vec4(a_position, 1.0) * u_projectionMatrix * u_viewMatrix;
-				gl_Position = u_viewMatrix * u_worldMatrix * vec4(a_position,1.0);
-
-                textCoord = a_uv;
-			}
-		)";
-
-        std::string fragmentSrc = R"(
-			#version 410 core	
-			
-            layout(location = 0) out vec4 fragColor;
-            layout(location = 1) out int objectID;
-
-            in vec2 textCoord;
-
-            uniform sampler2D u_texture;
-            uniform int u_objectID;
-
-			void main()
-			{
-				fragColor = texture(u_texture, textCoord);
-                objectID = u_objectID;
-			}
-		)";
-
-        m_shader = Shader::create(vertexSource, fragmentSrc);
-
-    }
-
-    void DeerStudioLayer::onUpdate(Timestep delta) {
-        for (auto pannel : pannels) {
-            pannel->onUpdate(delta);
-        }
-
-        m_texture->bind(0);
-        m_shader->uploadUniformInt("u_texture", 0);
-
-        int windowWidth = Application::s_application->m_window->getWitdth();
-        int windowHeight = Application::s_application->m_window->getHeight();
-
-        m_camera->setAspect((float)windowWidth / (float)windowHeight);
-        m_camera->setPosition(pos);
-        m_camera->setRotation(glm::quat(rotation));
-        m_camera->recalculateMatrices();
-    }
-
-    void DeerStudioLayer::loadScene() {
-
-        m_scene = Ref<Scene>(new Scene());
-        Ref<ActiveEntity> activeEntity = Ref<ActiveEntity>(new ActiveEntity());
-
-        auto m_propertiesPannel = Ref<PropertiesPannel>(new PropertiesPannel(activeEntity));
-        auto m_viewportPannel = Ref<ViewportPannel>(new ViewportPannel(m_scene->getMainEnviroment(), "Scene viewport", activeEntity));
-        auto m_enviromentTreePannel = Ref<EnviromentTreePannel>(new EnviromentTreePannel(m_scene->getMainEnviroment(), "World tree", activeEntity));
+        auto m_propertiesPannel = Ref<PropertiesPannel>(new PropertiesPannel(m_activeEntity));
+        auto m_viewportPannel = Ref<ViewportPannel>(new ViewportPannel(Project::m_scene->getMainEnviroment(), "Scene viewport", m_activeEntity));
+        auto m_enviromentTreePannel = Ref<EnviromentTreePannel>(new EnviromentTreePannel(Project::m_scene->getMainEnviroment(), "World tree", m_activeEntity));
+        auto m_assetPannel = Ref<AssetManagerPannel>(new AssetManagerPannel(m_activeEntity));
+        auto m_gamePannel = Ref<GamePannel>(new GamePannel(m_activeEntity));
 
         pannels.clear();
         pannels.push_back(m_propertiesPannel);
         pannels.push_back(m_enviromentTreePannel);
         pannels.push_back(m_viewportPannel);
+        pannels.push_back(m_assetPannel);
+        pannels.push_back(m_gamePannel);
 
-        MeshRenderComponent& mrc = m_scene->getMainEnviroment()->createEntity("Square").addComponent<MeshRenderComponent>();
-        mrc.mesh = m_vertexArray;
-        mrc.shader = m_shader;
+    }
+
+    void DeerStudioLayer::onRender(Timestep delta) {
+        for (auto pannel : pannels) {
+            pannel->onRender(delta);
+        }
+
+        int windowWidth = Application::s_application->m_window->getWitdth();
+        int windowHeight = Application::s_application->m_window->getHeight();
+    }
+
+    void DeerStudioLayer::onUpdate(Timestep delta) {
+        if (Project::m_scene->getExecutingState())
+            Project::m_scene->update();
+    }
+
+    void DeerStudioLayer::loadScene() {
+
     }
 
     void DeerStudioLayer::unloadScene() {
-        m_scene.reset();
-        m_activeEntity.reset();
+        Project::m_scene.reset();
+        Project::m_sceneSerializer.reset();
+        m_activeEntity->clear();
         pannels.clear();
     }
 
@@ -180,22 +119,35 @@ namespace Deer {
     void DeerStudioLayer::drawMenuBar() {
 
         if (ImGui::BeginMenu("Project")) {
-            if (ImGui::MenuItem("LoadScene")) {
-                loadScene();
-            }
-            if (ImGui::MenuItem("UnloadScene")) {
-                unloadScene();
-            }
-            if (ImGui::MenuItem("Test")) {
-                
-            }
-            //ImGui::MenuItem("New project");
-            //ImGui::MenuItem("Open project");
 
             ImGui::EndMenu();
         }
 
         if (ImGui::BeginMenu("Edit")) {
+            if (ImGui::MenuItem("New scene")) {
+                m_activeEntity->clear();
+                Project::m_scene->clear();
+                Project::m_sceneSerializer->serialize("assets/newScene.dscn");
+            }
+
+            if (Project::m_sceneSerializer->getCurrentScenePath() != "_NO_INITIALIZED_" && ImGui::MenuItem("Save scene")) {
+                Project::m_sceneSerializer->serialize(Project::m_sceneSerializer->getCurrentScenePath());
+            }
+
+            if (Project::m_sceneSerializer->getCurrentScenePath() != "_NO_INITIALIZED_" && ImGui::MenuItem("Save Scene Binary")) {
+                m_activeEntity->clear();
+                Project::m_scene->clear();
+                const std::string path = std::string("binTest.bscn");
+                Project::m_sceneSerializer->serializeBinary(path);
+            }
+
+            if (ImGui::MenuItem("Load Scene Binary")) {
+                m_activeEntity->clear();
+                Project::m_scene->clear();
+                const std::string path = std::string("binTest.bscn");
+                Project::m_sceneSerializer->deserializeBinary(path);
+            }
+
             ImGui::EndMenu();
         }
 

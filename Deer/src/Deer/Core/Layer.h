@@ -11,6 +11,7 @@ namespace Deer {
 
 		virtual void onAttach() {}
 		virtual void onDetach() {}
+		virtual void onRender(Timestep delta) {}
 		virtual void onUpdate(Timestep delta) {}
 		virtual void onImGUI() {}
 		virtual void onEvent(Event& event) {}

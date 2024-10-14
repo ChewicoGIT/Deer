@@ -1,17 +1,12 @@
 #pragma once
+#include "Deer/Core/Core.h"
 #include "Deer/Core/Window.h"
 #include "Deer/Core/Layer.h"
 #include "Deer/Core/LayerStack.h"
-#include "Deer/Core/Core.h"
 #include "Deer/Core/Events/Event.h"
 #include "Deer/ImGui/ImGuiLayer.h"
 
 #include "Deer/Core/Events/ApplicationEvent.h"
-#include "Deer/Render/Shader.h"
-#include "Deer/Render/Buffer.h"
-#include "Deer/Render/VertexArray.h"
-#include "Deer/Render/Render.h"
-#include "Deer/Render/Camera.h"
 
 namespace Deer {
 	class Application

@@ -1,0 +1,201 @@
+{
+    "scene": {
+        "main_environment": {
+            "entities": [
+                {
+                    "id": 1,
+                    "name": "Scene Root",
+                    "transform": {
+                        "position": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 1.0
+                        }
+                    },
+                    "relationship": {
+                        "parentUID": 0,
+                        "childrensUIDs": [
+                            2,
+                            3,
+                            4,
+                            5
+                        ]
+                    },
+                    "hasMeshRenderComponent": false,
+                    "hasCameraComponent": false,
+                    "hasTextureBindingComponent": false
+                },
+                {
+                    "id": 2,
+                    "name": "Skull1",
+                    "transform": {
+                        "position": {
+                            "x": -1.1876044273376465,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 1.0
+                        }
+                    },
+                    "relationship": {
+                        "parentUID": 1,
+                        "childrensUIDs": []
+                    },
+                    "hasMeshRenderComponent": true,
+                    "meshRenderComponent": {
+                        "mesh": "assets/cube.obj",
+                        "shader": "assets/Shaders/SimpleShader.glsl"
+                    },
+                    "hasCameraComponent": false,
+                    "hasTextureBindingComponent": true,
+                    "textureBindingComponent": {
+                        "bindings": [
+                            {
+                                "texturePath": "assets/Skull.jpg",
+                                "bindingID": 0
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 3,
+                    "name": "Skull2",
+                    "transform": {
+                        "position": {
+                            "x": 4.1646552085876469,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 1.0
+                        }
+                    },
+                    "relationship": {
+                        "parentUID": 1,
+                        "childrensUIDs": []
+                    },
+                    "hasMeshRenderComponent": true,
+                    "meshRenderComponent": {
+                        "mesh": "assets/skull.obj",
+                        "shader": "assets/Shaders/SimpleShader.glsl"
+                    },
+                    "hasCameraComponent": false,
+                    "hasTextureBindingComponent": true,
+                    "textureBindingComponent": {
+                        "bindings": [
+                            {
+                                "texturePath": "assets/test_texture.png",
+                                "bindingID": 0
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 4,
+                    "name": "Skull2 (duplicated)",
+                    "transform": {
+                        "position": {
+                            "x": 1.608313798904419,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 1.0
+                        }
+                    },
+                    "relationship": {
+                        "parentUID": 1,
+                        "childrensUIDs": []
+                    },
+                    "hasMeshRenderComponent": true,
+                    "meshRenderComponent": {
+                        "mesh": "assets/skull.obj",
+                        "shader": "assets/Shaders/SimpleShader.glsl"
+                    },
+                    "hasCameraComponent": false,
+                    "hasTextureBindingComponent": true,
+                    "textureBindingComponent": {
+                        "bindings": [
+                            {
+                                "texturePath": "assets/Skull.jpg",
+                                "bindingID": 0
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 5,
+                    "name": "Camera",
+                    "transform": {
+                        "position": {
+                            "x": 1.266955018043518,
+                            "y": 1.3802015781402588,
+                            "z": 6.402083873748779
+                        },
+                        "scale": {
+                            "x": 0.9999963045120239,
+                            "y": 1.0,
+                            "z": 0.9999963045120239
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.9979519844055176,
+                            "z": 0.0,
+                            "w": 0.06396745890378952
+                        }
+                    },
+                    "relationship": {
+                        "parentUID": 1,
+                        "childrensUIDs": []
+                    },
+                    "hasMeshRenderComponent": false,
+                    "hasCameraComponent": true,
+                    "cameraComponent": {
+                        "aspect": 1.6891757249832154,
+                        "fov": 0.8116129636764526,
+                        "farZ": 100.0,
+                        "nearZ": 0.10000000149011612
+                    },
+                    "hasTextureBindingComponent": false
+                }
+            ],
+            "mainCameraUID": 5
+        }
+    }
+}
