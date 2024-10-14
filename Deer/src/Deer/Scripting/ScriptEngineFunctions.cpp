@@ -59,6 +59,13 @@ namespace Deer {
         entt.getComponent<TransformComponent>().scale = scale;
     }
 
+    uid getEntityParent(uid& entityUID) {
+        Ref<Environment>& m_environment = Project::m_scene->getMainEnviroment();
+        Entity& entt = m_environment->getEntity(entityUID);
+
+        return entt.getParentUID();
+    }
+
     void registerVec3(asIScriptEngine* engine) {
         engine->RegisterObjectType("Vec3", sizeof(glm::vec3), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<glm::vec3>());
 
@@ -120,6 +127,9 @@ namespace Deer {
     void registerEntity(asIScriptEngine* engine) {
         engine->RegisterObjectType("Entity", sizeof(unsigned int), asOBJ_VALUE | asOBJ_POD | asOBJ_APP_PRIMITIVE);
         engine->RegisterObjectProperty("Entity", "uint uid", 0);
+
+        engine->RegisterObjectMethod("Entity", "Entity getParent()", asFUNCTION(Deer::getEntityParent), asCALL_CDECL_OBJLAST);
+        
     }
 
     void registerDeerFunctions(asIScriptEngine* scriptEngine) {

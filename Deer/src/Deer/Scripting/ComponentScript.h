@@ -17,9 +17,11 @@ namespace Deer {
 		~ComponentScriptInstance();
 
 		void update();
+		void start();
 	private:
 		asIScriptObject* m_object;
 		asIScriptFunction* m_updateFunction;
+		asIScriptFunction* m_startFuction;
 
 		friend ScriptEngine;
 	};

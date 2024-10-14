@@ -33,6 +33,7 @@ namespace Deer {
 	}
 
 	void ScriptEngine::shutdownScriptEngine() {
+		m_componentScripts.clear();
 		m_scriptEngine->ShutDownAndRelease();
 	}
 
@@ -99,7 +100,9 @@ namespace Deer {
 		*entityValue = scriptEntity.getUID();
 	
 		asIScriptFunction* updateFunction = type->GetMethodByDecl("void update()");
+		asIScriptFunction* startFunction = type->GetMethodByDecl("void start()");
 		instance->m_updateFunction = updateFunction;
+		instance->m_startFuction = startFunction;
 		instance->m_object = obj;
 
 		return Ref<ComponentScriptInstance>(instance);

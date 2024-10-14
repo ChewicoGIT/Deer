@@ -7,6 +7,8 @@
 #include "DeerStudio/Editor/ViewportPannel.h"
 #include "DeerStudio/Editor/ActiveEntity.h"
 #include "DeerStudio/Editor/GamePannel.h"
+#include "Deer/Core/Project.h"
+#include "Deer/Scripting/ScriptEngine.h"
 
 #include "Deer/Asset/AssetManager.h"
 
@@ -151,7 +153,14 @@ namespace Deer {
             ImGui::EndMenu();
         }
 
-        if (ImGui::BeginMenu("Windows")) {
+        if (ImGui::BeginMenu("Scripts")) {
+            if (ImGui::MenuItem("Reload scripts")) {
+
+                Project::m_scriptEngine->shutdownScriptEngine();
+                Project::m_scriptEngine->initScriptEngine();
+                Project::m_scriptEngine->loadScripts(std::filesystem::path("scripts"));
+
+            }
 
             ImGui::EndMenu();
         }

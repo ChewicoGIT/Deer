@@ -27,6 +27,7 @@ namespace Deer {
 		app->run();
 		delete app;
 
+		Project::m_scriptEngine->shutdownScriptEngine();
 		Project::releaseBaseSystems();
 
 		DEER_CORE_TRACE("Shuting app");
