@@ -32,7 +32,6 @@ namespace Deer {
 		
 			componentScript.roeInstance->start();
 		}
-
 	}
 
 	void Scene::update() {

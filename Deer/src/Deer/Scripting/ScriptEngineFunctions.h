@@ -19,6 +19,7 @@ namespace Deer {
 
     // Entity Relationship ------------
     uid getEntityParent(uid& entityUID);
+    bool isEntityValid(uid& entityUID);
     // Entity Relationship ------------
 
     void registerVec3(asIScriptEngine* engine);

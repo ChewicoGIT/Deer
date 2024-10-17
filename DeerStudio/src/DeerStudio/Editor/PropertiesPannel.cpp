@@ -41,12 +41,13 @@ namespace Deer {
 			ImGui::Text(tag.tag.c_str());
 
 		ImGui::SameLine();
+		ImGui::Text("id : %u", tag.entityUID);
+
+		ImGui::SameLine();
 		addComponentContext();
 		ImGui::Dummy(ImVec2(0.0f, 10.0f));
 
-		if (collapsingComponentHeader<TransformComponent>("Transform Component", false))
-		{
-
+		if (collapsingComponentHeader<TransformComponent>("Transform Component", false)) {
 			auto& transform = activeEntity.getComponent<TransformComponent>();
 			ImGui::Dummy(ImVec2(0.0f, 10.0f));
 			ImGui::Indent();

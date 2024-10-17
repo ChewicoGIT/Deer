@@ -29,7 +29,7 @@
                             2,
                             6,
                             7,
-                            8
+                            5
                         ]
                     },
                     "hasMeshRenderComponent": false,
@@ -160,7 +160,7 @@
                         }
                     },
                     "relationship": {
-                        "parentUID": 8,
+                        "parentUID": 1,
                         "childrensUIDs": []
                     },
                     "hasMeshRenderComponent": true,
@@ -237,43 +237,11 @@
                     "hasMeshRenderComponent": false,
                     "hasCameraComponent": true,
                     "cameraComponent": {
-                        "aspect": 1.5240505933761597,
+                        "aspect": 1.4332425594329835,
                         "fov": 0.5714905858039856,
                         "farZ": 100.0,
                         "nearZ": 0.10000000149011612
                     },
-                    "hasTextureBindingComponent": false,
-                    "hasScriptComponent": false
-                },
-                {
-                    "id": 8,
-                    "name": "new entity",
-                    "transform": {
-                        "position": {
-                            "x": 0.0,
-                            "y": 0.0,
-                            "z": 0.0
-                        },
-                        "scale": {
-                            "x": 1.0,
-                            "y": 1.0,
-                            "z": 1.0
-                        },
-                        "rotation": {
-                            "x": 0.0,
-                            "y": 0.0,
-                            "z": 0.0,
-                            "w": 1.0
-                        }
-                    },
-                    "relationship": {
-                        "parentUID": 1,
-                        "childrensUIDs": [
-                            5
-                        ]
-                    },
-                    "hasMeshRenderComponent": false,
-                    "hasCameraComponent": false,
                     "hasTextureBindingComponent": false,
                     "hasScriptComponent": false
                 }
