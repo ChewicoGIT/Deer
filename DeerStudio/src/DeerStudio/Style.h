@@ -13,10 +13,10 @@ void SetupVSCodeStyle() {
     ImVec4* colors = ImGui::GetStyle().Colors;
 
     ImGuiStyle& style = ImGui::GetStyle();
-    style.WindowRounding = 5.0f;
-    style.FrameRounding = 4.0f;
-    style.GrabRounding = 4.0f;
-    style.ScrollbarRounding = 4.0f;
+    style.WindowRounding = 2.0f;
+    style.FrameRounding = 2.0f;
+    style.GrabRounding = 2.0f;
+    style.ScrollbarRounding = 2.0f;
 
     colors[ImGuiCol_Text] = ImVec4(0.86f, 0.86f, 0.86f, 1.00f);  // #CCCCCC
     colors[ImGuiCol_TextDisabled] = ImVec4(0.50f, 0.50f, 0.50f, 1.00f);  // #808080
