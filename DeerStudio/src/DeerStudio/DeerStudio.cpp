@@ -10,7 +10,7 @@
 class DeerStudioApplication : public Deer::Application {
 public:
 	DeerStudioApplication() 
-	: Application(Deer::WindowProps("Deer Studio")) {
+		: Application(Deer::WindowProps("Deer Studio")) {
 
 	}
 

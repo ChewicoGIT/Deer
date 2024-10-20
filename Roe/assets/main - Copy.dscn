@@ -98,7 +98,7 @@
                     },
                     "hasMeshRenderComponent": true,
                     "meshRenderComponent": {
-                        "mesh": "assets/cube.obj",
+                        "mesh": "assets/3dObjects/cube.obj",
                         "shader": "assets/Shaders/FancyShader.glsl"
                     },
                     "hasCameraComponent": false,
@@ -132,7 +132,7 @@
                     },
                     "hasMeshRenderComponent": true,
                     "meshRenderComponent": {
-                        "mesh": "assets/cube.obj",
+                        "mesh": "assets/3dObjects/cube.obj",
                         "shader": "assets/Shaders/FancyShader.glsl"
                     },
                     "hasCameraComponent": false,
@@ -166,12 +166,15 @@
                     },
                     "hasMeshRenderComponent": true,
                     "meshRenderComponent": {
-                        "mesh": "assets/cube.obj",
+                        "mesh": "assets/3dObjects/cube.obj",
                         "shader": "assets/Shaders/FancyShader.glsl"
                     },
                     "hasCameraComponent": false,
                     "hasTextureBindingComponent": false,
-                    "hasScriptComponent": false
+                    "hasScriptComponent": true,
+                    "scriptComponent": {
+                        "scriptID": "PlayerScript"
+                    }
                 },
                 {
                     "id": 6,
@@ -200,7 +203,7 @@
                     },
                     "hasMeshRenderComponent": true,
                     "meshRenderComponent": {
-                        "mesh": "assets/cube.obj",
+                        "mesh": "assets/3dObjects/cube.obj",
                         "shader": "assets/Shaders/FancyShader.glsl"
                     },
                     "hasCameraComponent": false,
@@ -238,7 +241,7 @@
                     "hasMeshRenderComponent": false,
                     "hasCameraComponent": true,
                     "cameraComponent": {
-                        "aspect": 1.7838104963302613,
+                        "aspect": 1.789162516593933,
                         "fov": 0.5714905858039856,
                         "farZ": 100.0,
                         "nearZ": 0.10000000149011612
@@ -273,12 +276,15 @@
                     },
                     "hasMeshRenderComponent": true,
                     "meshRenderComponent": {
-                        "mesh": "assets/cube.obj",
+                        "mesh": "assets/3dObjects/cube.obj",
                         "shader": "assets/Shaders/FancyShader.glsl"
                     },
                     "hasCameraComponent": false,
                     "hasTextureBindingComponent": false,
-                    "hasScriptComponent": false
+                    "hasScriptComponent": true,
+                    "scriptComponent": {
+                        "scriptID": "BallScript"
+                    }
                 }
             ],
             "mainCameraUID": 7

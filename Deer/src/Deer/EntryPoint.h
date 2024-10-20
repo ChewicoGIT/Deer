@@ -18,8 +18,8 @@ namespace Deer {
 
 		Application* app = createApplication(argc, argv);
 
-		Project::initializeBaseSystems();
 		RenderUtils::initializeRenderUtils();
+		Project::initializeBaseSystems();
 
 		Project::m_scriptEngine->initScriptEngine();
 		Project::m_scriptEngine->loadScripts(std::filesystem::path("scripts"));

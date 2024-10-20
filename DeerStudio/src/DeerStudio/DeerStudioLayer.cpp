@@ -27,7 +27,6 @@ namespace Deer {
         setNatureStyle();
 
         ImFont* font1 = io.Fonts->AddFontFromFileTTF("editor\\fonts\\OpenSans-VariableFont_wdth,wght.ttf", 19.0f);
-        //ImGui::PushFont(font1);
         ImGui_ImplOpenGL3_CreateFontsTexture();
 
         m_activeEntity = Ref<ActiveEntity>(new ActiveEntity());
@@ -134,20 +133,6 @@ namespace Deer {
 
             if (Project::m_sceneSerializer->getCurrentScenePath() != "_NO_INITIALIZED_" && ImGui::MenuItem("Save scene")) {
                 Project::m_sceneSerializer->serialize(Project::m_sceneSerializer->getCurrentScenePath());
-            }
-
-            if (Project::m_sceneSerializer->getCurrentScenePath() != "_NO_INITIALIZED_" && ImGui::MenuItem("Save Scene Binary")) {
-                m_activeEntity->clear();
-                Project::m_scene->clear();
-                const std::string path = std::string("binTest.bscn");
-                Project::m_sceneSerializer->serializeBinary(path);
-            }
-
-            if (ImGui::MenuItem("Load Scene Binary")) {
-                m_activeEntity->clear();
-                Project::m_scene->clear();
-                const std::string path = std::string("binTest.bscn");
-                Project::m_sceneSerializer->deserializeBinary(path);
             }
 
             ImGui::EndMenu();
