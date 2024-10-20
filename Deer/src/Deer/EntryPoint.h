@@ -21,8 +21,7 @@ namespace Deer {
 		RenderUtils::initializeRenderUtils();
 		Project::initializeBaseSystems();
 
-		Project::m_scriptEngine->initScriptEngine();
-		Project::m_scriptEngine->loadScripts(std::filesystem::path("scripts"));
+		Project::m_scriptEngine->initScriptEngine(std::filesystem::path("scripts"));
 
 		app->run();
 		delete app;
