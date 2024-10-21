@@ -23,18 +23,15 @@ namespace Deer {
 
 	class ScriptEngine {
 	public:
-		ScriptEngine() = default;
-
-		void initScriptEngine();
+		void initScriptEngine(const std::filesystem::path& scriptPath);
 		void shutdownScriptEngine();
 
-		//TEMP
 		void beginExecutionContext();
 		void endExecutionContext();
 
 		inline asIScriptContext* getExecutionContext() { return m_context; }
 
-		void loadScripts(const std::filesystem::path& scriptPath);
+		inline bool isScriptValid() { return m_isValid; }
 
 		inline ComponentScriptMap& getComponentScripts() { return m_componentScripts; }
 		inline ComponentScript& getComponentScript(const std::string& scriptID) { return m_componentScripts[scriptID]; }
@@ -44,10 +41,13 @@ namespace Deer {
 		asIScriptEngine* m_scriptEngine;
 		asIScriptModule* m_scriptModule;
 
+		bool m_isValid = false;
+
 		asIScriptContext* m_context;
 		ComponentScriptMap m_componentScripts;
 
 		void loadModuleFolder(const std::filesystem::path& modulePath, const char* moduleName);
+		void registerBaseComponents();
 	};
 }
 

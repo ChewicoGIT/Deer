@@ -7,6 +7,8 @@
 #include "DeerStudio/Editor/ViewportPannel.h"
 #include "DeerStudio/Editor/ActiveEntity.h"
 #include "DeerStudio/Editor/GamePannel.h"
+#include "Deer/Core/Project.h"
+#include "Deer/Scripting/ScriptEngine.h"
 
 #include "Deer/Asset/AssetManager.h"
 
@@ -25,7 +27,6 @@ namespace Deer {
         setNatureStyle();
 
         ImFont* font1 = io.Fonts->AddFontFromFileTTF("editor\\fonts\\OpenSans-VariableFont_wdth,wght.ttf", 19.0f);
-        //ImGui::PushFont(font1);
         ImGui_ImplOpenGL3_CreateFontsTexture();
 
         m_activeEntity = Ref<ActiveEntity>(new ActiveEntity());
@@ -42,7 +43,6 @@ namespace Deer {
         pannels.push_back(m_viewportPannel);
         pannels.push_back(m_assetPannel);
         pannels.push_back(m_gamePannel);
-
     }
 
     void DeerStudioLayer::onRender(Timestep delta) {
@@ -134,24 +134,14 @@ namespace Deer {
                 Project::m_sceneSerializer->serialize(Project::m_sceneSerializer->getCurrentScenePath());
             }
 
-            if (Project::m_sceneSerializer->getCurrentScenePath() != "_NO_INITIALIZED_" && ImGui::MenuItem("Save Scene Binary")) {
-                m_activeEntity->clear();
-                Project::m_scene->clear();
-                const std::string path = std::string("binTest.bscn");
-                Project::m_sceneSerializer->serializeBinary(path);
-            }
-
-            if (ImGui::MenuItem("Load Scene Binary")) {
-                m_activeEntity->clear();
-                Project::m_scene->clear();
-                const std::string path = std::string("binTest.bscn");
-                Project::m_sceneSerializer->deserializeBinary(path);
-            }
-
             ImGui::EndMenu();
         }
 
-        if (ImGui::BeginMenu("Windows")) {
+        if (ImGui::BeginMenu("Scripts")) {
+            if (ImGui::MenuItem("Reload scripts") && !Project::m_scene->getExecutingState()) {
+                Project::m_scriptEngine->shutdownScriptEngine();
+                Project::m_scriptEngine->initScriptEngine(std::filesystem::path("scripts"));
+            }
 
             ImGui::EndMenu();
         }

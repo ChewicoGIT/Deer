@@ -17,7 +17,6 @@
 #include <shellapi.h>
 
 namespace Deer {
-
     void openFileExplorer(const std::string& relativePath) {
         // Convert std::string to std::wstring
         std::wstring widePath(relativePath.begin(), relativePath.end());

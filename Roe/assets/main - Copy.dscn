@@ -27,9 +27,10 @@
                         "parentUID": 0,
                         "childrensUIDs": [
                             2,
-                            5,
                             6,
-                            7
+                            7,
+                            5,
+                            9
                         ]
                     },
                     "hasMeshRenderComponent": false,
@@ -82,7 +83,7 @@
                         "scale": {
                             "x": 10.0,
                             "y": 0.25,
-                            "z": 1.0
+                            "z": 0.25
                         },
                         "rotation": {
                             "x": 0.0,
@@ -97,8 +98,8 @@
                     },
                     "hasMeshRenderComponent": true,
                     "meshRenderComponent": {
-                        "mesh": "assets/cube.obj",
-                        "shader": "assets/shaders/BasicShader.glsl"
+                        "mesh": "assets/3dObjects/cube.obj",
+                        "shader": "assets/Shaders/FancyShader.glsl"
                     },
                     "hasCameraComponent": false,
                     "hasTextureBindingComponent": false,
@@ -116,7 +117,7 @@
                         "scale": {
                             "x": 10.0,
                             "y": 0.25,
-                            "z": 1.0
+                            "z": 0.25
                         },
                         "rotation": {
                             "x": 0.0,
@@ -131,8 +132,8 @@
                     },
                     "hasMeshRenderComponent": true,
                     "meshRenderComponent": {
-                        "mesh": "assets/cube.obj",
-                        "shader": "assets/shaders/BasicShader.glsl"
+                        "mesh": "assets/3dObjects/cube.obj",
+                        "shader": "assets/Shaders/FancyShader.glsl"
                     },
                     "hasCameraComponent": false,
                     "hasTextureBindingComponent": false,
@@ -140,17 +141,17 @@
                 },
                 {
                     "id": 5,
-                    "name": "Player",
+                    "name": "Enemy",
                     "transform": {
                         "position": {
                             "x": 9.0,
-                            "y": 5.650000095367432,
+                            "y": 5.0,
                             "z": 0.0
                         },
                         "scale": {
                             "x": 0.25,
                             "y": 1.0,
-                            "z": 0.5
+                            "z": 0.25
                         },
                         "rotation": {
                             "x": 0.0,
@@ -165,8 +166,8 @@
                     },
                     "hasMeshRenderComponent": true,
                     "meshRenderComponent": {
-                        "mesh": "assets/cube.obj",
-                        "shader": "assets/shaders/BasicShader.glsl"
+                        "mesh": "assets/3dObjects/cube.obj",
+                        "shader": "assets/Shaders/FancyShader.glsl"
                     },
                     "hasCameraComponent": false,
                     "hasTextureBindingComponent": false,
@@ -177,7 +178,7 @@
                 },
                 {
                     "id": 6,
-                    "name": "Enemy",
+                    "name": "Player",
                     "transform": {
                         "position": {
                             "x": -9.0,
@@ -187,7 +188,7 @@
                         "scale": {
                             "x": 0.25,
                             "y": 1.0,
-                            "z": 0.5
+                            "z": 0.25
                         },
                         "rotation": {
                             "x": 0.0,
@@ -202,12 +203,15 @@
                     },
                     "hasMeshRenderComponent": true,
                     "meshRenderComponent": {
-                        "mesh": "assets/cube.obj",
-                        "shader": "assets/shaders/BasicShader.glsl"
+                        "mesh": "assets/3dObjects/cube.obj",
+                        "shader": "assets/Shaders/FancyShader.glsl"
                     },
                     "hasCameraComponent": false,
                     "hasTextureBindingComponent": false,
-                    "hasScriptComponent": false
+                    "hasScriptComponent": true,
+                    "scriptComponent": {
+                        "scriptID": "PlayerScript"
+                    }
                 },
                 {
                     "id": 7,
@@ -216,7 +220,7 @@
                         "position": {
                             "x": -3.5067137105215809e-7,
                             "y": 5.0,
-                            "z": 25.0
+                            "z": -25.0
                         },
                         "scale": {
                             "x": 0.9999988079071045,
@@ -224,10 +228,10 @@
                             "z": 0.9999988079071045
                         },
                         "rotation": {
-                            "x": -4.371138828673793e-8,
-                            "y": 1.0,
-                            "z": -4.371138828673793e-8,
-                            "w": 1.910685465164705e-15
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 1.0
                         }
                     },
                     "relationship": {
@@ -237,13 +241,50 @@
                     "hasMeshRenderComponent": false,
                     "hasCameraComponent": true,
                     "cameraComponent": {
-                        "aspect": 1.4662004709243775,
+                        "aspect": 1.789162516593933,
                         "fov": 0.5714905858039856,
                         "farZ": 100.0,
                         "nearZ": 0.10000000149011612
                     },
                     "hasTextureBindingComponent": false,
                     "hasScriptComponent": false
+                },
+                {
+                    "id": 9,
+                    "name": "Ball",
+                    "transform": {
+                        "position": {
+                            "x": 0.0,
+                            "y": 5.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 0.25,
+                            "y": 0.25,
+                            "z": 0.25
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 1.0
+                        }
+                    },
+                    "relationship": {
+                        "parentUID": 1,
+                        "childrensUIDs": []
+                    },
+                    "hasMeshRenderComponent": true,
+                    "meshRenderComponent": {
+                        "mesh": "assets/3dObjects/cube.obj",
+                        "shader": "assets/Shaders/FancyShader.glsl"
+                    },
+                    "hasCameraComponent": false,
+                    "hasTextureBindingComponent": false,
+                    "hasScriptComponent": true,
+                    "scriptComponent": {
+                        "scriptID": "BallScript"
+                    }
                 }
             ],
             "mainCameraUID": 7

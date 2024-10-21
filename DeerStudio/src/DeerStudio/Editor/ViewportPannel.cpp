@@ -15,7 +15,7 @@ namespace Deer {
 		: m_environment(enviroment), m_windowName(windowName), m_activeEntity(activeEntity) {
 
         m_frameBuffer = FrameBuffer::create(FrameBufferSpecification(100, 100, { TextureBufferType::RGBA8, TextureBufferType::RED_INTEGER}, 1, false));
-        m_virtualCamera.transform.position = glm::vec3(0, 0, -3);
+        m_virtualCamera.transform.position = glm::vec3(0, 10, -20);
 	}
 
 	void ViewportPannel::onImGui() {

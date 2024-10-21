@@ -13,9 +13,8 @@ uniform mat4 u_worldMatrix;
 
 void main()
 {
-	//gl_Position = vec4(a_position, 1.0) * u_projectionMatrix * u_viewMatrix;
 	gl_Position = u_viewMatrix * u_worldMatrix * vec4(a_position,1.0);
-
+	
 	mat3 normalMatrix = transpose(inverse(mat3(u_worldMatrix)));
 	vec3 transformedNormal = normalize(normalMatrix * a_normal);
 
@@ -32,12 +31,12 @@ layout(location = 1) out int objectID;
 in vec2 textCoord;
 in vec3 worldNormal;
 
-uniform sampler2D u_texture;
 uniform int u_objectID;
 
 void main()
 {
-	float v = clamp(dot(worldNormal, normalize(vec3(1,2,-3))), 0.1, 1.0);
-	fragColor = texture(u_texture, textCoord) * v;
+	float light = clamp(dot(worldNormal, normalize(vec3(1,2,3))), 0.1, 1.0);
+	
+	fragColor = vec4(.7, .8, .9, 1.0);
     objectID = u_objectID;
 }

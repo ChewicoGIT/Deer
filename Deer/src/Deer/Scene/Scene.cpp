@@ -29,8 +29,9 @@ namespace Deer {
 
 			Entity& entity = m_enviroment->getEntity(tagComponent.entityUID);
 			componentScript.roeInstance = Project::m_scriptEngine->createComponentScriptInstance(componentScript.scriptID, entity);
+		
+			componentScript.roeInstance->start();
 		}
-
 	}
 
 	void Scene::update() {

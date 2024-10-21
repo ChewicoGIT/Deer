@@ -32,6 +32,11 @@ namespace Deer {
     }
 
     glm::vec3 getEntityPosition(uid& entityUID) {
+        if (entityUID == 0 || entityUID == 1) {
+            DEER_SCRIPT_ERROR("Entity is not invalid");
+            return glm::vec3();
+        }
+
         Ref<Environment>& m_environment = Project::m_scene->getMainEnviroment();
         Entity& entt = m_environment->getEntity(entityUID);
 
@@ -39,6 +44,11 @@ namespace Deer {
     }
 
     void setEntityPosition(glm::vec3 position, uid& entityUID) {
+        if (entityUID == 0 || entityUID == 1) {
+            DEER_SCRIPT_ERROR("Entity is not invalid");
+            return;
+        }
+
         Ref<Environment>& m_environment = Project::m_scene->getMainEnviroment();
         Entity& entt = m_environment->getEntity(entityUID);
 
@@ -46,6 +56,11 @@ namespace Deer {
     }
 
     glm::vec3 getEntityScale(uid& entityUID) {
+        if (entityUID == 0 || entityUID == 1) {
+            DEER_SCRIPT_ERROR("Entity is not invalid");
+            return glm::vec3();
+        }
+
         Ref<Environment>& m_environment = Project::m_scene->getMainEnviroment();
         Entity& entt = m_environment->getEntity(entityUID);
 
@@ -53,10 +68,37 @@ namespace Deer {
     }
 
     void setEntityScale(glm::vec3 scale, uid& entityUID) {
+        if (entityUID == 0 || entityUID == 1) {
+            DEER_SCRIPT_ERROR("Entity is not invalid");
+            return;
+        }
+
         Ref<Environment>& m_environment = Project::m_scene->getMainEnviroment();
         Entity& entt = m_environment->getEntity(entityUID);
 
         entt.getComponent<TransformComponent>().scale = scale;
+    }
+
+    uid getEntityParent(uid& entityUID) {
+        if (entityUID == 0 || entityUID == 1) {
+            DEER_SCRIPT_ERROR("Entity is not invalid");
+            return 0;
+        }
+
+        Ref<Environment>& m_environment = Project::m_scene->getMainEnviroment();
+        Entity& entt = m_environment->getEntity(entityUID);
+
+        return entt.getParentUID();
+    }
+
+    bool isEntityValid(uid& entityUID) {
+        if (entityUID == 0 || entityUID == 1)
+            return false;
+
+        Ref<Environment>& m_environment = Project::m_scene->getMainEnviroment();
+        Entity& entt = m_environment->getEntity(entityUID);
+
+        return entt.isValid();
     }
 
     void registerVec3(asIScriptEngine* engine) {
@@ -120,6 +162,14 @@ namespace Deer {
     void registerEntity(asIScriptEngine* engine) {
         engine->RegisterObjectType("Entity", sizeof(unsigned int), asOBJ_VALUE | asOBJ_POD | asOBJ_APP_PRIMITIVE);
         engine->RegisterObjectProperty("Entity", "uint uid", 0);
+
+        engine->RegisterObjectMethod("Entity", "Entity getParent()", asFUNCTION(Deer::getEntityParent), asCALL_CDECL_OBJLAST);
+        engine->RegisterObjectMethod("Entity", "bool isValid()", asFUNCTION(Deer::isEntityValid), asCALL_CDECL_OBJLAST);
+
+        engine->RegisterGlobalFunction("Entity getEntity(uint)", asFUNCTIONPR([](uid id) {
+            return id;
+            }, (uid), uid), asCALL_CDECL);
+
     }
 
     void registerDeerFunctions(asIScriptEngine* scriptEngine) {
