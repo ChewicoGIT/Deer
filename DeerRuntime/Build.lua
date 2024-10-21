@@ -1,4 +1,4 @@
-project "DeerStudio"
+project "DeerRuntime"
    kind "ConsoleApp"
    language "C++"
    cppdialect "C++20"

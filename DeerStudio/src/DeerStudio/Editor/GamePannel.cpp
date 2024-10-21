@@ -31,13 +31,13 @@ namespace Deer {
                 if (Project::m_scriptEngine->isScriptValid() && ImGui::Button("Execute")) {
                     m_activeEntity->clear();
                     Project::m_sceneSerializer->serializeBinary("temp_scene.dbscn");
-                    Project::m_scene->execute();
+                    Project::m_scene->beginExecution();
                 }
             }
             else {
                 if (ImGui::Button("Stop")) {
                     m_activeEntity->clear();
-                    Project::m_scene->stop();
+                    Project::m_scene->endExecution();
                     Project::m_sceneSerializer->deserializeBinary("temp_scene.dbscn");
                 }
             }
@@ -71,7 +71,7 @@ namespace Deer {
         Project::m_scene->render();
         m_frameBuffer->unbind();
 
-        ImGui::Image((void*)m_frameBuffer->getTextureBufferID(0), windowSize);
+        ImGui::Image((void*)m_frameBuffer->getTextureBufferID(0), windowSize, ImVec2(0, 1), ImVec2(1, 0));
 
         ImGui::SetCursorPos(cursorPos);
 
@@ -79,13 +79,13 @@ namespace Deer {
             if (Project::m_scriptEngine->isScriptValid() && ImGui::Button("Execute")) {
                 m_activeEntity->clear();
                 Project::m_sceneSerializer->serializeBinary("temp_scene.dbscn");
-                Project::m_scene->execute();
+                Project::m_scene->beginExecution();
             }
         }
         else {
             if (ImGui::Button("Stop")) {
                 m_activeEntity->clear();
-                Project::m_scene->stop();
+                Project::m_scene->endExecution();
                 Project::m_sceneSerializer->deserializeBinary("temp_scene.dbscn");
             }
         }

@@ -56,7 +56,7 @@ namespace Deer {
 
     void DeerStudioLayer::onUpdate(Timestep delta) {
         if (Project::m_scene->getExecutingState())
-            Project::m_scene->update();
+            Project::m_scene->updateExecution();
     }
 
     void DeerStudioLayer::loadScene() {

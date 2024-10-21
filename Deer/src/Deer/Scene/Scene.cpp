@@ -14,7 +14,7 @@ namespace Deer {
 		DEER_CORE_TRACE("Destroying scene");
 	}
 
-	void Scene::execute() {
+	void Scene::beginExecution() {
 		DEER_CORE_ASSERT(!m_isExecuting, "Deer scene is already executing");
 		m_isExecuting = true;
 
@@ -34,16 +34,16 @@ namespace Deer {
 		}
 	}
 
-	void Scene::update() {
+	void Scene::updateExecution() {
 		// Update all scripts
 		auto view = m_enviroment->m_registry.view<ScriptComponent>();
 		for (auto& entID : view) {
 			auto& componentScript = view.get<ScriptComponent>(entID);
-			componentScript.roeInstance->update();
+			componentScript.roeInstance->updateExecution();
 		}
 	}
 
-	void Scene::stop() {
+	void Scene::endExecution() {
 		DEER_CORE_ASSERT(m_isExecuting, "Deer scene is not executing");
 		m_isExecuting = false;
 

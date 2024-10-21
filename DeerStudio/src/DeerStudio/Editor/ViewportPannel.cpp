@@ -49,7 +49,7 @@ namespace Deer {
 
         m_environment->render(m_virtualCamera);
 
-        ImGui::Image((void*)m_frameBuffer->getTextureBufferID(0), windowSize);
+        ImGui::Image((void*)m_frameBuffer->getTextureBufferID(0), windowSize, ImVec2(0, 1), ImVec2(1, 0));
         bool isUsingDrawGizmo = drawGizmos(pos.x, pos.y, windowSize.x, windowSize.y);
 
         if (!isUsingDrawGizmo && m_handleClick) {
@@ -57,7 +57,7 @@ namespace Deer {
 
             ImVec2 mPos = ImGui::GetMousePos();
             relativeX = mPos.x - pos.x;
-            relativeY = mPos.y - pos.y;
+            relativeY = windowSize.y - (mPos.y - pos.y);
 
             if (relativeX >= 0 && relativeX < windowSize.x &&
                 relativeY >= 0 && relativeY < windowSize.y) {

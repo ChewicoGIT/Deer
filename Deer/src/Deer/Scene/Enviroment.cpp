@@ -52,10 +52,9 @@ namespace Deer {
 		glm::mat4 camMatrix = glm::inverse(camera.getWorldMatrix());
 		glm::mat4 projectionMatrix = cameraComponent.getMatrix();
 		glm::mat4 invertZ = glm::scale(glm::mat4(1.0f), glm::vec3(1, 1, -1));
-		glm::mat4 invertY = glm::scale(glm::mat4(1.0f), glm::vec3(1, -1, 1));
 		
 		// Invert the z axis for engine convenience
-		glm::mat4 cameraProjectionMatrix = invertY * projectionMatrix * invertZ * camMatrix;
+		glm::mat4 cameraProjectionMatrix = projectionMatrix * invertZ * camMatrix;
 
 		{
 			auto view = m_registry.view<MeshRenderComponent, TagComponent>();
@@ -105,10 +104,9 @@ namespace Deer {
 		glm::mat4 camMatrix = glm::inverse(camera.transform.getMatrix());
 		glm::mat4 projectionMatrix = camera.camera.getMatrix();
 		glm::mat4 invertZ = glm::scale(glm::mat4(1.0f), glm::vec3(1, 1, -1));
-		glm::mat4 invertY = glm::scale(glm::mat4(1.0f), glm::vec3(1, -1, 1));
 
 		// Lets invert the z axis for engine convenience
-		glm::mat4 cameraProjectionMatrix = invertY * projectionMatrix * invertZ * camMatrix;
+		glm::mat4 cameraProjectionMatrix = projectionMatrix * invertZ * camMatrix;
 		{
 			auto view = m_registry.view<MeshRenderComponent, TagComponent>();
 			for (auto entityId : view) {

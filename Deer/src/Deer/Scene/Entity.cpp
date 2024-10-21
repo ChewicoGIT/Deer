@@ -111,7 +111,7 @@ namespace Deer {
 		return getComponent<TransformComponent>().getMatrix();
 	}
 
-	void Entity::update() {
+	void Entity::updateExecution() {
 		TagComponent& tag = getComponent<TagComponent>();
 		RelationshipComponent& relation = getComponent<RelationshipComponent>();
 
