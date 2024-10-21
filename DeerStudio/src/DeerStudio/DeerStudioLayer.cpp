@@ -43,7 +43,6 @@ namespace Deer {
         pannels.push_back(m_viewportPannel);
         pannels.push_back(m_assetPannel);
         pannels.push_back(m_gamePannel);
-
     }
 
     void DeerStudioLayer::onRender(Timestep delta) {

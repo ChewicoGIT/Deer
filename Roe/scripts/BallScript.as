@@ -46,7 +46,7 @@ class BallScript : ComponentScript {
             }
         }
         
-        Vec3 nextPos = currentPos + direction * 0.08f;
+        Vec3 nextPos = currentPos + direction * 0.14f;
         entity.setPosition(nextPos);
 
         if (abs(nextPos.x) > 10)
@@ -57,12 +57,10 @@ class BallScript : ComponentScript {
         Vec3 ballEntDir = entity.getPosition() - col.getPosition();
         direction = ballEntDir.normalize();
 
-        if (abs(direction.x) < .7f) {
             if (direction.x > 0)
-                direction.x = 0.7f;
+                direction.x = 1;
             else
-                direction.x = -0.7f;
-        }
+                direction.x = -1;
 
     }
 
