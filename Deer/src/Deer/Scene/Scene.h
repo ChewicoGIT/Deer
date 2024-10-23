@@ -10,9 +10,9 @@ namespace Deer {
 		Scene();
 		~Scene();
 
-		void execute();
-		void update();
-		void stop();
+		void beginExecution();
+		void updateExecution();
+		void endExecution();
 
 		void render();
 		void clear();

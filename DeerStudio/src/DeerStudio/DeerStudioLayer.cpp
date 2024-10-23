@@ -43,7 +43,6 @@ namespace Deer {
         pannels.push_back(m_viewportPannel);
         pannels.push_back(m_assetPannel);
         pannels.push_back(m_gamePannel);
-
     }
 
     void DeerStudioLayer::onRender(Timestep delta) {
@@ -57,7 +56,7 @@ namespace Deer {
 
     void DeerStudioLayer::onUpdate(Timestep delta) {
         if (Project::m_scene->getExecutingState())
-            Project::m_scene->update();
+            Project::m_scene->updateExecution();
     }
 
     void DeerStudioLayer::loadScene() {

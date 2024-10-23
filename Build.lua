@@ -19,6 +19,10 @@ include "Deer/vendor/imgui/Build.lua"
 include "Deer/vendor/angelScript/Build.lua"
 group ""
 
+group "Runtime"
+include "DeerRuntime/Build.lua"
+group ""
+
 group "Studio"
 include "DeerStudio/Build.lua"
 group ""

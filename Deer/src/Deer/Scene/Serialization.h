@@ -251,7 +251,7 @@ namespace Deer {
             archive(cereal::make_nvp("scriptComponent", scriptComponent));
         }
 
-        m_entity.update();
+        m_entity.updateExecution();
     }
 
     template<class Archive>

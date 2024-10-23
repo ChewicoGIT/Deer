@@ -74,11 +74,11 @@ namespace Deer {
                 RenderCommand::setClearColor({ 0.2f, 0.2f, 0.3f, 1.0f });
                 RenderCommand::clear();
 
-                Render::execute();
+                Render::beginExecution();
                 for (auto it : m_layerStack) {
                     it->onRender(Timestep((float)targetRenderTime));
                 }
-                Render::stop();
+                Render::endExecution();
 
                 ImGuiIO& io = ImGui::GetIO();
                 io.DeltaTime = (float)targetRenderTime;
