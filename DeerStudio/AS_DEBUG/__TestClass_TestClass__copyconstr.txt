@@ -1,0 +1,22 @@
+TestClass::TestClass(const TestClass&inout)
+
+Temps: 1
+
+Variables: 
+ -002: const TestClass& other
+ 001: int 
+ 000: TestClass this
+
+
+- 3,8 -
+               VarDecl  0
+    0   1 *    SUSPEND
+    1   1 *    LoadRObjR v-2, v36, 134217745
+    4   1 *    RDR4     v1
+    5   1 *    LoadThisR v36, 134217745
+    7   1 *    WRTV4    v1
+    8   1 *    PshVPtr  v-2
+    9   3 *    PshVPtr  v0
+   10   5 *    CALL     101           (ComponentScript::ComponentScript(const ComponentScript&inout))
+            0:
+   12   1 *    RET      2

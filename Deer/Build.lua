@@ -12,7 +12,7 @@ project "Deer"
    "vendor/stb/stb_image.cpp"
    }
 
-   links { "spdlog", "GLFW", "glad", "ImGui" } 
+   links { "spdlog", "GLFW", "glad", "ImGui", "angelScript" } 
 
    includedirs
    {
@@ -26,7 +26,8 @@ project "Deer"
 	  "vendor/ImGuizmo",
 	  "vendor/entt/include",
 	  "vendor/cereal/include",
-	  "vendor/objload/include/objload"
+	  "vendor/objload/include/objload",
+	  "vendor/angelScript/include"
    }
 
    targetdir ("../bin/" .. OutputDir .. "/%{prj.name}")

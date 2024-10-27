@@ -1,0 +1,11 @@
+AnotherClass::AnotherClass()
+
+Temps: 
+
+Variables: 
+ 000: AnotherClass this
+
+
+    0   0 *    PshVPtr  v0
+    1   2 *    CALL     99           (ComponentScript::ComponentScript())
+    3   0 *    RET      2

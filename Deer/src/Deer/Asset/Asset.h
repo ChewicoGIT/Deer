@@ -1,5 +1,6 @@
 #pragma once
 #include "Deer/Core/Core.h"
+#include "Deer/Core/Log.h"
 
 #include <string>
 #include <filesystem>
@@ -11,7 +12,12 @@ namespace Deer {
 		Asset() : m_assetID(0), m_assetLocation("null") { }
 		Asset(uid id, const std::filesystem::path& assetLocation)
 			: m_assetID(id), m_assetLocation(assetLocation) {
-			value = T::create(assetLocation.generic_string());
+			try {
+				value = T::create(assetLocation.generic_string());
+			}
+			catch (const std::string& error){
+				DEER_CORE_ERROR("Error to load asset {0}\n{1}", assetLocation.generic_string().c_str(), error.c_str());
+			}
 		}
 
 		inline uid getAssetID() const { return m_assetID; }

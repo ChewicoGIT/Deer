@@ -10,14 +10,18 @@ namespace Deer {
 		Scene();
 		~Scene();
 
+		void beginExecution();
+		void updateExecution();
+		void endExecution();
+
 		void render();
 		void clear();
 
 		inline Ref<Environment>& getMainEnviroment() { return m_enviroment; }
+		inline bool getExecutingState() { return m_isExecuting; }
 	private:
 		Ref<Environment> m_enviroment;
-		// Chunk world -- saved in a bin file
-
+		bool m_isExecuting = false;
 	};
 }
 

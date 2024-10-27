@@ -1,0 +1,43 @@
+Vec3 Vec3::opSub(const Vec3&in) const
+
+Temps: 1, 2, 3, 4, 6
+
+Variables: 
+ -002: const Vec3& other
+ 001: const int 
+ 002: const int 
+ 003: const int 
+ 004: const int 
+ 006: (heap) Vec3@ 
+ 000: Vec3 this
+
+
+- 16,9 -
+               VarDecl  0
+    0   6 *    SUSPEND
+    1   6 *    LoadThisR v40, 134217744
+    3   6 *    RDR4     v1
+    4   6 *    LoadRObjR v-2, v40, 134217744
+    7   6 *    RDR4     v2
+    8   6 *    SUBf     v1, v1, v2
+   10   6 *    PshV4    v1
+   11   7 *    LoadThisR v36, 134217744
+   13   7 *    RDR4     v2
+   14   7 *    LoadRObjR v-2, v36, 134217744
+   17   7 *    RDR4     v3
+   18   7 *    SUBf     v2, v2, v3
+   20   7 *    PshV4    v2
+   21   8 *    LoadThisR v32, 134217744
+   23   8 *    RDR4     v3
+   24   8 *    LoadRObjR v-2, v32, 134217744
+   27   8 *    RDR4     v4
+   28   8 *    SUBf     v3, v3, v4
+   30   8 *    PshV4    v3
+   31   9 *    CALL     108           (Vec3@ Vec3(float = 0, float = 0, float = 0))
+   33   6 *    STOREOBJ v6
+   34   6 *    ChkNullV v6
+            {
+            }
+   35   6 *    LOADOBJ  v6
+            0:
+   36   6 *    RET      4

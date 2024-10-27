@@ -21,7 +21,7 @@ namespace Deer {
 	public:
 		virtual ~Window() = default;
 
-		virtual void onUpdate() = 0;
+		virtual void onRender() = 0;
 		virtual void clear() = 0;
 
 		inline virtual int getWitdth() const = 0;

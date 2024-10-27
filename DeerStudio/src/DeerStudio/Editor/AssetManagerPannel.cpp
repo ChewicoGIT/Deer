@@ -3,7 +3,11 @@
 #include "Deer/Core/Project.h"
 #include "Deer/Render/Texture.h"
 #include "Deer/Scene/SceneSerializer.h"
+#include "Deer/Asset/AssetManager.h"
 #include "DeerStudio/Editor/ActiveEntity.h"
+
+#include "Deer/Core/Project.h"
+
 #include "imgui.h"
 
 #include <string>
@@ -13,7 +17,6 @@
 #include <shellapi.h>
 
 namespace Deer {
-
     void openFileExplorer(const std::string& relativePath) {
         // Convert std::string to std::wstring
         std::wstring widePath(relativePath.begin(), relativePath.end());
@@ -26,8 +29,8 @@ namespace Deer {
 
     namespace fs = std::filesystem;
 
-    AssetManagerPannel::AssetManagerPannel(Ref<SceneSerializer> sceneSerializer, Ref<ActiveEntity> activeEntity)
-        : m_currentPath("assets"), m_sceneSerializer(sceneSerializer), m_activeEntity(activeEntity){
+    AssetManagerPannel::AssetManagerPannel(Ref<ActiveEntity> activeEntity)
+        : m_currentPath("assets"), m_activeEntity(activeEntity){
 
         m_folderIcon = Texture2D::create("editor/icons/folder.png");
         m_fileIcon = Texture2D::create("editor/icons/file.png");
@@ -126,10 +129,10 @@ namespace Deer {
             ImGui::Image((void*)m_scneIcon->getTextureID(), ImVec2(m_iconMinSize, m_iconMinSize), ImVec2(0, 1), ImVec2(1, 0));
 
             // Open scene
-            if (ImGui::IsItemClicked(0) && ImGui::IsMouseDoubleClicked(0)) {
+            if (ImGui::IsItemClicked(0) && ImGui::IsMouseDoubleClicked(0) && !Project::m_sceneSerializer->getSceneExecutingState()) {
                 try {
-                    m_sceneSerializer->deserialize(path.string());
                     m_activeEntity->clear();
+                    Project::m_sceneSerializer->deserialize(path.string());
                     m_currentScenePath = path;
                 }
                 catch ( ... ) {
@@ -155,8 +158,8 @@ namespace Deer {
                 ImGui::EndDragDropSource();
             }
         } else if (extension == ".png" || extension == ".jpg" || extension == ".jpeg") {
-            uid textureID = Project::m_assetManager.loadAsset<Texture2D>(path.string());
-            Asset<Texture2D>& textureAsset = Project::m_assetManager.getAsset<Texture2D>(textureID);
+            uid textureID = Project::m_assetManager->loadAsset<Texture2D>(path.string());
+            Asset<Texture2D>& textureAsset = Project::m_assetManager->getAsset<Texture2D>(textureID);
 
             ImGui::Image((void*)textureAsset.value->getTextureID(), ImVec2(m_iconMinSize, m_iconMinSize), ImVec2(0, 1), ImVec2(1, 0));
         

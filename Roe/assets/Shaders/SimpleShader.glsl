@@ -37,7 +37,7 @@ uniform int u_objectID;
 
 void main()
 {
-	float v = clamp(dot(worldNormal, normalize(vec3(1,2,3))), 0.1, 1.0);
+	float v = clamp(dot(worldNormal, normalize(vec3(1,2,-3))), 0.1, 1.0);
 	fragColor = texture(u_texture, textCoord) * v;
     objectID = u_objectID;
 }

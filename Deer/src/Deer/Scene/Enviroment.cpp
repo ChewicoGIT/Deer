@@ -1,6 +1,7 @@
 #include "Enviroment.h"
 #include "Deer/Core/Application.h"
 #include "Deer/Core/Project.h"
+#include "Deer/Asset/AssetManager.h"
 #include "Deer/Scene/Entity.h"
 #include "Deer/Scene/Components.h"
 #include "Deer/Render/Render.h"
@@ -51,10 +52,9 @@ namespace Deer {
 		glm::mat4 camMatrix = glm::inverse(camera.getWorldMatrix());
 		glm::mat4 projectionMatrix = cameraComponent.getMatrix();
 		glm::mat4 invertZ = glm::scale(glm::mat4(1.0f), glm::vec3(1, 1, -1));
-		glm::mat4 invertY = glm::scale(glm::mat4(1.0f), glm::vec3(1, -1, 1));
 		
 		// Invert the z axis for engine convenience
-		glm::mat4 cameraProjectionMatrix = invertY * projectionMatrix * invertZ * camMatrix;
+		glm::mat4 cameraProjectionMatrix = projectionMatrix * invertZ * camMatrix;
 
 		{
 			auto view = m_registry.view<MeshRenderComponent, TagComponent>();
@@ -76,20 +76,20 @@ namespace Deer {
 						if (textureBinding.textureAssetID[x] == 0)
 							continue;
 
-						Asset<Texture2D>& textureAsset = Project::m_assetManager.getAsset<Texture2D>(textureBinding.textureAssetID[x]);
+						Asset<Texture2D>& textureAsset = Project::m_assetManager->getAsset<Texture2D>(textureBinding.textureAssetID[x]);
 						textureAsset.value->bind(textureBinding.textureBindID[x]);
 					}
 				}
 
 				glm::mat4 matrix = entity.getWorldMatrix();
-				Asset<Shader>& shaderAsset = Project::m_assetManager.getAsset<Shader>(meshRender.shaderAssetID);
+				Asset<Shader>& shaderAsset = Project::m_assetManager->getAsset<Shader>(meshRender.shaderAssetID);
 				shaderAsset.value->bind();
 				shaderAsset.value->uploadUniformMat4("u_viewMatrix", cameraProjectionMatrix);
 				shaderAsset.value->uploadUniformMat4("u_worldMatrix", matrix);
 
 				shaderAsset.value->bind();
 
-				Asset<Mesh>& meshAsset = Project::m_assetManager.getAsset<Mesh>(meshRender.meshAssetID);
+				Asset<Mesh>& meshAsset = Project::m_assetManager->getAsset<Mesh>(meshRender.meshAssetID);
 				meshAsset.value->bind();
 
 				Render::submit(meshAsset.value);
@@ -104,10 +104,9 @@ namespace Deer {
 		glm::mat4 camMatrix = glm::inverse(camera.transform.getMatrix());
 		glm::mat4 projectionMatrix = camera.camera.getMatrix();
 		glm::mat4 invertZ = glm::scale(glm::mat4(1.0f), glm::vec3(1, 1, -1));
-		glm::mat4 invertY = glm::scale(glm::mat4(1.0f), glm::vec3(1, -1, 1));
 
 		// Lets invert the z axis for engine convenience
-		glm::mat4 cameraProjectionMatrix = invertY * projectionMatrix * invertZ * camMatrix;
+		glm::mat4 cameraProjectionMatrix = projectionMatrix * invertZ * camMatrix;
 		{
 			auto view = m_registry.view<MeshRenderComponent, TagComponent>();
 			for (auto entityId : view) {
@@ -128,13 +127,13 @@ namespace Deer {
 						if (textureBinding.textureAssetID[x] == 0)
 							continue;
 
-						Asset<Texture2D>& textureAsset = Project::m_assetManager.getAsset<Texture2D>(textureBinding.textureAssetID[x]);
+						Asset<Texture2D>& textureAsset = Project::m_assetManager->getAsset<Texture2D>(textureBinding.textureAssetID[x]);
 						textureAsset.value->bind(textureBinding.textureBindID[x]);
 					}
 				}
 
 				glm::mat4 matrix = entity.getWorldMatrix();
-				Asset<Shader>& shaderAsset = Project::m_assetManager.getAsset<Shader>(meshRender.shaderAssetID);
+				Asset<Shader>& shaderAsset = Project::m_assetManager->getAsset<Shader>(meshRender.shaderAssetID);
 				shaderAsset.value->bind();
 				shaderAsset.value->uploadUniformMat4("u_viewMatrix", cameraProjectionMatrix);
 				shaderAsset.value->uploadUniformMat4("u_worldMatrix", matrix);
@@ -142,7 +141,7 @@ namespace Deer {
 
 				shaderAsset.value->bind();
 
-				Asset<Mesh>& meshAsset = Project::m_assetManager.getAsset<Mesh>(meshRender.meshAssetID);
+				Asset<Mesh>& meshAsset = Project::m_assetManager->getAsset<Mesh>(meshRender.meshAssetID);
 				meshAsset.value->bind();
 
 				Render::submit(meshAsset.value);

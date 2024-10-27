@@ -4,6 +4,7 @@
 #include "Deer/Scene/Enviroment.h"
 #include "Deer/Scene/Entity.h"
 #include "Deer/Scene/Scene.h"
+#include "Deer/Asset/AssetManager.h"
 #include "Deer/Render/Texture.h"
 #include "cereal/cereal.hpp"
 #include "cereal/types/vector.hpp"
@@ -58,6 +59,13 @@ namespace Deer {
 
     template<class Archive>
     void serialize(Archive& archive,
+        ScriptComponent& scriptComponent) {
+
+        archive(cereal::make_nvp("scriptID", scriptComponent.scriptID));
+    }
+
+    template<class Archive>
+    void serialize(Archive& archive,
         TextureBinding& textureBinding) {
 
         archive(cereal::make_nvp("texturePath", textureBinding.texturePath));
@@ -72,7 +80,7 @@ namespace Deer {
         for (int x = 0; x < MAX_TEXTURE_BINDINGS; x++) {
             if (textureBinding.textureAssetID[x] != 0) {
                 bindings.push_back(TextureBinding(
-                    Project::m_assetManager.getAssetLocation(textureBinding.textureAssetID[x]).generic_string(),
+                    Project::m_assetManager->getAssetLocation(textureBinding.textureAssetID[x]).generic_string(),
                     textureBinding.textureBindID[x]
                 ));
             }
@@ -96,7 +104,7 @@ namespace Deer {
             if (id >= MAX_TEXTURE_BINDINGS)
                 break;
 
-            textureBinding.textureAssetID[id] = Project::m_assetManager.loadAsset<Texture2D>(
+            textureBinding.textureAssetID[id] = Project::m_assetManager->loadAsset<Texture2D>(
                 std::filesystem::path(binding.texturePath));
             textureBinding.textureBindID[id] = binding.bindingID;
         }
@@ -116,9 +124,9 @@ namespace Deer {
     void save(Archive& archive,
         MeshRenderComponent const& meshRender) {
 
-        std::string meshLocation = Project::m_assetManager.getAssetLocation(meshRender.meshAssetID).generic_string();
+        std::string meshLocation = Project::m_assetManager->getAssetLocation(meshRender.meshAssetID).generic_string();
         archive(cereal::make_nvp("mesh", meshLocation));
-        std::string shaderLocation = Project::m_assetManager.getAssetLocation(meshRender.shaderAssetID).generic_string();
+        std::string shaderLocation = Project::m_assetManager->getAssetLocation(meshRender.shaderAssetID).generic_string();
         archive(cereal::make_nvp("shader", shaderLocation));
     }
 
@@ -131,8 +139,8 @@ namespace Deer {
         std::string shaderLocation;
         archive(cereal::make_nvp("shader", shaderLocation));
 
-        meshRender.meshAssetID = Project::m_assetManager.loadAsset<Mesh>(std::filesystem::path(meshLocation));
-        meshRender.shaderAssetID = Project::m_assetManager.loadAsset<Shader>(std::filesystem::path(shaderLocation));
+        meshRender.meshAssetID = Project::m_assetManager->loadAsset<Mesh>(std::filesystem::path(meshLocation));
+        meshRender.shaderAssetID = Project::m_assetManager->loadAsset<Shader>(std::filesystem::path(shaderLocation));
     }
 
     template<class Archive>
@@ -189,6 +197,13 @@ namespace Deer {
             TextureBindingComponent& textureBinding = m_entity.getComponent<TextureBindingComponent>();
             archive(cereal::make_nvp("textureBindingComponent", textureBinding));
         }
+
+        bool hasScriptComponent = m_entity.hasComponent<ScriptComponent>();
+        archive(cereal::make_nvp("hasScriptComponent", hasScriptComponent));
+        if (hasScriptComponent) {
+            ScriptComponent& scriptComponent = m_entity.getComponent<ScriptComponent>();
+            archive(cereal::make_nvp("scriptComponent", scriptComponent));
+        }
     }
 
     template<class Archive>
@@ -229,7 +244,14 @@ namespace Deer {
             archive(cereal::make_nvp("textureBindingComponent", textureBinding));
         }
 
-        m_entity.update();
+        bool hasScriptComponent;
+        archive(cereal::make_nvp("hasScriptComponent", hasScriptComponent));
+        if (hasScriptComponent) {
+            ScriptComponent& scriptComponent = m_entity.addComponent<ScriptComponent>();
+            archive(cereal::make_nvp("scriptComponent", scriptComponent));
+        }
+
+        m_entity.updateExecution();
     }
 
     template<class Archive>

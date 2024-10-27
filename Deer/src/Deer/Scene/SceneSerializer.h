@@ -14,7 +14,7 @@ namespace Deer {
 		void deserializeBinary(const std::string& filePath);
 
 		const std::string& getCurrentScenePath() { return m_currentScenePath; }
-
+		inline bool getSceneExecutingState() { return m_scene->getExecutingState(); }
 	private:
 		std::string m_currentScenePath;
 		Ref<Scene> m_scene;

@@ -15,7 +15,7 @@ namespace Deer {
 		: m_environment(enviroment), m_windowName(windowName), m_activeEntity(activeEntity) {
 
         m_frameBuffer = FrameBuffer::create(FrameBufferSpecification(100, 100, { TextureBufferType::RGBA8, TextureBufferType::RED_INTEGER}, 1, false));
-        m_virtualCamera.transform.position = glm::vec3(0, 0, -3);
+        m_virtualCamera.transform.position = glm::vec3(0, 10, -20);
 	}
 
 	void ViewportPannel::onImGui() {
@@ -49,7 +49,7 @@ namespace Deer {
 
         m_environment->render(m_virtualCamera);
 
-        ImGui::Image((void*)m_frameBuffer->getTextureBufferID(0), windowSize);
+        ImGui::Image((void*)m_frameBuffer->getTextureBufferID(0), windowSize, ImVec2(0, 1), ImVec2(1, 0));
         bool isUsingDrawGizmo = drawGizmos(pos.x, pos.y, windowSize.x, windowSize.y);
 
         if (!isUsingDrawGizmo && m_handleClick) {
@@ -57,7 +57,7 @@ namespace Deer {
 
             ImVec2 mPos = ImGui::GetMousePos();
             relativeX = mPos.x - pos.x;
-            relativeY = mPos.y - pos.y;
+            relativeY = windowSize.y - (mPos.y - pos.y);
 
             if (relativeX >= 0 && relativeX < windowSize.x &&
                 relativeY >= 0 && relativeY < windowSize.y) {
@@ -82,17 +82,17 @@ namespace Deer {
         ImGui::PopStyleVar();
 	}
 
-    void ViewportPannel::onUpdate(Timestep timestep) {
+    void ViewportPannel::onRender(Timestep timestep) {
         if (!m_isActive)
             return;
 
         if (!Input::isKeyPressed(DEER_KEY_LEFT_CONTROL)) {
 
-            float vel = 1;
+            float vel = 6;
             if (Input::isKeyPressed(DEER_KEY_LEFT_SHIFT))
-                vel = 4;
+                vel = 14;
             if (Input::isKeyPressed(DEER_KEY_LEFT_ALT))
-                vel = .25f;
+                vel = 1.0f;
 
             if (Input::isKeyPressed(DEER_KEY_W))
                 m_virtualCamera.transform.position += m_virtualCamera.transform.rotation * glm::vec3(0, 0, 1) * timestep.getSeconds() * vel;

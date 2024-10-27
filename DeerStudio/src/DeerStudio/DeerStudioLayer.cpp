@@ -7,6 +7,10 @@
 #include "DeerStudio/Editor/ViewportPannel.h"
 #include "DeerStudio/Editor/ActiveEntity.h"
 #include "DeerStudio/Editor/GamePannel.h"
+#include "Deer/Core/Project.h"
+#include "Deer/Scripting/ScriptEngine.h"
+
+#include "Deer/Asset/AssetManager.h"
 
 #include "backends/imgui_impl_opengl3.h"
 #include "Style.h"
@@ -23,21 +27,15 @@ namespace Deer {
         setNatureStyle();
 
         ImFont* font1 = io.Fonts->AddFontFromFileTTF("editor\\fonts\\OpenSans-VariableFont_wdth,wght.ttf", 19.0f);
-        //ImGui::PushFont(font1);
         ImGui_ImplOpenGL3_CreateFontsTexture();
 
-        m_meshID = Project::m_assetManager.loadAsset<Mesh>(std::filesystem::path("assets/skull.obj"));
-        m_shaderID = Project::m_assetManager.loadAsset<Shader>(std::filesystem::path("assets/Shaders/SimpleShader.glsl"));
-
         m_activeEntity = Ref<ActiveEntity>(new ActiveEntity());
-        m_scene = Ref<Scene>(new Scene());
-        m_sceneSerializer = Ref<SceneSerializer>(new SceneSerializer(m_scene));
 
         auto m_propertiesPannel = Ref<PropertiesPannel>(new PropertiesPannel(m_activeEntity));
-        auto m_viewportPannel = Ref<ViewportPannel>(new ViewportPannel(m_scene->getMainEnviroment(), "Scene viewport", m_activeEntity));
-        auto m_enviromentTreePannel = Ref<EnviromentTreePannel>(new EnviromentTreePannel(m_scene->getMainEnviroment(), "World tree", m_activeEntity));
-        auto m_assetPannel = Ref<AssetManagerPannel>(new AssetManagerPannel(m_sceneSerializer, m_activeEntity));
-        auto m_gamePannel = Ref<GamePannel>(new GamePannel(m_scene));
+        auto m_viewportPannel = Ref<ViewportPannel>(new ViewportPannel(Project::m_scene->getMainEnviroment(), "Scene viewport", m_activeEntity));
+        auto m_enviromentTreePannel = Ref<EnviromentTreePannel>(new EnviromentTreePannel(Project::m_scene->getMainEnviroment(), "World tree", m_activeEntity));
+        auto m_assetPannel = Ref<AssetManagerPannel>(new AssetManagerPannel(m_activeEntity));
+        auto m_gamePannel = Ref<GamePannel>(new GamePannel(m_activeEntity));
 
         pannels.clear();
         pannels.push_back(m_propertiesPannel);
@@ -45,24 +43,20 @@ namespace Deer {
         pannels.push_back(m_viewportPannel);
         pannels.push_back(m_assetPannel);
         pannels.push_back(m_gamePannel);
-
-        auto& entity = m_scene->getMainEnviroment()->createEntity("Square");
-        MeshRenderComponent& mrc = entity.addComponent<MeshRenderComponent>();
-        mrc.meshAssetID = m_meshID;
-        mrc.shaderAssetID = m_shaderID;
-
     }
 
-    void DeerStudioLayer::onUpdate(Timestep delta) {
+    void DeerStudioLayer::onRender(Timestep delta) {
         for (auto pannel : pannels) {
-            pannel->onUpdate(delta);
+            pannel->onRender(delta);
         }
-
-        Asset<Shader>& shaderAsset = Project::m_assetManager.getAsset<Shader>(m_shaderID);
-        shaderAsset.value->uploadUniformInt("u_texture", 0);
 
         int windowWidth = Application::s_application->m_window->getWitdth();
         int windowHeight = Application::s_application->m_window->getHeight();
+    }
+
+    void DeerStudioLayer::onUpdate(Timestep delta) {
+        if (Project::m_scene->getExecutingState())
+            Project::m_scene->updateExecution();
     }
 
     void DeerStudioLayer::loadScene() {
@@ -70,8 +64,8 @@ namespace Deer {
     }
 
     void DeerStudioLayer::unloadScene() {
-        m_scene.reset();
-        m_sceneSerializer.reset();
+        Project::m_scene.reset();
+        Project::m_sceneSerializer.reset();
         m_activeEntity->clear();
         pannels.clear();
     }
@@ -132,32 +126,22 @@ namespace Deer {
         if (ImGui::BeginMenu("Edit")) {
             if (ImGui::MenuItem("New scene")) {
                 m_activeEntity->clear();
-                m_scene->clear();
-                m_sceneSerializer->serialize("assets/newScene.dscn");
+                Project::m_scene->clear();
+                Project::m_sceneSerializer->serialize("assets/newScene.dscn");
             }
 
-            if (m_sceneSerializer->getCurrentScenePath() != "_NO_INITIALIZED_" && ImGui::MenuItem("Save scene")) {
-                m_sceneSerializer->serialize(m_sceneSerializer->getCurrentScenePath());
-            }
-
-            if (m_sceneSerializer->getCurrentScenePath() != "_NO_INITIALIZED_" && ImGui::MenuItem("Save Scene Binary")) {
-                m_activeEntity->clear();
-                m_scene->clear();
-                const std::string path = std::string("binTest.bscn");
-                m_sceneSerializer->serializeBinary(path);
-            }
-
-            if (ImGui::MenuItem("Load Scene Binary")) {
-                m_activeEntity->clear();
-                m_scene->clear();
-                const std::string path = std::string("binTest.bscn");
-                m_sceneSerializer->deserializeBinary(path);
+            if (Project::m_sceneSerializer->getCurrentScenePath() != "_NO_INITIALIZED_" && ImGui::MenuItem("Save scene")) {
+                Project::m_sceneSerializer->serialize(Project::m_sceneSerializer->getCurrentScenePath());
             }
 
             ImGui::EndMenu();
         }
 
-        if (ImGui::BeginMenu("Windows")) {
+        if (ImGui::BeginMenu("Scripts")) {
+            if (ImGui::MenuItem("Reload scripts") && !Project::m_scene->getExecutingState()) {
+                Project::m_scriptEngine->shutdownScriptEngine();
+                Project::m_scriptEngine->initScriptEngine(std::filesystem::path("scripts"));
+            }
 
             ImGui::EndMenu();
         }

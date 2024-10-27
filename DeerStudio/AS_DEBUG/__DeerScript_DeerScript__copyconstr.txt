@@ -1,0 +1,12 @@
+DeerScript::DeerScript(const DeerScript&inout)
+
+Temps: 
+
+Variables: 
+ -002: const DeerScript& other
+ 000: DeerScript this
+
+
+               VarDecl  0
+            0:
+    0   0 *    RET      2

@@ -31,6 +31,7 @@
 namespace Deer {
 	class DeerStudioLayer : public Layer {
 		void onAttach() override;
+		void onRender(Timestep delta) override;
 		void onUpdate(Timestep delta) override;
 
 		void loadScene();

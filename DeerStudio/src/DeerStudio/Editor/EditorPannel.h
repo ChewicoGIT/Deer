@@ -8,7 +8,7 @@ namespace Deer {
 	class EditorPannel {
 	public:
 		virtual ~EditorPannel() = default;
-		virtual void onUpdate(Timestep timestep) { }
+		virtual void onRender(Timestep timestep) { }
 		virtual void onEvent(Event& e) { }
 		virtual void onImGui() { }
 	};
