@@ -1,6 +1,7 @@
 
 class PlayerScript : ComponentScript {
 	float height = 0;
+
 	float minHeight = 1;
 	float maxHeight = 9;
 
