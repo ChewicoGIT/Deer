@@ -1,4 +1,4 @@
-project "Deer"
+project "DeerService"
    kind "StaticLib"
    language "C++"
    cppdialect "C++20"
@@ -8,40 +8,30 @@ project "Deer"
    files {
    "src/Deer/**.h",
    "src/Deer/**.cpp",
-   "src/Plattform/OpenGL/**.h",
-   "src/Plattform/OpenGL/**.cpp",
-   "vendor/ImGuizmo/**.cpp",
-   "vendor/stb/stb_image.cpp"
+   "src/Plattform/Service/**.h",
+   "src/Plattform/Service/**.cpp"
    }
 
-   links { "spdlog", "GLFW", "glad", "ImGui", "angelScript" } 
+   links { "spdlog", "angelScript" } 
 
    includedirs
    {
       "src",
 	  "vendor/spdlog/include",
-	  "vendor/GLFW/include",
-	  "vendor/glad/include",
-	  "vendor/imgui",
 	  "vendor/glm",
-	  "vendor/stb",
-	  "vendor/ImGuizmo",
 	  "vendor/entt/include",
 	  "vendor/cereal/include",
-	  "vendor/objload/include/objload",
 	  "vendor/angelScript/include"
    }
 
    targetdir ("../bin/" .. OutputDir .. "/%{prj.name}")
    objdir ("../bin/int/" .. OutputDir .. "/%{prj.name}")
+   
+   defines { "DEER_SERVICE" }
 
    filter "system:windows"
        systemversion "latest"
        defines { }
-	   files {
-		"src/Plattform/windows/**.h",
-		"src/Plattform/windows/**.cpp"
-	   }
 
    filter "configurations:Debug"
        defines { "DEBUG" }

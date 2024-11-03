@@ -132,7 +132,7 @@ namespace Deer {
 
     }
 
-    void ViewportPannel::onEvent(Event& e) {
+    void ViewportPannel::onEventCallback(Event& e) {
         EventDispatcher dispatcher(e);
 
         dispatcher.dispatch<MouseButtonPressedEvent>(std::bind(&ViewportPannel::onClickEvent, this, std::placeholders::_1));

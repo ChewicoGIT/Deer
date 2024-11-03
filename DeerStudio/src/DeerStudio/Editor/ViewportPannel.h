@@ -24,7 +24,7 @@ namespace Deer {
 		
 		void onImGui() override;
 		void onRender(Timestep timestep) override;
-		void onEvent(Event& e) override;
+		void onEventCallback(Event& e) override;
 		bool onClickEvent(MouseButtonPressedEvent mouseEvent);
 		bool onKeyEvent(KeyPressedEvent keyEvent);
 	private:

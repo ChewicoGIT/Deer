@@ -14,7 +14,7 @@ namespace Deer {
 		EnviromentTreePannel(const Ref<Environment>& enviroment, const std::string& name, Ref<ActiveEntity>& activeEntity);
 
 		void onImGui() override;
-		void onEvent(Event& e) override;
+		void onEventCallback(Event& e) override;
 	private:
 
 		void clickEntity(Entity& entity);

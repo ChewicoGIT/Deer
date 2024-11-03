@@ -9,7 +9,7 @@ namespace Deer {
 	public:
 		virtual ~EditorPannel() = default;
 		virtual void onRender(Timestep timestep) { }
-		virtual void onEvent(Event& e) { }
+		virtual void onEventCallback(Event& e) { }
 		virtual void onImGui() { }
 	};
 }

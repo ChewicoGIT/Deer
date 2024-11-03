@@ -9,6 +9,7 @@ OutputDir = "%{cfg.system}-%{cfg.architecture}/%{cfg.buildcfg}"
 
 group "core"
 include "Deer/Build.lua"
+include "Deer/Build-Service.lua"
 group ""
 
 group "external"
@@ -21,6 +22,7 @@ group ""
 
 group "Runtime"
 include "DeerRuntime/Build.lua"
+include "DeerServer/Build.lua"
 group ""
 
 group "Studio"

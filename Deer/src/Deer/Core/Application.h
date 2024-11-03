@@ -1,9 +1,8 @@
 #pragma once
 #include "Deer/Core/Core.h"
 #include "Deer/Core/Window.h"
-#include "Deer/Core/Layer.h"
-#include "Deer/Core/LayerStack.h"
 #include "Deer/Core/Events/Event.h"
+#include "Deer/Core/Timestep.h"
 #include "Deer/ImGui/ImGuiLayer.h"
 
 #include "Deer/Core/Events/ApplicationEvent.h"
@@ -16,21 +15,26 @@ namespace Deer {
 
 		static Application* s_application;
 
-		virtual void onInit() {}
-		virtual void onShutdown() {}
-
-		void pushLayer(Layer* layer);
-		virtual void onEvent(Event& e);
 		void run();
 
-		Scope<Window> m_window;
-	private:
-		bool onWindowClose(WindowCloseEvent& e);
+		virtual void onInit() {}
+		virtual void onShutdown() {}
+		virtual void onUpdate(Timestep delta) {}
 
-		bool m_running;
-		LayerStack m_layerStack;
-		ImGuiLayer m_imGuiLayer;
+#ifndef DEER_SERVICE
+		virtual void onRender(Timestep delta) {}
+		virtual void onImGUI() {}
+		virtual void onEvent(Event& event) {}
+
+		Scope<Window> m_window;
+
 	private:
+		virtual void onEventCallback(Event& e);
+		bool onWindowClose(WindowCloseEvent& e);
+		ImGuiLayer m_imGuiLayer;
+#endif
+	private:
+		bool m_running;
 		float m_lastFrameTime = 0.0f;
 	};
 

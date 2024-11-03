@@ -1,47 +1,34 @@
-project "Deer"
-   kind "StaticLib"
+project "DeerServer"
+   kind "ConsoleApp"
    language "C++"
    cppdialect "C++20"
    targetdir "bin/%{cfg.buildcfg}"
    staticruntime "off"
 
-   files {
-   "src/Deer/**.h",
-   "src/Deer/**.cpp",
-   "src/Plattform/OpenGL/**.h",
-   "src/Plattform/OpenGL/**.cpp",
-   "vendor/ImGuizmo/**.cpp",
-   "vendor/stb/stb_image.cpp"
-   }
-
-   links { "spdlog", "GLFW", "glad", "ImGui", "angelScript" } 
+   files { "src/**.h", "src/**.cpp" }
 
    includedirs
    {
       "src",
-	  "vendor/spdlog/include",
-	  "vendor/GLFW/include",
-	  "vendor/glad/include",
-	  "vendor/imgui",
-	  "vendor/glm",
-	  "vendor/stb",
-	  "vendor/ImGuizmo",
-	  "vendor/entt/include",
-	  "vendor/cereal/include",
-	  "vendor/objload/include/objload",
-	  "vendor/angelScript/include"
+	  "../Deer/src",
+	  "../Deer/vendor/spdlog/include",
+	  "../Deer/vendor/glm",
+	  "../Deer/vendor/entt/include"
+   }
+
+   links
+   {
+      "DeerService",
+	  "spdlog"
    }
 
    targetdir ("../bin/" .. OutputDir .. "/%{prj.name}")
    objdir ("../bin/int/" .. OutputDir .. "/%{prj.name}")
+   defines { "DEER_SERVICE" }
 
    filter "system:windows"
        systemversion "latest"
-       defines { }
-	   files {
-		"src/Plattform/windows/**.h",
-		"src/Plattform/windows/**.cpp"
-	   }
+       defines { "WINDOWS" }
 
    filter "configurations:Debug"
        defines { "DEBUG" }

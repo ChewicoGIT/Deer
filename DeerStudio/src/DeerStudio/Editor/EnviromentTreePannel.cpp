@@ -55,7 +55,7 @@ namespace Deer {
 		ImGui::End();
 	}
 
-	void EnviromentTreePannel::onEvent(Event& e) {
+	void EnviromentTreePannel::onEventCallback(Event& e) {
 		EventDispatcher dispatcher(e);
 
 		dispatcher.dispatch<KeyPressedEvent>(std::bind(&EnviromentTreePannel::onKeyPressed, this, std::placeholders::_1));
