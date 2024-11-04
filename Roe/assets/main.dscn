@@ -144,7 +144,7 @@
                     "name": "Enemy",
                     "transform": {
                         "position": {
-                            "x": 9.0,
+                            "x": 4.0,
                             "y": 5.0,
                             "z": 0.0
                         },
@@ -241,7 +241,7 @@
                     "hasMeshRenderComponent": false,
                     "hasCameraComponent": true,
                     "cameraComponent": {
-                        "aspect": 1.789162516593933,
+                        "aspect": 1.095049500465393,
                         "fov": 0.5714905858039856,
                         "farZ": 100.0,
                         "nearZ": 0.10000000149011612

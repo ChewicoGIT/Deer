@@ -29,6 +29,7 @@ namespace Deer {
         ImFont* font1 = io.Fonts->AddFontFromFileTTF("editor\\fonts\\OpenSans-VariableFont_wdth,wght.ttf", 19.0f);
         ImGui_ImplOpenGL3_CreateFontsTexture();
 
+        Project::m_sceneSerializer->setSceneChangeCallback(std::bind(onChangeScene, this));
         m_activeEntity = Ref<ActiveEntity>(new ActiveEntity());
 
         auto m_propertiesPannel = Ref<PropertiesPannel>(new PropertiesPannel(m_activeEntity));
@@ -59,15 +60,8 @@ namespace Deer {
             Project::m_scene->updateExecution();
     }
 
-    void DeerStudioLayer::loadScene() {
-
-    }
-
-    void DeerStudioLayer::unloadScene() {
-        Project::m_scene.reset();
-        Project::m_sceneSerializer.reset();
+    void DeerStudioLayer::onChangeScene() {
         m_activeEntity->clear();
-        pannels.clear();
     }
 
     void DeerStudioLayer::onEvent(Event& e) {

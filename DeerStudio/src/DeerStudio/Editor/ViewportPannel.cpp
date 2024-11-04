@@ -19,7 +19,6 @@ namespace Deer {
 	}
 
 	void ViewportPannel::onImGui() {
-
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
         ImGui::Begin(m_windowName.c_str());
         ImVec2 contentRegionMin = ImGui::GetWindowContentRegionMin();

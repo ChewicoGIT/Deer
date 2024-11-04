@@ -34,8 +34,7 @@ namespace Deer {
 		void onRender(Timestep delta) override;
 		void onUpdate(Timestep delta) override;
 
-		void loadScene();
-		void unloadScene();
+		void onChangeScene();
 
 		void onEvent(Event& e) override;
 
