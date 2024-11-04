@@ -29,14 +29,12 @@ namespace Deer {
 
             if (!Project::m_scene->getExecutingState()) {
                 if (Project::m_scriptEngine->isScriptValid() && ImGui::Button("Execute")) {
-                    m_activeEntity->clear();
                     Project::m_sceneSerializer->serializeBinary("temp_scene.dbscn");
                     Project::m_scene->beginExecution();
                 }
             }
             else {
                 if (ImGui::Button("Stop")) {
-                    m_activeEntity->clear();
                     Project::m_scene->endExecution();
                     Project::m_sceneSerializer->deserializeBinary("temp_scene.dbscn");
                 }
@@ -77,14 +75,12 @@ namespace Deer {
 
         if (!Project::m_scene->getExecutingState()) {
             if (Project::m_scriptEngine->isScriptValid() && ImGui::Button("Execute")) {
-                m_activeEntity->clear();
                 Project::m_sceneSerializer->serializeBinary("temp_scene.dbscn");
                 Project::m_scene->beginExecution();
             }
         }
         else {
             if (ImGui::Button("Stop")) {
-                m_activeEntity->clear();
                 Project::m_scene->endExecution();
                 Project::m_sceneSerializer->deserializeBinary("temp_scene.dbscn");
             }

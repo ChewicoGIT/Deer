@@ -1,6 +1,7 @@
 #pragma once
 #include "Scene.h"
 #include <string>
+#include <functional>
 
 namespace Deer {
 	class SceneSerializer {
@@ -13,10 +14,13 @@ namespace Deer {
 		void serializeBinary(const std::string& filePath);
 		void deserializeBinary(const std::string& filePath);
 
+		void setSceneChangeCallback(std::function<void()> func) { m_sceneChangeCallback = func; }
+
 		const std::string& getCurrentScenePath() { return m_currentScenePath; }
 		inline bool getSceneExecutingState() { return m_scene->getExecutingState(); }
 	private:
 		std::string m_currentScenePath;
+		std::function<void()> m_sceneChangeCallback;
 		Ref<Scene> m_scene;
 	};
 }

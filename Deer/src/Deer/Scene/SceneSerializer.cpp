@@ -15,6 +15,9 @@ namespace Deer {
 	}
 
 	void SceneSerializer::deserialize(const std::string& filePath) {
+		if (m_sceneChangeCallback)
+			m_sceneChangeCallback();
+
 		std::ifstream file(filePath);
 		cereal::JSONInputArchive archive(file);
 
@@ -33,6 +36,9 @@ namespace Deer {
 	}
 
 	void SceneSerializer::deserializeBinary(const std::string& filePath) {
+		if (m_sceneChangeCallback)
+			m_sceneChangeCallback();
+
 		std::ifstream file(filePath);
 		cereal::BinaryInputArchive archive(file);
 
