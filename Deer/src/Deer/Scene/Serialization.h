@@ -34,7 +34,6 @@ namespace cereal {
         archive(cereal::make_nvp("z", rot.z));
         archive(cereal::make_nvp("w", rot.w));
     }
-
 }
 
 // Intermediate structs
@@ -45,10 +44,10 @@ namespace Deer {
         EntityVector_Environment(const Ref<Environment>& _environment)
             : environment(_environment) { }
     };
-
 }
 
 namespace Deer {
+    // SCRIPT COMPONENT
     template<class Archive>
     void serialize(Archive& archive,
         ScriptComponent& scriptComponent) {
@@ -56,6 +55,7 @@ namespace Deer {
         archive(cereal::make_nvp("scriptID", scriptComponent.scriptID));
     }
 
+    // CAMERA COMPONENT
     template<class Archive>
     void serialize(Archive& archive,
         CameraComponent& camera) {
@@ -66,6 +66,7 @@ namespace Deer {
         archive(cereal::make_nvp("nearZ", camera.nearZ));
     }
 
+    // RELATIONSHIP COMPONENT
     template<class Archive>
     void serialize(Archive& archive,
         RelationshipComponent& relationship) {
@@ -75,6 +76,7 @@ namespace Deer {
 
     }
 
+    // TRANSFORM COMPONENT
     template<class Archive>
     void serialize(Archive& archive,
         TransformComponent& transform) {
@@ -85,6 +87,7 @@ namespace Deer {
         
     }
 
+    // ENTITY
     template<class Archive>
     void save(Archive& archive,
         Entity const& m_entity) {
@@ -128,7 +131,6 @@ namespace Deer {
             archive(cereal::make_nvp("scriptComponent", scriptComponent));
         }
     }
-
     template<class Archive>
     void load(Archive& archive,
         Entity& m_entity) {
@@ -177,6 +179,7 @@ namespace Deer {
         m_entity.updateExecution();
     }
 
+    // ENVIRONMENT
     template<class Archive>
     void save(Archive& archive,
         EntityVector_Environment const& m_entityVector) {
@@ -185,7 +188,6 @@ namespace Deer {
         for (auto&& v : m_entityVector.entities)
             archive(v);
     }
-
     template<class Archive>
     void load(Archive& archive,
         EntityVector_Environment& m_entityVector) {
@@ -223,7 +225,6 @@ namespace Deer {
         archive(cereal::make_nvp("mainCameraUID", mainCameraUID));
 
     }
-
     template<class Archive>
     void load(Archive& archive,
         Ref<Environment> & m_environment) {
