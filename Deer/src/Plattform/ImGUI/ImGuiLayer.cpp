@@ -8,6 +8,7 @@
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 #include "ImGuizmo.h"
+#include "imgui.h"
 
 namespace Deer {
 	void ImGuiLayer::onAttach() {

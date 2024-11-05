@@ -10,6 +10,10 @@ project "Deer"
    "src/Deer/**.cpp",
    "src/Plattform/OpenGL/**.h",
    "src/Plattform/OpenGL/**.cpp",
+   "src/Plattform/ImGUI/**.h",
+   "src/Plattform/ImGUI/**.cpp",
+   "src/Plattform/Windows/**.h",
+   "src/Plattform/Windows/**.cpp",
    "vendor/ImGuizmo/**.cpp",
    "vendor/stb/stb_image.cpp"
    }

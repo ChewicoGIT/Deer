@@ -5,7 +5,11 @@ project "DeerServer"
    targetdir "bin/%{cfg.buildcfg}"
    staticruntime "off"
 
-   files { "src/**.h", "src/**.cpp" }
+   files {
+    "src/DeerServer/**.h",
+	"src/DeerServer/**.cpp"
+	}
+   debugdir "../Roe"
 
    includedirs
    {

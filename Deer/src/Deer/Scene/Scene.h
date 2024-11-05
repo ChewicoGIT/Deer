@@ -13,8 +13,10 @@ namespace Deer {
 		void beginExecution();
 		void updateExecution();
 		void endExecution();
-
+#ifndef DEER_SERVICE
 		void render();
+#endif
+
 		void clear();
 
 		inline Ref<Environment>& getMainEnviroment() { return m_enviroment; }

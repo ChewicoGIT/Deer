@@ -2,9 +2,11 @@
 #include "Deer/Core/Log.h"
 #include "Deer/Core/Timestep.h"
 
-// [Render Specific]
+#ifndef DEER_SERVICE
 #include "Deer/Render/RenderCommand.h"
 #include "Deer/Render/Render.h"
+#include "imgui.h"
+#endif
 
 #include <functional>
 
@@ -12,8 +14,10 @@ namespace Deer {
 	Application* Application::s_application;
 
 	Application::Application(const WindowProps& props) {
-		m_window = Scope<Window>(Window::create(props));
-		m_window->setEventCallback(std::bind(&Application::onEventCallback, this, std::placeholders::_1));
+#ifndef DEER_SERVICE
+        m_window = Scope<Window>(Window::create(props));
+        m_window->setEventCallback(std::bind(&Application::onEventCallback, this, std::placeholders::_1));
+#endif
 	}
 
 	void Application::run() {
@@ -27,7 +31,9 @@ namespace Deer {
         double accumulatedUpdateTime = 0.0;
         double accumulatedRenderTime = 0.0;
 
+#ifndef DEER_SERVICE
         m_imGuiLayer.onAttach();
+#endif
         onInit();
 
         while (m_running) {
@@ -46,6 +52,7 @@ namespace Deer {
                 accumulatedUpdateTime -= targetUpdateTime;
             }
 
+#ifndef DEER_SERVICE
             // Render loop (User-defined FPS)
             if (accumulatedRenderTime >= targetRenderTime) {
                 RenderCommand::setClearColor({ 0.2f, 0.2f, 0.3f, 1.0f });
@@ -66,15 +73,19 @@ namespace Deer {
                 // Handle window events and update (if necessary)
                 m_window->onRender();
             }
+#endif
 
             // Optional: Sleep to avoid CPU overuse
             std::this_thread::sleep_for(std::chrono::milliseconds(1));
         }
 
         onShutdown();
+#ifndef DEER_SERVICE
         m_imGuiLayer.onDetach();
+#endif
 	}
 
+#ifndef DEER_SERVICE
     void Application::onEventCallback(Event& e) {
         onEvent(e);
         m_imGuiLayer.onEvent(e);
@@ -83,9 +94,10 @@ namespace Deer {
         dispatcher.dispatch<WindowCloseEvent>(std::bind(&Application::onWindowClose, this, std::placeholders::_1));
     }
 
-	bool Application::onWindowClose(WindowCloseEvent& e)
-	{
-		m_running = false;
-		return true;
-	}
+    bool Application::onWindowClose(WindowCloseEvent& e)
+    {
+        m_running = false;
+        return true;
+    }
+#endif
 }

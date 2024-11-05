@@ -5,6 +5,10 @@
 #include "glad/glad.h"
 
 namespace Deer {
+	Ref<Texture2D> Deer::Texture2D::create(const std::string& pathFile) {
+		return Ref<Texture2D>(new OpenGLTexture2D(pathFile));
+	}
+
 	OpenGLTexture2D::OpenGLTexture2D(const std::string& pathFile)
 		: m_pathFile(pathFile) {
 

@@ -23,8 +23,10 @@ namespace Deer {
 
 		void clear();
 
+#ifndef DEER_SERVICE
 		void render(Entity& camera);
 		void render(VirtualCamera& camera);
+#endif
 
 		Entity& getEntity(uid id);
 		Entity& createEntity(const std::string& name = std::string());

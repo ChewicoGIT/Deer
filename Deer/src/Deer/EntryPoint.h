@@ -18,8 +18,9 @@ namespace Deer {
 
 		Application* app = createApplication(argc, argv);
 
-		// [Render Specific]
+#ifndef DEER_SERVICE
 		RenderUtils::initializeRenderUtils();
+#endif
 
 		Project::initializeBaseSystems();
 

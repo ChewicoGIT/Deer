@@ -9,6 +9,13 @@ namespace Deer {
 	////////////////////////////////////////////////////////////////////////
 	// Vertex Buffer ///////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////
+	Ref<VertexBuffer> VertexBuffer::create(void* data, unsigned int size) {
+		return Ref<VertexBuffer>(new OpenGLVertexBuffer(data, size));
+	}
+
+	Ref<IndexBuffer> IndexBuffer::create(void* data, unsigned int size, IndexDataType indexDataType) {
+		return Ref<IndexBuffer>(new OpenGLIndexBuffer(data, size, indexDataType));
+	}
 
 	OpenGLVertexBuffer::OpenGLVertexBuffer(void* data, unsigned int size) {
 		glGenBuffers(1, &m_bufferID);

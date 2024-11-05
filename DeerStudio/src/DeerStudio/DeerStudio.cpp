@@ -14,9 +14,12 @@
 #include "Style.h"
 #include "Plattform/OpenGL/imgui_impl_opengl3.h"
 
+#include <functional>
+
 namespace Deer {
     void DeerStudioApplication::onInit() {
         Project::m_scriptEngine->initScriptEngine(std::filesystem::path("scripts"));
+        Project::m_sceneSerializer->setSceneChangeCallback(std::bind(&Deer::DeerStudioApplication::onChangeScene, this));
 
         // IMGUI STYLE
         ImGuiIO& io = ImGui::GetIO();
@@ -42,6 +45,9 @@ namespace Deer {
     }
 
     void DeerStudioApplication::onShutdown() {
+        if (Project::m_scene->getExecutingState())
+            Project::m_scene->endExecution();
+
         Project::m_scriptEngine->shutdownScriptEngine();
         pannels.clear();
     }
@@ -113,7 +119,6 @@ namespace Deer {
 
         if (ImGui::BeginMenu("Edit")) {
             if (ImGui::MenuItem("New scene")) {
-                m_activeEntity->clear();
                 Project::m_scene->clear();
                 Project::m_sceneSerializer->serialize("assets/newScene.dscn");
             }
@@ -133,5 +138,9 @@ namespace Deer {
 
             ImGui::EndMenu();
         }
+    }
+
+    void DeerStudioApplication::onChangeScene() {
+        m_activeEntity->clear();
     }
 }
