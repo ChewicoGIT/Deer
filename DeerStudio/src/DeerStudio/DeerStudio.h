@@ -22,10 +22,10 @@ namespace Deer {
 		void onEvent(Event& e) override;
 		void onImGUI() override;
 		void drawMenuBar();
+		void onChangeScene();
 
 		Ref<ActiveEntity> m_activeEntity;
 		std::vector<Ref<EditorPannel>> pannels;
-
 	};
 
 }

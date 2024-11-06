@@ -7,6 +7,14 @@
 #include "GLFW/glfw3.h"
 
 namespace Deer {
+	Ref<VertexArray> VertexArray::create() {
+		return Ref<VertexArray>(new OpenGLVertexArray());
+	}
+
+	Ref<VertexArray> VertexArray::create(const std::string& filePath) {
+		return Ref<VertexArray>(new OpenGLVertexArray(filePath));
+	}
+
 	OpenGLVertexArray::OpenGLVertexArray() {
 		glGenVertexArrays(1, &m_vertexArray);
 	}

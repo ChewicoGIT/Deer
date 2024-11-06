@@ -5,12 +5,11 @@ project "DeerService"
    targetdir "bin/%{cfg.buildcfg}"
    staticruntime "off"
 
+   
    files {
-   "src/Deer/**.h",
-   "src/Deer/**.cpp",
-   "src/Plattform/Service/**.h",
-   "src/Plattform/Service/**.cpp"
-   }
+    "src/Deer/**.h",
+	"src/Deer/**.cpp"
+	}
 
    links { "spdlog", "angelScript" } 
 

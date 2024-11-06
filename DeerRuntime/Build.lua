@@ -6,6 +6,7 @@ project "DeerRuntime"
    staticruntime "off"
 
    files { "src/**.h", "src/**.cpp" }
+   debugdir "../Roe"
 
    includedirs
    {

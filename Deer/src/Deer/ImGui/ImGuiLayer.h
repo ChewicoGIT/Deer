@@ -2,7 +2,6 @@
 #include "Deer/Core/Events/ApplicationEvent.h"
 #include "Deer/Core/Events/KeyEvent.h"
 #include "Deer/Core/Events/MouseEvent.h"
-#include "imgui.h"
 
 namespace Deer {
 	class ImGuiLayer {

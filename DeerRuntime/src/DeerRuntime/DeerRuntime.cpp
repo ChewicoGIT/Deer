@@ -1,22 +1,36 @@
-#include "Deer/Core/Application.h"
-#include "Deer/EntryPoint.h"
-#include "Deer/Core/Window.h"
+#include "DeerRuntime.h"
 
-#include "DeerRuntime/RuntimeLayer.h"
+#include "Deer/Core/Project.h"
+#include "Deer/Scripting/ScriptEngine.h"
+#include "Deer/Scene/Scene.h"
 
-class DeerRuntimeApplication : public Deer::Application {
-public:
-	DeerRuntimeApplication()
-		: Application(Deer::WindowProps("Deer Studio")) {
-
+namespace Deer {
+	void DeerRuntimeApplication::onInit() {
+		Project::m_scriptEngine->initScriptEngine(std::filesystem::path("scripts"));
+		Project::m_scriptEngine->beginExecutionContext();
+		Project::m_scene->beginExecution();
 	}
 
-	virtual void onInit() override {
-		pushLayer(new Deer::RuntimeLayer());
-	}
-};
+	void DeerRuntimeApplication::onShutdown() {
+		if (Project::m_scene->getExecutingState())
+			Project::m_scene->endExecution();
 
-Deer::Application* createApplication(int argc, char** argv) {
-	DeerRuntimeApplication* app = new DeerRuntimeApplication();
-	return app;
+		Project::m_scriptEngine->shutdownScriptEngine();
+	}
+
+	void DeerRuntimeApplication::onRender(Timestep delta) {
+		uid mainCam = Project::m_scene->getMainEnviroment()->tryGetMainCamera();
+		Entity& cam = Project::m_scene->getMainEnviroment()->getEntity(mainCam);
+
+		float witdth = Application::s_application->m_window->getWitdth();
+		float height = Application::s_application->m_window->getHeight();
+
+		cam.getComponent<CameraComponent>().aspect = witdth / height;
+
+		Project::m_scene->render();
+	}
+
+	void DeerRuntimeApplication::onUpdate(Timestep delta) {
+		Project::m_scene->updateExecution();
+	}
 }

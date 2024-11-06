@@ -4,6 +4,8 @@ project "DeerStudio"
    cppdialect "C++20"
    targetdir "bin/%{cfg.buildcfg}"
    staticruntime "off"
+   
+   debugdir "../Roe"
 
    files { "src/**.h", "src/**.cpp" }
 

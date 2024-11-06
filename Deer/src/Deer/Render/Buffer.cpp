@@ -3,33 +3,7 @@
 #include "Deer/Core/Log.h"
 #include "Deer/Render/Render.h"
 
-#include "Plattform/OpenGL/OpenGLBuffer.h"
-
 namespace Deer {
-	Ref<VertexBuffer> VertexBuffer::create(void* data, unsigned int size)
-    {
-        switch (Render::getAPI())
-        {
-		case RenderAPI::API::None: DEER_CORE_ERROR("There is no render api selected"); return nullptr;
-		case RenderAPI::API::OpenGL: return Ref<VertexBuffer>(new OpenGLVertexBuffer(data, size));
-        }
-
-        DEER_CORE_ERROR("Unkown render API");
-        return nullptr;
-    }
-
-	Ref<IndexBuffer> IndexBuffer::create(void* data, unsigned int size, IndexDataType indexDataType)
-    {
-        switch (Render::getAPI())
-        {
-        case RenderAPI::API::None: DEER_CORE_ERROR("There is no render api selected"); return nullptr;
-        case RenderAPI::API::OpenGL: return Ref<IndexBuffer>(new OpenGLIndexBuffer(data, size, indexDataType));
-        }
-
-        DEER_CORE_ERROR("Unkown render API");
-        return nullptr;
-    }
-
     unsigned int dataTypeSize(DataType type) {
 		switch (type) {
 		case DataType::None: DEER_CORE_ERROR("Unkown shader data type"); return 0;

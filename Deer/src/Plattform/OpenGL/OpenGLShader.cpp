@@ -10,6 +10,14 @@
 #include <regex>
 
 namespace Deer {
+	Ref<Shader> Shader::create(const std::string& filePath) {
+		return Ref<Shader>(new OpenGLShader(filePath));
+	}
+
+	Ref<Shader> Shader::create(const std::string& vertexSrc, const std::string& fragmentSrc) {
+		return Ref<Shader>(new OpenGLShader(vertexSrc, fragmentSrc));
+	}
+
 	OpenGLShader::OpenGLShader(const std::string& filePath) {
 		std::string shaderSrc = readFile(filePath);
 		std::unordered_map<unsigned int, std::string> sources = preProcess(shaderSrc);

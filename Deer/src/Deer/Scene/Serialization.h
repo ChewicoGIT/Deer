@@ -5,11 +5,11 @@
 #include "Deer/Scene/Entity.h"
 #include "Deer/Scene/Scene.h"
 #include "Deer/Asset/AssetManager.h"
-#include "Deer/Render/Texture.h"
 #include "cereal/cereal.hpp"
 #include "cereal/types/vector.hpp"
 #include "cereal/types/string.hpp"
 #include "entt/entt.hpp"
+#include "SerializationRender.h"
 
 #include <vector>
 
@@ -34,7 +34,6 @@ namespace cereal {
         archive(cereal::make_nvp("z", rot.z));
         archive(cereal::make_nvp("w", rot.w));
     }
-
 }
 
 // Intermediate structs
@@ -45,18 +44,10 @@ namespace Deer {
         EntityVector_Environment(const Ref<Environment>& _environment)
             : environment(_environment) { }
     };
-
-    struct TextureBinding {
-        std::string texturePath;
-        unsigned char bindingID;
-
-        TextureBinding() = default;
-        TextureBinding(std::string _texturePath, unsigned char _bindingID) : texturePath(_texturePath), bindingID(_bindingID) { }
-    };
 }
 
 namespace Deer {
-
+    // SCRIPT COMPONENT
     template<class Archive>
     void serialize(Archive& archive,
         ScriptComponent& scriptComponent) {
@@ -64,52 +55,7 @@ namespace Deer {
         archive(cereal::make_nvp("scriptID", scriptComponent.scriptID));
     }
 
-    template<class Archive>
-    void serialize(Archive& archive,
-        TextureBinding& textureBinding) {
-
-        archive(cereal::make_nvp("texturePath", textureBinding.texturePath));
-        archive(cereal::make_nvp("bindingID", textureBinding.bindingID));
-    }
-
-    template<class Archive>
-    void save(Archive& archive,
-        TextureBindingComponent const& textureBinding) {
-        std::vector<TextureBinding> bindings;
-
-        for (int x = 0; x < MAX_TEXTURE_BINDINGS; x++) {
-            if (textureBinding.textureAssetID[x] != 0) {
-                bindings.push_back(TextureBinding(
-                    Project::m_assetManager->getAssetLocation(textureBinding.textureAssetID[x]).generic_string(),
-                    textureBinding.textureBindID[x]
-                ));
-            }
-        }
-
-        std::sort(bindings.begin(), bindings.end(), [](TextureBinding& a, TextureBinding& b) {
-            return a.bindingID < b.bindingID; });
-
-        archive(cereal::make_nvp("bindings", bindings));
-    }
-
-    template<class Archive>
-    void load(Archive& archive,
-        TextureBindingComponent& textureBinding) {
-        std::vector<TextureBinding> bindings;
-
-        archive(cereal::make_nvp("bindings", bindings));
-
-        int id = 0;
-        for (auto& binding : bindings) {
-            if (id >= MAX_TEXTURE_BINDINGS)
-                break;
-
-            textureBinding.textureAssetID[id] = Project::m_assetManager->loadAsset<Texture2D>(
-                std::filesystem::path(binding.texturePath));
-            textureBinding.textureBindID[id] = binding.bindingID;
-        }
-    }
-
+    // CAMERA COMPONENT
     template<class Archive>
     void serialize(Archive& archive,
         CameraComponent& camera) {
@@ -120,29 +66,7 @@ namespace Deer {
         archive(cereal::make_nvp("nearZ", camera.nearZ));
     }
 
-    template<class Archive>
-    void save(Archive& archive,
-        MeshRenderComponent const& meshRender) {
-
-        std::string meshLocation = Project::m_assetManager->getAssetLocation(meshRender.meshAssetID).generic_string();
-        archive(cereal::make_nvp("mesh", meshLocation));
-        std::string shaderLocation = Project::m_assetManager->getAssetLocation(meshRender.shaderAssetID).generic_string();
-        archive(cereal::make_nvp("shader", shaderLocation));
-    }
-
-    template<class Archive>
-    void load(Archive& archive,
-        MeshRenderComponent& meshRender) {
-
-        std::string meshLocation;
-        archive(cereal::make_nvp("mesh", meshLocation));
-        std::string shaderLocation;
-        archive(cereal::make_nvp("shader", shaderLocation));
-
-        meshRender.meshAssetID = Project::m_assetManager->loadAsset<Mesh>(std::filesystem::path(meshLocation));
-        meshRender.shaderAssetID = Project::m_assetManager->loadAsset<Shader>(std::filesystem::path(shaderLocation));
-    }
-
+    // RELATIONSHIP COMPONENT
     template<class Archive>
     void serialize(Archive& archive,
         RelationshipComponent& relationship) {
@@ -152,6 +76,7 @@ namespace Deer {
 
     }
 
+    // TRANSFORM COMPONENT
     template<class Archive>
     void serialize(Archive& archive,
         TransformComponent& transform) {
@@ -162,6 +87,7 @@ namespace Deer {
         
     }
 
+    // ENTITY
     template<class Archive>
     void save(Archive& archive,
         Entity const& m_entity) {
@@ -205,7 +131,6 @@ namespace Deer {
             archive(cereal::make_nvp("scriptComponent", scriptComponent));
         }
     }
-
     template<class Archive>
     void load(Archive& archive,
         Entity& m_entity) {
@@ -254,6 +179,7 @@ namespace Deer {
         m_entity.updateExecution();
     }
 
+    // ENVIRONMENT
     template<class Archive>
     void save(Archive& archive,
         EntityVector_Environment const& m_entityVector) {
@@ -262,7 +188,6 @@ namespace Deer {
         for (auto&& v : m_entityVector.entities)
             archive(v);
     }
-
     template<class Archive>
     void load(Archive& archive,
         EntityVector_Environment& m_entityVector) {
@@ -300,7 +225,6 @@ namespace Deer {
         archive(cereal::make_nvp("mainCameraUID", mainCameraUID));
 
     }
-
     template<class Archive>
     void load(Archive& archive,
         Ref<Environment> & m_environment) {

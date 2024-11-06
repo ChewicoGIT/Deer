@@ -1,4 +1,4 @@
-#include "ImGuiLayer.h"
+#include "Deer/ImGui/ImGuiLayer.h"
 #include "Plattform/OpenGL/imgui_impl_opengl3.h"
 #include "Deer/Core/Application.h"
 #include "Deer/Core/Events/Event.h"
@@ -8,6 +8,7 @@
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 #include "ImGuizmo.h"
+#include "imgui.h"
 
 namespace Deer {
 	void ImGuiLayer::onAttach() {

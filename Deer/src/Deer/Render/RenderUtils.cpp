@@ -3,6 +3,8 @@
 #include "Deer/Render/Buffer.h"
 #include "Deer/Render/Shader.h"
 
+#ifndef DEER_SERVICE
+
 namespace Deer {
 	Ref<VertexArray> RenderUtils::m_lineVertexArray;
 	Ref<Shader> RenderUtils::m_lineShader;
@@ -18,7 +20,7 @@ namespace Deer {
 		Ref<VertexArray> vertexArray = VertexArray::create();
 		Ref<VertexBuffer> vertexBuffer = VertexBuffer::create(vertices, sizeof(vertices));
 		Ref<IndexBuffer> indexBuffer = IndexBuffer::create(vertices, sizeof(vertices), IndexDataType::Unsigned_Int);
-		
+
 		BufferLayout layout({
 			{"a_vertexID", DataType::Unsigned_Int, ShaderDataType::Integer}
 			});
@@ -69,3 +71,4 @@ void main()
 		return Shader::create(vertexSrc, fragmentSrc);
 	}
 }
+#endif 
