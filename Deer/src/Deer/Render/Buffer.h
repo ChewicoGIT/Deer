@@ -55,6 +55,10 @@ namespace Deer {
 			 : m_bufferElements(elements) {
 			calculateOffsetAndStride();
 		}
+		BufferLayout(const std::vector<BufferElement> elements)
+			: m_bufferElements(elements) {
+			calculateOffsetAndStride();
+		}
 
 		inline std::vector<BufferElement>::iterator begin() { return m_bufferElements.begin(); }
 		inline std::vector<BufferElement>::iterator end() { return m_bufferElements.end(); }

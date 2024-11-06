@@ -9,6 +9,13 @@
 #include "glm/gtx/matrix_decompose.hpp"
 
 #include <string>
+//TEMP
+#include "Deer/Voxels/Chunk.h"
+#include "Deer/Voxels/ChunkBaker.h"
+#include "Deer/Render/RenderCommand.h"
+#include "Deer/Asset/AssetManager.h"
+#include "Deer/Render/Shader.h"
+#include "Deer/Core/Project.h"
 
 namespace Deer {
 	ViewportPannel::ViewportPannel(Ref<Environment>& enviroment, const std::string& windowName, Ref<ActiveEntity>& activeEntity)
@@ -16,6 +23,12 @@ namespace Deer {
 
         m_frameBuffer = FrameBuffer::create(FrameBufferSpecification(100, 100, { TextureBufferType::RGBA8, TextureBufferType::RED_INTEGER}, 1, false));
         m_virtualCamera.transform.position = glm::vec3(0, 10, -20);
+
+        //TEMP
+        Chunk chunk;
+        chunk.initializeEmpty();
+        ChunkBaker baker;
+        vertexArray = baker.bakeChunk(chunk);
 	}
 
 	void ViewportPannel::onImGui() {
@@ -73,6 +86,12 @@ namespace Deer {
 
             }
         }
+
+        // TEMP
+        uid shaderAsset = Project::m_assetManager->loadAsset<Shader>(std::filesystem::path("Assets/Shaders/BasicShader.glsl"));
+        Asset<Shader>& shader = Project::m_assetManager->getAsset<Shader>(shaderAsset);
+        shader.value->bind();
+        RenderCommand::drawIndex(vertexArray);
 
         m_handleClick = false;
 

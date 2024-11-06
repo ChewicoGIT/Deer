@@ -10,6 +10,8 @@
 #include "Deer/Core/Events/MouseEvent.h"
 
 #include <string>
+// TEMP
+#include "Deer/Render/VertexArray.h"
 
 namespace Deer {
 	enum class TransformMode {
@@ -48,6 +50,8 @@ namespace Deer {
 
 		TransformMode m_transformMode = TransformMode::Translate;
 		VirtualCamera m_virtualCamera;
+	private:
+		Ref<VertexArray> vertexArray;
 	};
 }
 
