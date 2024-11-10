@@ -35,8 +35,8 @@ uniform int u_objectID;
 
 void main()
 {
-	float light = clamp(dot(worldNormal, normalize(vec3(1,2,3))), 0.1, 1.0);
+	//float light = clamp(dot(worldNormal, normalize(vec3(1,2,3))), 0.1, 1.0);
 	
-	fragColor = vec4(.7, .8, .9, 1.0);
+	fragColor = vec4(1,1,1, 1.0);
     objectID = u_objectID;
 }

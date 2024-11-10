@@ -35,19 +35,19 @@ namespace Deer {
 		glm::mat4 projectionMatrix = camera.camera.getMatrix();
 		glm::mat4 invertZ = glm::scale(glm::mat4(1.0f), glm::vec3(1, 1, -1));
 
-		// Invert the z axis for engine convenience
+		// Lets invert the z axis for engine convenience
 		glm::mat4 cameraProjectionMatrix = projectionMatrix * invertZ * camMatrix;
-
 		for (auto& chunk : m_chunksRender) {
-			int assetID = Project::m_assetManager->loadAsset<Shader>("assets/Shaders/SimpleShader.glsl");
+			int assetID = Project::m_assetManager->loadAsset<Shader>("assets/Shaders/BasicShader.glsl");
 			Asset<Shader>& shaderAsset = Project::m_assetManager->getAsset<Shader>(assetID);
 
 			shaderAsset.value->bind();
 			shaderAsset.value->uploadUniformMat4("u_viewMatrix", cameraProjectionMatrix);
 			shaderAsset.value->uploadUniformMat4("u_worldMatrix", glm::mat4(1.0f));
-			shaderAsset.value->bind();
+			shaderAsset.value->uploadUniformInt("u_objectID", -1);
 
 			ChunkRender& chunkRender = chunk.second;
+			chunkRender.solidChunk->bind();
 
 			Render::submit(chunkRender.solidChunk);
 		}

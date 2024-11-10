@@ -15,10 +15,10 @@ namespace Deer {
 		vertices.push_back(0);
 
 		vertices.push_back(0);
-		vertices.push_back(1);
+		vertices.push_back(10);
 		vertices.push_back(0);
 
-		vertices.push_back(1);
+		vertices.push_back(10);
 		vertices.push_back(0);
 		vertices.push_back(0);
 
@@ -27,7 +27,7 @@ namespace Deer {
 		Ref<VertexBuffer> vb = VertexBuffer::create(vertices.data(), vertices.size() * sizeof(int));
 		Ref<IndexBuffer> ib = IndexBuffer::create(indices.data(), indices.size() * sizeof(unsigned int), IndexDataType::Unsigned_Int);
 		
-		BufferLayout layout({ {"a_position", DataType::Int, ShaderDataType::FloatingPoint} });
+		BufferLayout layout({ {"a_position", DataType::Int3} });
 		vb->setLayout(layout);
 
 		va->addVertexBuffer(vb);

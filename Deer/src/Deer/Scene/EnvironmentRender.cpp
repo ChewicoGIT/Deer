@@ -56,8 +56,6 @@ namespace Deer {
 				shaderAsset.value->uploadUniformMat4("u_viewMatrix", cameraProjectionMatrix);
 				shaderAsset.value->uploadUniformMat4("u_worldMatrix", matrix);
 
-				shaderAsset.value->bind();
-
 				Asset<Mesh>& meshAsset = Project::m_assetManager->getAsset<Mesh>(meshRender.meshAssetID);
 				meshAsset.value->bind();
 
@@ -107,8 +105,6 @@ namespace Deer {
 				shaderAsset.value->uploadUniformMat4("u_viewMatrix", cameraProjectionMatrix);
 				shaderAsset.value->uploadUniformMat4("u_worldMatrix", matrix);
 				shaderAsset.value->uploadUniformInt("u_objectID", tag.entityUID);
-
-				shaderAsset.value->bind();
 
 				Asset<Mesh>& meshAsset = Project::m_assetManager->getAsset<Mesh>(meshRender.meshAssetID);
 				meshAsset.value->bind();

@@ -45,13 +45,11 @@ namespace Deer {
         m_frameBuffer->clear();
         int clearData = -1;
         m_frameBuffer->clearBuffer(1, &clearData);
-        unsigned char clearColor[4]{ 0, 0, 0, 255 };
+        unsigned char clearColor[4]{ 15, 10, 10, 255 };
         m_frameBuffer->clearBuffer(0, &clearColor);
 
         Project::m_scene->render(m_virtualCamera);
         
-        m_frameBuffer->unbind();
-
         ImGui::Image((void*)m_frameBuffer->getTextureBufferID(0), windowSize, ImVec2(0, 1), ImVec2(1, 0));
         bool isUsingDrawGizmo = drawGizmos(pos.x, pos.y, windowSize.x, windowSize.y);
 
