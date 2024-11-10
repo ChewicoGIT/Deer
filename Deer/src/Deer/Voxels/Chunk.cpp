@@ -1,17 +1,20 @@
 #include "Chunk.h"
 
 namespace Deer {
+	Chunk::~Chunk() {
+		if (isDataLoaded())
+			delete[] m_voxelData;
+	}
+
 	void Chunk::initializeEmpty() {
 		generateData();
 
 		for (int i = 0; i < CHUNK_VOXELS; i++) {
-			voxelData[i] = Voxel();
+			m_voxelData[i] = Voxel();
 		}
-
-		// Temp
-		voxelData[0].id = 1;
 	}
+
 	void Chunk::generateData() {
-		voxelData = new Voxel[CHUNK_VOXELS];
+		m_voxelData = new Voxel[CHUNK_VOXELS];
 	}
 }

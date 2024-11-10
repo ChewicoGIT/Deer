@@ -1,6 +1,8 @@
 #pragma once
 #include "Deer/Core/Core.h"
-#include "Enviroment.h"
+#include "Deer/Voxels/VoxelWorld.h"
+#include "Deer/Scene/Enviroment.h"
+
 #include <vector>
 #include <string>
 
@@ -10,19 +12,23 @@ namespace Deer {
 		Scene();
 		~Scene();
 
+		void clear();
+
 		void beginExecution();
 		void updateExecution();
 		void endExecution();
 #ifndef DEER_SERVICE
 		void render();
+		void render(SceneCamera);
 #endif
 
-		void clear();
-
 		inline Ref<Environment>& getMainEnviroment() { return m_enviroment; }
+		inline Ref<VoxelWorld>& getVoxelWorld() { return m_voxelWorld; }
 		inline bool getExecutingState() { return m_isExecuting; }
 	private:
 		Ref<Environment> m_enviroment;
+		Ref<VoxelWorld> m_voxelWorld;
+
 		bool m_isExecuting = false;
 	};
 }

@@ -2,7 +2,7 @@
 #include "Deer/Render/Buffer.h"
 
 namespace Deer {
-	Ref<VertexArray> Deer::ChunkBaker::bakeChunk(Chunk& chunk) {
+	ChunkRender Deer::ChunkBaker::bakeChunk(Chunk& chunk) {
 		vertices.clear();
 		indices.clear();
 
@@ -23,15 +23,19 @@ namespace Deer {
 		vertices.push_back(0);
 
 		Ref<VertexArray> va = VertexArray::create();
-		Ref<VertexBuffer> vb = VertexBuffer::create(vertices.data(), vertices.size());
-		Ref<IndexBuffer> ib = IndexBuffer::create(indices.data(), indices.size(), IndexDataType::Unsigned_Int);
-
+		va->bind();
+		Ref<VertexBuffer> vb = VertexBuffer::create(vertices.data(), vertices.size() * sizeof(int));
+		Ref<IndexBuffer> ib = IndexBuffer::create(indices.data(), indices.size() * sizeof(unsigned int), IndexDataType::Unsigned_Int);
+		
 		BufferLayout layout({ {"a_position", DataType::Int, ShaderDataType::FloatingPoint} });
 		vb->setLayout(layout);
 
 		va->addVertexBuffer(vb);
 		va->setIndexBuffer(ib);
+		
+		ChunkRender chunkRender;
+		chunkRender.solidChunk = va;
 
-		return va;
+		return chunkRender;
 	}
 }

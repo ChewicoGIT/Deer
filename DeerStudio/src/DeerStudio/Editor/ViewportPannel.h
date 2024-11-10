@@ -22,7 +22,7 @@ namespace Deer {
 
 	class ViewportPannel : public EditorPannel {
 	public:
-		ViewportPannel(Ref<Environment>& enviroment, const std::string& windowName, Ref<ActiveEntity>& activeEntity);
+		ViewportPannel(const std::string& windowName, Ref<ActiveEntity>& activeEntity);
 		
 		void onImGui() override;
 		void onRender(Timestep timestep) override;
@@ -33,7 +33,6 @@ namespace Deer {
 		// bool expresses if it is being used
 		bool drawGizmos(int wPosX, int wPosY, int wSizeX, int wSizeY);
 	private:
-		Ref<Environment> m_environment;
 		Ref<FrameBuffer> m_frameBuffer;
 		Ref<ActiveEntity> m_activeEntity;
 
@@ -49,9 +48,7 @@ namespace Deer {
 		float m_sensitivity = 0.005f;
 
 		TransformMode m_transformMode = TransformMode::Translate;
-		VirtualCamera m_virtualCamera;
-	private:
-		Ref<VertexArray> vertexArray;
+		SceneCamera m_virtualCamera;
 	};
 }
 

@@ -32,7 +32,7 @@ namespace Deer {
         m_activeEntity = Ref<ActiveEntity>(new ActiveEntity());
 
         auto m_propertiesPannel = Ref<PropertiesPannel>(new PropertiesPannel(m_activeEntity));
-        auto m_viewportPannel = Ref<ViewportPannel>(new ViewportPannel(Project::m_scene->getMainEnviroment(), "Scene viewport", m_activeEntity));
+        auto m_viewportPannel = Ref<ViewportPannel>(new ViewportPannel("Scene viewport", m_activeEntity));
         auto m_enviromentTreePannel = Ref<EnviromentTreePannel>(new EnviromentTreePannel(Project::m_scene->getMainEnviroment(), "World tree", m_activeEntity));
         auto m_assetPannel = Ref<AssetManagerPannel>(new AssetManagerPannel(m_activeEntity));
         auto m_gamePannel = Ref<GamePannel>(new GamePannel(m_activeEntity));
@@ -43,6 +43,9 @@ namespace Deer {
         pannels.push_back(m_assetPannel);
         pannels.push_back(m_gamePannel);
 
+        Project::m_scene->getVoxelWorld()->loadEmptyChunk(0, 0, 0);
+        Project::m_scene->getVoxelWorld()->getVoxel(0, 0, 0).id = 1;
+        Project::m_scene->getVoxelWorld()->bakeChunk(0, 0, 0);
     }
 
     void DeerStudioApplication::onShutdown() {

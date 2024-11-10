@@ -7,28 +7,17 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/gtx/matrix_decompose.hpp"
+#include "Deer/Core/Project.h"
+#include "Deer/Scene/Scene.h"
 
 #include <string>
-//TEMP
-#include "Deer/Voxels/Chunk.h"
-#include "Deer/Voxels/ChunkBaker.h"
-#include "Deer/Render/RenderCommand.h"
-#include "Deer/Asset/AssetManager.h"
-#include "Deer/Render/Shader.h"
-#include "Deer/Core/Project.h"
 
 namespace Deer {
-	ViewportPannel::ViewportPannel(Ref<Environment>& enviroment, const std::string& windowName, Ref<ActiveEntity>& activeEntity)
-		: m_environment(enviroment), m_windowName(windowName), m_activeEntity(activeEntity) {
+	ViewportPannel::ViewportPannel(const std::string& windowName, Ref<ActiveEntity>& activeEntity)
+		: m_windowName(windowName), m_activeEntity(activeEntity) {
 
         m_frameBuffer = FrameBuffer::create(FrameBufferSpecification(100, 100, { TextureBufferType::RGBA8, TextureBufferType::RED_INTEGER}, 1, false));
         m_virtualCamera.transform.position = glm::vec3(0, 10, -20);
-
-        //TEMP
-        Chunk chunk;
-        chunk.initializeEmpty();
-        ChunkBaker baker;
-        vertexArray = baker.bakeChunk(chunk);
 	}
 
 	void ViewportPannel::onImGui() {
@@ -59,7 +48,9 @@ namespace Deer {
         unsigned char clearColor[4]{ 0, 0, 0, 255 };
         m_frameBuffer->clearBuffer(0, &clearColor);
 
-        m_environment->render(m_virtualCamera);
+        Project::m_scene->render(m_virtualCamera);
+        
+        m_frameBuffer->unbind();
 
         ImGui::Image((void*)m_frameBuffer->getTextureBufferID(0), windowSize, ImVec2(0, 1), ImVec2(1, 0));
         bool isUsingDrawGizmo = drawGizmos(pos.x, pos.y, windowSize.x, windowSize.y);
@@ -80,18 +71,11 @@ namespace Deer {
                     m_activeEntity->clear();
 
                 if (id >= 0) {
-                    Entity& selectedEntity = m_environment->getEntity((uid)id);
+                    Entity& selectedEntity = Project::m_scene->getMainEnviroment()->getEntity((uid)id);
                     m_activeEntity->addEntity(selectedEntity);
                 }
-
             }
         }
-
-        // TEMP
-        uid shaderAsset = Project::m_assetManager->loadAsset<Shader>(std::filesystem::path("Assets/Shaders/BasicShader.glsl"));
-        Asset<Shader>& shader = Project::m_assetManager->getAsset<Shader>(shaderAsset);
-        shader.value->bind();
-        RenderCommand::drawIndex(vertexArray);
 
         m_handleClick = false;
 

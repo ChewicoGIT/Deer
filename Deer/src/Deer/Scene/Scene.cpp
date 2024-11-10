@@ -8,6 +8,7 @@ namespace Deer {
 	Scene::Scene() {
 		DEER_CORE_TRACE("Creating scene");
 		m_enviroment = Ref<Environment>(new Environment("Scene Root"));
+		m_voxelWorld = Ref<VoxelWorld>(new VoxelWorld());
 	}
 
 	Scene::~Scene() {
@@ -65,6 +66,11 @@ namespace Deer {
 
 		Entity& m_cameraEntity = m_enviroment->getEntity(mainCamera);
 		m_enviroment->render(m_cameraEntity);
+	}
+
+	void Scene::render(SceneCamera sceneCamera) {
+		m_voxelWorld->render(sceneCamera);
+		m_enviroment->render(sceneCamera);
 	}
 #endif
 

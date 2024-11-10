@@ -1,6 +1,7 @@
 #pragma once
 #include "Deer/Core/Core.h"
 #include "Deer/Scene/Components.h"
+#include "Deer/Scene/SceneCamera.h"
 #include "Deer/Render/FrameBuffer.h"
 #include "entt/entt.hpp"
 
@@ -11,11 +12,6 @@ namespace Deer {
 	class Entity;
 	using EntityMap = std::unordered_map<uid, Entity>;
 
-	struct VirtualCamera {
-		TransformComponent transform;
-		CameraComponent camera;
-	};
-
 	class Environment {
 	public:
 		Environment(const std::string& rootName = "root");
@@ -25,7 +21,7 @@ namespace Deer {
 
 #ifndef DEER_SERVICE
 		void render(Entity& camera);
-		void render(VirtualCamera& camera);
+		void render(SceneCamera& camera);
 #endif
 
 		Entity& getEntity(uid id);

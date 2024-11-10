@@ -1,4 +1,6 @@
 #include "Enviroment.h"
+#ifndef DEER_SERVICE
+
 #include "Deer/Core/Application.h"
 #include "Deer/Core/Project.h"
 #include "Deer/Asset/AssetManager.h"
@@ -11,8 +13,6 @@
 #include "Deer/Core/Log.h"
 
 namespace Deer {
-
-#ifndef DEER_SERVICE
 	void Environment::render(Entity& camera) {
 		DEER_CORE_ASSERT(camera.isValid(), "Rendering camera is not valid");
 
@@ -68,7 +68,7 @@ namespace Deer {
 
 	}
 
-	void Environment::render(VirtualCamera& camera) {
+	void Environment::render(SceneCamera& camera) {
 
 		glm::mat4 camMatrix = glm::inverse(camera.transform.getMatrix());
 		glm::mat4 projectionMatrix = camera.camera.getMatrix();
