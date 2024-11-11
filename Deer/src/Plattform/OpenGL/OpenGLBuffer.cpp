@@ -68,7 +68,7 @@ namespace Deer {
 		case DataType::Half3:	return GL_HALF_FLOAT;
 		case DataType::Half4:	return GL_HALF_FLOAT;
 			// Floats : 4
-		case DataType::Float: return  GL_FLOAT;
+		case DataType::Float:  return  GL_FLOAT;
 		case DataType::Float2: return GL_FLOAT;
 		case DataType::Float3: return GL_FLOAT;
 		case DataType::Float4: return GL_FLOAT;
@@ -98,10 +98,10 @@ namespace Deer {
 		case DataType::Unsigned_Short3: return GL_UNSIGNED_SHORT;
 		case DataType::Unsigned_Short4: return GL_UNSIGNED_SHORT;
 			// Ints : 4
-		case DataType::Unsigned_Int:	return GL_UNSIGNED_BYTE;
-		case DataType::Unsigned_Int2:	return GL_UNSIGNED_BYTE;
-		case DataType::Unsigned_Int3:	return GL_UNSIGNED_BYTE;
-		case DataType::Unsigned_Int4: return   GL_UNSIGNED_BYTE;
+		case DataType::Unsigned_Int:	return GL_UNSIGNED_INT;
+		case DataType::Unsigned_Int2:	return GL_UNSIGNED_INT;
+		case DataType::Unsigned_Int3:	return GL_UNSIGNED_INT;
+		case DataType::Unsigned_Int4:	return GL_UNSIGNED_INT;
 		}
 
 		DEER_CORE_ERROR("Unkown shader data type");

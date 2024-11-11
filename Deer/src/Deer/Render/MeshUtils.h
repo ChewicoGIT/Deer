@@ -6,7 +6,7 @@ namespace Deer {
 
 	class MeshUtils {
 	public:
-		static Ref<VertexArray> createMesh(int vertexCount, float* vertices, int indexCount, unsigned int* indices);
+		static Ref<VertexArray> createMesh(int vertexCount, float* vertices, int indexCount, unsigned int* m_indices);
 	};
 }
 

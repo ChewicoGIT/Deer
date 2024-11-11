@@ -44,8 +44,23 @@ namespace Deer {
         pannels.push_back(m_gamePannel);
 
         Project::m_scene->getVoxelWorld()->loadEmptyChunk(0, 0, 0);
-        Project::m_scene->getVoxelWorld()->getVoxel(0, 0, 0).id = 1;
+
+        for (int x = 0; x < 32; x++) {
+            for (int y = 0; y < 32; y++) {
+                for (int z = 0; z < 32; z++) {
+                    int rx = x - 16;
+                    int ry = y - 16;
+                    int rz = z - 16;
+                    int distance = rx * rx + ry * ry + rz * rz;
+                    
+                    if (distance < 14 * 14)
+                        Project::m_scene->getVoxelWorld()->getVoxel(x, y, z).id = 1;
+
+                }
+            }
+        }
         Project::m_scene->getVoxelWorld()->bakeChunk(0, 0, 0);
+
     }
 
     void DeerStudioApplication::onShutdown() {

@@ -9,8 +9,12 @@ namespace Deer {
 	public:
 		ChunkRender bakeChunk(Chunk& chunk);
 	private:
-		std::vector<int> indices;
-		std::vector<int> vertices;
+		std::vector<int> m_indices;
+		std::vector<SolidVoxelVertexData> m_solidVoxelVertices;
+		Chunk* m_workingChunk;
+
+		void bakeSolidVoxel();
+		void genSolidVoxel(ChunkVoxelID voxelID);
 	};
 }
 

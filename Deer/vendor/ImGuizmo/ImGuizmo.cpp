@@ -1510,12 +1510,12 @@ namespace ImGuizmo
                gContext.mBoundsAnchor.TransformPoint(midPoint, gContext.mModelSource);
                gContext.mBoundsPlan = BuildPlan(gContext.mBoundsAnchor, bestAxisWorldDirection);
                gContext.mBoundsBestAxis = bestAxis;
-               int indices[] = { secondAxis , thirdAxis };
-               gContext.mBoundsAxis[0] = indices[i % 2];
+               int m_indices[] = { secondAxis , thirdAxis };
+               gContext.mBoundsAxis[0] = m_indices[i % 2];
                gContext.mBoundsAxis[1] = -1;
 
                gContext.mBoundsLocalPivot.Set(0.f);
-               gContext.mBoundsLocalPivot[gContext.mBoundsAxis[0]] = aabb[oppositeIndex][indices[i % 2]];// bounds[gContext.mBoundsAxis[0]] * (((i + 1) & 2) ? 1.f : -1.f);
+               gContext.mBoundsLocalPivot[gContext.mBoundsAxis[0]] = aabb[oppositeIndex][m_indices[i % 2]];// bounds[gContext.mBoundsAxis[0]] * (((i + 1) & 2) ? 1.f : -1.f);
 
                gContext.mbUsingBounds = true;
                gContext.mEditingID = gContext.mActualID;

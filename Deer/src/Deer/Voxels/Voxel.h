@@ -8,6 +8,17 @@
 #define CHUNK_VOXELS CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z
 #define VOXEL_POSITION(id) id.z + id.y * CHUNK_SIZE_Z + id.x * CHUNK_SIZE_Z * CHUNK_SIZE_Y
 
+#define NORMAL_LEFT 0
+#define NORMAL_RIGHT 1
+#define NORMAL_DOWN 2
+#define NORMAL_UP 3
+#define NORMAL_BACK 4
+#define NORMAL_FRONT 5
+#define NORMAL_DIR(axis, normal) normalDirs[axis + normal * 3]
+#define NORMAL_VERTEX_POS(axis, id, normal) normalFacePositions[axis + id * 3 + normal * 3 * 4]
+#define NORMAL_VERTEX_POS_DENORMALIZED(axis, id, normal) normalFacePositionsDenormalized[axis + id * 3 + normal * 3 * 4]
+#define VERTEX_UV(axis, id) uvFace[axis + id * 2]
+
 namespace Deer {
 	struct Voxel {
 		uint16_t id;
@@ -17,6 +28,11 @@ namespace Deer {
 	};
 
 	extern Voxel nullVoxel;
+	extern Voxel emptyVoxel;
+	extern int normalDirs[3 * 6];
+	extern int normalFacePositions[3 * 4 * 6];
+	extern int normalFacePositionsDenormalized[3 * 4 * 6];
+	extern int uvFace[2 * 4];
 
 	struct ChunkID {
 		uint16_t x;
@@ -41,5 +57,8 @@ namespace Deer {
 		uint8_t x;
 		uint8_t y;
 		uint8_t z;
+
+		ChunkVoxelID() : x(0), y(0), z(0) { }
+		ChunkVoxelID(uint8_t _x, uint8_t _y = 0, uint8_t _z = 0) : x(_x), y(_y), z(_z) { }
 	};
 }
