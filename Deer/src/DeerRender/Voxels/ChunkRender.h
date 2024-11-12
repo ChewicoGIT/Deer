@@ -1,6 +1,6 @@
 #pragma once
 #include "Deer/Core/Core.h"
-#include "Deer/Render/VertexArray.h"
+#include "DeerRender/Render/VertexArray.h"
 #include <stdint.h>
 
 namespace Deer {

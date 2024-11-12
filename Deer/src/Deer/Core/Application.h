@@ -1,11 +1,13 @@
 #pragma once
 #include "Deer/Core/Core.h"
-#include "Deer/Core/Window.h"
-#include "Deer/Core/Events/Event.h"
 #include "Deer/Core/Timestep.h"
-#include "Deer/ImGui/ImGuiLayer.h"
 
+#ifndef DEER_SERVICE
+#include "Deer/Core/Events/Event.h"
 #include "Deer/Core/Events/ApplicationEvent.h"
+#include "DeerRender/ImGui/ImGuiLayer.h"
+#include "DeerRender/Core/Window.h"
+#endif
 
 namespace Deer {
 	class Application
@@ -27,7 +29,6 @@ namespace Deer {
 		virtual void onEvent(Event& event) {}
 
 		Scope<Window> m_window;
-
 	private:
 		virtual void onEventCallback(Event& e);
 		bool onWindowClose(WindowCloseEvent& e);

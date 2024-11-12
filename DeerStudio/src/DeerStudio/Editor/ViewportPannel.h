@@ -11,7 +11,7 @@
 
 #include <string>
 // TEMP
-#include "Deer/Render/VertexArray.h"
+#include "DeerRender/Render/VertexArray.h"
 
 namespace Deer {
 	enum class TransformMode {

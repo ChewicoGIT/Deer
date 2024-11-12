@@ -4,9 +4,9 @@
 #include "Deer/Asset/AssetManager.h"
 #include "Deer/Scene/Entity.h"
 #include "Deer/Scene/Components.h"
-#include "Deer/Render/Render.h"
-#include "Deer/Render/RenderUtils.h"
-#include "Deer/Render/Texture.h"
+#include "DeerRender/Render/Render.h"
+#include "DeerRender/Render/RenderUtils.h"
+#include "DeerRender/Render/Texture.h"
 
 #include "Deer/Core/Log.h"
 

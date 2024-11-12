@@ -12,7 +12,7 @@
 #include <vector>
 
 #ifndef DEER_SERVICE
-#include "Deer/Render/Texture.h"
+#include "DeerRender/Render/Texture.h"
 #endif
 
 namespace Deer {

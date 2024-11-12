@@ -3,8 +3,8 @@
 #include "Deer/Scene/Components.h"
 #include "Deer/Scene/Entity.h"
 #include "Deer/Core/Log.h"
-#include "Deer/Core/Input.h"
-#include "Deer/Core/KeyCodes.h"
+#include "Deer/Core/Input/Input.h"
+#include "Deer/Core/Input/KeyCodes.h"
 
 #include <string.h>
 #include <functional>

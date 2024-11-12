@@ -2,7 +2,7 @@
 #include "Deer/Core/Core.h"
 #include "Deer/Scene/Components.h"
 #include "Deer/Scene/SceneCamera.h"
-#include "Deer/Render/FrameBuffer.h"
+#include "DeerRender/Render/FrameBuffer.h"
 #include "entt/entt.hpp"
 
 #include <string>

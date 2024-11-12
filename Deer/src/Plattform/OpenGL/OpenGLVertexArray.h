@@ -1,6 +1,6 @@
 #pragma once
-#include "Deer/Render/VertexArray.h"
-#include "Deer/Render/Buffer.h"
+#include "DeerRender/Render/VertexArray.h"
+#include "DeerRender/Render/Buffer.h"
 #include "Deer/Core/Core.h"
 
 #include <vector>

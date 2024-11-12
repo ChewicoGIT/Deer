@@ -4,9 +4,9 @@
 #include "Deer/Voxels/Chunk.h"
 
 #ifndef DEER_SERVICE
-#include "Deer/Voxels/ChunkRender.h"
-#include "Deer/Voxels/ChunkBaker.h"
-#include "Deer/Render/Camera.h"
+#include "DeerRender/Voxels/ChunkRender.h"
+#include "DeerRender/Voxels/ChunkBaker.h"
+#include "DeerRender/Render/Camera.h"
 #include "Deer/Scene/SceneCamera.h"
 #endif
 

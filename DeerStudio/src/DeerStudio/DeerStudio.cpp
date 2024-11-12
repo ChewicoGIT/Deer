@@ -5,6 +5,7 @@
 #include "DeerStudio/Editor/ViewportPannel.h"
 #include "DeerStudio/Editor/AssetManagerPannel.h"
 #include "DeerStudio/Editor/GamePannel.h"
+#include "DeerStudio/Editor/TerrainEditorPannel.h"
 
 #include "Deer/Core/Project.h"
 #include "Deer/Scene/Scene.h"
@@ -36,31 +37,14 @@ namespace Deer {
         auto m_enviromentTreePannel = Ref<EnviromentTreePannel>(new EnviromentTreePannel(Project::m_scene->getMainEnviroment(), "World tree", m_activeEntity));
         auto m_assetPannel = Ref<AssetManagerPannel>(new AssetManagerPannel(m_activeEntity));
         auto m_gamePannel = Ref<GamePannel>(new GamePannel(m_activeEntity));
+        auto m_terrainEditor = Ref<TerrainEditorPannel>(new TerrainEditorPannel());
 
         pannels.push_back(m_propertiesPannel);
         pannels.push_back(m_enviromentTreePannel);
         pannels.push_back(m_viewportPannel);
         pannels.push_back(m_assetPannel);
         pannels.push_back(m_gamePannel);
-
-        Project::m_scene->getVoxelWorld()->loadEmptyChunk(0, 0, 0);
-
-        for (int x = 0; x < 32; x++) {
-            for (int y = 0; y < 32; y++) {
-                for (int z = 0; z < 32; z++) {
-                    int rx = x - 16;
-                    int ry = y - 16;
-                    int rz = z - 16;
-                    int distance = rx * rx + ry * ry + rz * rz;
-                    
-                    if (distance < 14 * 14)
-                        Project::m_scene->getVoxelWorld()->getVoxel(x, y, z).id = 1;
-
-                }
-            }
-        }
-        Project::m_scene->getVoxelWorld()->bakeChunk(0, 0, 0);
-
+        pannels.push_back(m_terrainEditor);
     }
 
     void DeerStudioApplication::onShutdown() {

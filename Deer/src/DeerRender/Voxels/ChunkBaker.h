@@ -1,7 +1,7 @@
 #pragma once
 #include "Deer/Voxels/Chunk.h"
-#include "Deer/Render/VertexArray.h"
-#include "Deer/Voxels/ChunkRender.h"
+#include "DeerRender/Render/VertexArray.h"
+#include "DeerRender/Voxels/ChunkRender.h"
 #include <vector>
 
 namespace Deer {

@@ -1,7 +1,7 @@
 #include "RenderUtils.h"
-#include "Deer/Render/VertexArray.h"
-#include "Deer/Render/Buffer.h"
-#include "Deer/Render/Shader.h"
+#include "DeerRender/Render/VertexArray.h"
+#include "DeerRender/Render/Buffer.h"
+#include "DeerRender/Render/Shader.h"
 
 #ifndef DEER_SERVICE
 

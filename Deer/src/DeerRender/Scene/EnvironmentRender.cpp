@@ -1,14 +1,13 @@
-#include "Enviroment.h"
-#ifndef DEER_SERVICE
+#include "Deer/Scene/Enviroment.h"
 
 #include "Deer/Core/Application.h"
 #include "Deer/Core/Project.h"
 #include "Deer/Asset/AssetManager.h"
 #include "Deer/Scene/Entity.h"
 #include "Deer/Scene/Components.h"
-#include "Deer/Render/Render.h"
-#include "Deer/Render/RenderUtils.h"
-#include "Deer/Render/Texture.h"
+#include "DeerRender/Render/Render.h"
+#include "DeerRender/Render/RenderUtils.h"
+#include "DeerRender/Render/Texture.h"
 
 #include "Deer/Core/Log.h"
 
@@ -207,5 +206,4 @@ namespace Deer {
 
 
 	}
-#endif
 }

@@ -1,6 +1,6 @@
 #pragma once
-#include "Deer/Core/Window.h"
-#include "Deer/Render/RenderContext.h"
+#include "DeerRender/Core/Window.h"
+#include "DeerRender/Render/RenderContext.h"
 #include <functional>
 
 struct GLFWwindow;

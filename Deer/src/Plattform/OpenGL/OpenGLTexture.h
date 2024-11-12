@@ -1,5 +1,5 @@
 #pragma once
-#include "Deer/Render/Texture.h"
+#include "DeerRender/Render/Texture.h"
 
 namespace Deer {
 	class OpenGLTexture2D : public Texture2D {

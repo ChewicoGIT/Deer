@@ -8,6 +8,8 @@ project "Deer"
    files {
    "src/Deer/**.h",
    "src/Deer/**.cpp",
+   "src/DeerRender/**.h",
+   "src/DeerRender/**.cpp",
    "src/Plattform/OpenGL/**.h",
    "src/Plattform/OpenGL/**.cpp",
    "src/Plattform/ImGUI/**.h",

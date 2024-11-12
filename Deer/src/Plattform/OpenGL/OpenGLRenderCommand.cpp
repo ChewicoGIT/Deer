@@ -1,6 +1,6 @@
-#include "Deer/Render/RenderCommand.h"
-#include "Deer/Render/VertexArray.h"
-#include "Deer/Render/RenderAPI.h"
+#include "DeerRender/Render/RenderCommand.h"
+#include "DeerRender/Render/VertexArray.h"
+#include "DeerRender/Render/RenderAPI.h"
 #include "Plattform/OpenGL/OpenGLRenderAPI.h"
 
 namespace Deer {

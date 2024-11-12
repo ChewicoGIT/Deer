@@ -1,7 +1,7 @@
 #include "AssetManagerPannel.h"
 #include "Deer/Core/Log.h"
 #include "Deer/Core/Project.h"
-#include "Deer/Render/Texture.h"
+#include "DeerRender/Render/Texture.h"
 #include "Deer/Scene/SceneSerializer.h"
 #include "Deer/Asset/AssetManager.h"
 #include "DeerStudio/Editor/ActiveEntity.h"

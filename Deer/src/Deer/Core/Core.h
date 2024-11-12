@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <stdint.h>
 
 namespace Deer {
 
@@ -13,6 +14,6 @@ namespace Deer {
 	using WeakRef = std::weak_ptr<T>;
 
 	// Unique identifier
-	using uid = unsigned int;
+	using uid = uint32_t;
 
 }
