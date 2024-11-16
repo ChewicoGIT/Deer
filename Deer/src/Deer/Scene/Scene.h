@@ -17,7 +17,7 @@ namespace Deer {
 		void beginExecution();
 		void updateExecution();
 		void endExecution();
-#ifndef DEER_SERVICE
+#ifdef DEER_RENDER
 		void render();
 		void render(SceneCamera);
 #endif

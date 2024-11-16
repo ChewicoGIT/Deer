@@ -2,7 +2,6 @@
 #include "Deer/Core/Core.h"
 #include "Deer/Core/Log.h"
 #include "Deer/Scene/Enviroment.h"
-#include "Deer/Scene/Entity.h"
 
 #include "entt/entt.hpp"
 

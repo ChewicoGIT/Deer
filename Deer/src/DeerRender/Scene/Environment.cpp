@@ -12,61 +12,7 @@
 #include "Deer/Core/Log.h"
 
 namespace Deer {
-	void Environment::render(Entity& camera) {
-		DEER_CORE_ASSERT(camera.isValid(), "Rendering camera is not valid");
-
-		CameraComponent& cameraComponent = camera.getComponent<CameraComponent>();
-
-		glm::mat4 camMatrix = glm::inverse(camera.getWorldMatrix());
-		glm::mat4 projectionMatrix = cameraComponent.getMatrix();
-		glm::mat4 invertZ = glm::scale(glm::mat4(1.0f), glm::vec3(1, 1, -1));
-
-		// Invert the z axis for engine convenience
-		glm::mat4 cameraProjectionMatrix = projectionMatrix * invertZ * camMatrix;
-
-		{
-			auto view = m_registry.view<MeshRenderComponent, TagComponent>();
-			for (auto entityId : view) {
-				auto& meshRender = view.get<MeshRenderComponent>(entityId);
-				if (meshRender.shaderAssetID == 0)
-					continue;
-
-				if (meshRender.meshAssetID == 0)
-					continue;
-
-				auto& tag = view.get<TagComponent>(entityId);
-				Entity& entity = getEntity(tag.entityUID);
-
-				if (entity.hasComponent<TextureBindingComponent>()) {
-					TextureBindingComponent& textureBinding = entity.getComponent<TextureBindingComponent>();
-
-					for (int x = 0; x < MAX_TEXTURE_BINDINGS; x++) {
-						if (textureBinding.textureAssetID[x] == 0)
-							continue;
-
-						Asset<Texture2D>& textureAsset = Project::m_assetManager->getAsset<Texture2D>(textureBinding.textureAssetID[x]);
-						textureAsset.value->bind(textureBinding.textureBindID[x]);
-					}
-				}
-
-				glm::mat4 matrix = entity.getWorldMatrix();
-				Asset<Shader>& shaderAsset = Project::m_assetManager->getAsset<Shader>(meshRender.shaderAssetID);
-				shaderAsset.value->bind();
-				shaderAsset.value->uploadUniformMat4("u_viewMatrix", cameraProjectionMatrix);
-				shaderAsset.value->uploadUniformMat4("u_worldMatrix", matrix);
-
-				Asset<Mesh>& meshAsset = Project::m_assetManager->getAsset<Mesh>(meshRender.meshAssetID);
-				meshAsset.value->bind();
-
-				Render::submit(meshAsset.value);
-			}
-
-		}
-
-	}
-
 	void Environment::render(SceneCamera& camera) {
-
 		glm::mat4 camMatrix = glm::inverse(camera.transform.getMatrix());
 		glm::mat4 projectionMatrix = camera.camera.getMatrix();
 		glm::mat4 invertZ = glm::scale(glm::mat4(1.0f), glm::vec3(1, 1, -1));

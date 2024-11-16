@@ -1,5 +1,4 @@
 #pragma once
-#ifndef DEER_SERVICE
 #include "Deer/Core/Core.h"
 #include "DeerRender/Render/VertexArray.h"
 #include "DeerRender/Render/Shader.h"
@@ -42,5 +41,5 @@ namespace Deer {
 
 		float fov = glm::radians(50.0f), aspect = 16 / 9, nearZ = 0.1f, farZ = 100;
 	};
+
 }
-#endif

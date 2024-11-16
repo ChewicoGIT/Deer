@@ -2,7 +2,7 @@
 #include "Deer/Core/Core.h"
 #include "Deer/Core/Timestep.h"
 
-#ifndef DEER_SERVICE
+#ifdef DEER_RENDER
 #include "Deer/Core/Events/Event.h"
 #include "Deer/Core/Events/ApplicationEvent.h"
 #include "DeerRender/ImGui/ImGuiLayer.h"
@@ -13,7 +13,10 @@ namespace Deer {
 	class Application
 	{
 	public:
+		Application();
+#ifdef DEER_RENDER
 		Application(const WindowProps& props = WindowProps());
+#endif
 
 		static Application* s_application;
 
@@ -23,7 +26,7 @@ namespace Deer {
 		virtual void onShutdown() {}
 		virtual void onUpdate(Timestep delta) {}
 
-#ifndef DEER_SERVICE
+#ifdef DEER_RENDER
 		virtual void onRender(Timestep delta) {}
 		virtual void onImGUI() {}
 		virtual void onEvent(Event& event) {}

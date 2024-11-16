@@ -19,6 +19,7 @@ project "Deer"
    }
 
    links { "spdlog", "GLFW", "glad", "ImGui", "angelScript" } 
+   defines { "DEER_RENDER" }
 
    includedirs
    {

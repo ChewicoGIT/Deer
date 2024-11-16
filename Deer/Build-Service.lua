@@ -26,8 +26,6 @@ project "DeerService"
    targetdir ("../bin/" .. OutputDir .. "/%{prj.name}")
    objdir ("../bin/int/" .. OutputDir .. "/%{prj.name}")
    
-   defines { "DEER_SERVICE" }
-
    filter "system:windows"
        systemversion "latest"
        defines { }

@@ -4,6 +4,10 @@
 #include "glm/gtc/quaternion.hpp"
 #include "glm/glm.hpp"
 
+#ifdef DEER_RENDER
+#include "DeerRender/Scene/Components.h"
+#endif
+
 #include <string>
 #include <vector>
 

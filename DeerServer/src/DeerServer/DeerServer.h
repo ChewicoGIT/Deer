@@ -6,7 +6,7 @@ namespace Deer {
 	class DeerServerApplication : public Deer::Application {
 	public:
 		DeerServerApplication()
-			: Application(Deer::WindowProps("Deer Runtime")) {
+			: Application() {
 		}
 
 		void onInit() override;

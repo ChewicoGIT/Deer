@@ -25,15 +25,85 @@
                     },
                     "relationship": {
                         "parentUID": 0,
+                        "childrensUIDs": [
+                            2
+                        ]
+                    },
+                    "has_meshRenderComponent": false,
+                    "has_cameraComponent": false,
+                    "has_textureBindingComponent": false,
+                    "has_scriptComponent": false
+                },
+                {
+                    "id": 1,
+                    "name": "Scene Root",
+                    "transform": {
+                        "position": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 1.0
+                        }
+                    },
+                    "relationship": {
+                        "parentUID": 0,
+                        "childrensUIDs": [
+                            2
+                        ]
+                    },
+                    "has_meshRenderComponent": false,
+                    "has_cameraComponent": false,
+                    "has_textureBindingComponent": false,
+                    "has_scriptComponent": false
+                },
+                {
+                    "id": 2,
+                    "name": "Camera",
+                    "transform": {
+                        "position": {
+                            "x": 1.9156945943832398,
+                            "y": 11.272941589355469,
+                            "z": 45.95248794555664
+                        },
+                        "scale": {
+                            "x": 1.000001072883606,
+                            "y": 1.0,
+                            "z": 1.000001072883606
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.9542083144187927,
+                            "z": 0.0,
+                            "w": 0.2991430163383484
+                        }
+                    },
+                    "relationship": {
+                        "parentUID": 1,
                         "childrensUIDs": []
                     },
-                    "hasMeshRenderComponent": false,
-                    "hasCameraComponent": false,
-                    "hasTextureBindingComponent": false,
-                    "hasScriptComponent": false
+                    "has_meshRenderComponent": false,
+                    "has_cameraComponent": true,
+                    "cameraComponent": {
+                        "aspect": 1.6326905488967896,
+                        "fov": 0.8726646304130554,
+                        "farZ": 100.0,
+                        "nearZ": 0.10000000149011612
+                    },
+                    "has_textureBindingComponent": false,
+                    "has_scriptComponent": false
                 }
             ],
-            "mainCameraUID": 0
+            "mainCameraUID": 2
         }
     }
 }

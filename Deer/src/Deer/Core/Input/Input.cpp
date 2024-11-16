@@ -1,7 +1,7 @@
 #include "Input.h"
 
 namespace Deer {
-#ifndef DEER_SERVICE
+#ifdef DEER_RENDER
 	bool Input::isKeyPressed(unsigned int key) {
 		return Application::s_application->m_window->getKeyPressed(key);
 	}

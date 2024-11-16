@@ -1,7 +1,7 @@
 #include "Application.h"
 #include "Deer/Core/Log.h"
 
-#ifndef DEER_SERVICE
+#ifdef DEER_RENDER
 #include "DeerRender/Render/RenderCommand.h"
 #include "DeerRender/Render/Render.h"
 #include "imgui.h"
@@ -12,13 +12,16 @@
 namespace Deer {
 	Application* Application::s_application;
 
-	Application::Application(const WindowProps& props) 
+    Application::Application() : m_running(false) {
+    }
+
+#ifdef DEER_RENDER
+    Application::Application(const WindowProps& props)
         : m_running(false) {
-#ifndef DEER_SERVICE
         m_window = Scope<Window>(Window::create(props));
         m_window->setEventCallback(std::bind(&Application::onEventCallback, this, std::placeholders::_1));
-#endif
 	}
+#endif
 
 	void Application::run() {
         s_application = this;
@@ -31,7 +34,7 @@ namespace Deer {
         double accumulatedUpdateTime = 0.0;
         double accumulatedRenderTime = 0.0;
 
-#ifndef DEER_SERVICE
+#ifdef DEER_RENDER
         m_imGuiLayer.onAttach();
 #endif
         onInit();
@@ -52,7 +55,7 @@ namespace Deer {
                 accumulatedUpdateTime -= targetUpdateTime;
             }
 
-#ifndef DEER_SERVICE
+#ifdef DEER_RENDER
             // Render loop (User-defined FPS)
             if (accumulatedRenderTime >= targetRenderTime) {
                 RenderCommand::setClearColor({ 0.2f, 0.2f, 0.3f, 1.0f });
@@ -77,13 +80,13 @@ namespace Deer {
             std::this_thread::sleep_for(std::chrono::milliseconds(1));
         }
 
-#ifndef DEER_SERVICE
+#ifdef DEER_RENDER
         m_imGuiLayer.onDetach();
 #endif
         onShutdown();
 	}
 
-#ifndef DEER_SERVICE
+#ifdef DEER_RENDER
     void Application::onEventCallback(Event& e) {
         onEvent(e);
         m_imGuiLayer.onEvent(e);

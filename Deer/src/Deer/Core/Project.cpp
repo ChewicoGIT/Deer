@@ -19,8 +19,6 @@ namespace Deer {
 
 		m_scene = Ref<Scene>(new Scene());
 		m_sceneSerializer = Ref<SceneSerializer>(new SceneSerializer(Project::m_scene));
-
-		m_sceneSerializer->deserialize("assets/main.dscn");
 	}
 
 	void Project::releaseBaseSystems() {

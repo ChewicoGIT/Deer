@@ -1,12 +1,15 @@
 #pragma once
 #include "Deer/Core/Core.h"
 #include "Deer/Scene/Components.h"
-#include "Deer/Scene/SceneCamera.h"
-#include "DeerRender/Render/FrameBuffer.h"
 #include "entt/entt.hpp"
 
 #include <string>
 #include <unordered_map>
+
+#ifdef DEER_RENDER
+#include "DeerRender/Scene/SceneCamera.h"
+#include "DeerRender/Render/FrameBuffer.h"
+#endif
 
 namespace Deer {
 	class Entity;
@@ -19,8 +22,7 @@ namespace Deer {
 
 		void clear();
 
-#ifndef DEER_SERVICE
-		void render(Entity& camera);
+#ifdef DEER_RENDER
 		void render(SceneCamera& camera);
 #endif
 

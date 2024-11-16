@@ -6,13 +6,14 @@
 namespace Deer {
 	class SceneSerializer {
 	public:
-		SceneSerializer(Ref<Scene>& scene) : m_scene(scene), m_currentScenePath("_NO_INITIALIZED_") { }
+		// In case DEER_SERVICE is defined by default serverSerialization will be true allewaysk9iy88ugyu 
+  		SceneSerializer(Ref<Scene>& scene) : m_scene(scene), m_currentScenePath("_NO_INITIALIZED_") { }
+		
+		void serialize(const std::string& filePath, bool serverSerialization = false);
+		void deserialize(const std::string& filePath, bool serverSerialization = false);
 
-		void serialize(const std::string& filePath);
-		void deserialize(const std::string& filePath);
-
-		void serializeBinary(const std::string& filePath);
-		void deserializeBinary(const std::string& filePath);
+		void serializeBinary(const std::string& filePath, bool serverSerialization = false);
+		void deserializeBinary(const std::string& filePath, bool serverSerialization = false);
 
 		void setSceneChangeCallback(std::function<void()> func) { m_sceneChangeCallback = func; }
 

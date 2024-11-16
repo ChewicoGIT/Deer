@@ -1,5 +1,5 @@
 #include "Deer/Voxels/VoxelWorld.h"
-#ifndef DEER_SERVICE
+#ifdef DEER_RENDER
 #include "Deer/Core/Application.h"
 #include "Deer/Core/Project.h"
 #include "Deer/Asset/AssetManager.h"

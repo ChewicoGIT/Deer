@@ -3,11 +3,11 @@
 #include "Deer/Voxels/Voxel.h"
 #include "Deer/Voxels/Chunk.h"
 
-#ifndef DEER_SERVICE
+#ifdef DEER_RENDER
 #include "DeerRender/Voxels/ChunkRender.h"
 #include "DeerRender/Voxels/ChunkBaker.h"
 #include "DeerRender/Render/Camera.h"
-#include "Deer/Scene/SceneCamera.h"
+#include "DeerRender/Scene/SceneCamera.h"
 #endif
 
 namespace Deer {
@@ -16,7 +16,7 @@ namespace Deer {
 		Voxel& getVoxel(int x, int y, int z);
 		void loadEmptyChunk(int x, int y, int z);
 
-#ifndef DEER_SERVICE
+#ifdef DEER_RENDER
 	public:
 		void render(SceneCamera camera);
 		void bakeChunk(int x, int y, int z);

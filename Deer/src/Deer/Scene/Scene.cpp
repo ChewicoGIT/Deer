@@ -58,22 +58,6 @@ namespace Deer {
 		DEER_CORE_INFO("Stoping Scene...");
 	}
 
-#ifndef DEER_SERVICE
-	void Scene::render() {
-		uid mainCamera = m_enviroment->tryGetMainCamera();
-		if (mainCamera == 0)
-			return;
-
-		Entity& m_cameraEntity = m_enviroment->getEntity(mainCamera);
-		m_enviroment->render(m_cameraEntity);
-	}
-
-	void Scene::render(SceneCamera sceneCamera) {
-		m_enviroment->render(sceneCamera);
-		m_voxelWorld->render(sceneCamera);
-	}
-#endif
-
 	void Scene::clear() {
 		m_enviroment->clear();
 	}

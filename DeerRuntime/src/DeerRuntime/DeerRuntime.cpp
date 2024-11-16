@@ -20,6 +20,8 @@ namespace Deer {
 
 	void DeerRuntimeApplication::onRender(Timestep delta) {
 		uid mainCam = Project::m_scene->getMainEnviroment()->tryGetMainCamera();
+		if (mainCam == 0)
+			return;
 		Entity& cam = Project::m_scene->getMainEnviroment()->getEntity(mainCam);
 
 		float witdth = Application::s_application->m_window->getWitdth();

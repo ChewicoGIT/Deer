@@ -1,5 +1,6 @@
 #include "Entity.h"
 #include "Deer/Core/Core.h"
+#include "Deer/Scene/Components.h"
 
 namespace Deer {
 	Entity Entity::nullEntity = Entity();
@@ -63,6 +64,7 @@ namespace Deer {
 		Entity& parent = m_environment->getEntity(m_parentUID);
 		creation.setParent(parent);
 
+#ifdef DEER_RENDER
 		if (m_environment->m_registry.any_of<MeshRenderComponent>(m_entityHandle))
 			creation.addComponent<MeshRenderComponent>(getComponent<MeshRenderComponent>());
 
@@ -71,7 +73,7 @@ namespace Deer {
 
 		if (m_environment->m_registry.any_of<TextureBindingComponent>(m_entityHandle))
 			creation.addComponent<TextureBindingComponent>(getComponent<TextureBindingComponent>());
-
+#endif
 		return creation;
 	}
 

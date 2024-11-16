@@ -1,6 +1,5 @@
-#pragma once"Deer/Scene/ComponentsRender.h"
+#pragma once
 #include "Deer/Scene/Components.h"
-#include "DeerRender/Scene/ComponentsRender.h"
 
 namespace Deer {
 	struct SceneCamera {

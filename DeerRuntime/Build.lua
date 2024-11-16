@@ -24,6 +24,7 @@ project "DeerRuntime"
 	  "spdlog",
 	  "ImGui"
    }
+   defines { "DEER_RENDER" }
 
    targetdir ("../bin/" .. OutputDir .. "/%{prj.name}")
    objdir ("../bin/int/" .. OutputDir .. "/%{prj.name}")

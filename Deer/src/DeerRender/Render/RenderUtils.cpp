@@ -3,7 +3,7 @@
 #include "DeerRender/Render/Buffer.h"
 #include "DeerRender/Render/Shader.h"
 
-#ifndef DEER_SERVICE
+#ifdef DEER_RENDER
 
 namespace Deer {
 	Ref<VertexArray> RenderUtils::m_lineVertexArray;
