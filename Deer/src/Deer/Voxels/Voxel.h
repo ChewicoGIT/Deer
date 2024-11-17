@@ -61,4 +61,18 @@ namespace Deer {
 		ChunkVoxelID() : x(0), y(0), z(0) { }
 		ChunkVoxelID(uint8_t _x, uint8_t _y = 0, uint8_t _z = 0) : x(_x), y(_y), z(_z) { }
 	};
+
+	inline void extractCordinates(int x, int y, int z, ChunkID& _chunkID, ChunkVoxelID& _chunkVoxelID) {
+		uint16_t posX = x + (1 << 15);
+		uint16_t posY = y + (1 << 15);
+		uint16_t posZ = z + (1 << 15);
+
+		_chunkID.x = posX >> 5;
+		_chunkID.y = posY >> 5;
+		_chunkID.z = posZ >> 5;
+
+		_chunkVoxelID.x = posX & 31;
+		_chunkVoxelID.y = posY & 31;
+		_chunkVoxelID.z = posZ & 31;
+	}
 }
