@@ -1,12 +1,11 @@
 #pragma once
 #include "Deer/Core/Core.h"
+#include "Deer/Scripting/ComponentScript.h"
 
 #include <filesystem>
 #include <string>
 #include <unordered_map>
 #include <vector>
-
-#include "Deer/Scripting/ComponentScript.h"
 
 class asIScriptEngine;
 class asIScriptModule;
@@ -23,15 +22,14 @@ namespace Deer {
 
 	class ScriptEngine {
 	public:
-		void initScriptEngine(const std::filesystem::path& scriptPath);
+		void compileScriptEngine(const std::filesystem::path& scriptPath);
 		void shutdownScriptEngine();
 
 		void beginExecutionContext();
 		void endExecutionContext();
 
 		inline asIScriptContext* getExecutionContext() { return m_context; }
-
-		inline bool isScriptValid() { return m_isValid; }
+		inline bool isCompilationValid() { return m_isCompilationValid; }
 
 		inline ComponentScriptMap& getComponentScripts() { return m_componentScripts; }
 		inline ComponentScript& getComponentScript(const std::string& scriptID) { return m_componentScripts[scriptID]; }
@@ -41,7 +39,7 @@ namespace Deer {
 		asIScriptEngine* m_scriptEngine;
 		asIScriptModule* m_scriptModule;
 
-		bool m_isValid = false;
+		bool m_isCompilationValid = false;
 
 		asIScriptContext* m_context;
 		ComponentScriptMap m_componentScripts;

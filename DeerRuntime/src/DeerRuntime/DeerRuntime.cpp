@@ -6,7 +6,7 @@
 
 namespace Deer {
 	void DeerRuntimeApplication::onInit() {
-		Project::m_scriptEngine->initScriptEngine(std::filesystem::path("scripts"));
+		Project::m_scriptEngine->compileScriptEngine(std::filesystem::path("scripts"));
 		Project::m_scriptEngine->beginExecutionContext();
 		Project::m_scene->beginExecution();
 	}

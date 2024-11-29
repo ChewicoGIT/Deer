@@ -20,12 +20,7 @@
 #define VERTEX_UV(axis, id) uvFace[axis + id * 2]
 
 namespace Deer {
-	struct Voxel {
-		uint16_t id;
-
-		Voxel() : id(0) { }
-		Voxel(uint16_t _id) : id(_id) { }
-	};
+	struct Voxel;
 
 	extern Voxel nullVoxel;
 	extern Voxel emptyVoxel;
@@ -33,6 +28,13 @@ namespace Deer {
 	extern int normalFacePositions[3 * 4 * 6];
 	extern int normalFacePositionsDenormalized[3 * 4 * 6];
 	extern int uvFace[2 * 4];
+
+	struct Voxel {
+		uint16_t id;
+
+		Voxel() : id(0) { }
+		Voxel(uint16_t _id) : id(_id) { }
+	};
 
 	struct ChunkID {
 		uint16_t x;
@@ -51,7 +53,6 @@ namespace Deer {
 				(uint64_t)(id.z);
 		}
 	};
-
 
 	struct ChunkVoxelID {
 		uint8_t x;

@@ -1,7 +1,7 @@
 #include "VoxelWorld.h"
 
 namespace Deer {
-	void VoxelWorld::initVoxelWorld(const VoxelWorldProps& props) {
+	void VoxelWorld::initWorldProps(const VoxelWorldProps& props) {
 		m_worldProps = props;
 		m_chunks = new Chunk[m_worldProps.getChunkCount()];
 	}

@@ -19,7 +19,7 @@
 
 namespace Deer {
     void DeerStudioApplication::onInit() {
-        Project::m_scriptEngine->initScriptEngine(std::filesystem::path("scripts"));
+        Project::m_scriptEngine->compileScriptEngine(std::filesystem::path("scripts"));
         Project::m_sceneSerializer->setSceneChangeCallback(std::bind(&Deer::DeerStudioApplication::onChangeScene, this));
 
         // IMGUI STYLE
@@ -31,6 +31,9 @@ namespace Deer {
 
         // WINDOWS
         m_activeEntity = Ref<ActiveEntity>(new ActiveEntity());
+        Ref<VoxelWorld>& voxelWorld = Project::m_scene->getVoxelWorld();
+        VoxelWorldProps worldProps(2, 2, 2);
+        voxelWorld->initWorldProps(worldProps);
 
         auto m_propertiesPannel = Ref<PropertiesPannel>(new PropertiesPannel(m_activeEntity));
         auto m_viewportPannel = Ref<ViewportPannel>(new ViewportPannel("Scene viewport", m_activeEntity));
@@ -136,7 +139,7 @@ namespace Deer {
         if (ImGui::BeginMenu("Scripts")) {
             if (ImGui::MenuItem("Reload scripts") && !Project::m_scene->getExecutingState()) {
                 Project::m_scriptEngine->shutdownScriptEngine();
-                Project::m_scriptEngine->initScriptEngine(std::filesystem::path("scripts"));
+                Project::m_scriptEngine->compileScriptEngine(std::filesystem::path("scripts"));
             }
 
             ImGui::EndMenu();

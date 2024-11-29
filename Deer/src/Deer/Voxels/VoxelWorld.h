@@ -14,11 +14,12 @@
 namespace Deer {
 	class VoxelWorld {
 	public:
-		void initVoxelWorld(const VoxelWorldProps& props);
+		VoxelWorld(const VoxelWorldProps& props);
+
+		void initWorldProps(const VoxelWorldProps& props);
 
 		Voxel& getVoxel(int x, int y, int z);
-
-		inline const VoxelWorldProps& getVoxelWorldProps() { return m_worldProps };
+		inline const VoxelWorldProps& getVoxelWorldProps() { return m_worldProps; }
 	private:
 		VoxelWorldProps m_worldProps;
 		Chunk* m_chunks;

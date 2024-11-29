@@ -29,9 +29,9 @@ namespace Deer {
 		m_context->Release();
 	}
 
-	void ScriptEngine::initScriptEngine(const std::filesystem::path& modulePath) {
+	void ScriptEngine::compileScriptEngine(const std::filesystem::path& modulePath) {
 		m_scriptEngine = asCreateScriptEngine();
-		m_isValid = true;
+		m_isCompilationValid = true;
 
 		registerBaseComponents();
 		loadModuleFolder(modulePath, "Deer");
@@ -120,7 +120,7 @@ namespace Deer {
 		r = builder.BuildModule();
 		if (r < 0) {
 			DEER_SCRIPT_INFO("Please correct the errors in the script and try again.");
-			m_isValid = false;
+			m_isCompilationValid = false;
 		}
 	}
 

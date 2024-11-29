@@ -1,18 +1,16 @@
 #pragma once
 #include "Voxel.h"
+#include <array>
 
 namespace Deer {
 	class Chunk {
 	public:
+		Chunk();
 		~Chunk();
-		void initializeEmpty();
 
-		inline Voxel& getVoxel(ChunkVoxelID id) { return m_voxelData[VOXEL_POSITION(id)]; }
-		bool isDataLoaded() { return m_voxelData != nullptr; }
+		inline Voxel& getVoxel(ChunkVoxelID id) { return m_voxels[VOXEL_POSITION(id)]; }
 	private:
-		Voxel* m_voxelData = nullptr;
-
-		void generateData();
+		std::array<Voxel, CHUNK_VOXELS> m_voxels;
 	};
 }
 
