@@ -2,6 +2,7 @@
 #include <unordered_map>
 #include "Deer/Voxels/Voxel.h"
 #include "Deer/Voxels/Chunk.h"
+#include "VoxelWorldProps.h"
 
 #ifdef DEER_RENDER
 #include "DeerRender/Voxels/ChunkRender.h"
@@ -11,11 +12,16 @@
 #endif
 
 namespace Deer {
-
 	class VoxelWorld {
 	public:
+		void initVoxelWorld(const VoxelWorldProps& props);
+
 		Voxel& getVoxel(int x, int y, int z);
-		void loadEmptyChunk(int x, int y, int z);
+
+		inline const VoxelWorldProps& getVoxelWorldProps() { return m_worldProps };
+	private:
+		VoxelWorldProps m_worldProps;
+		Chunk* m_chunks;
 
 #ifdef DEER_RENDER
 	public:
@@ -28,9 +34,6 @@ namespace Deer {
 
 		void bakeChunk(ChunkID chunkID);
 #endif
-	private:
-		std::unordered_map<ChunkID, Chunk, ChunkIDHash> m_chunks;
-
 	};
 }
 

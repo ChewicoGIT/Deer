@@ -63,9 +63,9 @@ namespace Deer {
 	};
 
 	inline void extractCordinates(int x, int y, int z, ChunkID& _chunkID, ChunkVoxelID& _chunkVoxelID) {
-		uint16_t posX = x + (1 << 15);
-		uint16_t posY = y + (1 << 15);
-		uint16_t posZ = z + (1 << 15);
+		uint16_t posX = x;
+		uint16_t posY = y;
+		uint16_t posZ = z;
 
 		_chunkID.x = posX >> 5;
 		_chunkID.y = posY >> 5;

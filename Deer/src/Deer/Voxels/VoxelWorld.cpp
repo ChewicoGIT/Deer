@@ -1,25 +1,21 @@
 #include "VoxelWorld.h"
 
 namespace Deer {
+	void VoxelWorld::initVoxelWorld(const VoxelWorldProps& props) {
+		m_worldProps = props;
+		m_chunks = new Chunk[m_worldProps.getChunkCount()];
+	}
+
 	Voxel& VoxelWorld::getVoxel(int x, int y, int z) {
 		ChunkID chunkID;
 		ChunkVoxelID chunkVoxelID;
 
 		extractCordinates(x, y, z, chunkID, chunkVoxelID);
-
-		// If chunk exists
-		if (m_chunks.contains(chunkID)) {
-			Chunk& chunk = m_chunks[chunkID];
-			
-			// If chunk has data return the data
-			if (chunk.isDataLoaded())
-				return chunk.getVoxel(chunkVoxelID);
-
-			// If it does not have the data return null and ask for data loaded
+		if (!m_worldProps.isValid(chunkID))
 			return nullVoxel;
-		}
 
-		return nullVoxel;
+		Chunk& chunk = m_chunks[m_worldProps.getInternalID(chunkID)];
+		return chunk.getVoxel(chunkVoxelID);
 	}
 
 	void VoxelWorld::loadEmptyChunk(int x, int y, int z) {
