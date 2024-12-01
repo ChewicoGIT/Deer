@@ -1,5 +1,4 @@
 #include "Deer/Voxels/VoxelWorld.h"
-#ifdef DEER_RENDER
 #include "Deer/Core/Application.h"
 #include "Deer/Core/Project.h"
 #include "Deer/Asset/AssetManager.h"
@@ -25,9 +24,10 @@ namespace Deer {
 	}
 
 	void VoxelWorld::bakeChunk(ChunkID chunkID) {
-		// Add safe chunk loading
-		Chunk& chunk = m_chunks[chunkID];
-		m_chunksRender[chunkID] = m_chunkBaker.bakeChunk(chunk);
+		int chunk_internal_id = m_worldProps.getInternalID(chunkID);
+
+		Chunk& chunk = m_chunks[chunk_internal_id];
+		m_chunksRender[chunk_internal_id] = m_chunkBaker.bakeChunk(chunk);
 	}
 
 	void VoxelWorld::render(SceneCamera camera) {
@@ -37,7 +37,13 @@ namespace Deer {
 
 		// Lets invert the z axis for engine convenience
 		glm::mat4 cameraProjectionMatrix = projectionMatrix * invertZ * camMatrix;
-		for (auto& chunk : m_chunksRender) {
+
+		for (int x = 0; x < m_worldProps.getChunkCount(); x++) {
+			ChunkRender& chunkRender = m_chunksRender[x];
+			if (!chunkRender.hasData)
+				continue;
+			chunkRender.solidVoxel->bind();
+
 			int textureAssetID = Project::m_assetManager->loadAsset<Texture2D>("assets/Textures/Dirt.png");
 			Asset<Texture2D>& textureAsset = Project::m_assetManager->getAsset<Texture2D>(textureAssetID);
 			textureAsset.value->bind(0);
@@ -51,11 +57,7 @@ namespace Deer {
 			shaderAsset.value->uploadUniformInt("u_objectID", -1);
 			shaderAsset.value->uploadUniformInt("u_texture", 0);
 
-			ChunkRender& chunkRender = chunk.second;
-			chunkRender.solidVoxel->bind();
-
 			Render::submit(chunkRender.solidVoxel);
 		}
 	}
 }
-#endif

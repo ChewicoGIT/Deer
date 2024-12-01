@@ -1,11 +1,13 @@
 #include "Chunk.h"
 
 namespace Deer {
-	Chunk::Chunk() {
-		m_voxelData = new Voxel[CHUNK_VOXELS];
-	}
+	Chunk::Chunk() : m_voxels(nullptr) { }
 	Chunk::~Chunk() {
-		delete[] m_voxelData;
+		if (m_voxels)
+			delete[] m_voxels;
 	}
 
+	void Chunk::loadVoxels() {
+		m_voxels = new Voxel[CHUNK_VOXELS];
+	}
 }

@@ -18,6 +18,7 @@ namespace Deer {
 
 	void Scene::render(SceneCamera sceneCamera) {
 		m_enviroment->render(sceneCamera);
-		m_voxelWorld->render(sceneCamera);
+		if (m_voxelWorld)
+			m_voxelWorld->render(sceneCamera);
 	}
 }

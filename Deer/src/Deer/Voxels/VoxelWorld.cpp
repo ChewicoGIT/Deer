@@ -1,12 +1,22 @@
 #include "VoxelWorld.h"
 
 namespace Deer {
-	void VoxelWorld::initWorldProps(const VoxelWorldProps& props) {
-		m_worldProps = props;
+	VoxelWorld::VoxelWorld(const VoxelWorldProps& props) 
+		: m_worldProps(props) {
 		m_chunks = new Chunk[m_worldProps.getChunkCount()];
+#ifdef DEER_RENDER
+		m_chunksRender = new ChunkRender[m_worldProps.getChunkCount()];
+#endif
 	}
 
-	Voxel& VoxelWorld::getVoxel(int x, int y, int z) {
+	VoxelWorld::~VoxelWorld() {
+		delete[] m_chunks;
+#ifdef DEER_RENDER
+		delete[] m_chunksRender;
+#endif
+	}
+
+	Voxel VoxelWorld::readVoxel(int x, int y, int z) {
 		ChunkID chunkID;
 		ChunkVoxelID chunkVoxelID;
 
@@ -15,20 +25,18 @@ namespace Deer {
 			return nullVoxel;
 
 		Chunk& chunk = m_chunks[m_worldProps.getInternalID(chunkID)];
-		return chunk.getVoxel(chunkVoxelID);
+		return chunk.readVoxel(chunkVoxelID);
 	}
 
-	void VoxelWorld::loadEmptyChunk(int x, int y, int z) {
+	Voxel& VoxelWorld::modVoxel(int x, int y, int z) {
 		ChunkID chunkID;
-		chunkID.x = x + (1 << 10);
-		chunkID.y = y + (1 << 10);
-		chunkID.z = z + (1 << 10);
+		ChunkVoxelID chunkVoxelID;
 
-		if (m_chunks.contains(chunkID))
-			return;
+		extractCordinates(x, y, z, chunkID, chunkVoxelID);
+		if (!m_worldProps.isValid(chunkID))
+			return nullVoxel;
 
-		m_chunks.insert({ chunkID, {} });
-		Chunk& chunk = m_chunks[chunkID];
-		chunk.initializeEmpty();
+		Chunk& chunk = m_chunks[m_worldProps.getInternalID(chunkID)];
+		return chunk.modVoxel(chunkVoxelID);
 	}
 }

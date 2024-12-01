@@ -1,4 +1,5 @@
 #pragma once
+#include "Deer/Core/Core.h"
 #include "Voxel.h"
 #include <array>
 
@@ -8,9 +9,21 @@ namespace Deer {
 		Chunk();
 		~Chunk();
 
-		inline Voxel& getVoxel(ChunkVoxelID id) { return m_voxels[VOXEL_POSITION(id)]; }
+		inline Voxel readVoxel(ChunkVoxelID id) {
+			if (m_voxels)
+				return m_voxels[VOXEL_POSITION(id)];
+			return emptyVoxel;
+		}
+
+		inline Voxel& modVoxel(ChunkVoxelID id) {
+			if (!m_voxels)
+				loadVoxels();
+			return m_voxels[VOXEL_POSITION(id)];
+		}
 	private:
-		std::array<Voxel, CHUNK_VOXELS> m_voxels;
+		Voxel* m_voxels;
+
+		void loadVoxels();
 	};
 }
 

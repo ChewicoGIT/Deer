@@ -31,9 +31,9 @@ namespace Deer {
 
         // WINDOWS
         m_activeEntity = Ref<ActiveEntity>(new ActiveEntity());
-        Ref<VoxelWorld>& voxelWorld = Project::m_scene->getVoxelWorld();
         VoxelWorldProps worldProps(2, 2, 2);
-        voxelWorld->initWorldProps(worldProps);
+        Project::m_scene->createVoxelWorld(worldProps);
+
 
         auto m_propertiesPannel = Ref<PropertiesPannel>(new PropertiesPannel(m_activeEntity));
         auto m_viewportPannel = Ref<ViewportPannel>(new ViewportPannel("Scene viewport", m_activeEntity));

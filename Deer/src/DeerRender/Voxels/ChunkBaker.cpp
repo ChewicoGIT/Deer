@@ -6,7 +6,7 @@ namespace Deer {
 	void ChunkBaker::genSolidVoxel(ChunkVoxelID voxelID) {
 		// for each dir
 		for (int i = 0; i < 6; i++) {
-			Voxel& voxel = m_workingChunk->getVoxel(voxelID);
+			Voxel voxel = m_workingChunk->readVoxel(voxelID);
 			bool isSolid = voxel.id != 0;
 
 			if (!isSolid)
@@ -21,7 +21,7 @@ namespace Deer {
 				nextIsSolid = false;
 			}
 			else {
-				Voxel& nextVoxel = m_workingChunk->getVoxel(ChunkVoxelID(nextX, nextY, nextZ));
+				Voxel nextVoxel = m_workingChunk->readVoxel(ChunkVoxelID(nextX, nextY, nextZ));
 				nextIsSolid = nextVoxel.id != 0;
 			}
 
@@ -85,6 +85,7 @@ namespace Deer {
 
 		ChunkRender chunkRender;
 		chunkRender.solidVoxel = va;
+		chunkRender.hasData = true;
 
 		return chunkRender;
 	}

@@ -1,5 +1,6 @@
 #include "TerrainEditorPannel.h"
 #include "Deer/Core/Project.h"
+#include "Deer/Voxels/VoxelWorld.h"
 #include "Deer/Scene/Scene.h"
 #include "imgui.h"
 
@@ -8,9 +9,7 @@ namespace Deer {
 		ImGui::Begin("Terrain Editor");
 
 
-
 		if (ImGui::Button("Create Terrain")) {
-            Project::m_scene->getVoxelWorld()->loadEmptyChunk(0, 0, 0);
 
             for (int x = 0; x < 32; x++) {
                 for (int y = 0; y < 32; y++) {
@@ -21,11 +20,11 @@ namespace Deer {
                         int distance = rx * rx + ry * ry + rz * rz;
 
                         if (distance < 14 * 14)
-                            Project::m_scene->getVoxelWorld()->getVoxel(x, y, z).id = 1;
-
+                            Project::m_scene->getVoxelWorld()->modVoxel(x, y, z).id = 1;
                     }
                 }
             }
+
             Project::m_scene->getVoxelWorld()->bakeChunk(0, 0, 0);
 		}
 

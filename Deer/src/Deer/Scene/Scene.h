@@ -12,6 +12,7 @@ namespace Deer {
 		Scene();
 		~Scene();
 
+		void createVoxelWorld(const VoxelWorldProps&);
 		void clear();
 
 		void beginExecution();

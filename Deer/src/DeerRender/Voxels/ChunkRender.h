@@ -6,6 +6,7 @@
 namespace Deer {
 	struct ChunkRender {
 		Ref<VertexArray> solidVoxel;
+		bool hasData = false;
 	};
 
 	struct SolidVoxelVertexData {

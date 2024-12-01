@@ -8,7 +8,6 @@ namespace Deer {
 	Scene::Scene() {
 		DEER_CORE_TRACE("Creating scene");
 		m_enviroment = Ref<Environment>(new Environment("Scene Root"));
-		m_voxelWorld = Ref<VoxelWorld>(new VoxelWorld());
 	}
 
 	Scene::~Scene() {
@@ -58,7 +57,12 @@ namespace Deer {
 		DEER_CORE_INFO("Stoping Scene...");
 	}
 
+	void Scene::createVoxelWorld(const VoxelWorldProps& props) {
+		m_voxelWorld = Ref<VoxelWorld>(new VoxelWorld(props));
+	}
+
 	void Scene::clear() {
 		m_enviroment->clear();
+		m_voxelWorld.reset();
 	}
 }

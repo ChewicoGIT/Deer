@@ -1,5 +1,4 @@
 #pragma once
-#include <unordered_map>
 #include "Deer/Voxels/Voxel.h"
 #include "Deer/Voxels/Chunk.h"
 #include "VoxelWorldProps.h"
@@ -15,10 +14,10 @@ namespace Deer {
 	class VoxelWorld {
 	public:
 		VoxelWorld(const VoxelWorldProps& props);
+		~VoxelWorld();
 
-		void initWorldProps(const VoxelWorldProps& props);
-
-		Voxel& getVoxel(int x, int y, int z);
+		Voxel readVoxel(int x, int y, int z);
+		Voxel& modVoxel(int x, int y, int z);
 		inline const VoxelWorldProps& getVoxelWorldProps() { return m_worldProps; }
 	private:
 		VoxelWorldProps m_worldProps;
@@ -30,7 +29,7 @@ namespace Deer {
 		void bakeChunk(int x, int y, int z);
 
 	private:
-		std::unordered_map<ChunkID, ChunkRender, ChunkIDHash> m_chunksRender;
+		ChunkRender* m_chunksRender;
 		ChunkBaker m_chunkBaker;
 
 		void bakeChunk(ChunkID chunkID);
