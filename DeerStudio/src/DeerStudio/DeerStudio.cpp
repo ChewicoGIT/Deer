@@ -34,7 +34,6 @@ namespace Deer {
         VoxelWorldProps worldProps(2, 2, 2);
         Project::m_scene->createVoxelWorld(worldProps);
 
-
         auto m_propertiesPannel = Ref<PropertiesPannel>(new PropertiesPannel(m_activeEntity));
         auto m_viewportPannel = Ref<ViewportPannel>(new ViewportPannel("Scene viewport", m_activeEntity));
         auto m_enviromentTreePannel = Ref<EnviromentTreePannel>(new EnviromentTreePannel(Project::m_scene->getMainEnviroment(), "World tree", m_activeEntity));
@@ -118,21 +117,99 @@ namespace Deer {
     }
 
     void DeerStudioApplication::drawMenuBar() {
-        if (ImGui::BeginMenu("Project")) {
-
+        if (ImGui::BeginMenu("Archive")) {
+            if (ImGui::MenuItem("New project")) {
+                // TODO
+            }
+            if (ImGui::MenuItem("Open project")) {
+                // TODO
+            }
+            if (ImGui::MenuItem("Save project")) {
+                // TODO
+            }
+            if (ImGui::MenuItem("Save project as...")) {
+                // TODO
+            }
+            if (ImGui::MenuItem("Export project")) {
+                // TODO
+            }
+            if (ImGui::MenuItem("Project settings")) {
+                // TODO
+            }
+            ImGui::EndMenu();
+        }
+        if (ImGui::BeginMenu("Scene")) {
+            if (ImGui::MenuItem("New scene")) {
+                // TODO
+                Project::m_scene->clear();
+                Project::m_sceneSerializer->serialize("assets/newScene.dscn");
+            }
+            //if (Project::m_sceneSerializer->getCurrentScenePath() != "_NO_INITIALIZED_" && ImGui::MenuItem("Save scene")) {
+            //    Project::m_sceneSerializer->serialize(Project::m_sceneSerializer->getCurrentScenePath());
+            //}
+            if (ImGui::MenuItem("Save scene")) {
+                // TODO
+            }
+            if (ImGui::MenuItem("Save scene as...")) {
+                // TODO
+            }
+            if (ImGui::MenuItem("Load scene")) {
+                // TODO
+            }
+            if (ImGui::MenuItem("Scene settings")) {
+                // TODO
+            }
             ImGui::EndMenu();
         }
 
         if (ImGui::BeginMenu("Edit")) {
-            if (ImGui::MenuItem("New scene")) {
-                Project::m_scene->clear();
-                Project::m_sceneSerializer->serialize("assets/newScene.dscn");
+            if (ImGui::MenuItem("Undo")) {
+                // TODO
             }
-
-            if (Project::m_sceneSerializer->getCurrentScenePath() != "_NO_INITIALIZED_" && ImGui::MenuItem("Save scene")) {
-                Project::m_sceneSerializer->serialize(Project::m_sceneSerializer->getCurrentScenePath());
+            if (ImGui::MenuItem("Copy")) {
+                // TODO
             }
+            if (ImGui::MenuItem("Paste")) {
+                // TODO
+            }
+            if (ImGui::MenuItem("Duplicate")) {
+                // TODO
+            }
+            if (ImGui::MenuItem("Select all")) {
+                // TODO
+            }
+            if (ImGui::MenuItem("Deselect all")) {
+                // TODO
+            }
+            ImGui::EndMenu();
+        }
 
+        if (ImGui::BeginMenu("View")) {
+            if (ImGui::MenuItem("Zoom In")) {
+                // TODO
+            }
+            if (ImGui::MenuItem("Zoom Out")) {
+                // TODO
+            }
+            if (ImGui::MenuItem("Show Gizmo/ Hide Gizmo")) {
+                // TODO
+            }
+            if (ImGui::MenuItem("Full screen")) {
+                // TODO
+            }
+            ImGui::EndMenu();
+        }
+
+        if (ImGui::BeginMenu("Runtime")) {
+            if (ImGui::MenuItem("Start")) {
+                // TODO
+            }
+            if (ImGui::MenuItem("End")) {
+                // TODO
+            }
+            if (ImGui::MenuItem("Restart")) {
+                // TODO
+            }
             ImGui::EndMenu();
         }
 
@@ -144,6 +221,20 @@ namespace Deer {
 
             ImGui::EndMenu();
         }
+
+        if (ImGui::BeginMenu("Help")) {
+            if (ImGui::MenuItem("Documentation")) {
+                // TODO
+            }
+            if (ImGui::MenuItem("Report bug")) {
+                // TODO
+            }
+            if (ImGui::MenuItem("About")) {
+                // TODO
+            }
+            ImGui::EndMenu();
+        }
+
     }
 
     void DeerStudioApplication::onChangeScene() {

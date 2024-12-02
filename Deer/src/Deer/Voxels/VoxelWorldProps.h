@@ -24,9 +24,9 @@ namespace Deer {
 		}
 
 		inline bool isValid(ChunkID chunkID) {
-			return chunkID.x > 0 && chunkID.x < chunkSizeX
-				&& chunkID.y > 0 && chunkID.y < chunkSizeY
-				&& chunkID.z > 0 && chunkID.z < chunkSizeZ;
+			return chunkID.x >= 0 && chunkID.x < chunkSizeX
+				&& chunkID.y >= 0 && chunkID.y < chunkSizeY
+				&& chunkID.z >= 0 && chunkID.z < chunkSizeZ;
 		}
 
 		inline int getMaxVoxelCount() {

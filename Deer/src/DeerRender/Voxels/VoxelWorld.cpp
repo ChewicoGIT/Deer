@@ -15,11 +15,7 @@
 
 namespace Deer {
 	void VoxelWorld::bakeChunk(int x, int y, int z) {
-		ChunkID chunkID;
-		chunkID.x = x + (1 << 10);
-		chunkID.y = y + (1 << 10);
-		chunkID.z = z + (1 << 10);
-
+		ChunkID chunkID(x, y, z);
 		bakeChunk(chunkID);
 	}
 
