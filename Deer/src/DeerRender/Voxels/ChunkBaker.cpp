@@ -12,9 +12,9 @@ namespace Deer {
 			if (!isSolid)
 				continue;
 
-			int nextX = NORMAL_DIR(0, i) + voxelID.x;
-			int nextY = NORMAL_DIR(1, i) + voxelID.y;
-			int nextZ = NORMAL_DIR(2, i) + voxelID.z;
+			int nextX = NORMAL_DIR(INTERNAL_X_POS, i) + voxelID.x;
+			int nextY = NORMAL_DIR(INTERNAL_Y_POS, i) + voxelID.y;
+			int nextZ = NORMAL_DIR(INTERNAL_Z_POS, i) + voxelID.z;
 
 			bool nextIsSolid = true;
 			if (nextX < 0 || nextY < 0 || nextZ < 0 || nextX >= CHUNK_SIZE_X || nextY >= CHUNK_SIZE_Y || nextZ >= CHUNK_SIZE_Z) { 
@@ -39,16 +39,10 @@ namespace Deer {
 
 			for (int v = 0; v < 4; v++) {
 				SolidVoxelVertexData vertexData(
-					voxelID.x + NORMAL_VERTEX_POS_DENORMALIZED(0, v, i),
-					voxelID.y + NORMAL_VERTEX_POS_DENORMALIZED(1, v, i),
-					voxelID.z + NORMAL_VERTEX_POS_DENORMALIZED(2, v, i),
-					i, VERTEX_UV(0, v), VERTEX_UV(1, v));
-
-				int x = vertexData.getXPosition();
-				int y = vertexData.getYPosition();
-				int z = vertexData.getZPosition();
-
-				int normal = vertexData.getNormal();
+					voxelID.x + NORMAL_VERTEX_POS(INTERNAL_X_POS, v, i),
+					voxelID.y + NORMAL_VERTEX_POS(INTERNAL_Y_POS, v, i),
+					voxelID.z + NORMAL_VERTEX_POS(INTERNAL_Z_POS, v, i),
+					i, VERTEX_UV(INTERNAL_X_POS, v), VERTEX_UV(INTERNAL_Y_POS, v));
 
 				m_solidVoxelVertices.push_back(vertexData);
 			}
@@ -78,7 +72,14 @@ namespace Deer {
 		Ref<VertexBuffer> vb = VertexBuffer::create(m_solidVoxelVertices.data(), m_solidVoxelVertices.size() * sizeof(SolidVoxelVertexData));
 		Ref<IndexBuffer> ib = IndexBuffer::create(m_indices.data(), m_indices.size() * sizeof(unsigned int), IndexDataType::Unsigned_Int);
 
-		BufferLayout layout({ {"a_vertexData", DataType::Unsigned_Int, ShaderDataType::Integer} });
+		BufferLayout layout({ 
+			{ "a_xPos", DataType::Unsigned_Byte, ShaderDataType::FloatingPoint },
+			{ "a_yPos", DataType::Unsigned_Byte, ShaderDataType::FloatingPoint },
+			{ "a_zPos", DataType::Unsigned_Byte, ShaderDataType::FloatingPoint },
+			{ "a_normal", DataType::Unsigned_Byte, ShaderDataType::Integer },
+			{ "a_u", DataType::Unsigned_Byte, ShaderDataType::FloatingPoint },
+			{ "a_v", DataType::Unsigned_Byte, ShaderDataType::FloatingPoint }
+			});
 		vb->setLayout(layout);
 		va->addVertexBuffer(vb);
 		va->setIndexBuffer(ib);

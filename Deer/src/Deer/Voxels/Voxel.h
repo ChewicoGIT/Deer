@@ -8,6 +8,10 @@
 #define CHUNK_VOXELS CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z
 #define VOXEL_POSITION(id) id.z + id.y * CHUNK_SIZE_Z + id.x * CHUNK_SIZE_Z * CHUNK_SIZE_Y
 
+#define INTERNAL_X_POS 0
+#define INTERNAL_Y_POS 1
+#define INTERNAL_Z_POS 2
+
 #define NORMAL_LEFT 0
 #define NORMAL_RIGHT 1
 #define NORMAL_DOWN 2

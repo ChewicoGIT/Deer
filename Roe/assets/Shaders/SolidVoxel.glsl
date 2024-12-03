@@ -1,6 +1,11 @@
 #type vertex
 #version 410 core
-layout(location = 0) in uint a_vertexData;
+layout(location = 0) in float a_xPos;
+layout(location = 1) in float a_yPos;
+layout(location = 2) in float a_zPos;
+layout(location = 3) in uint a_normal;
+layout(location = 4) in float a_u;
+layout(location = 5) in float a_v;
 
 uniform mat4 u_viewMatrix;
 uniform mat4 u_worldMatrix;
@@ -10,27 +15,9 @@ flat out uint normal;
 
 void main() {
 
-	uint xPos = (a_vertexData >> 25) & 31;
-	uint yPos = (a_vertexData >> 20) & 31;
-	uint zPos = (a_vertexData >> 15) & 31;
-
-	normal = (a_vertexData >> 12) & 7;
-
-	uint xUV = (a_vertexData >> 6) & 31;
-	uint yUV = (a_vertexData >> 0) & 31;
-
-
-	if (normal == 1)
-		xPos += 1;
-
-	if (normal == 3)
-		yPos += 1;
-		
-	if (normal == 5)
-		zPos += 1;
-
-	uv = vec2(xUV, yUV);
-	gl_Position = u_viewMatrix * u_worldMatrix * vec4(xPos, yPos, zPos, 1.0);
+	normal = a_normal;
+	uv = vec2(a_u, a_v);
+	gl_Position = u_viewMatrix * u_worldMatrix * vec4(a_xPos, a_yPos, a_zPos, 1.0);
 }
 
 #type fragment
