@@ -20,7 +20,6 @@
 #define NORMAL_FRONT 5
 #define NORMAL_DIR(axis, normal) normalDirs[axis + normal * 3]
 #define NORMAL_VERTEX_POS(axis, id, normal) normalFacePositions[axis + id * 3 + normal * 3 * 4]
-#define NORMAL_VERTEX_POS_DENORMALIZED(axis, id, normal) normalFacePositionsDenormalized[axis + id * 3 + normal * 3 * 4]
 #define VERTEX_UV(axis, id) uvFace[axis + id * 2]
 
 namespace Deer {
@@ -30,7 +29,6 @@ namespace Deer {
 	extern Voxel emptyVoxel;
 	extern int normalDirs[3 * 6];
 	extern int normalFacePositions[3 * 4 * 6];
-	extern int normalFacePositionsDenormalized[3 * 4 * 6];
 	extern int uvFace[2 * 4];
 
 	struct Voxel {
@@ -38,6 +36,18 @@ namespace Deer {
 
 		Voxel() : id(0) { }
 		Voxel(uint16_t _id) : id(_id) { }
+
+		inline bool operator== (const Voxel& b) const {
+			return id == b.id;
+		}
+	};
+
+	struct VoxelRayResult {
+		uint32_t xPos;
+		uint32_t yPos;
+		uint32_t zPos;
+		float distance;
+		uint8_t face;
 	};
 
 	struct ChunkID {
@@ -67,7 +77,7 @@ namespace Deer {
 		ChunkVoxelID(uint8_t _x, uint8_t _y = 0, uint8_t _z = 0) : x(_x), y(_y), z(_z) { }
 	};
 
-	inline void extractCordinates(int x, int y, int z, ChunkID& _chunkID, ChunkVoxelID& _chunkVoxelID) {
+	inline void extractCordinates(uint32_t x, uint32_t y, uint32_t z, ChunkID& _chunkID, ChunkVoxelID& _chunkVoxelID) {
 		uint16_t posX = x;
 		uint16_t posY = y;
 		uint16_t posZ = z;

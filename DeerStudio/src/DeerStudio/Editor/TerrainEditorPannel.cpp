@@ -25,7 +25,6 @@ namespace Deer {
                 }
             }
 
-            Project::m_scene->getVoxelWorld()->bakeChunk(0, 0, 0);
 		}
 
         if (ImGui::Button("Create Base")) {
@@ -38,13 +37,11 @@ namespace Deer {
                 }
             }
 
-            Project::m_scene->getVoxelWorld()->bakeChunk(0, 0, 0);
         }
         if (ImGui::Button("Create Yes Base")) {
 
             Project::m_scene->getVoxelWorld()->modVoxel(31, 0, 0).id = 1;
 
-            Project::m_scene->getVoxelWorld()->bakeChunk(0, 0, 0);
         }
 
 		ImGui::End();

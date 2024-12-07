@@ -19,6 +19,14 @@ namespace Deer {
 		bakeChunk(chunkID);
 	}
 
+	void VoxelWorld::bakeNextChunk() {
+		if (!m_chunkQueue.hasChunk())
+			return;
+
+		ChunkID nextChunk = m_chunkQueue.pullChunk();
+		bakeChunk(nextChunk);
+	}
+
 	void VoxelWorld::bakeChunk(ChunkID chunkID) {
 		int chunk_internal_id = m_worldProps.getInternalID(chunkID);
 

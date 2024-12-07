@@ -11,7 +11,8 @@ namespace Deer {
 	public:
 		DeerStudioApplication()
 			: Application(Deer::WindowProps("Deer Studio")) { }
-
+	private:
+		int originEntity, dirEntity, hitEntity;
 	private:
 		void onInit() override;
 		void onShutdown() override;

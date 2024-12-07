@@ -31,7 +31,7 @@ namespace Deer {
 
         // WINDOWS
         m_activeEntity = Ref<ActiveEntity>(new ActiveEntity());
-        VoxelWorldProps worldProps(2, 2, 2);
+        VoxelWorldProps worldProps(5, 2, 5);
         Project::m_scene->createVoxelWorld(worldProps);
 
         auto m_propertiesPannel = Ref<PropertiesPannel>(new PropertiesPannel(m_activeEntity));
@@ -47,6 +47,11 @@ namespace Deer {
         pannels.push_back(m_assetPannel);
         pannels.push_back(m_gamePannel);
         pannels.push_back(m_terrainEditor);
+
+        Ref<Environment>& environment = Project::m_scene->getMainEnviroment();
+        originEntity = environment->createEntity("Origin Ray").getUID();
+        dirEntity = environment->createEntity("Direction Ray").getUID();
+        hitEntity = environment->createEntity("Hit Ray").getUID();
     }
 
     void DeerStudioApplication::onShutdown() {
@@ -69,6 +74,20 @@ namespace Deer {
     void DeerStudioApplication::onUpdate(Timestep delta) {
         if (Project::m_scene->getExecutingState())
             Project::m_scene->updateExecution();
+
+        Ref<Environment>& environment = Project::m_scene->getMainEnviroment();
+
+        Entity& origin = environment->getEntity(originEntity);
+        Entity& dir = environment->getEntity(dirEntity);
+        Entity& hit = environment->getEntity(hitEntity);
+
+        Project::m_scene->getVoxelWorld()->bakeNextChunk();
+        glm::vec3 dirF = dir.getComponent<TransformComponent>().position - origin.getComponent<TransformComponent>().position;
+        VoxelRayResult ray = Project::m_scene->getVoxelWorld()->rayCast(origin.getComponent<TransformComponent>().position, dirF);
+        
+        hit.getComponent<TransformComponent>().position = origin.getComponent<TransformComponent>().position
+            + glm::normalize(dirF) * ray.distance;
+        
     }
 
     void DeerStudioApplication::onEvent(Event& e) {
