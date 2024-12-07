@@ -3,6 +3,11 @@
 #include "Deer/Voxels/VoxelWorld.h"
 #include "Deer/Scene/Enviroment.h"
 
+#ifdef DEER_RENDER
+#include "DeerRender/Scene/GizmoRenderer.h"
+#endif // DEER_RENDER
+
+
 #include <vector>
 #include <string>
 
@@ -18,11 +23,7 @@ namespace Deer {
 		void beginExecution();
 		void updateExecution();
 		void endExecution();
-#ifdef DEER_RENDER
-		void render();
-		void render(SceneCamera);
-#endif
-
+	public:
 		inline Ref<Environment>& getMainEnviroment() { return m_enviroment; }
 		inline Ref<VoxelWorld>& getVoxelWorld() { return m_voxelWorld; }
 		inline bool getExecutingState() { return m_isExecuting; }
@@ -31,6 +32,14 @@ namespace Deer {
 		Ref<VoxelWorld> m_voxelWorld;
 
 		bool m_isExecuting = false;
+#ifdef DEER_RENDER
+	public:
+		void render();
+		void render(SceneCamera);
+		inline GizmoRenderer& getMainGizmoRenderer() { return m_gizmoRenderer; }
+	private:
+		GizmoRenderer m_gizmoRenderer;
+#endif
 	};
 }
 

@@ -81,10 +81,18 @@ namespace Deer {
         Entity& dir = environment->getEntity(dirEntity);
         Entity& hit = environment->getEntity(hitEntity);
 
+        Project::m_scene->getMainGizmoRenderer().refresh();
+        Project::m_scene->getMainGizmoRenderer().drawLine(dir.getComponent<TransformComponent>().position,
+            origin.getComponent<TransformComponent>().position, glm::vec3(0.67f, 0.98f, 0.67f));
+        Project::m_scene->getMainGizmoRenderer().drawLine(dir.getComponent<TransformComponent>().position,
+            hit.getComponent<TransformComponent>().position, glm::vec3(0.97f, 0.98f, 0.97f));
+
         Project::m_scene->getVoxelWorld()->bakeNextChunk();
         glm::vec3 dirF = dir.getComponent<TransformComponent>().position - origin.getComponent<TransformComponent>().position;
         VoxelRayResult ray = Project::m_scene->getVoxelWorld()->rayCast(origin.getComponent<TransformComponent>().position, dirF);
         
+        Project::m_scene->getMainGizmoRenderer().drawVoxelLine(ray.xPos, ray.yPos, ray.zPos);
+
         hit.getComponent<TransformComponent>().position = origin.getComponent<TransformComponent>().position
             + glm::normalize(dirF) * ray.distance;
         

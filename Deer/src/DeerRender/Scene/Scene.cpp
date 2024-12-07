@@ -20,5 +20,7 @@ namespace Deer {
 		m_enviroment->render(sceneCamera);
 		if (m_voxelWorld)
 			m_voxelWorld->render(sceneCamera);
+		m_gizmoRenderer.render(sceneCamera);
 	}
+
 }

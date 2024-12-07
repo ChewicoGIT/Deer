@@ -1,4 +1,5 @@
 #include "VoxelWorld.h"
+#include <math.h>
 
 namespace Deer {
 	VoxelWorld::VoxelWorld(const VoxelWorldProps& props) 
@@ -50,24 +51,27 @@ namespace Deer {
 		result.yPos = (uint32_t)position.y;
 		result.zPos = (uint32_t)position.z;
 
+		result.distance = 0;
+
 		if (dir.x == 0 && dir.y == 0 && dir.z == 0) {
-			result.distance = 0;
 			return result;
 		}
 
 		dir = glm::normalize(dir);
 		glm::vec3 stepAxis = glm::vec3(maxDistance, maxDistance, maxDistance);
+		glm::vec3 distanceAxis = stepAxis;
 		int8_t directionAxis[3] = { 1, 1, 1 };
 		for (int i = 0; i < 3; i++) {
-			if (dir[i] != 0) {
-				if (dir[i] < 0) {
-					stepAxis[i] = -1 / dir[i];
-					directionAxis[i] = -1;
-				} else
-					stepAxis[i] = 1 / dir[i];
+			if (dir[i] < 0) {
+				stepAxis[i] = -1 / dir[i];
+				directionAxis[i] = -1;
+				distanceAxis[i] = (position[i] - (&result.xPos)[i]) * stepAxis[i];
+			}
+			else if (dir[i] > 0) {
+				stepAxis[i] = 1 / dir[i];
+				distanceAxis[i] = (1 - position[i] + (&result.xPos)[i]) * stepAxis[i];
 			}
 		}
-		glm::vec3 distanceAxis = stepAxis;
 
 		while (result.distance < maxDistance) {
 			float minDistance = distanceAxis[0];
