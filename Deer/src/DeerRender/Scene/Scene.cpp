@@ -1,6 +1,7 @@
 #include "Deer/Scene/Scene.h"
 #include "Deer/Scene/Entity.h"
 #include "Deer/Scene/Components.h"
+#include "DeerRender/Render/RenderCommand.h"
 
 namespace Deer {
 	void Scene::render() {
@@ -17,9 +18,11 @@ namespace Deer {
 	}
 
 	void Scene::render(SceneCamera sceneCamera) {
+		RenderCommand::setDepthBuffer(true);
 		m_enviroment->render(sceneCamera);
 		if (m_voxelWorld)
 			m_voxelWorld->render(sceneCamera);
+		RenderCommand::setDepthBuffer(false);
 		m_gizmoRenderer.render(sceneCamera);
 	}
 

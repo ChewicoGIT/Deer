@@ -26,6 +26,10 @@ namespace Deer {
 			s_renderAPI->drawLines(vertexArray);
 		}
 
+		static inline void setDepthBuffer(bool state) {
+			s_renderAPI->setDepthBuffer(state);
+		}
+
 	private:
 		static Scope<RenderAPI> s_renderAPI;
 	};

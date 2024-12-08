@@ -16,6 +16,7 @@ namespace Deer {
 
 		virtual void init() = 0;
 		virtual void clearColor(const glm::vec4& color) = 0;
+		virtual void setDepthBuffer(bool enable) = 0;
 		virtual void clear() = 0;
 
 		virtual void drawIndex(const Ref<VertexArray>& vertexArray) = 0;

@@ -6,6 +6,7 @@
 #include "DeerStudio/Editor/AssetManagerPannel.h"
 #include "DeerStudio/Editor/GamePannel.h"
 #include "DeerStudio/Editor/TerrainEditorPannel.h"
+#include "DeerStudio/Editor/VoxelPannel.h"
 
 #include "Deer/Core/Project.h"
 #include "Deer/Scene/Scene.h"
@@ -40,6 +41,7 @@ namespace Deer {
         auto m_assetPannel = Ref<AssetManagerPannel>(new AssetManagerPannel(m_activeEntity));
         auto m_gamePannel = Ref<GamePannel>(new GamePannel(m_activeEntity));
         auto m_terrainEditor = Ref<TerrainEditorPannel>(new TerrainEditorPannel());
+        auto m_voxelPannel = Ref<VoxelPannel>(new VoxelPannel());
 
         pannels.push_back(m_propertiesPannel);
         pannels.push_back(m_enviromentTreePannel);
@@ -47,11 +49,8 @@ namespace Deer {
         pannels.push_back(m_assetPannel);
         pannels.push_back(m_gamePannel);
         pannels.push_back(m_terrainEditor);
+        pannels.push_back(m_voxelPannel);
 
-        Ref<Environment>& environment = Project::m_scene->getMainEnviroment();
-        originEntity = environment->createEntity("Origin Ray").getUID();
-        dirEntity = environment->createEntity("Direction Ray").getUID();
-        hitEntity = environment->createEntity("Hit Ray").getUID();
     }
 
     void DeerStudioApplication::onShutdown() {
@@ -74,28 +73,6 @@ namespace Deer {
     void DeerStudioApplication::onUpdate(Timestep delta) {
         if (Project::m_scene->getExecutingState())
             Project::m_scene->updateExecution();
-
-        Ref<Environment>& environment = Project::m_scene->getMainEnviroment();
-
-        Entity& origin = environment->getEntity(originEntity);
-        Entity& dir = environment->getEntity(dirEntity);
-        Entity& hit = environment->getEntity(hitEntity);
-
-        Project::m_scene->getMainGizmoRenderer().refresh();
-        Project::m_scene->getMainGizmoRenderer().drawLine(dir.getComponent<TransformComponent>().position,
-            origin.getComponent<TransformComponent>().position, glm::vec3(0.67f, 0.98f, 0.67f));
-        Project::m_scene->getMainGizmoRenderer().drawLine(dir.getComponent<TransformComponent>().position,
-            hit.getComponent<TransformComponent>().position, glm::vec3(0.97f, 0.98f, 0.97f));
-
-        Project::m_scene->getVoxelWorld()->bakeNextChunk();
-        glm::vec3 dirF = dir.getComponent<TransformComponent>().position - origin.getComponent<TransformComponent>().position;
-        VoxelRayResult ray = Project::m_scene->getVoxelWorld()->rayCast(origin.getComponent<TransformComponent>().position, dirF);
-        
-        Project::m_scene->getMainGizmoRenderer().drawVoxelLine(ray.xPos, ray.yPos, ray.zPos);
-
-        hit.getComponent<TransformComponent>().position = origin.getComponent<TransformComponent>().position
-            + glm::normalize(dirF) * ray.distance;
-        
     }
 
     void DeerStudioApplication::onEvent(Event& e) {
@@ -144,7 +121,7 @@ namespace Deer {
     }
 
     void DeerStudioApplication::drawMenuBar() {
-        if (ImGui::BeginMenu("Archive")) {
+        if (ImGui::BeginMenu("Project")) {
             if (ImGui::MenuItem("New project")) {
                 // TODO
             }
@@ -165,6 +142,7 @@ namespace Deer {
             }
             ImGui::EndMenu();
         }
+
         if (ImGui::BeginMenu("Scene")) {
             if (ImGui::MenuItem("New scene")) {
                 // TODO
@@ -184,6 +162,19 @@ namespace Deer {
                 // TODO
             }
             if (ImGui::MenuItem("Scene settings")) {
+                // TODO
+            }
+            ImGui::EndMenu();
+        }
+
+        if (ImGui::BeginMenu("Runtime")) {
+            if (ImGui::MenuItem("Start")) {
+                // TODO
+            }
+            if (ImGui::MenuItem("End")) {
+                // TODO
+            }
+            if (ImGui::MenuItem("Restart")) {
                 // TODO
             }
             ImGui::EndMenu();
@@ -227,16 +218,11 @@ namespace Deer {
             ImGui::EndMenu();
         }
 
-        if (ImGui::BeginMenu("Runtime")) {
-            if (ImGui::MenuItem("Start")) {
+        if (ImGui::BeginMenu("Voxel")) {
+            if (ImGui::MenuItem("Voxel Pannel")) {
                 // TODO
             }
-            if (ImGui::MenuItem("End")) {
-                // TODO
-            }
-            if (ImGui::MenuItem("Restart")) {
-                // TODO
-            }
+
             ImGui::EndMenu();
         }
 
