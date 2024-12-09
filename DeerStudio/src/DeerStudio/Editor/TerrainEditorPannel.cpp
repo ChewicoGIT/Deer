@@ -8,7 +8,6 @@ namespace Deer {
 	void Deer::TerrainEditorPannel::onImGui() {
 		ImGui::Begin("Terrain Editor");
 
-
 		if (ImGui::Button("Create Terrain")) {
 
             for (int x = 0; x < 32; x++) {

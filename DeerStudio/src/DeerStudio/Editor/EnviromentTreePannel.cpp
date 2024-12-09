@@ -16,17 +16,24 @@ namespace Deer {
 		: m_enviroment(enviroment), m_treeName(name), m_activeEntity(activeEntity) { }
 
 	void EnviromentTreePannel::onImGui() {
-		ImGui::ShowDemoWindow();
-		ImGui::Begin(m_treeName.c_str());
+		ImGui::Begin(m_treeName.c_str(), (bool*)0, ImGuiWindowFlags_MenuBar);
+
+		m_isRightClickHandled = false;
+		Entity& root = m_enviroment->getRoot();
+
+		if (ImGui::BeginMenuBar()) {
+			if (ImGui::MenuItem("Options")) {
+				m_contextMenuEntity = &root;
+				ImGui::OpenPopup("Entity Context Menu");
+			}
+			ImGui::EndMenuBar();
+		}
 
 		if (m_openRenamePopUp) {
 			m_openRenamePopUp = false;
 
 			ImGui::OpenPopup("Rename Entity Menu");
 		}
-
-		m_isRightClickHandled = false;
-		Entity& root = m_enviroment->getRoot();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
 		for (auto& entityID : m_enviroment->getRoot().getChildren()) {
@@ -195,6 +202,13 @@ namespace Deer {
 		if (ImGui::BeginPopup("Entity Context Menu")) {
 			if (ImGui::MenuItem("New Entity")) {
 				Entity& entity = m_enviroment->createEntity("new entity");
+				entity.setParent(*m_contextMenuEntity);
+
+				ImGui::CloseCurrentPopup();
+			}
+			if (ImGui::MenuItem("New Camera")) {
+				Entity& entity = m_enviroment->createEntity("new camera");
+				entity.addComponent<CameraComponent>();
 				entity.setParent(*m_contextMenuEntity);
 
 				ImGui::CloseCurrentPopup();
