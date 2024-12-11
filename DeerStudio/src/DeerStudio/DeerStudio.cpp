@@ -32,7 +32,7 @@ namespace Deer {
 
         // WINDOWS
         m_activeEntity = Ref<ActiveEntity>(new ActiveEntity());
-        VoxelWorldProps worldProps(5, 2, 5);
+        VoxelWorldProps worldProps(2, 2, 2);
         Project::m_scene->createVoxelWorld(worldProps);
 
         auto m_propertiesPannel = Ref<PropertiesPannel>(new PropertiesPannel(m_activeEntity));
@@ -73,6 +73,7 @@ namespace Deer {
     void DeerStudioApplication::onUpdate(Timestep delta) {
         if (Project::m_scene->getExecutingState())
             Project::m_scene->updateExecution();
+        Project::m_scene->getVoxelWorld()->bakeNextChunk();
     }
 
     void DeerStudioApplication::onEvent(Event& e) {

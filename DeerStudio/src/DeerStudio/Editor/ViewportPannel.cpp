@@ -13,6 +13,7 @@
 #include "glm/gtx/matrix_decompose.hpp"
 
 #include <string>
+#include "glm/gtc/matrix_transform.hpp"
 
 namespace Deer {
 	ViewportPannel::ViewportPannel(const std::string& windowName, Ref<ActiveEntity>& activeEntity)
@@ -50,6 +51,8 @@ namespace Deer {
         unsigned char clearColor[4]{ 15, 10, 10, 255 };
         m_frameBuffer->clearBuffer(0, &clearColor);
 
+        drawVoxelRay();
+
         Project::m_scene->render(m_virtualCamera);
         
         ImGui::Image((void*)m_frameBuffer->getTextureBufferID(0), windowSize, ImVec2(0, 1), ImVec2(1, 0));
@@ -84,6 +87,34 @@ namespace Deer {
         ImGui::PopStyleVar();
 	}
 
+    void ViewportPannel::drawVoxelRay() {
+        ImVec2 mPos = ImGui::GetMousePos();
+        ImVec2 pos = ImGui::GetWindowPos();
+        ImVec2 windowSize = ImGui::GetContentRegionAvail();
+        int relativeX, relativeY;
+
+        relativeX = mPos.x - pos.x;
+        relativeY = windowSize.y - (mPos.y - pos.y);
+
+        float x = relativeX / windowSize.x;
+        float y = relativeY / windowSize.y;
+
+        if (x < 0 || x > 1 || y < 0 || y > 1)
+            return;
+
+        glm::mat4 camMatrix = glm::inverse(m_virtualCamera.transform.getMatrix());
+        glm::mat4 projectionMatrix = m_virtualCamera.camera.getMatrix();
+        glm::mat4 invertZ = glm::scale(glm::mat4(1.0f), glm::vec3(1, 1, -1));
+
+        glm::vec3 rayDir = camMatrix * glm::vec4(x * 2 - 1, y * 2 - 1, 1, 1);
+        rayDir -= m_virtualCamera.transform.position;
+        DEER_CORE_TRACE("{0} {1} {2}", rayDir.x, rayDir.y, rayDir.z);
+        VoxelRayResult res = Project::m_scene->getVoxelWorld()->rayCast(m_virtualCamera.transform.position, rayDir);
+
+        Project::m_scene->getMainGizmoRenderer().refresh();
+        Project::m_scene->getMainGizmoRenderer().drawVoxelLine(res.xPos, res.yPos, res.zPos);
+
+    }
     void ViewportPannel::onRender(Timestep timestep) {
         if (!m_isActive)
             return;
@@ -207,4 +238,5 @@ namespace Deer {
 
         return false;
     }
+    
 }

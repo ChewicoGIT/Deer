@@ -32,6 +32,7 @@ namespace Deer {
 	private:
 		// bool expresses if it is being used
 		bool drawGizmos(int wPosX, int wPosY, int wSizeX, int wSizeY);
+		void drawVoxelRay();
 	private:
 		Ref<FrameBuffer> m_frameBuffer;
 		Ref<ActiveEntity> m_activeEntity;
