@@ -14,7 +14,7 @@ namespace Deer {
 		Chunk* m_workingChunk;
 
 		void bakeSolidVoxel();
-		void genSolidVoxel(ChunkVoxelID voxelID);
+		void genSolidVoxel(ChunkVoxelID id);
 	};
 }
 

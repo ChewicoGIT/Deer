@@ -7,7 +7,7 @@
 #include "Deer/Scripting/ScriptEngine.h"
 #include "angelscript.h"
 #include "Deer/Core/Log.h"
-#include "Deer/Core/Input/Input.h"
+#include "DeerRender/Core/Input/Input.h"
 
 #include "glm/glm.hpp"
 

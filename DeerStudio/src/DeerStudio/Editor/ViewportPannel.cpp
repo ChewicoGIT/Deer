@@ -1,6 +1,6 @@
 #include "ViewportPannel.h"
 #include "Deer/Core/Project.h"
-#include "Deer/Core/Input/Input.h"
+#include "DeerRender/Core/Input/Input.h"
 #include "Deer/Scene/Components.h"
 #include "Deer/Scene/Entity.h"
 #include "Deer/Scene/Scene.h"
@@ -108,7 +108,7 @@ namespace Deer {
 
         glm::vec3 rayDir = camMatrix * glm::vec4(x * 2 - 1, y * 2 - 1, 1, 1);
         rayDir -= m_virtualCamera.transform.position;
-        DEER_CORE_TRACE("{0} {1} {2}", rayDir.x, rayDir.y, rayDir.z);
+
         VoxelRayResult res = Project::m_scene->getVoxelWorld()->rayCast(m_virtualCamera.transform.position, rayDir);
 
         Project::m_scene->getMainGizmoRenderer().refresh();

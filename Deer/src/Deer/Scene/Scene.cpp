@@ -7,7 +7,7 @@
 namespace Deer {
 	Scene::Scene() {
 		DEER_CORE_TRACE("Creating scene");
-		m_enviroment = Ref<Environment>(new Environment("Scene Root"));
+		m_enviroment = Ref<Environment>(new Environment());
 	}
 
 	Scene::~Scene() {

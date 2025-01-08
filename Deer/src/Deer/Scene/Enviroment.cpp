@@ -11,37 +11,33 @@
 #include "Deer/Core/Log.h"
 
 namespace Deer {
-	Environment::Environment(const std::string& rootName) 
-		: m_rootName(rootName) {
-		DEER_CORE_TRACE("Creating enviroment with root : {0}", rootName.c_str());
-
+	Environment::Environment() {
 		clear();
 	}
 
 	Environment::~Environment() { }
 
 	void Environment::clear() {
+		// Clear all existing entities and map
 		m_registry.clear();
 		m_entities.clear();
-		m_rootEntity = nullptr;
-		m_idCreationOffset = 0;
+
+		m_rootEntity = 0;
 		m_mainCamera = 0;
+		m_idCreationOffset = 0;
 
-		uid id = m_idCreationOffset + 1;
-		m_idCreationOffset++;
+		m_rootEntity = pullEntityID();
 
-		entt::entity entityID = m_registry.create();
-		Entity entity = { entityID, this };
-		entity.addComponent<TagComponent>(m_rootName, id);
+		entt::entity rootEntity = m_registry.create();
+		Entity entity = { rootEntity, this };
+
+		entity.addComponent<TagComponent>("root", m_rootEntity);
 		entity.addComponent<RelationshipComponent>();
 		entity.addComponent<TransformComponent>();
 
 		entity.m_isRoot = true;
-		entity.m_entityUID = id;
-		m_entities.insert({ id, entity });
-
-		auto& rootEntity = m_entities[id];
-		m_rootEntity = &rootEntity;
+		entity.m_entityUID = m_rootEntity;
+		m_entities.insert({ m_rootEntity, entity });
 	}
 
 	Entity& Environment::getEntity(uid id) {
@@ -53,8 +49,7 @@ namespace Deer {
 	{
 		uid id;
 		do {
-			id = m_idCreationOffset + 1;
-			m_idCreationOffset++;
+			id = pullEntityID();
 		} while (m_entities.contains(id));
 
 		entt::entity entityID = m_registry.create();
@@ -90,7 +85,6 @@ namespace Deer {
 	}
 
 	Entity& Environment::getRoot() {
-		return *m_rootEntity;
+		return m_entities[m_rootEntity];
 	}
-
 }

@@ -13,6 +13,7 @@ namespace Deer {
 		DEER_CORE_ASSERT(child.m_environment == m_environment, "Can not remove childrens from diferent enviroments");
 
 		std::vector<uid>& children = getChildren();
+
 		auto it = std::find(children.begin(), children.end(), child.m_entityUID);
 		if (it != children.end())
 		{
@@ -33,7 +34,6 @@ namespace Deer {
 
 		if (m_parentUID != 0){
 			Entity& current_parent = getParent();
-
 			if (parent.isDescendant(*this)) {
 				return;
 			}
@@ -46,8 +46,7 @@ namespace Deer {
 		parent.getChildren().push_back(m_entityUID);
 	}
 
-	bool Entity::isDescendant(Entity& parent)
-	{
+	bool Entity::isDescendant(Entity& parent) {
 		if (m_entityUID == parent.m_entityUID)
 			return true;
 		
@@ -58,7 +57,7 @@ namespace Deer {
 	}
 
 	Entity& Entity::duplicate() {
-		Entity& creation = m_environment->createEntity(getComponent<TagComponent>().tag + " (duplicated)");
+		Entity& creation = m_environment->createEntity(getComponent<TagComponent>().tag + "(d)");
 
 		creation.getComponent<TransformComponent>() = getComponent<TransformComponent>();
 		Entity& parent = m_environment->getEntity(m_parentUID);
@@ -122,8 +121,8 @@ namespace Deer {
 		m_isRoot = relation.parent_UID == 0;
 
 		if (m_isRoot) {
-			m_environment->m_registry.destroy(m_environment->m_rootEntity->m_entityHandle);
-			m_environment->m_rootEntity = &m_environment->m_entities[tag.entityUID];
+			m_environment->m_registry.destroy(m_environment->getRoot().m_entityHandle);
+			m_environment->m_rootEntity = tag.entityUID;
 		}
 		m_environment->m_entities[tag.entityUID] = *this;
 	}

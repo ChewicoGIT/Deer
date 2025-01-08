@@ -1,7 +1,7 @@
 #pragma once
-#include "Deer/Core/Events/ApplicationEvent.h"
-#include "Deer/Core/Events/KeyEvent.h"
-#include "Deer/Core/Events/MouseEvent.h"
+#include "DeerRender/Core/Events/ApplicationEvent.h"
+#include "DeerRender/Core/Events/KeyEvent.h"
+#include "DeerRender/Core/Events/MouseEvent.h"
 
 namespace Deer {
 	class ImGuiLayer {

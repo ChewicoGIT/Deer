@@ -3,8 +3,8 @@
 #include "Deer/Core/Timestep.h"
 
 #ifdef DEER_RENDER
-#include "Deer/Core/Events/Event.h"
-#include "Deer/Core/Events/ApplicationEvent.h"
+#include "DeerRender/Core/Events/Event.h"
+#include "DeerRender/Core/Events/ApplicationEvent.h"
 #include "DeerRender/ImGui/ImGuiLayer.h"
 #include "DeerRender/Core/Window.h"
 #endif

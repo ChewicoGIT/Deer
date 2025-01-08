@@ -17,7 +17,7 @@ namespace Deer {
 
 	class Environment {
 	public:
-		Environment(const std::string& rootName = "root");
+		Environment();
 		~Environment();
 
 		void clear();
@@ -29,20 +29,21 @@ namespace Deer {
 		Entity& getEntity(uid id);
 		Entity& createEntity(const std::string& name = std::string());
 		Entity& createEmptyEntity();
-
+		
+		//FEO
 		uid tryGetMainCamera();
 		void setMainCamera(Entity& entity);
 
 		Entity& getRoot();
 	public:
-		const std::string m_rootName;
 		entt::registry m_registry;
-
-		Entity* m_rootEntity;
 		EntityMap m_entities;
 
-		uid m_idCreationOffset = 0;
+		uid m_rootEntity = 0;
 		uid m_mainCamera = 0;
+	private:
+		uid m_idCreationOffset = 0;
+		inline uid pullEntityID() { m_idCreationOffset++; return m_idCreationOffset; }
 
 		friend class Entity;
 	};

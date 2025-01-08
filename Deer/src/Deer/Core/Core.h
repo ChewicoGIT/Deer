@@ -2,6 +2,8 @@
 #include <memory>
 #include <stdint.h>
 
+#define MAX_CHILDRENS 16
+
 namespace Deer {
 
 	template<typename T>
@@ -15,5 +17,4 @@ namespace Deer {
 
 	// Unique identifier
 	using uid = uint32_t;
-
 }

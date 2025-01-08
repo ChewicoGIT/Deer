@@ -3,18 +3,18 @@
 
 namespace Deer {
 
-	void ChunkBaker::genSolidVoxel(ChunkVoxelID voxelID) {
+	void ChunkBaker::genSolidVoxel(ChunkVoxelID id) {
 		// for each dir
 		for (int i = 0; i < 6; i++) {
-			Voxel voxel = m_workingChunk->readVoxel(voxelID);
+			Voxel voxel = m_workingChunk->readVoxel(id);
 			bool isSolid = voxel.id != 0;
 
 			if (!isSolid)
 				continue;
 
-			int nextX = NORMAL_DIR(INTERNAL_X_POS, i) + voxelID.x;
-			int nextY = NORMAL_DIR(INTERNAL_Y_POS, i) + voxelID.y;
-			int nextZ = NORMAL_DIR(INTERNAL_Z_POS, i) + voxelID.z;
+			int nextX = NORMAL_DIR(INTERNAL_X_POS, i) + id.x;
+			int nextY = NORMAL_DIR(INTERNAL_Y_POS, i) + id.y;
+			int nextZ = NORMAL_DIR(INTERNAL_Z_POS, i) + id.z;
 
 			bool nextIsSolid = true;
 			if (nextX < 0 || nextY < 0 || nextZ < 0 || nextX >= CHUNK_SIZE_X || nextY >= CHUNK_SIZE_Y || nextZ >= CHUNK_SIZE_Z) { 
@@ -39,9 +39,9 @@ namespace Deer {
 
 			for (int v = 0; v < 4; v++) {
 				SolidVoxelVertexData vertexData(
-					voxelID.x + NORMAL_VERTEX_POS(INTERNAL_X_POS, v, i),
-					voxelID.y + NORMAL_VERTEX_POS(INTERNAL_Y_POS, v, i),
-					voxelID.z + NORMAL_VERTEX_POS(INTERNAL_Z_POS, v, i),
+					id.x + NORMAL_VERTEX_POS(INTERNAL_X_POS, v, i),
+					id.y + NORMAL_VERTEX_POS(INTERNAL_Y_POS, v, i),
+					id.z + NORMAL_VERTEX_POS(INTERNAL_Z_POS, v, i),
 					i, VERTEX_UV(INTERNAL_X_POS, v), VERTEX_UV(INTERNAL_Y_POS, v));
 
 				m_solidVoxelVertices.push_back(vertexData);

@@ -3,8 +3,8 @@
 #include "DeerStudio/Editor/ActiveEntity.h"
 
 #include "Deer/Core/Core.h"
-#include "Deer/Core/Events/KeyEvent.h"
-#include "Deer/Core/Events/Event.h"
+#include "DeerRender/Core/Events/KeyEvent.h"
+#include "DeerRender/Core/Events/Event.h"
 #include "Deer/Scene/Enviroment.h"
 #include "Deer/Scene/Entity.h"
 

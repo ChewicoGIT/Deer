@@ -49,6 +49,8 @@ namespace Deer {
 		void destroy();
 
 		Entity& getParent();
+		inline uid getParentUID() { return m_parentUID; }
+
 		// TODO, enable transfer entitys from difrent enviroments
 		void setParent(Entity& parent);
 		bool isDescendant(Entity& parent);

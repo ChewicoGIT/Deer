@@ -5,9 +5,9 @@
 #include "Deer/Scene/Enviroment.h"
 #include "Deer/Scene/Entity.h"
 
-#include "Deer/Core/Events/Event.h"
-#include "Deer/Core/Events/keyEvent.h"
-#include "Deer/Core/Events/MouseEvent.h"
+#include "DeerRender/Core/Events/Event.h"
+#include "DeerRender/Core/Events/keyEvent.h"
+#include "DeerRender/Core/Events/MouseEvent.h"
 
 #include <string>
 // TEMP

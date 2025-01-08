@@ -7,6 +7,10 @@ namespace Deer {
 	};
 
 	struct VoxelInfo {
+		uint16_t id;
 		VoxelType type;
+
+		VoxelInfo(uint16_t _id = 0, VoxelType _type = VoxelType::Solid)
+			: id (_id), type(_type) { }
 	};
 }
