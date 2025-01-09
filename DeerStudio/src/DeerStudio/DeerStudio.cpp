@@ -135,6 +135,10 @@ namespace Deer {
             if (ImGui::MenuItem("Save project as...")) {
                 // TODO
             }
+            ImGui::Separator();
+            if (ImGui::MenuItem("Create binaries")) {
+
+            }
             if (ImGui::MenuItem("Export project")) {
                 // TODO
             }
@@ -176,44 +180,6 @@ namespace Deer {
                 // TODO
             }
             if (ImGui::MenuItem("Restart")) {
-                // TODO
-            }
-            ImGui::EndMenu();
-        }
-
-        if (ImGui::BeginMenu("Edit")) {
-            if (ImGui::MenuItem("Undo")) {
-                // TODO
-            }
-            if (ImGui::MenuItem("Copy")) {
-                // TODO
-            }
-            if (ImGui::MenuItem("Paste")) {
-                // TODO
-            }
-            if (ImGui::MenuItem("Duplicate")) {
-                // TODO
-            }
-            if (ImGui::MenuItem("Select all")) {
-                // TODO
-            }
-            if (ImGui::MenuItem("Deselect all")) {
-                // TODO
-            }
-            ImGui::EndMenu();
-        }
-
-        if (ImGui::BeginMenu("View")) {
-            if (ImGui::MenuItem("Zoom In")) {
-                // TODO
-            }
-            if (ImGui::MenuItem("Zoom Out")) {
-                // TODO
-            }
-            if (ImGui::MenuItem("Show Gizmo/ Hide Gizmo")) {
-                // TODO
-            }
-            if (ImGui::MenuItem("Full screen")) {
                 // TODO
             }
             ImGui::EndMenu();
