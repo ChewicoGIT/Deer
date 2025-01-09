@@ -41,7 +41,7 @@ namespace Deer {
         auto m_assetPannel = Ref<AssetManagerPannel>(new AssetManagerPannel(m_activeEntity));
         auto m_gamePannel = Ref<GamePannel>(new GamePannel(m_activeEntity));
         auto m_terrainEditor = Ref<TerrainEditorPannel>(new TerrainEditorPannel());
-        auto m_voxelPannel = Ref<VoxelPannel>(new VoxelPannel());
+        //auto m_voxelPannel = Ref<VoxelPannel>(new VoxelPannel());
 
         pannels.push_back(m_propertiesPannel);
         pannels.push_back(m_enviromentTreePannel);
@@ -49,7 +49,7 @@ namespace Deer {
         pannels.push_back(m_assetPannel);
         pannels.push_back(m_gamePannel);
         pannels.push_back(m_terrainEditor);
-        pannels.push_back(m_voxelPannel);
+        //pannels.push_back(m_voxelPannel);
 
     }
 

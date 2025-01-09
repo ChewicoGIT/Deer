@@ -10,8 +10,6 @@
 #include "DeerRender/Core/Events/MouseEvent.h"
 
 #include <string>
-// TEMP
-#include "DeerRender/Render/VertexArray.h"
 
 namespace Deer {
 	enum class TransformMode {
@@ -29,8 +27,8 @@ namespace Deer {
 		void onEventCallback(Event& e) override;
 		bool onClickEvent(MouseButtonPressedEvent mouseEvent);
 		bool onKeyEvent(KeyPressedEvent keyEvent);
+
 	private:
-		// bool expresses if it is being used
 		bool drawGizmos(int wPosX, int wPosY, int wSizeX, int wSizeY);
 		void drawVoxelRay();
 	private:
