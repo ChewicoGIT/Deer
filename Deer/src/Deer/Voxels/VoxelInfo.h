@@ -7,6 +7,7 @@ namespace Deer {
 	};
 
 	struct VoxelInfo {
+		uid id;
 		VoxelType type;
 	};
 }
