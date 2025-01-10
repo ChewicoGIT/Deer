@@ -6,7 +6,6 @@
 namespace Deer {
 	class SceneSerializer {
 	public:
-		// In case DEER_SERVICE is defined by default serverSerialization will be true allewaysk9iy88ugyu 
   		SceneSerializer(Ref<Scene>& scene) : m_scene(scene), m_currentScenePath("_NO_INITIALIZED_") { }
 		
 		void serialize(const std::string& filePath, bool serverSerialization = false);
