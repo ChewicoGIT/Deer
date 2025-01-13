@@ -3,7 +3,7 @@
 #include "Deer/Core/Log.h"
 
 #include <string>
-#include <filesystem>
+#include "Deer/DataStore/Path.h"
 
 namespace Deer {
 	template <typename T>
@@ -21,12 +21,12 @@ namespace Deer {
 		}
 
 		inline uid getAssetID() const { return m_assetID; }
-		inline std::filesystem::path& getAssetLocation() { return m_assetLocation; }
+		inline Path& getAssetLocation() { return m_assetLocation; }
 
 		Ref<T> value;
 	private:
 		uid m_assetID;
-		std::filesystem::path m_assetLocation;
+		Path m_assetLocation;
 	};
 
 	template <>
@@ -37,12 +37,12 @@ namespace Deer {
 			: m_assetID(id), m_assetLocation(assetLocation) { }
 
 		inline uid getAssetID() const { return m_assetID; }
-		inline std::filesystem::path& getAssetLocation() { return m_assetLocation; }
+		inline Path& getAssetLocation() { return m_assetLocation; }
 
 		Ref<void> value;
 	private:
 		uid m_assetID;
-		std::filesystem::path m_assetLocation;
+		Path m_assetLocation;
 	};
 }
 

@@ -99,7 +99,7 @@ namespace Deer {
 			if (mesh.meshAssetID == 0)
 				meshName = " null ";
 			else
-				meshName = Project::m_assetManager->getAssetLocation(mesh.meshAssetID).generic_string();
+				meshName = AssetManager::getAssetLocation(mesh.meshAssetID).generic_string();
 
 			ImGui::Text("Mesh   : ");
 			ImGui::SameLine();
@@ -107,7 +107,7 @@ namespace Deer {
 			if (ImGui::BeginDragDropTarget()) {
 				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("_MESH")) {
 					std::string receivedData = std::string((const char*)payload->Data);
-					mesh.meshAssetID = Project::m_assetManager->loadAsset<Mesh>(receivedData);
+					mesh.meshAssetID = AssetManager::loadAsset<Mesh>(receivedData);
 				}
 				ImGui::EndDragDropTarget();
 			}
@@ -117,7 +117,7 @@ namespace Deer {
 			if (mesh.shaderAssetID == 0)
 				shaderName = " null ";
 			else
-				shaderName = Project::m_assetManager->getAssetLocation(mesh.shaderAssetID).generic_string();
+				shaderName = AssetManager::getAssetLocation(mesh.shaderAssetID).generic_string();
 
 			ImGui::Text("Shader : ");
 			ImGui::SameLine();
@@ -125,7 +125,7 @@ namespace Deer {
 			if (ImGui::BeginDragDropTarget()) {
 				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("_SHADER")) {
 					std::string receivedData = std::string((const char*)payload->Data);
-					mesh.shaderAssetID = Project::m_assetManager->loadAsset<Shader>(receivedData);
+					mesh.shaderAssetID = AssetManager::loadAsset<Shader>(receivedData);
 				}
 				ImGui::EndDragDropTarget();
 			}
@@ -150,7 +150,7 @@ namespace Deer {
 
 				textureBindingCount++;
 
-				std::string textureBindingName = Project::m_assetManager->getAssetLocation(textureBinding.textureAssetID[x]).generic_string();
+				std::string textureBindingName = AssetManager::getAssetLocation(textureBinding.textureAssetID[x]).generic_string();
 				int currentID = textureBinding.textureBindID[x];
 
 				ImGui::Text("Texture : ");
@@ -162,7 +162,7 @@ namespace Deer {
 						std::string receivedData = std::string((const char*)payload->Data);
 
 						textureBinding.textureAssetID[x]
-							= Project::m_assetManager->loadAsset<Texture2D>(std::filesystem::path(receivedData));
+							= AssetManager::loadAsset<Texture2D>(std::filesystem::path(receivedData));
 					}
 					ImGui::EndDragDropTarget();
 				}
@@ -194,7 +194,7 @@ namespace Deer {
 							if (textureBinding.textureAssetID[x] != 0)
 								continue;
 
-							textureBinding.textureAssetID[x] = Project::m_assetManager->loadAsset<Texture2D>(std::filesystem::path(receivedData));
+							textureBinding.textureAssetID[x] = AssetManager::loadAsset<Texture2D>(std::filesystem::path(receivedData));
 							textureBinding.textureBindID[x] = 0;
 							break;
 						}

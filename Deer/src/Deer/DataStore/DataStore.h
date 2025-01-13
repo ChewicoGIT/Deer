@@ -8,16 +8,13 @@
 #include <string>
 
 namespace Deer {
-	class DataStore {
-	public:
-		DataStore(const Path& _path) : r_path(_path) { }
-
+	namespace DataStore {
 		uint8_t* readFile(const Path&, uint32_t* size);
 		void saveFile(const Path&, uint8_t* data, uint32_t size);
 
+		void compressFiles(std::vector<Path> files, const Path& path);
 		std::vector<Path> getFiles(const Path& path, const std::string& extension);
-		inline const Path& getRootPath() { return r_path; }
-	private:
-		Path r_path;
-	};
+
+		extern Path rootPath;
+	}
 }

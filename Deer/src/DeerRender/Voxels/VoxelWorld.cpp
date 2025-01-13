@@ -48,12 +48,12 @@ namespace Deer {
 				continue;
 			chunkRender.solidVoxel->bind();
 
-			int textureAssetID = Project::m_assetManager->loadAsset<Texture2D>("assets/Textures/Dirt.png");
-			Asset<Texture2D>& textureAsset = Project::m_assetManager->getAsset<Texture2D>(textureAssetID);
+			int textureAssetID = AssetManager::loadAsset<Texture2D>("assets/Textures/Dirt.png");
+			Asset<Texture2D>& textureAsset = AssetManager::getAsset<Texture2D>(textureAssetID);
 			textureAsset.value->bind(0);
 
-			int assetID = Project::m_assetManager->loadAsset<Shader>("assets/Shaders/SolidVoxel.glsl");
-			Asset<Shader>& shaderAsset = Project::m_assetManager->getAsset<Shader>(assetID);
+			int assetID = AssetManager::loadAsset<Shader>("assets/Shaders/SolidVoxel.glsl");
+			Asset<Shader>& shaderAsset = AssetManager::getAsset<Shader>(assetID);
 
 			shaderAsset.value->bind();
 			shaderAsset.value->uploadUniformMat4("u_viewMatrix", cameraProjectionMatrix);

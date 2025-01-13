@@ -33,7 +33,7 @@ namespace Deer {
             if (id >= MAX_TEXTURE_BINDINGS)
                 break;
 
-            textureBinding.textureAssetID[id] = Project::m_assetManager->loadAsset<Texture2D>(
+            textureBinding.textureAssetID[id] = AssetManager::loadAsset<Texture2D>(
                 std::filesystem::path(binding.texturePath));
             textureBinding.textureBindID[id] = binding.bindingID;
         }
@@ -47,7 +47,7 @@ namespace Deer {
         for (int x = 0; x < MAX_TEXTURE_BINDINGS; x++) {
             if (textureBinding.textureAssetID[x] != 0) {
                 bindings.push_back(TextureBinding(
-                    Project::m_assetManager->getAssetLocation(textureBinding.textureAssetID[x]).generic_string(),
+                    AssetManager::getAssetLocation(textureBinding.textureAssetID[x]).generic_string(),
                     textureBinding.textureBindID[x]
                 ));
             }

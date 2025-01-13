@@ -13,6 +13,11 @@
 #include "Deer/Scene/SceneSerializer.h"
 #include "Deer/Scripting/ScriptEngine.h"
 
+#include "Deer/DataStore/DataAccess/PhyisicalDataAccess.h"
+
+#include "Deer/DataStore/DataStore.h"
+#include "Deer/Asset/AssetManager.h"
+
 #include "Style.h"
 #include "Plattform/OpenGL/imgui_impl_opengl3.h"
 
@@ -22,6 +27,8 @@ namespace Deer {
     void DeerStudioApplication::onInit() {
         Project::m_scriptEngine->compileScriptEngine(std::filesystem::path("scripts"));
         Project::m_sceneSerializer->setSceneChangeCallback(std::bind(&Deer::DeerStudioApplication::onChangeScene, this));
+
+        AssetManager::setupDataAccess(new PhyisicalDataAccess());
 
         // IMGUI STYLE
         ImGuiIO& io = ImGui::GetIO();
@@ -140,7 +147,9 @@ namespace Deer {
 
             }
             if (ImGui::MenuItem("Export project")) {
-                // TODO
+                std::vector<Path> scenes = DataStore::getFiles("scenes", ".dbscn");
+                DataStore::compressFiles(scenes, "bin/scene_data");
+
             }
             if (ImGui::MenuItem("Project settings")) {
                 // TODO

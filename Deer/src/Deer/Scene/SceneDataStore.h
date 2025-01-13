@@ -6,15 +6,10 @@
 namespace Deer {
 	class Scene;
 
-	class SceneDataStore {
-	public:
-		SceneDataStore(DataStore& dataStore) : m_dataStore(dataStore) { }
+	namespace SceneDataStore {
 
 		void saveBin(Ref<Scene>& scene, const Path& path);
 		Ref<Scene> loadBin(const Path& path);
-
-	private:
-		DataStore& m_dataStore;
-	};
+	}
 }
 

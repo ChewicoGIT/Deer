@@ -6,9 +6,9 @@ namespace Deer{
     void save(Archive& archive,
         MeshRenderComponent const& meshRender) {
 
-        std::string meshLocation = Project::m_assetManager->getAssetLocation(meshRender.meshAssetID).generic_string();
+        std::string meshLocation = AssetManager::getAssetLocation(meshRender.meshAssetID).generic_string();
         archive(cereal::make_nvp("mesh", meshLocation));
-        std::string shaderLocation = Project::m_assetManager->getAssetLocation(meshRender.shaderAssetID).generic_string();
+        std::string shaderLocation = AssetManager::getAssetLocation(meshRender.shaderAssetID).generic_string();
         archive(cereal::make_nvp("shader", shaderLocation));
     }
 
@@ -21,7 +21,7 @@ namespace Deer{
         std::string shaderLocation;
         archive(cereal::make_nvp("shader", shaderLocation));
 
-        meshRender.meshAssetID = Project::m_assetManager->loadAsset<Mesh>(std::filesystem::path(meshLocation));
-        meshRender.shaderAssetID = Project::m_assetManager->loadAsset<Shader>(std::filesystem::path(shaderLocation));
+        meshRender.meshAssetID = AssetManager::loadAsset<Mesh>(std::filesystem::path(meshLocation));
+        meshRender.shaderAssetID = AssetManager::loadAsset<Shader>(std::filesystem::path(shaderLocation));
     }
 }
