@@ -18,7 +18,8 @@ namespace Deer {
 
 	class Texture2D : public Texture {
 	public:
-		static Ref<Texture2D> create(const std::string& pathFile);
+		static Ref<Texture2D> create(const std::string&);
+		static Ref<Texture2D> create(uint8_t* data, uint32_t size);
 	};
 }
 

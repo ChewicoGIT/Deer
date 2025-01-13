@@ -9,9 +9,6 @@
 namespace Deer {
 	namespace AssetManager {
 		extern std::vector<Asset<void>> assets;
-		extern DataAccess* dataAccess;
-
-		void setupDataAccess(DataAccess* _dataAccess);
 
 		template<typename T>
 		inline Asset<T>& getAsset(uid assetID) { return *(Asset<T>*) & (assets[assetID]); }

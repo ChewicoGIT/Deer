@@ -10,7 +10,7 @@ namespace Deer {
 	class OpenGLVertexArray : public VertexArray {
 	public:
 		OpenGLVertexArray();
-		OpenGLVertexArray(const std::string& filePath);
+		OpenGLVertexArray(uint8_t* data, uint32_t size);
 		~OpenGLVertexArray() override;
 
 		void bind() const override;

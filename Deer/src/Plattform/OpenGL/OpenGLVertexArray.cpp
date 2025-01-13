@@ -11,21 +11,21 @@ namespace Deer {
 		return Ref<VertexArray>(new OpenGLVertexArray());
 	}
 
-	Ref<VertexArray> VertexArray::create(const std::string& filePath) {
-		return Ref<VertexArray>(new OpenGLVertexArray(filePath));
+	Ref<VertexArray> VertexArray::create(uint8_t* data, uint32_t size) {
+		return Ref<VertexArray>(new OpenGLVertexArray(data, size));
 	}
 
 	OpenGLVertexArray::OpenGLVertexArray() {
 		glGenVertexArrays(1, &m_vertexArray);
 	}
 
-	OpenGLVertexArray::OpenGLVertexArray(const std::string& filePath) {
+	OpenGLVertexArray::OpenGLVertexArray(uint8_t* data, uint32_t size) {
 		Ref<VertexBuffer> m_vertexBuffer;
 		Ref<VertexBuffer> m_uvBuffer;
 		Ref<VertexBuffer> m_normalBuffer;
 		Ref<IndexBuffer> m_indexBuffer;
 
-		obj::Model model = obj::loadModelFromFile(filePath);
+		obj::Model model = obj::loadModelFromString((char*)data);
 		std::vector<unsigned short>& triangles = model.faces.at("default");
 
 		glGenVertexArrays(1, &m_vertexArray);
@@ -34,7 +34,7 @@ namespace Deer {
 
 		BufferLayout vertexbufferLayout({
 			{"a_Position", DataType::Float3, ShaderDataType::FloatingPoint }
-		});
+			});
 
 		m_vertexBuffer->setLayout(vertexbufferLayout);
 		addVertexBuffer(m_vertexBuffer);

@@ -21,7 +21,7 @@ namespace Deer {
 		virtual const Ref<IndexBuffer>& getIndexBuffer() = 0;
 
 		static Ref<VertexArray> create();
-		static Ref<VertexArray> create(const std::string& filePath);
+		static Ref<VertexArray> create(uint8_t* data, uint32_t size);
 	};
 }
 
