@@ -18,6 +18,7 @@ namespace Deer {
 		virtual void uploadUniformMat4(const std::string& name, const glm::mat4 mat) = 0;
 
 		static Ref<Shader> create(const std::string& filePath);
+		static Ref<Shader> create(uint8_t* data, uint32_t size);
 		static Ref<Shader> create(const std::string& vertexSrc, const std::string& fragmentSrc);
 	};
 }

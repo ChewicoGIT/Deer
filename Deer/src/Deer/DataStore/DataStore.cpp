@@ -1,6 +1,7 @@
 #include "DataStore.h"
 #include "Deer/Core/Log.h"
 #include "Deer/DataStore/Path.h"
+#include "Deer/DataStore/DataAccess.h"
 
 #include "cereal/cereal.hpp"
 #include "cereal/types/unordered_map.hpp"
@@ -14,6 +15,7 @@
 #include <unordered_map>
 #include <ostream>
 #include <streambuf>
+#include "DataAccess.h"
 
 namespace Deer {
     Path DataStore::rootPath;
@@ -97,5 +99,14 @@ namespace Deer {
         }
 
         return files;
+    }
+
+    DataAccess* DataStore::dataAccess;
+
+    void DataStore::setupDataAccess(DataAccess* _dataAccess) {
+        if (dataAccess)
+            delete dataAccess;
+
+        dataAccess = _dataAccess;
     }
 }

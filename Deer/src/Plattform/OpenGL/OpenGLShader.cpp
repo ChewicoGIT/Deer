@@ -8,10 +8,17 @@
 
 #include <fstream>
 #include <regex>
+#include <cstring>
+
+#include <iostream>
 
 namespace Deer {
 	Ref<Shader> Shader::create(const std::string& filePath) {
 		return Ref<Shader>(new OpenGLShader(filePath));
+	}
+
+	Ref<Shader> Shader::create(uint8_t* data, uint32_t size) {
+		return Ref<Shader>(new OpenGLShader(data, size));
 	}
 
 	Ref<Shader> Shader::create(const std::string& vertexSrc, const std::string& fragmentSrc) {
@@ -23,8 +30,17 @@ namespace Deer {
 		std::unordered_map<unsigned int, std::string> sources = preProcess(shaderSrc);
 		
 		compile(sources[GL_VERTEX_SHADER], sources[GL_FRAGMENT_SHADER]);
-		//std::string fragmentShader = readFile(filePath + ".frag.glsl");
-		//std::string vertexShader = readFile(filePath + ".vert.glsl");
+	}
+
+	OpenGLShader::OpenGLShader(uint8_t* data, uint32_t size) {
+		char* formated_data = new char[size + 1];
+		std::memcpy(formated_data, data, size);
+		formated_data[size] = '\0';
+
+		std::unordered_map<unsigned int, std::string> sources = preProcess((char*)formated_data);
+		compile(sources[GL_VERTEX_SHADER], sources[GL_FRAGMENT_SHADER]);
+
+		delete[] formated_data;
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& vertexSource, const std::string& fragmentSource) {
@@ -195,6 +211,8 @@ namespace Deer {
 			glDeleteShader(fragmentShader);
 			// Either of them. Don't leak shaders.
 			glDeleteShader(vertexShader);
+
+			DEER_CORE_INFO(source);
 
 			// Use the infoLog as you see fit.
 			DEER_CORE_ERROR("Error compiling fragment shader. \n{0}", infoLog);

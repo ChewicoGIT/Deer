@@ -16,7 +16,6 @@
 #include "Deer/DataStore/DataAccess/PhyisicalDataAccess.h"
 
 #include "Deer/DataStore/DataStore.h"
-#include "Deer/Asset/AssetDataAccess.h"
 
 #include "Style.h"
 #include "Plattform/OpenGL/imgui_impl_opengl3.h"
@@ -28,7 +27,7 @@ namespace Deer {
         Project::m_scriptEngine->compileScriptEngine(std::filesystem::path("scripts"));
         Project::m_sceneSerializer->setSceneChangeCallback(std::bind(&Deer::DeerStudioApplication::onChangeScene, this));
 
-        AssetManager::setupDataAccess(new PhyisicalDataAccess());
+        DataStore::setupDataAccess(new PhyisicalDataAccess());
 
         // IMGUI STYLE
         ImGuiIO& io = ImGui::GetIO();

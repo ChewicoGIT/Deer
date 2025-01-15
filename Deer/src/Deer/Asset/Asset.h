@@ -4,7 +4,8 @@
 
 #include <string>
 #include "Deer/DataStore/Path.h"
-#include "Deer/Asset/AssetDataAccess.h"
+#include "Deer/DataStore/DataAccess.h"
+#include "Deer/DataStore/DataStore.h"
 
 namespace Deer {
 	template <typename T>
@@ -15,11 +16,11 @@ namespace Deer {
 			: m_assetID(id), m_assetLocation(assetLocation) {
 			try {
 				uint32_t size;
-				uint8_t* data = AssetManager::dataAccess->loadData(assetLocation, &size);
+				uint8_t* data = DataStore::dataAccess->loadData(assetLocation, &size);
 
 				value = T::create(data, size);
 
-				AssetManager::dataAccess->freeData(assetLocation, data);
+				DataStore::dataAccess->freeData(assetLocation, data);
 			}
 			catch (const std::string& error){
 				DEER_CORE_ERROR("Error loading asset {0}\n{1}", assetLocation.generic_string().c_str(), error.c_str());

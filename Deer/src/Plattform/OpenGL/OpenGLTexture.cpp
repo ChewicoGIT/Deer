@@ -13,12 +13,12 @@ namespace Deer {
 		return Ref<Texture2D>(new OpenGLTexture2D(path));
 	}
 
-	OpenGLTexture2D::OpenGLTexture2D(uint8_t* data, uint32_t size) {
+	OpenGLTexture2D::OpenGLTexture2D(uint8_t* _data, uint32_t size) {
 
 		stbi_set_flip_vertically_on_load(true);
 		int width, height, channels;
 
-		stbi_uc* data = stbi_load_from_memory(data, size, &width, &height, &channels, 0);
+		stbi_uc* data = stbi_load_from_memory(_data, size, &width, &height, &channels, 0);
 		
 		m_width = width;
 		m_height = height;
