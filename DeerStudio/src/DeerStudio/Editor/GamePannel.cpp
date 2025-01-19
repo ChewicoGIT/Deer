@@ -2,9 +2,9 @@
 #include "Deer/Scene/Enviroment.h"
 #include "Deer/Scene/Scene.h"
 #include "Deer/Scene/Entity.h"
-#include "Deer/Scene/SceneSerializer.h"
-#include "Deer/Core/Project.h"
+#include "Deer/Core/Project.h".
 #include "Deer/Scripting/ScriptEngine.h"
+#include "Deer/Scene/SceneDataStore.h"
 
 #include "imgui.h"
 #include <filesystem>
@@ -29,14 +29,14 @@ namespace Deer {
 
             if (!Project::m_scene->getExecutingState()) {
                 if (Project::m_scriptEngine->isCompilationValid() && ImGui::Button("Execute")) {
-                    Project::m_sceneSerializer->serializeBinary("temp_scene.dbscn");
+                    SceneDataStore::exportRuntimeScene(Project::m_scene);
                     Project::m_scene->beginExecution();
                 }
             }
             else {
                 if (ImGui::Button("Stop")) {
                     Project::m_scene->endExecution();
-                    Project::m_sceneSerializer->deserializeBinary("temp_scene.dbscn");
+                    SceneDataStore::importRuntimeScene();
                 }
             }
 
@@ -75,14 +75,15 @@ namespace Deer {
 
         if (!Project::m_scene->getExecutingState()) {
             if (Project::m_scriptEngine->isCompilationValid() && ImGui::Button("Execute")) {
-                Project::m_sceneSerializer->serializeBinary("temp_scene.dbscn");
+                SceneDataStore::exportRuntimeScene(Project::m_scene);
                 Project::m_scene->beginExecution();
             }
         }
         else {
             if (ImGui::Button("Stop")) {
                 Project::m_scene->endExecution();
-                Project::m_sceneSerializer->deserializeBinary("temp_scene.dbscn");
+                // Work to be done
+                SceneDataStore::importRuntimeScene();
             }
         }
 

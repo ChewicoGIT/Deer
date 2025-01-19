@@ -10,7 +10,7 @@
 
 #include "Deer/Core/Project.h"
 #include "Deer/Scene/Scene.h"
-#include "Deer/Scene/SceneSerializer.h"
+#include "Deer/Scene/SceneDataStore.h"
 #include "Deer/Scripting/ScriptEngine.h"
 
 #include "Deer/DataStore/DataAccess/PhyisicalDataAccess.h"
@@ -25,7 +25,6 @@
 namespace Deer {
     void DeerStudioApplication::onInit() {
         Project::m_scriptEngine->compileScriptEngine(std::filesystem::path("scripts"));
-        Project::m_sceneSerializer->setSceneChangeCallback(std::bind(&Deer::DeerStudioApplication::onChangeScene, this));
 
         DataStore::setupDataAccess(new PhyisicalDataAccess());
 
@@ -146,9 +145,10 @@ namespace Deer {
 
             }
             if (ImGui::MenuItem("Export project")) {
+                SceneDataStore::exportScenesBin();
+
                 std::vector<Path> scenes = DataStore::getFiles("scenes", ".dbscn");
                 DataStore::compressFiles(scenes, "bin/scene_data");
-
             }
             if (ImGui::MenuItem("Project settings")) {
                 // TODO
@@ -160,19 +160,20 @@ namespace Deer {
             if (ImGui::MenuItem("New scene")) {
                 // TODO
                 Project::m_scene->clear();
-                Project::m_sceneSerializer->serialize("assets/newScene.dscn");
+                SceneDataStore::exportSceneJson(Project::m_scene, "new_scene");
             }
             //if (Project::m_sceneSerializer->getCurrentScenePath() != "_NO_INITIALIZED_" && ImGui::MenuItem("Save scene")) {
             //    Project::m_sceneSerializer->serialize(Project::m_sceneSerializer->getCurrentScenePath());
             //}
             if (ImGui::MenuItem("Save scene")) {
-                // TODO
+                SceneDataStore::exportSceneJson(Project::m_scene, "saved_scene");
             }
             if (ImGui::MenuItem("Save scene as...")) {
                 // TODO
             }
             if (ImGui::MenuItem("Load scene")) {
-                // TODO
+                //Project::m_scene.swap(SceneDataStore::loadScene("new_scene"));
+                //SceneDataStore::exportSceneJson(Project::m_scene, "new_scene");
             }
             if (ImGui::MenuItem("Scene settings")) {
                 // TODO

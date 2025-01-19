@@ -7,6 +7,15 @@
 #include <vector>
 #include <string>
 
+#define DEER_SCENE_PATH "scenes"
+#define DEER_SCRIPT_PATH "scripts"
+#define DEER_SHADER_PATH "shaders"
+#define DEER_VOXEL_PATH "voxels"
+#define DEER_OBJECT_PATH "objects"
+
+#define DEER_BIN_PATH "bin"
+#define DEER_TEMP_PATH "tmp"
+
 namespace Deer {
 	class DataAccess;
 

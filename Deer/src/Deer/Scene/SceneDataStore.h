@@ -7,9 +7,13 @@ namespace Deer {
 	class Scene;
 
 	namespace SceneDataStore {
+		Ref<Scene> loadScene(const Path& name);
 
-		void saveBin(Ref<Scene>& scene, const Path& path);
-		Ref<Scene> loadBin(const Path& path);
+		void exportSceneJson(Ref<Scene>& scene, const Path& name);
+		void exportScenesBin();
+
+		void exportRuntimeScene(Ref<Scene>& scene);
+		Ref<Scene> importRuntimeScene();
 	}
 }
 

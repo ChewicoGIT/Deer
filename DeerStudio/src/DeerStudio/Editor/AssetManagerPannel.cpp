@@ -2,7 +2,6 @@
 #include "Deer/Core/Log.h"
 #include "Deer/Core/Project.h"
 #include "DeerRender/Render/Texture.h"
-#include "Deer/Scene/SceneSerializer.h"
 #include "Deer/Asset/AssetManager.h"
 #include "DeerStudio/Editor/ActiveEntity.h"
 
@@ -129,9 +128,8 @@ namespace Deer {
             ImGui::Image((void*)m_scneIcon->getTextureID(), ImVec2(m_iconMinSize, m_iconMinSize), ImVec2(0, 1), ImVec2(1, 0));
 
             // Open scene
-            if (ImGui::IsItemClicked(0) && ImGui::IsMouseDoubleClicked(0) && !Project::m_sceneSerializer->getSceneExecutingState()) {
+            if (ImGui::IsItemClicked(0) && ImGui::IsMouseDoubleClicked(0)) {
                 try {
-                    Project::m_sceneSerializer->deserialize(path.string());
                     m_currentScenePath = path;
                 }
                 catch ( ... ) {
