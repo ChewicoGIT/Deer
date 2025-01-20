@@ -7,13 +7,13 @@ namespace Deer {
 	class Scene;
 
 	namespace SceneDataStore {
-		Ref<Scene> loadScene(const Path& name);
+		Scene loadScene(const Path& name);
 
-		void exportSceneJson(Ref<Scene>& scene, const Path& name);
+		void exportSceneJson(Scene& scene, const Path& name);
 		void exportScenesBin();
 
-		void exportRuntimeScene(Ref<Scene>& scene);
-		Ref<Scene> importRuntimeScene();
+		void exportRuntimeScene(Scene& scene);
+		Scene importRuntimeScene();
 	}
 }
 

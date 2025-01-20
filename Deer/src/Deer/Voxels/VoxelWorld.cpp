@@ -1,5 +1,6 @@
 #include "VoxelWorld.h"
 #include <math.h>
+#include "Deer/Core/Log.h"
 
 namespace Deer {
 	VoxelWorld::VoxelWorld(const VoxelWorldProps& props) 
@@ -78,6 +79,11 @@ namespace Deer {
 			for (int i = 1; i < 3; i++) {
 				if (distanceAxis[i] < minDistance)
 					minDistance = distanceAxis[i];
+			}
+
+			if (minDistance < 0) {
+				DEER_CORE_ERROR("Que coño????");
+				break;
 			}
 
 			result.distance = minDistance;

@@ -5,8 +5,8 @@
 namespace Deer {
     template<class Archive>
     void serialize(Archive& archive,
-        Ref<Scene>& m_scene) {
+        Scene& m_scene) {
 
-        archive(cereal::make_nvp("main_environment", m_scene->getMainEnviroment()));
+        archive(cereal::make_nvp("main_environment", m_scene.getMainEnviroment()));
     }
 }

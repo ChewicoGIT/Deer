@@ -9,15 +9,15 @@
 #include <sstream>
 
 namespace Deer {
-	Ref<Scene> loadSceneJson(uint8_t* data, uint32_t size);
-	Ref<Scene> loadSceneBin(uint8_t* data, uint32_t size);
+	Scene loadSceneJson(uint8_t* data, uint32_t size);
+	Scene loadSceneBin(uint8_t* data, uint32_t size);
 
-	Ref<Scene> SceneDataStore::loadScene(const Path& name) {
+	Scene SceneDataStore::loadScene(const Path& name) {
 		
 		uint32_t size;
 		uint8_t* data = DataStore::dataAccess->loadData(name, &size);
 
-		Ref<Scene> scene_data;
+		Scene scene_data;
 		if (DataStore::dataAccess->isDataBin())
 			scene_data = loadSceneBin(data, size);
 		else
@@ -27,11 +27,11 @@ namespace Deer {
 		return scene_data;
 	}
 
-	Ref<Scene> loadSceneJson(uint8_t* data, uint32_t size) {
+	Scene loadSceneJson(uint8_t* data, uint32_t size) {
 		std::string strData((char*)data, size);
 		std::istringstream stream(strData);
 
-		Ref<Scene> scene(new Scene());
+		Scene scene;
 		{
 			cereal::JSONInputArchive archive(stream);
 			archive(cereal::make_nvp("scene", scene));
@@ -40,11 +40,11 @@ namespace Deer {
 		return scene;
 	}
 
-	Ref<Scene> loadSceneBin(uint8_t* data, uint32_t size) {
+	Scene loadSceneBin(uint8_t* data, uint32_t size) {
 		std::string strData((char*)data, size);
 		std::istringstream stream(strData);
 
-		Ref<Scene> scene(new Scene());
+		Scene scene;
 		{
 			cereal::PortableBinaryInputArchive archive(stream);
 			archive(cereal::make_nvp("scene", scene));
@@ -53,7 +53,7 @@ namespace Deer {
 		return scene;
 	}
 
-	void SceneDataStore::exportSceneJson(Ref<Scene>& scene, const Path& name) {
+	void SceneDataStore::exportSceneJson(Scene& scene, const Path& name) {
 		is_server_serialization = false;
 
 		std::stringstream output;
@@ -68,7 +68,7 @@ namespace Deer {
 		DataStore::saveFile(savePath, (uint8_t*)view.data(), view.size());
 	}
 
-	void exportSceneBin(Ref<Scene>& scene, const Path& name) {
+	void exportSceneBin(Scene& scene, const Path& name) {
 		is_server_serialization = false;
 
 		std::stringstream output;
@@ -90,7 +90,7 @@ namespace Deer {
 			uint32_t size;
 			uint8_t* data = DataStore::readFile(scene_path, &size);
 
-			Ref<Scene> scene_data = loadSceneJson(data, size);
+			Scene scene_data = loadSceneJson(data, size);
 			delete[] data;
 
 			Path name = scene_path.lexically_relative(DEER_SCENE_PATH);
@@ -100,7 +100,7 @@ namespace Deer {
 		}
 	}
 
-	void SceneDataStore::exportRuntimeScene(Ref<Scene>& scene) {
+	void SceneDataStore::exportRuntimeScene(Scene& scene) {
 		std::stringstream output;
 		{
 			cereal::PortableBinaryOutputArchive archive(output);
@@ -113,13 +113,13 @@ namespace Deer {
 		DataStore::saveFile(savePath, (uint8_t*)view.data(), view.size());
 	}
 
-	Ref<Scene> SceneDataStore::importRuntimeScene() {
+	Scene SceneDataStore::importRuntimeScene() {
 		Path loadPath = Path(DEER_TEMP_PATH) / "scene_runtime.dbscn";
 
 		uint32_t size;
 		uint8_t* data = DataStore::readFile(loadPath, &size);
 
-		Ref<Scene> scene_data = loadSceneBin(data, size);
+		Scene scene_data = loadSceneBin(data, size);
 		delete[] data;
 
 		return scene_data;

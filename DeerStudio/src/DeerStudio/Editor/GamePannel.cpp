@@ -29,14 +29,14 @@ namespace Deer {
 
             if (!Project::m_scene->getExecutingState()) {
                 if (Project::m_scriptEngine->isCompilationValid() && ImGui::Button("Execute")) {
-                    SceneDataStore::exportRuntimeScene(Project::m_scene);
+                    SceneDataStore::exportRuntimeScene(*Project::m_scene);
                     Project::m_scene->beginExecution();
                 }
             }
             else {
                 if (ImGui::Button("Stop")) {
                     Project::m_scene->endExecution();
-                    SceneDataStore::importRuntimeScene();
+                    *Project::m_scene = SceneDataStore::importRuntimeScene();
                 }
             }
 
@@ -75,15 +75,14 @@ namespace Deer {
 
         if (!Project::m_scene->getExecutingState()) {
             if (Project::m_scriptEngine->isCompilationValid() && ImGui::Button("Execute")) {
-                SceneDataStore::exportRuntimeScene(Project::m_scene);
+                SceneDataStore::exportRuntimeScene(*Project::m_scene);
                 Project::m_scene->beginExecution();
             }
         }
         else {
             if (ImGui::Button("Stop")) {
                 Project::m_scene->endExecution();
-                // Work to be done
-                SceneDataStore::importRuntimeScene();
+                *Project::m_scene = SceneDataStore::importRuntimeScene();
             }
         }
 

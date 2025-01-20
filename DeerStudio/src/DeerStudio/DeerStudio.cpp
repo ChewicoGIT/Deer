@@ -160,13 +160,13 @@ namespace Deer {
             if (ImGui::MenuItem("New scene")) {
                 // TODO
                 Project::m_scene->clear();
-                SceneDataStore::exportSceneJson(Project::m_scene, "new_scene");
+                SceneDataStore::exportSceneJson(*Project::m_scene, "new_scene");
             }
             //if (Project::m_sceneSerializer->getCurrentScenePath() != "_NO_INITIALIZED_" && ImGui::MenuItem("Save scene")) {
             //    Project::m_sceneSerializer->serialize(Project::m_sceneSerializer->getCurrentScenePath());
             //}
             if (ImGui::MenuItem("Save scene")) {
-                SceneDataStore::exportSceneJson(Project::m_scene, "saved_scene");
+                SceneDataStore::exportSceneJson(*Project::m_scene, "saved_scene");
             }
             if (ImGui::MenuItem("Save scene as...")) {
                 // TODO
