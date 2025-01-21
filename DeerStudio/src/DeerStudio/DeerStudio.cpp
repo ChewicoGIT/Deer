@@ -17,7 +17,11 @@
 
 #include "Deer/DataStore/DataStore.h"
 
+#include "Editor/SceneExplorer.h"
+
 #include "Style.h"
+#include "Editor/Icons.h"
+
 #include "Plattform/OpenGL/imgui_impl_opengl3.h"
 
 #include <functional>
@@ -27,6 +31,8 @@ namespace Deer {
         Project::m_scriptEngine->compileScriptEngine(std::filesystem::path("scripts"));
 
         DataStore::setupDataAccess(new PhyisicalDataAccess());
+
+        setupIcons();
 
         // IMGUI STYLE
         ImGuiIO& io = ImGui::GetIO();
@@ -122,6 +128,10 @@ namespace Deer {
         for (auto pannel : pannels) {
             pannel->onImGui();
         }
+
+        // ---- PANNELS -----
+        sceneExplorer_onImGUI();
+        // ---- PANNELS -----
 
         ImGui::End();
     }
