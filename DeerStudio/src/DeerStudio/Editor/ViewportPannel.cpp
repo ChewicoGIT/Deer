@@ -54,7 +54,7 @@ namespace Deer {
 
         drawVoxelRay();
 
-        Project::m_scene->render(m_virtualCamera);
+        Project::m_scene.render(m_virtualCamera);
         
         ImGui::Image((void*)m_frameBuffer->getTextureBufferID(0), windowSize, ImVec2(0, 1), ImVec2(1, 0));
         bool isUsingDrawGizmo = drawGizmos(pos.x, pos.y, windowSize.x, windowSize.y);
@@ -75,7 +75,7 @@ namespace Deer {
                     m_activeEntity->clear();
 
                 if (id >= 0) {
-                    Entity& selectedEntity = Project::m_scene->getMainEnviroment()->getEntity((uid)id);
+                    Entity& selectedEntity = Project::m_scene.getMainEnviroment()->getEntity((uid)id);
                     m_activeEntity->addEntity(selectedEntity);
                 }
             }
@@ -110,10 +110,12 @@ namespace Deer {
         glm::vec3 rayDir = camMatrix * glm::vec4(x * 2 - 1, y * 2 - 1, 1, 1);
         rayDir -= m_virtualCamera.transform.position;
 
-        VoxelRayResult res = Project::m_scene->getVoxelWorld()->rayCast(m_virtualCamera.transform.position, rayDir);
+        if (Project::m_scene.getVoxelWorld()) {
+            VoxelRayResult res = Project::m_scene.getVoxelWorld()->rayCast(m_virtualCamera.transform.position, rayDir);
 
-        Project::m_scene->getMainGizmoRenderer().refresh();
-        Project::m_scene->getMainGizmoRenderer().drawVoxelLine(res.xPos, res.yPos, res.zPos);
+            Project::m_scene.getMainGizmoRenderer().refresh();
+            Project::m_scene.getMainGizmoRenderer().drawVoxelLine(res.xPos, res.yPos, res.zPos);
+        }
 
     }
     void ViewportPannel::onRender(Timestep timestep) {

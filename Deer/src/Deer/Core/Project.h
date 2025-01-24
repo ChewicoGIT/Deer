@@ -9,7 +9,7 @@ namespace Deer {
 	public:
 		static Ref<ScriptEngine> m_scriptEngine;
 
-		static Ref<Scene> m_scene;
+		static Scene m_scene;
 
 		static void initializeBaseSystems();
 		static void releaseBaseSystems();

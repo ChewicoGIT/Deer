@@ -17,8 +17,21 @@ namespace Deer {
 
 	void sceneExplorer_onImGUI() {
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(30, 30));
-		ImGui::Begin("Scene Explorer");
+		ImGui::Begin("Scene Explorer", (bool*)0, ImGuiWindowFlags_MenuBar);
         ImGui::PopStyleVar();
+
+
+        if (ImGui::BeginMenuBar()) {
+            if (ImGui::MenuItem("Save Scene")) {
+
+            }
+
+            if (ImGui::MenuItem("New Scene")) {
+
+            }
+
+            ImGui::EndMenuBar();
+        }
 
         float width = ImGui::GetWindowContentRegionWidth();
 
@@ -37,14 +50,18 @@ namespace Deer {
         else
             ImGui::Button(DEER_SCENE_PATH);
 
-        ImGui::SameLine();
-
         ImGui::Columns(cols, 0, false);
         
         for (const auto& entry : std::filesystem::directory_iterator(m_currentScenePath)) {
+            
+
             if (entry.is_directory())
                 drawSceneExplorerFolder(entry.path());
-            else
+            else {
+                std::string extension = entry.path().filename().extension().string();
+                if (extension != ".dscn")
+                    continue;
+            }
                 drawSceneExplorerScene(entry.path());
 
             float cursorOffset = (ICON_MIN_SIZE - ImGui::CalcTextSize(entry.path().filename().string().c_str()).x) / 2;
@@ -68,14 +85,10 @@ namespace Deer {
 
 
     void drawSceneExplorerScene(const Path& path) {
-        std::string extension = path.filename().extension().string();
-        if (extension != ".dscn")
-            return;
-
         ImGui::Image((void*)scene_icon->getTextureID(), ImVec2(ICON_MIN_SIZE, ICON_MIN_SIZE), ImVec2(0, 1), ImVec2(1, 0));
 
         if (ImGui::IsItemClicked(0) && ImGui::IsMouseDoubleClicked(0)) {
-            *Project::m_scene = SceneDataStore::loadScene(path);
+            Project::m_scene = SceneDataStore::loadScene(path);
         }
     }
 }

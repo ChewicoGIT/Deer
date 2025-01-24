@@ -21,22 +21,22 @@ namespace Deer {
         ImGui::Begin("Game Window");
         ImGui::PopStyleVar();
 
-        Ref<Environment> environment = Project::m_scene->getMainEnviroment();
+        Ref<Environment> environment = Project::m_scene.getMainEnviroment();
         uid cameraUID = environment->tryGetMainCamera();
 
         if (cameraUID == 0) {
             ImGui::TextColored(ImVec4(.3f, .3f, .8f, 1.0f), "There is no camera");
 
-            if (!Project::m_scene->getExecutingState()) {
+            if (!Project::m_scene.getExecutingState()) {
                 if (Project::m_scriptEngine->isCompilationValid() && ImGui::Button("Execute")) {
-                    SceneDataStore::exportRuntimeScene(*Project::m_scene);
-                    Project::m_scene->beginExecution();
+                    SceneDataStore::exportRuntimeScene(Project::m_scene);
+                    Project::m_scene.beginExecution();
                 }
             }
             else {
                 if (ImGui::Button("Stop")) {
-                    Project::m_scene->endExecution();
-                    *Project::m_scene = SceneDataStore::importRuntimeScene();
+                    Project::m_scene.endExecution();
+                    Project::m_scene = SceneDataStore::importRuntimeScene();
                 }
             }
 
@@ -66,23 +66,23 @@ namespace Deer {
         unsigned char clearColor[4]{ 0, 0, 0, 255 };
         m_frameBuffer->clearBuffer(0, &clearColor);
 
-        Project::m_scene->render();
+        Project::m_scene.render();
         m_frameBuffer->unbind();
 
         ImGui::Image((void*)m_frameBuffer->getTextureBufferID(0), windowSize, ImVec2(0, 1), ImVec2(1, 0));
 
         ImGui::SetCursorPos(cursorPos);
 
-        if (!Project::m_scene->getExecutingState()) {
+        if (!Project::m_scene.getExecutingState()) {
             if (Project::m_scriptEngine->isCompilationValid() && ImGui::Button("Execute")) {
-                SceneDataStore::exportRuntimeScene(*Project::m_scene);
-                Project::m_scene->beginExecution();
+                SceneDataStore::exportRuntimeScene(Project::m_scene);
+                Project::m_scene.beginExecution();
             }
         }
         else {
             if (ImGui::Button("Stop")) {
-                Project::m_scene->endExecution();
-                *Project::m_scene = SceneDataStore::importRuntimeScene();
+                Project::m_scene.endExecution();
+                Project::m_scene = SceneDataStore::importRuntimeScene();
             }
         }
 

@@ -19,7 +19,7 @@ namespace Deer {
                         int distance = rx * rx + ry * ry + rz * rz;
 
                         if (distance < 14 * 14)
-                            Project::m_scene->getVoxelWorld()->modVoxel(x, y, z).id = 1;
+                            Project::m_scene.getVoxelWorld()->modVoxel(x, y, z).id = 1;
                     }
                 }
             }
@@ -31,7 +31,7 @@ namespace Deer {
             for (int x = 0; x < 32; x++) {
                 for (int y = 0; y < 10; y++) {
                     for (int z = 0; z < 32; z++) {
-                        Project::m_scene->getVoxelWorld()->modVoxel(x, y, z).id = 1;
+                        Project::m_scene.getVoxelWorld()->modVoxel(x, y, z).id = 1;
                     }
                 }
             }
@@ -39,7 +39,7 @@ namespace Deer {
         }
         if (ImGui::Button("Create Yes Base")) {
 
-            Project::m_scene->getVoxelWorld()->modVoxel(31, 0, 0).id = 1;
+            Project::m_scene.getVoxelWorld()->modVoxel(31, 0, 0).id = 1;
 
         }
 

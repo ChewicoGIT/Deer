@@ -44,11 +44,11 @@ namespace Deer {
         // WINDOWS
         m_activeEntity = Ref<ActiveEntity>(new ActiveEntity());
         VoxelWorldProps worldProps(2, 2, 2);
-        Project::m_scene->createVoxelWorld(worldProps);
+        Project::m_scene.createVoxelWorld(worldProps);
 
         auto m_propertiesPannel = Ref<PropertiesPannel>(new PropertiesPannel(m_activeEntity));
         auto m_viewportPannel = Ref<ViewportPannel>(new ViewportPannel("Scene viewport", m_activeEntity));
-        auto m_enviromentTreePannel = Ref<EnviromentTreePannel>(new EnviromentTreePannel(Project::m_scene->getMainEnviroment(), "World tree", m_activeEntity));
+        auto m_enviromentTreePannel = Ref<EnviromentTreePannel>(new EnviromentTreePannel(Project::m_scene.getMainEnviroment(), "World tree", m_activeEntity));
         auto m_assetPannel = Ref<AssetManagerPannel>(new AssetManagerPannel(m_activeEntity));
         auto m_gamePannel = Ref<GamePannel>(new GamePannel(m_activeEntity));
         auto m_terrainEditor = Ref<TerrainEditorPannel>(new TerrainEditorPannel());
@@ -65,8 +65,8 @@ namespace Deer {
     }
 
     void DeerStudioApplication::onShutdown() {
-        if (Project::m_scene->getExecutingState())
-            Project::m_scene->endExecution();
+        if (Project::m_scene.getExecutingState())
+            Project::m_scene.endExecution();
 
         Project::m_scriptEngine->shutdownScriptEngine();
         pannels.clear();
@@ -82,9 +82,10 @@ namespace Deer {
     }
 
     void DeerStudioApplication::onUpdate(Timestep delta) {
-        if (Project::m_scene->getExecutingState())
-            Project::m_scene->updateExecution();
-        Project::m_scene->getVoxelWorld()->bakeNextChunk();
+        if (Project::m_scene.getExecutingState())
+            Project::m_scene.updateExecution();
+        if (Project::m_scene.getVoxelWorld())
+            Project::m_scene.getVoxelWorld()->bakeNextChunk();
     }
 
     void DeerStudioApplication::onEvent(Event& e) {
@@ -169,14 +170,14 @@ namespace Deer {
         if (ImGui::BeginMenu("Scene")) {
             if (ImGui::MenuItem("New scene")) {
                 // TODO
-                Project::m_scene->clear();
-                SceneDataStore::exportSceneJson(*Project::m_scene, "new_scene");
+                Project::m_scene.clear();
+                SceneDataStore::exportSceneJson(Project::m_scene, "new_scene");
             }
             //if (Project::m_sceneSerializer->getCurrentScenePath() != "_NO_INITIALIZED_" && ImGui::MenuItem("Save scene")) {
             //    Project::m_sceneSerializer->serialize(Project::m_sceneSerializer->getCurrentScenePath());
             //}
             if (ImGui::MenuItem("Save scene")) {
-                SceneDataStore::exportSceneJson(*Project::m_scene, "saved_scene");
+                SceneDataStore::exportSceneJson(Project::m_scene, "saved_scene");
             }
             if (ImGui::MenuItem("Save scene as...")) {
                 // TODO
@@ -213,7 +214,7 @@ namespace Deer {
         }
 
         if (ImGui::BeginMenu("Scripts")) {
-            if (ImGui::MenuItem("Reload scripts") && !Project::m_scene->getExecutingState()) {
+            if (ImGui::MenuItem("Reload scripts") && !Project::m_scene.getExecutingState()) {
                 Project::m_scriptEngine->shutdownScriptEngine();
                 Project::m_scriptEngine->compileScriptEngine(std::filesystem::path("scripts"));
             }
