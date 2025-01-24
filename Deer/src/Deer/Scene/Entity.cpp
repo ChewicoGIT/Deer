@@ -112,7 +112,7 @@ namespace Deer {
 		return getComponent<TransformComponent>().getMatrix();
 	}
 
-	void Entity::updateExecution() {
+	void Entity::updateInternalVars() {
 		TagComponent& tag = getComponent<TagComponent>();
 		RelationshipComponent& relation = getComponent<RelationshipComponent>();
 
@@ -120,10 +120,8 @@ namespace Deer {
 		m_parentUID = relation.parent_UID;
 		m_isRoot = relation.parent_UID == 0;
 
-		if (m_isRoot) {
-			m_environment->m_registry.destroy(m_environment->getRoot().m_entityHandle);
+		if (m_isRoot)
 			m_environment->m_rootEntity = tag.entityUID;
-		}
 		m_environment->m_entities[tag.entityUID] = *this;
 	}
 }

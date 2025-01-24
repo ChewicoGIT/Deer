@@ -20,7 +20,7 @@ namespace Deer {
 		void clear();
 
 		void beginExecution();
-		void updateExecution();
+		void updateInternalVars();
 		void endExecution();
 	public:
 		inline Ref<Environment>& getMainEnviroment() { return m_enviroment; }

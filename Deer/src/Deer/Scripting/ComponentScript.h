@@ -16,7 +16,7 @@ namespace Deer {
 		ComponentScriptInstance() = default;
 		~ComponentScriptInstance();
 
-		void updateExecution();
+		void updateInternalVars();
 		void start();
 	private:
 		asIScriptObject* m_object;

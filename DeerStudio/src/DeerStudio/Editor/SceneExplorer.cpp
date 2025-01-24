@@ -23,11 +23,16 @@ namespace Deer {
 
         if (ImGui::BeginMenuBar()) {
             if (ImGui::MenuItem("Save Scene")) {
-
+                SceneDataStore::exportSceneJson(Project::m_scene, "saved_scene");
             }
 
             if (ImGui::MenuItem("New Scene")) {
+                Scene scn;
+                SceneDataStore::exportSceneJson(scn, "saved_scene");
+            }
 
+            if (ImGui::MenuItem("Load Scene")) {
+                Project::m_scene = SceneDataStore::loadScene("saved_scene");
             }
 
             ImGui::EndMenuBar();

@@ -19,6 +19,6 @@ namespace Deer {
 	}
 
 	void DeerServerApplication::onUpdate(Timestep delta) {
-		Project::m_scene->updateExecution();
+		Project::m_scene->updateInternalVars();
 	}
 }

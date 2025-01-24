@@ -65,7 +65,7 @@ namespace Deer {
 		glm::mat4 getWorldMatrix();
 		glm::mat4 getRelativeMatrix();
 
-		void updateExecution();
+		void updateInternalVars();
 
 		inline bool isValid() const { return m_entityUID != 0 && m_environment != nullptr && m_environment->m_registry.valid(m_entityHandle); }
 		inline bool operator== (const Entity& b) const { return m_environment == b.m_environment && m_entityUID == b.m_entityUID; }

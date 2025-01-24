@@ -33,6 +33,6 @@ namespace Deer {
 	}
 
 	void DeerRuntimeApplication::onUpdate(Timestep delta) {
-		Project::m_scene->updateExecution();
+		Project::m_scene->updateInternalVars();
 	}
 }

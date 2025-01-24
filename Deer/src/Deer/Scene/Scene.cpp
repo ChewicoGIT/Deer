@@ -11,7 +11,6 @@ namespace Deer {
 	}
 
 	Scene::~Scene() {
-		DEER_CORE_TRACE("Destroying scene");
 	}
 
 	void Scene::beginExecution() {
@@ -34,12 +33,12 @@ namespace Deer {
 		}
 	}
 
-	void Scene::updateExecution() {
+	void Scene::updateInternalVars() {
 		// Update all scripts
 		auto view = m_enviroment->m_registry.view<ScriptComponent>();
 		for (auto& entID : view) {
 			auto& componentScript = view.get<ScriptComponent>(entID);
-			componentScript.roeInstance->updateExecution();
+			componentScript.roeInstance->updateInternalVars();
 		}
 	}
 

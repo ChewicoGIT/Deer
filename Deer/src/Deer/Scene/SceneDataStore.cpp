@@ -13,9 +13,14 @@ namespace Deer {
 	Scene loadSceneBin(uint8_t* data, uint32_t size);
 
 	Scene SceneDataStore::loadScene(const Path& name) {
-		
+		Path realName;
+		if (DataStore::dataAccess->isDataBin())
+			realName = Path(DEER_SCENE_PATH) / (name.string() + ".dbscn");
+		else
+			realName = Path(DEER_SCENE_PATH) / (name.string() + ".dscn");
+
 		uint32_t size;
-		uint8_t* data = DataStore::dataAccess->loadData(name, &size);
+		uint8_t* data = DataStore::dataAccess->loadData(realName, &size);
 
 		Scene scene_data;
 		if (DataStore::dataAccess->isDataBin())

@@ -77,7 +77,7 @@ namespace Deer {
 #endif
         loadComponent<Archive, ScriptComponent>(archive, "scriptComponent", m_entity);
 
-        m_entity.updateExecution();
+        m_entity.updateInternalVars();
     }
 
 }

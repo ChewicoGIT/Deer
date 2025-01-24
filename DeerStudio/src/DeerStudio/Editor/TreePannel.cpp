@@ -1,27 +1,28 @@
-#include "EnviromentTreePannel.h"
-#include "imgui.h"
-#include "Deer/Scene/Components.h"
-#include "Deer/Scene/Entity.h"
-#include "Deer/Core/Log.h"
-#include "DeerRender/Core/Input/Input.h"
-#include "DeerRender/Core/Input/KeyCodes.h"
+#include "TreePannel.h"
 #include "Deer/Core/Project.h"
 #include "Deer/Scene/Scene.h"
+#include "Deer/Scene/Enviroment.h"
+#include "Deer/Scene/Entity.h"
 
-#include <string.h>
-#include <functional>
-
-#include "Plattform/OpenGL/imgui_impl_opengl3.h"
+#include "imgui.h"
 
 namespace Deer {
-	EnviromentTreePannel::EnviromentTreePannel(const Ref<Environment>& enviroment, const std::string& name, Ref<ActiveEntity>& activeEntity)
-		: m_treeName(name), m_activeEntity(activeEntity) { }
+	void updateEntity(Entity& entity);
+	void updateReciveDragPayload(Entity& entity);
+	bool updateDragPayload(Entity* entity, const std::string& name);
+	void updateContextMenu();
 
-	void EnviromentTreePannel::onImGui() {
-		ImGui::Begin(m_treeName.c_str(), (bool*)0, ImGuiWindowFlags_MenuBar);
+	bool m_isRightClickHandled;
+	Entity* m_contextMenuEntity = nullptr;
+
+	void treePannel_onImGui() {
+		ImGui::Begin("Tree Pannel", (bool*)0, ImGuiWindowFlags_MenuBar);
 
 		m_isRightClickHandled = false;
 		Entity& root = Project::m_scene.getMainEnviroment()->getRoot();
+
+		if (!m_contextMenuEntity)
+			m_contextMenuEntity = &root;
 
 		if (ImGui::BeginMenuBar()) {
 			if (ImGui::BeginMenu("New")) {
@@ -37,12 +38,6 @@ namespace Deer {
 				ImGui::EndMenu();
 			}
 			ImGui::EndMenuBar();
-		}
-
-		if (m_openRenamePopUp) {
-			m_openRenamePopUp = false;
-
-			ImGui::OpenPopup("Rename Entity Menu");
 		}
 
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
@@ -72,38 +67,8 @@ namespace Deer {
 		ImGui::End();
 	}
 
-	void EnviromentTreePannel::onEventCallback(Event& e) {
-		EventDispatcher dispatcher(e);
 
-		dispatcher.dispatch<KeyPressedEvent>(std::bind(&EnviromentTreePannel::onKeyPressed, this, std::placeholders::_1));
-	}
-
-	void EnviromentTreePannel::clickEntity(Entity& entity) {
-
-		if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
-			if (!(Input::isKeyPressed(DEER_KEY_LEFT_CONTROL) || Input::isKeyPressed(DEER_KEY_LEFT_ALT)))
-				m_activeEntity->clear();
-
-			if (Input::isKeyPressed(DEER_KEY_LEFT_ALT))
-				m_activeEntity->removeEntity(entity);
-			else
-				m_activeEntity->addEntity(entity);
-		}
-	}
-
-	bool EnviromentTreePannel::onKeyPressed(KeyPressedEvent& keyPressed) {
-
-		if (keyPressed.getKeyCode() == DEER_KEY_F2) {
-			if (m_activeEntity->count() > 0) {
-				m_contextMenuEntity = &m_activeEntity->getEntity(0);
-				m_openRenamePopUp = true;
-			}
-		}
-
-		return false;
-	}
-
-	void EnviromentTreePannel::updateEntity(Entity& entity) {
+	void updateEntity(Entity& entity) {
 		auto& tag = entity.getComponent<TagComponent>();
 		auto& relationship = entity.getComponent<RelationshipComponent>();
 
@@ -130,7 +95,7 @@ namespace Deer {
 				m_isRightClickHandled = true;
 				ImGui::OpenPopup("Entity Context Menu");
 			}
-			 
+
 			return;
 		}
 
@@ -150,7 +115,7 @@ namespace Deer {
 				m_contextMenuEntity = &entity;
 				m_isRightClickHandled = true;
 				ImGui::OpenPopup("Entity Context Menu");
-			}	
+			}
 
 			clickEntity(entity);
 
@@ -180,19 +145,7 @@ namespace Deer {
 
 	}
 
-
-	bool EnviromentTreePannel::updateDragPayload(Entity* entity, const std::string& name) {
-		if (!ImGui::BeginDragDropSource())
-			return false;
-
-		ImGui::SetDragDropPayload("_ENTITY", &entity, sizeof(Entity*));
-
-		ImGui::Text(name.c_str());
-		ImGui::EndDragDropSource();
-		return true;
-	}
-
-	void EnviromentTreePannel::updateReciveDragPayload(Entity& entity) {
+	void updateReciveDragPayload(Entity& entity) {
 		if (ImGui::BeginDragDropTarget()) {
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("_ENTITY")) {
 				Entity* receivedData = *(Entity**)payload->Data;
@@ -205,7 +158,18 @@ namespace Deer {
 		}
 	}
 
-	void EnviromentTreePannel::updateContextMenu() {
+	bool updateDragPayload(Entity* entity, const std::string& name) {
+		if (!ImGui::BeginDragDropSource())
+			return false;
+
+		ImGui::SetDragDropPayload("_ENTITY", &entity, sizeof(Entity*));
+
+		ImGui::Text(name.c_str());
+		ImGui::EndDragDropSource();
+		return true;
+	}
+
+	void updateContextMenu() {
 
 		bool callRename = false;
 
@@ -247,7 +211,7 @@ namespace Deer {
 			std::string& name = m_contextMenuEntity->getComponent<TagComponent>().tag;
 			char nameBuffer[256];
 			strcpy_s(nameBuffer, 256, name.c_str());
-			
+
 			ImGui::Text("Rename");
 			if (ImGui::InputText("##", nameBuffer, 256, ImGuiInputTextFlags_EnterReturnsTrue)) {
 				m_contextMenuEntity->getComponent<TagComponent>().tag = nameBuffer;

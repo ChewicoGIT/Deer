@@ -83,7 +83,7 @@ namespace Deer {
 
     void DeerStudioApplication::onUpdate(Timestep delta) {
         if (Project::m_scene.getExecutingState())
-            Project::m_scene.updateExecution();
+            Project::m_scene.updateInternalVars();
         if (Project::m_scene.getVoxelWorld())
             Project::m_scene.getVoxelWorld()->bakeNextChunk();
     }

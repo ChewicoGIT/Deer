@@ -35,13 +35,45 @@
                     "has_scriptComponent": false
                 },
                 {
+                    "id": 1,
+                    "name": "root",
+                    "transform": {
+                        "position": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 1.0
+                        }
+                    },
+                    "relationship": {
+                        "parentUID": 0,
+                        "childrensUIDs": [
+                            2
+                        ]
+                    },
+                    "has_meshRenderComponent": false,
+                    "has_cameraComponent": false,
+                    "has_textureBindingComponent": false,
+                    "has_scriptComponent": false
+                },
+                {
                     "id": 2,
                     "name": "new entity",
                     "transform": {
                         "position": {
-                            "x": -3.0142810344696047,
-                            "y": 0.0,
-                            "z": -0.9708585739135742
+                            "x": 9.230239868164063,
+                            "y": 1.8529324531555176,
+                            "z": -2.998775005340576
                         },
                         "scale": {
                             "x": 1.0,

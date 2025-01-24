@@ -17,7 +17,7 @@ namespace Deer {
 		m_object->Release();
 	}
 
-	void ComponentScriptInstance::updateExecution() {
+	void ComponentScriptInstance::updateInternalVars() {
 		if (!m_updateFunction)
 			return;
 
