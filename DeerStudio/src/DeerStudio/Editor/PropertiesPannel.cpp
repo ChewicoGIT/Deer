@@ -26,13 +26,13 @@ namespace Deer {
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(20, 20));
 		ImGui::Begin("Properties");
 
-		if (m_activeEntity->count() == 0) {
+		if (ActiveEntity::count() == 0) {
 			ImGui::End();
 			ImGui::PopStyleVar();
 			return;
 		}
 
-		Entity& activeEntity = m_activeEntity->getEntity(0);
+		Entity& activeEntity = ActiveEntity::getEntity(0);
 
 		auto& tag = activeEntity.getComponent<TagComponent>();
 		if (tag.tag == "")
@@ -352,11 +352,11 @@ namespace Deer {
 	template<typename T>
 	inline bool PropertiesPannel::collapsingComponentHeader(const std::string& componentName, bool canDelete)
 	{
-		if (!m_activeEntity->shareComponent<T>())
+		if (!ActiveEntity::shareComponent<T>())
 			return false;
 
 		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_CollapsingHeader | ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnArrow;
-		bool collapsingHeader = m_activeEntity->shareComponent<T>() && ImGui::TreeNodeEx(componentName.c_str(), flags);
+		bool collapsingHeader = ActiveEntity::shareComponent<T>() && ImGui::TreeNodeEx(componentName.c_str(), flags);
 
 		if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
 			ImGui::OpenPopup(componentName.c_str());
@@ -366,14 +366,14 @@ namespace Deer {
 		if (ImGui::BeginPopup(componentName.c_str())) {
 
 			if (ImGui::Selectable("reset")) {
-				for (auto& entity : *m_activeEntity)
+				for (auto& entity : ActiveEntity::entities)
 					entity->getComponent<T>() = T();
 
 				ImGui::CloseCurrentPopup();
 			}
 
 			if (canDelete && ImGui::Selectable("delete")) {
-				for (auto& entity : *m_activeEntity)
+				for (auto& entity : ActiveEntity::entities)
 					entity->removeComponent<T>();
 
 				ImGui::CloseCurrentPopup();
@@ -391,10 +391,10 @@ namespace Deer {
 	}
 
 	void PropertiesPannel::addScriptButton(const std::string& scriptID) {
-		ImGuiSelectableFlags selectableFlag = (m_activeEntity->shareComponent<ScriptComponent>()) ? ImGuiSelectableFlags_Disabled : ImGuiSelectableFlags_None;
+		ImGuiSelectableFlags selectableFlag = (ActiveEntity::shareComponent<ScriptComponent>()) ? ImGuiSelectableFlags_Disabled : ImGuiSelectableFlags_None;
 		if (ImGui::Selectable(scriptID.c_str(), false, selectableFlag)) {
 
-			for (auto& entity : *m_activeEntity) {
+			for (auto& entity : ActiveEntity::entities) {
 				if (!entity->hasComponent<ScriptComponent>())
 					entity->addComponent<ScriptComponent>(scriptID);
 			}
@@ -406,10 +406,10 @@ namespace Deer {
 	template<typename T>
 	void PropertiesPannel::addComponentButton(const std::string& componentName)
 	{
-		ImGuiSelectableFlags selectableFlag = (m_activeEntity->shareComponent<T>()) ? ImGuiSelectableFlags_Disabled : ImGuiSelectableFlags_None;
+		ImGuiSelectableFlags selectableFlag = (ActiveEntity::shareComponent<T>()) ? ImGuiSelectableFlags_Disabled : ImGuiSelectableFlags_None;
 		if (ImGui::Selectable(componentName.c_str(), false, selectableFlag)) {
 			
-			for (auto& entity : *m_activeEntity) {
+			for (auto& entity : ActiveEntity::entities) {
 				if (!entity->hasComponent<T>())
 					entity->addComponent<T>();
 			}

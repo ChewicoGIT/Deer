@@ -16,8 +16,8 @@
 #include "glm/gtc/matrix_transform.hpp"
 
 namespace Deer {
-	ViewportPannel::ViewportPannel(const std::string& windowName, Ref<ActiveEntity>& activeEntity)
-		: m_windowName(windowName), m_activeEntity(activeEntity) {
+	ViewportPannel::ViewportPannel(const std::string& windowName)
+		: m_windowName(windowName){
 
         m_frameBuffer = FrameBuffer::create(FrameBufferSpecification(100, 100, { TextureBufferType::RGBA8, TextureBufferType::RED_INTEGER}, 1, false));
         m_virtualCamera.transform.position = glm::vec3(0, 10, -20);
@@ -72,11 +72,11 @@ namespace Deer {
                 int id = m_frameBuffer->getTextureBufferPixel(1, relativeX, relativeY);
 
                 if (!(Input::isKeyPressed(DEER_KEY_LEFT_CONTROL) || Input::isKeyPressed(DEER_KEY_LEFT_ALT)))
-                    m_activeEntity->clear();
+                    ActiveEntity::clear();
 
                 if (id >= 0) {
                     Entity& selectedEntity = Project::m_scene.getMainEnviroment()->getEntity((uid)id);
-                    m_activeEntity->addEntity(selectedEntity);
+                    ActiveEntity::addEntity(selectedEntity);
                 }
             }
         }
@@ -198,8 +198,8 @@ namespace Deer {
             m_transformMode = TransformMode::Scale;
 
         if (Input::isKeyPressed(DEER_KEY_D) && Input::isKeyPressed(DEER_KEY_LEFT_CONTROL)) {
-            if (m_activeEntity->count() > 0)
-                m_activeEntity->getEntity(0).duplicate();
+            if (ActiveEntity::count() > 0)
+                ActiveEntity::getEntity(0).duplicate();
         }
 
         return false;
@@ -214,9 +214,9 @@ namespace Deer {
         glm::mat4 projectionMatrix = m_virtualCamera.camera.getMatrix() * glm::scale(glm::mat4(1.0f), glm::vec3(1, 1, -1));
 
         ImGuizmo::SetRect(wPosX, wPosY, wSizeX, wSizeY);
-        if (m_activeEntity->count() != 0) {
+        if (ActiveEntity::count() != 0) {
 
-            Entity& currentEntity = m_activeEntity->getEntity(0);
+            Entity& currentEntity = ActiveEntity::getEntity(0);
 
             glm::mat4 entity_matrix = currentEntity.getWorldMatrix();
 

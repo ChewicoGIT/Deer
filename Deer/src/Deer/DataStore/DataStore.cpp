@@ -20,8 +20,13 @@
 namespace Deer {
     Path DataStore::rootPath;
 
+    void DataStore::deleteFile(const Path& path) {
+        Path filePath = rootPath / toLowerCasePath(path);
+        std::filesystem::remove(filePath);
+    }
+
     uint8_t* DataStore::readFile(const Path& path, uint32_t* size) {
-        Path filePath = rootPath / path;
+        Path filePath = rootPath / toLowerCasePath(path);
         std::ifstream file(filePath, std::ios::in | std::ios::binary);
 
         DEER_CORE_ASSERT(file, "Could not open file {0}", filePath.generic_string().c_str());
@@ -43,7 +48,7 @@ namespace Deer {
     }
 
     void DataStore::saveFile(const Path& path, uint8_t* data, uint32_t size) {
-        Path filePath = rootPath / path;
+        Path filePath = rootPath / toLowerCasePath(path);
         std::filesystem::create_directories(filePath.parent_path());
 
         std::ofstream file(filePath, std::ios::out | std::ios::binary);
@@ -108,5 +113,9 @@ namespace Deer {
             delete dataAccess;
 
         dataAccess = _dataAccess;
+    }
+
+    void DataStore::createFolder(const Path& path) {
+        std::filesystem::create_directories(path);
     }
 }

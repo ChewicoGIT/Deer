@@ -9,6 +9,7 @@ namespace Deer {
 	namespace SceneDataStore {
 		Scene loadScene(const Path& name);
 
+		void deleteSceneJson(const Path& name);
 		void exportSceneJson(Scene& scene, const Path& name);
 		void exportScenesBin();
 

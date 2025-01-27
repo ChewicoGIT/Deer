@@ -10,8 +10,7 @@
 #include <filesystem>
 
 namespace Deer {
-    GamePannel::GamePannel(Ref<ActiveEntity>& activeEntity)
-        : m_activeEntity(activeEntity) {
+    GamePannel::GamePannel() {
         FrameBufferSpecification fbSpecs = FrameBufferSpecification(100, 100, { TextureBufferType::RGBA8 }, 1, false);
         m_frameBuffer = FrameBuffer::create(fbSpecs);
     }

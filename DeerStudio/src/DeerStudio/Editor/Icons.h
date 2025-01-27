@@ -1,8 +1,8 @@
 #pragma once
 #include "Deer/Core/Core.h"
 
-#define ICON_MIN_SIZE 60
-#define ICON_MAX_SIZE 90
+#define ICON_MIN_SIZE 90
+#define ICON_MAX_SIZE 160
 
 namespace Deer {
 	class Texture2D;

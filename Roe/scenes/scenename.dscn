@@ -25,9 +25,7 @@
                     },
                     "relationship": {
                         "parentUID": 0,
-                        "childrensUIDs": [
-                            2
-                        ]
+                        "childrensUIDs": []
                     },
                     "has_meshRenderComponent": false,
                     "has_cameraComponent": false,
@@ -57,9 +55,7 @@
                     },
                     "relationship": {
                         "parentUID": 0,
-                        "childrensUIDs": [
-                            2
-                        ]
+                        "childrensUIDs": []
                     },
                     "has_meshRenderComponent": false,
                     "has_cameraComponent": false,
@@ -67,13 +63,13 @@
                     "has_scriptComponent": false
                 },
                 {
-                    "id": 2,
-                    "name": "new entity",
+                    "id": 1,
+                    "name": "root",
                     "transform": {
                         "position": {
-                            "x": 9.230239868164063,
-                            "y": 1.8529324531555176,
-                            "z": -2.998775005340576
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
                         },
                         "scale": {
                             "x": 1.0,
@@ -88,7 +84,7 @@
                         }
                     },
                     "relationship": {
-                        "parentUID": 1,
+                        "parentUID": 0,
                         "childrensUIDs": []
                     },
                     "has_meshRenderComponent": false,

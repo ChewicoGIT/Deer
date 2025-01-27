@@ -1,6 +1,5 @@
 #include "DeerStudio.h"
 
-#include "DeerStudio/Editor/EnviromentTreePannel.h"
 #include "DeerStudio/Editor/PropertiesPannel.h"
 #include "DeerStudio/Editor/ViewportPannel.h"
 #include "DeerStudio/Editor/AssetManagerPannel.h"
@@ -18,6 +17,7 @@
 #include "Deer/DataStore/DataStore.h"
 
 #include "Editor/SceneExplorer.h"
+#include "Editor/TreePannel.h"
 
 #include "Style.h"
 #include "Editor/Icons.h"
@@ -36,26 +36,22 @@ namespace Deer {
 
         // IMGUI STYLE
         ImGuiIO& io = ImGui::GetIO();
-        io.Fonts->Clear();
-        ImFont* font1 = io.Fonts->AddFontFromFileTTF("editor\\fonts\\OpenSans-VariableFont_wdth,wght.ttf", 19.0f);
+        //io.Fonts->Clear();
+        //ImFontConfig cnfg;
+        //cnfg.SizePixels = 17;
+        //io.Fonts->AddFontDefault(&cnfg);
+        
         ImGui_ImplOpenGL3_CreateFontsTexture();
         setNatureStyle();
 
-        // WINDOWS
-        m_activeEntity = Ref<ActiveEntity>(new ActiveEntity());
-        VoxelWorldProps worldProps(2, 2, 2);
-        Project::m_scene.createVoxelWorld(worldProps);
-
-        auto m_propertiesPannel = Ref<PropertiesPannel>(new PropertiesPannel(m_activeEntity));
-        auto m_viewportPannel = Ref<ViewportPannel>(new ViewportPannel("Scene viewport", m_activeEntity));
-        auto m_enviromentTreePannel = Ref<EnviromentTreePannel>(new EnviromentTreePannel(Project::m_scene.getMainEnviroment(), "World tree", m_activeEntity));
-        auto m_assetPannel = Ref<AssetManagerPannel>(new AssetManagerPannel(m_activeEntity));
-        auto m_gamePannel = Ref<GamePannel>(new GamePannel(m_activeEntity));
+        auto m_propertiesPannel = Ref<PropertiesPannel>(new PropertiesPannel());
+        auto m_viewportPannel = Ref<ViewportPannel>(new ViewportPannel("Scene viewport"));
+        auto m_assetPannel = Ref<AssetManagerPannel>(new AssetManagerPannel());
+        auto m_gamePannel = Ref<GamePannel>(new GamePannel());
         auto m_terrainEditor = Ref<TerrainEditorPannel>(new TerrainEditorPannel());
         //auto m_voxelPannel = Ref<VoxelPannel>(new VoxelPannel());
 
         pannels.push_back(m_propertiesPannel);
-        pannels.push_back(m_enviromentTreePannel);
         pannels.push_back(m_viewportPannel);
         pannels.push_back(m_assetPannel);
         pannels.push_back(m_gamePannel);
@@ -132,6 +128,7 @@ namespace Deer {
 
         // ---- PANNELS -----
         sceneExplorer_onImGUI();
+        treePannel_onImGui();
         // ---- PANNELS -----
 
         ImGui::End();
@@ -238,6 +235,6 @@ namespace Deer {
     }
 
     void DeerStudioApplication::onChangeScene() {
-        m_activeEntity->clear();
+        ActiveEntity::clear();
     }
 }

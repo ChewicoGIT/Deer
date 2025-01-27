@@ -25,7 +25,6 @@ namespace Deer {
 		void drawMenuBar();
 		void onChangeScene();
 		
-		Ref<ActiveEntity> m_activeEntity;
 		std::vector<Ref<EditorPannel>> pannels;
 	};
 

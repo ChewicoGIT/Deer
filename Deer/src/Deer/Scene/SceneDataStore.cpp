@@ -58,6 +58,10 @@ namespace Deer {
 		return scene;
 	}
 
+	void SceneDataStore::deleteSceneJson(const Path& name) {
+		DataStore::deleteFile((Path(DEER_SCENE_PATH) / (name.generic_string() + ".dscn")));
+	}
+
 	void SceneDataStore::exportSceneJson(Scene& scene, const Path& name) {
 		is_server_serialization = false;
 
@@ -67,7 +71,7 @@ namespace Deer {
 			archive(cereal::make_nvp("scene", scene));
 		}
 
-		Path savePath = Path(DEER_SCENE_PATH) / (name.generic_string() + ".dscn");
+		Path savePath = Path(DEER_SCENE_PATH) / toLowerCasePath((name.generic_string() + ".dscn"));
 		std::string_view view = output.view();
 
 		DataStore::saveFile(savePath, (uint8_t*)view.data(), view.size());
@@ -82,7 +86,7 @@ namespace Deer {
 			archive(cereal::make_nvp("scene", scene));
 		}
 
-		Path savePath = Path(DEER_BIN_PATH) / Path(DEER_SCENE_PATH) / (name.generic_string() + ".dbscn");
+		Path savePath = Path(DEER_BIN_PATH) / Path(DEER_SCENE_PATH) / toLowerCasePath((name.generic_string() + ".dbscn"));
 		std::string_view view = output.view();
 
 		DataStore::saveFile(savePath, (uint8_t*)view.data(), view.size());

@@ -28,8 +28,8 @@ namespace Deer {
 
     namespace fs = std::filesystem;
 
-    AssetManagerPannel::AssetManagerPannel(Ref<ActiveEntity> activeEntity)
-        : m_currentPath("assets"), m_activeEntity(activeEntity){
+    AssetManagerPannel::AssetManagerPannel()
+        : m_currentPath("assets"){
 
         m_folderIcon = Texture2D::create("editor/icons/folder.png");
         m_fileIcon = Texture2D::create("editor/icons/file.png");

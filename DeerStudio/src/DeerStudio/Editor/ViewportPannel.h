@@ -20,7 +20,7 @@ namespace Deer {
 
 	class ViewportPannel : public EditorPannel {
 	public:
-		ViewportPannel(const std::string& windowName, Ref<ActiveEntity>& activeEntity);
+		ViewportPannel(const std::string& windowName);
 		
 		void onImGui() override;
 		void onRender(Timestep timestep) override;
@@ -33,7 +33,6 @@ namespace Deer {
 		void drawVoxelRay();
 	private:
 		Ref<FrameBuffer> m_frameBuffer;
-		Ref<ActiveEntity> m_activeEntity;
 
 		std::string m_windowName;
 

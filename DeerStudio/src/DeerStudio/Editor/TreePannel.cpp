@@ -1,8 +1,12 @@
 #include "TreePannel.h"
 #include "Deer/Core/Project.h"
+#include "DeerRender/Core/Input/Input.h"
+#include "DeerRender/Core/Input/KeyCodes.h"
 #include "Deer/Scene/Scene.h"
 #include "Deer/Scene/Enviroment.h"
 #include "Deer/Scene/Entity.h"
+
+#include "DeerStudio/Editor/ActiveEntity.h"	
 
 #include "imgui.h"
 
@@ -11,6 +15,7 @@ namespace Deer {
 	void updateReciveDragPayload(Entity& entity);
 	bool updateDragPayload(Entity* entity, const std::string& name);
 	void updateContextMenu();
+	void clickEntity(Entity& entity);
 
 	bool m_isRightClickHandled;
 	Entity* m_contextMenuEntity = nullptr;
@@ -81,7 +86,7 @@ namespace Deer {
 		//End of the tree
 		if (relationship.children.size() == 0) {
 			ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_SpanFullWidth;
-			if (m_activeEntity->contains(entity))
+			if (ActiveEntity::contains(entity))
 				flags |= ImGuiTreeNodeFlags_Selected;
 
 			ImGui::TreeNodeEx(entityID, flags, name.c_str());
@@ -100,7 +105,7 @@ namespace Deer {
 		}
 
 		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanFullWidth;
-		if (m_activeEntity->contains(entity))
+		if (ActiveEntity::contains(entity))
 			flags |= ImGuiTreeNodeFlags_Selected;
 
 		// for the moment i prefer to default open all
@@ -169,6 +174,18 @@ namespace Deer {
 		return true;
 	}
 
+	void clickEntity(Entity& entity) {
+		if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
+			if (!(Input::isKeyPressed(DEER_KEY_LEFT_CONTROL) || Input::isKeyPressed(DEER_KEY_LEFT_ALT)))
+				ActiveEntity::clear();
+
+			if (Input::isKeyPressed(DEER_KEY_LEFT_ALT))
+				ActiveEntity::removeEntity(entity);
+			else
+				ActiveEntity::addEntity(entity);
+		}
+	}
+
 	void updateContextMenu() {
 
 		bool callRename = false;
@@ -189,7 +206,7 @@ namespace Deer {
 			}
 			if (!m_contextMenuEntity->isRoot() && ImGui::MenuItem("Delete")) {
 				m_contextMenuEntity->destroy();
-				m_activeEntity->clear();
+				ActiveEntity::clear();
 				ImGui::CloseCurrentPopup();
 			}
 			if (!m_contextMenuEntity->isRoot() && ImGui::MenuItem("Rename")) {

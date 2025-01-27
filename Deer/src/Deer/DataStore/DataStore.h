@@ -20,6 +20,7 @@ namespace Deer {
 	class DataAccess;
 
 	namespace DataStore {
+		void deleteFile(const Path&);
 		uint8_t* readFile(const Path&, uint32_t* size);
 		void saveFile(const Path&, uint8_t* data, uint32_t size);
 
@@ -28,6 +29,8 @@ namespace Deer {
 
 		extern DataAccess* dataAccess;
 		void setupDataAccess(DataAccess* _dataAccess);
+
+		void createFolder(const Path& path);
 
 		extern Path rootPath;
 	}
