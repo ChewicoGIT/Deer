@@ -6,6 +6,7 @@
 #include "DeerStudio/Editor/GamePannel.h"
 #include "DeerStudio/Editor/TerrainEditorPannel.h"
 #include "DeerStudio/Editor/VoxelPannel.h"
+#include "DeerStudio/Editor/TerrainEditor.h"
 
 #include "Deer/Core/Project.h"
 #include "Deer/Scene/Scene.h"
@@ -48,14 +49,14 @@ namespace Deer {
         auto m_viewportPannel = Ref<ViewportPannel>(new ViewportPannel("Scene viewport"));
         auto m_assetPannel = Ref<AssetManagerPannel>(new AssetManagerPannel());
         auto m_gamePannel = Ref<GamePannel>(new GamePannel());
-        auto m_terrainEditor = Ref<TerrainEditorPannel>(new TerrainEditorPannel());
+        //auto m_terrainEditor = Ref<TerrainEditorPannel>(new TerrainEditorPannel());
         //auto m_voxelPannel = Ref<VoxelPannel>(new VoxelPannel());
 
         pannels.push_back(m_propertiesPannel);
         pannels.push_back(m_viewportPannel);
         pannels.push_back(m_assetPannel);
         pannels.push_back(m_gamePannel);
-        pannels.push_back(m_terrainEditor);
+        //pannels.push_back(m_terrainEditor);
         //pannels.push_back(m_voxelPannel);
 
     }
@@ -129,6 +130,7 @@ namespace Deer {
         // ---- PANNELS -----
         sceneExplorer_onImGUI();
         treePannel_onImGui();
+        terrainEditor_onImGui();
         // ---- PANNELS -----
 
         ImGui::End();

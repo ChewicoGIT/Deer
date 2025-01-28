@@ -31,6 +31,8 @@ namespace Deer {
     void saveSceneBeforeLoadingPopup();
     void sceneDialogPopup();
     void deleteScenePopup();
+    void saveSceneBeforeCreatingNew();
+    void saveSceneWithNameBeforeCreatingNew();
 
     void openFileExplorer(const std::string& relativePath);
 
@@ -52,9 +54,7 @@ namespace Deer {
             }
 
             if (ImGui::MenuItem("New Scene")) {
-                ActiveEntity::clear();
-                Project::m_scene = Scene();
-                m_currentSceneName = Path();
+                ImGui::OpenPopup("SAVE_SCENE_BEFORE_CREATING_NEW");
             }
 
             if (ImGui::MenuItem("New folder")) {
@@ -67,6 +67,8 @@ namespace Deer {
 
             createFolderPopup();
             saveSceneNewNamePopup();
+            saveSceneBeforeCreatingNew();
+            saveSceneWithNameBeforeCreatingNew();
 
             ImGui::EndMenuBar();
         }
@@ -230,7 +232,6 @@ namespace Deer {
 
             ImGui::Text("Do you want to save the current scene?");
 
-
             ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(100, 255, 120, 255));
             bool save = ImGui::Button("Save");
             ImGui::PopStyleColor();
@@ -261,6 +262,83 @@ namespace Deer {
         }
     }
 
+    void saveSceneBeforeCreatingNew() {
+        if (ImGui::BeginPopup("SAVE_SCENE_BEFORE_CREATING_NEW")) {
+            ImGui::Text("Do you want to save the current scene?");
+
+            ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(100, 255, 120, 255));
+            bool save = ImGui::Button("Save");
+            ImGui::PopStyleColor();
+            ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 100, 120, 255));
+            ImGui::SameLine();
+            bool dont_save = ImGui::Button("Don't save");
+            ImGui::PopStyleColor();
+            ImGui::SameLine();
+            bool cancel = ImGui::Button("Cancel");
+
+            if (save) {
+                if (m_currentSceneName == "") {
+                    ImGui::CloseCurrentPopup();
+                    ImGui::EndPopup();
+                    ImGui::OpenPopup("SAVE_SCENE_NAME_CREATE_NEW");
+                    return;
+                }
+                else {
+                    ActiveEntity::clear();
+                    SceneDataStore::exportSceneJson(Project::m_scene, m_currentSceneName);
+                    Project::m_scene = Scene();
+                    m_currentSceneName = Path();
+                    ImGui::CloseCurrentPopup();
+                }
+            }
+            else if (dont_save) {
+                ActiveEntity::clear();
+                Project::m_scene = Scene();
+                m_currentSceneName = Path();
+                ImGui::CloseCurrentPopup();
+            } if (cancel) {
+                ImGui::CloseCurrentPopup();
+            }
+
+            ImGui::EndPopup();
+        }
+    }
+
+    void saveSceneWithNameBeforeCreatingNew() {
+        char name_buffer[256];
+        name_buffer[0] = '\0';
+
+        if (ImGui::BeginPopup("SAVE_SCENE_NAME_CREATE_NEW")) {
+            ImGui::Text("Scene name:");
+            ImGui::InputText("##SceneNameInput", name_buffer, 256, ImGuiInputTextFlags_EnterReturnsTrue);
+
+            bool pressed_enter = ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Enter));
+            if (pressed_enter) {
+
+                std::string name(name_buffer);
+                std::string correctInput = sanitizeInput(name);
+
+                if (name.size() != 0) {
+                    Path fullName;
+                    if (m_currentScenePath == DEER_SCENE_PATH)
+                        fullName = correctInput;
+                    else
+                        fullName = m_currentScenePath.lexically_relative(DEER_SCENE_PATH) / correctInput;
+
+                    ActiveEntity::clear();
+                    SceneDataStore::exportSceneJson(Project::m_scene, fullName);
+                    m_currentSceneName = Path();
+                    Project::m_scene = Scene();
+
+                }
+
+                ImGui::CloseCurrentPopup();
+            }
+
+            ImGui::EndPopup();
+        }
+    }
+
     void sceneDialogPopup() {
         
         if (ImGui::BeginPopup("SCENE_DIALOG")) {
@@ -272,20 +350,21 @@ namespace Deer {
                 ImGui::CloseCurrentPopup();
                 ImGui::EndPopup();
 
-                ImGui::OpenPopup("DELETE_SCENE_POPUP");
+                ImGui::OpenPopup("DELETE_SCENE");
                 m_deleteSceneName = m_dialogSceneName;
                 return;
             }
             ImGui::EndPopup();
         }
     }
+
     void deleteScenePopup() {
-        if (ImGui::BeginPopup("DELETE_SCENE_POPUP")) {
+        if (ImGui::BeginPopup("DELETE_SCENE")) {
             ImGui::Text("Are you sure you want to delete ");
             ImGui::SameLine();
             ImGui::TextColored(ImVec4(1, 0.5f, 0.5f, 1.0f), m_deleteSceneName.generic_string().c_str());
 
-            ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 0, 20, 255));
+            ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 122, 122, 255));
             bool delete_button = ImGui::Button("Delete");
             ImGui::PopStyleColor();
             ImGui::SameLine();
