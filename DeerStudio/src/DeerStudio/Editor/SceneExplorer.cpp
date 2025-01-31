@@ -10,6 +10,8 @@
 #include "Deer/Scene/Scene.h"
 #include "DeerStudio/Editor/ActiveEntity.h"
 
+#include "EditorUtils.h"
+
 #include <regex>
 #include <string>
 
@@ -33,6 +35,7 @@ namespace Deer {
     void deleteScenePopup();
     void saveSceneBeforeCreatingNew();
     void saveSceneWithNameBeforeCreatingNew();
+    void saveSceneName
 
     void openFileExplorer(const std::string& relativePath);
 
@@ -49,6 +52,7 @@ namespace Deer {
                     SceneDataStore::exportSceneJson(Project::m_scene, m_currentSceneName);
             }
 
+            editorMenuItem_nameInputPopup<>("Save as", "Scene name");
             if (ImGui::MenuItem("Save as")) {
                 ImGui::OpenPopup("SAVE_SCENE_NAME");
             }
