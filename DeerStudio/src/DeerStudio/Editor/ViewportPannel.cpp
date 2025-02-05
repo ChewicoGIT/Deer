@@ -115,6 +115,9 @@ namespace Deer {
 
             Project::m_scene.getMainGizmoRenderer().refresh();
             Project::m_scene.getMainGizmoRenderer().drawVoxelLine(res.xPos, res.yPos, res.zPos);
+
+            Project::m_scene.getMainGizmoRenderer().drawLine(res.xPos, res.yPos, res.zPos);
+
         }
 
     }

@@ -8,9 +8,13 @@
 
 #include "imgui.h"
 
+#include "EditorUtils.h"
+
 #include <string>
 
 namespace Deer {
+	void deleteVoxelWorld();
+
 	void terrainEditor_onImGui() {
 		ImGui::Begin("Terrain Editor");
 
@@ -35,6 +39,21 @@ namespace Deer {
 			ImGui::SameLine();
 			ImGui::Text(std::to_string(values[0] * values[1] * values[2]).c_str());
 
+			ImGui::Separator();
+
+			ImGui::Text("Units x: ");
+			ImGui::SameLine();
+			ImGui::Text(std::to_string(values[0] * 32).c_str());
+
+			ImGui::Text("Units y: ");
+			ImGui::SameLine();
+			ImGui::Text(std::to_string(values[1] * 32).c_str());
+
+			ImGui::Text("Units z: ");
+			ImGui::SameLine();
+			ImGui::Text(std::to_string(values[2] * 32).c_str());
+
+			ImGui::Separator();
 			ImGui::Spacing();
 
 			if (ImGui::Button("Create voxel world")) {
@@ -47,9 +66,36 @@ namespace Deer {
 				Project::m_scene.createVoxelWorld(props);
 			}
 
-			return ImGui::End();
+			ImGui::End();
+			return;
 		}
 
+		if (ImGui::Button("Create Base")) {
+
+			VoxelWorldProps worldProps = voxelWorld->getVoxelWorldProps();
+			for (int x = 0; x < 32 * worldProps.chunkSizeX; x++) {
+				for (int y = 0; y < 1; y++) {
+					for (int z = 0; z < 32 * worldProps.chunkSizeZ; z++) {
+						Project::m_scene.getVoxelWorld()->modVoxel(x, y, z).id = 1;
+					}
+				}
+			}
+
+		}
+
+		ImGui::Separator();
+
+		if (ImGui::Button("Delete voxel world")) {
+			ImGui::OpenPopup("DELETE_VOXEL_WORLD");
+		}
+
+		deleteInputPopup<deleteVoxelWorld>("DELETE_VOXEL_WORLD", "Are you sure you want to delete voxel world?");
+
 		ImGui::End();
+	}
+
+
+	void deleteVoxelWorld() {
+		Project::m_scene.deleteVoxelWorld();
 	}
 }

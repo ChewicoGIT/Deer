@@ -43,9 +43,9 @@ namespace Deer {
 	};
 
 	struct VoxelRayResult {
-		uint32_t xPos;
-		uint32_t yPos;
-		uint32_t zPos;
+		int32_t xPos;
+		int32_t yPos;
+		int32_t zPos;
 		float distance;
 		uint8_t face;
 	};

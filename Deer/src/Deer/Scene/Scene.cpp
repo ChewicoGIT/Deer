@@ -60,6 +60,10 @@ namespace Deer {
 		m_voxelWorld = Ref<VoxelWorld>(new VoxelWorld(props));
 	}
 
+	void Scene::deleteVoxelWorld() {
+		m_voxelWorld.reset();
+	}
+
 	void Scene::clear() {
 		m_enviroment->clear();
 		m_voxelWorld.reset();

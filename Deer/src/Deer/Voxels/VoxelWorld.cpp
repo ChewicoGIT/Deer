@@ -1,5 +1,6 @@
 #include "VoxelWorld.h"
 #include <math.h>
+#include <cmath>
 #include "Deer/Core/Log.h"
 
 namespace Deer {
@@ -48,9 +49,9 @@ namespace Deer {
 	VoxelRayResult VoxelWorld::rayCast(glm::vec3 position, glm::vec3 dir, float maxDistance) {
 		VoxelRayResult result;
 
-		result.xPos = (uint32_t)position.x;
-		result.yPos = (uint32_t)position.y;
-		result.zPos = (uint32_t)position.z;
+		result.xPos = (int32_t)std::floor(position.x);
+		result.yPos = (int32_t)std::floor(position.y);
+		result.zPos = (int32_t)std::floor(position.z);
 
 		result.distance = 0;
 
@@ -59,18 +60,23 @@ namespace Deer {
 		}
 
 		dir = glm::normalize(dir);
+
 		glm::vec3 stepAxis = glm::vec3(maxDistance, maxDistance, maxDistance);
-		glm::vec3 distanceAxis = stepAxis;
+		glm::vec3 distanceAxis = glm::vec3(maxDistance, maxDistance, maxDistance);
+		
 		int8_t directionAxis[3] = { 1, 1, 1 };
+
 		for (int i = 0; i < 3; i++) {
 			if (dir[i] < 0) {
-				stepAxis[i] = -1 / dir[i];
+				stepAxis[i] = -1.0f / dir[i];
 				directionAxis[i] = -1;
-				distanceAxis[i] = (position[i] - (&result.xPos)[i]) * stepAxis[i];
+				distanceAxis[i] = stepAxis[i];
+				//distanceAxis[i] -= (position[i] - (float)(&result.xPos)[i]);
 			}
 			else if (dir[i] > 0) {
-				stepAxis[i] = 1 / dir[i];
-				distanceAxis[i] = (1 - position[i] + (&result.xPos)[i]) * stepAxis[i];
+				stepAxis[i] = 1.0f / dir[i];
+				distanceAxis[i] = stepAxis[i];
+				//distanceAxis[i] += (position[i] - (float)(&result.xPos)[i]);
 			}
 		}
 
@@ -96,8 +102,9 @@ namespace Deer {
 					distanceAxis[i] = minDistance + stepAxis[i];
 
 					Voxel hitVoxel = readVoxel(result.xPos, result.yPos, result.zPos);
+					
 					if (hitVoxel == nullVoxel)
-						break;
+						continue;
 
 					if (hitVoxel != 0) {
 						result.face = i;

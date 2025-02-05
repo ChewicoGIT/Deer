@@ -28,14 +28,14 @@ namespace Deer {
 
     void drawSceneExplorerFolder(const Path& path);
     void drawSceneExplorerScene(const Path& path);
-    void createFolderPopup();
-    void saveSceneNewNamePopup();
     void saveSceneBeforeLoadingPopup();
     void sceneDialogPopup();
-    void deleteScenePopup();
-    void saveSceneBeforeCreatingNew();
-    void saveSceneWithNameBeforeCreatingNew();
-    void saveSceneName
+
+    void saveSceneName(const std::string&);
+    void createFolderName(const std::string& name);
+    void saveBeforeCreatingNew(bool save);
+    void saveSceneNameBeforeCreatingNew(const std::string& name);
+    void deleteScene();
 
     void openFileExplorer(const std::string& relativePath);
 
@@ -52,11 +52,9 @@ namespace Deer {
                     SceneDataStore::exportSceneJson(Project::m_scene, m_currentSceneName);
             }
 
-            editorMenuItem_nameInputPopup<>("Save as", "Scene name");
             if (ImGui::MenuItem("Save as")) {
                 ImGui::OpenPopup("SAVE_SCENE_NAME");
             }
-
             if (ImGui::MenuItem("New Scene")) {
                 ImGui::OpenPopup("SAVE_SCENE_BEFORE_CREATING_NEW");
             }
@@ -69,10 +67,10 @@ namespace Deer {
                 openFileExplorer(m_currentScenePath.generic_string());
             }
 
-            createFolderPopup();
-            saveSceneNewNamePopup();
-            saveSceneBeforeCreatingNew();
-            saveSceneWithNameBeforeCreatingNew();
+            stringInputPopup<saveSceneName>("SAVE_SCENE_NAME", "Scene name");
+            stringInputPopup<createFolderName>("CREATE_SCENE_FOLDER", "Folder name");
+            saveInputPopup<saveBeforeCreatingNew>("SAVE_SCENE_BEFORE_CREATING_NEW", "Do you want to save the scene before creating new?");
+            stringInputPopup<saveSceneNameBeforeCreatingNew>("SAVE_SCENE_NAME_CREATE_NEW", "Scene name");
 
             ImGui::EndMenuBar();
         }
@@ -127,7 +125,7 @@ namespace Deer {
 
         saveSceneBeforeLoadingPopup();
         sceneDialogPopup();
-        deleteScenePopup();
+        deleteInputPopup<deleteScene>("DELETE_SCENE", "Are you sure you want to delete the scene?");
 
 		ImGui::End();
 
@@ -144,7 +142,6 @@ namespace Deer {
         }
         
     }
-
 
     void drawSceneExplorerScene(const Path& path) {
         ImGui::Image((void*)scene_icon->getTextureID(), ImVec2(ICON_MIN_SIZE, ICON_MIN_SIZE), ImVec2(0, 1), ImVec2(1, 0));
@@ -168,62 +165,6 @@ namespace Deer {
             }
         }
         return sanitized;
-    }
-
-    void createFolderPopup() {
-        char name_buffer[256];
-        name_buffer[0] = '\0';
-        if (ImGui::BeginPopup("CREATE_SCENE_FOLDER")) {
-            ImGui::Text("Folder name:");
-            ImGui::InputText("##FolderNameInput", name_buffer, 256, ImGuiInputTextFlags_EnterReturnsTrue);
-
-            bool pressed_enter = ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Enter));
-            if (pressed_enter) {
-                
-                std::string name(name_buffer);
-                std::string correctInput = sanitizeInput(name);
-
-                if (name.size() != 0) {
-                    DataStore::createFolder(m_currentScenePath / correctInput);
-                }
-
-                ImGui::CloseCurrentPopup();
-            }
-
-            ImGui::EndPopup();
-        }
-    }
-
-    void saveSceneNewNamePopup() {
-        char name_buffer[256];
-        name_buffer[0] = '\0';
-
-        if (ImGui::BeginPopup("SAVE_SCENE_NAME")) {
-            ImGui::Text("Scene name:");
-            ImGui::InputText("##SceneNameInput", name_buffer, 256, ImGuiInputTextFlags_EnterReturnsTrue);
-
-            bool pressed_enter = ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Enter));
-            if (pressed_enter) {
-
-                std::string name(name_buffer);
-                std::string correctInput = sanitizeInput(name);
-
-                if (name.size() != 0) {
-                    Path fullName;
-                    if (m_currentScenePath == DEER_SCENE_PATH)
-                        fullName = correctInput;
-                    else
-                        fullName = m_currentScenePath.lexically_relative(DEER_SCENE_PATH) / correctInput;
-
-                    m_currentSceneName = fullName;
-                    SceneDataStore::exportSceneJson(Project::m_scene, fullName);
-                }
-
-                ImGui::CloseCurrentPopup();
-            }
-
-            ImGui::EndPopup();
-        }
     }
 
     void saveSceneBeforeLoadingPopup() {
@@ -266,83 +207,6 @@ namespace Deer {
         }
     }
 
-    void saveSceneBeforeCreatingNew() {
-        if (ImGui::BeginPopup("SAVE_SCENE_BEFORE_CREATING_NEW")) {
-            ImGui::Text("Do you want to save the current scene?");
-
-            ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(100, 255, 120, 255));
-            bool save = ImGui::Button("Save");
-            ImGui::PopStyleColor();
-            ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 100, 120, 255));
-            ImGui::SameLine();
-            bool dont_save = ImGui::Button("Don't save");
-            ImGui::PopStyleColor();
-            ImGui::SameLine();
-            bool cancel = ImGui::Button("Cancel");
-
-            if (save) {
-                if (m_currentSceneName == "") {
-                    ImGui::CloseCurrentPopup();
-                    ImGui::EndPopup();
-                    ImGui::OpenPopup("SAVE_SCENE_NAME_CREATE_NEW");
-                    return;
-                }
-                else {
-                    ActiveEntity::clear();
-                    SceneDataStore::exportSceneJson(Project::m_scene, m_currentSceneName);
-                    Project::m_scene = Scene();
-                    m_currentSceneName = Path();
-                    ImGui::CloseCurrentPopup();
-                }
-            }
-            else if (dont_save) {
-                ActiveEntity::clear();
-                Project::m_scene = Scene();
-                m_currentSceneName = Path();
-                ImGui::CloseCurrentPopup();
-            } if (cancel) {
-                ImGui::CloseCurrentPopup();
-            }
-
-            ImGui::EndPopup();
-        }
-    }
-
-    void saveSceneWithNameBeforeCreatingNew() {
-        char name_buffer[256];
-        name_buffer[0] = '\0';
-
-        if (ImGui::BeginPopup("SAVE_SCENE_NAME_CREATE_NEW")) {
-            ImGui::Text("Scene name:");
-            ImGui::InputText("##SceneNameInput", name_buffer, 256, ImGuiInputTextFlags_EnterReturnsTrue);
-
-            bool pressed_enter = ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Enter));
-            if (pressed_enter) {
-
-                std::string name(name_buffer);
-                std::string correctInput = sanitizeInput(name);
-
-                if (name.size() != 0) {
-                    Path fullName;
-                    if (m_currentScenePath == DEER_SCENE_PATH)
-                        fullName = correctInput;
-                    else
-                        fullName = m_currentScenePath.lexically_relative(DEER_SCENE_PATH) / correctInput;
-
-                    ActiveEntity::clear();
-                    SceneDataStore::exportSceneJson(Project::m_scene, fullName);
-                    m_currentSceneName = Path();
-                    Project::m_scene = Scene();
-
-                }
-
-                ImGui::CloseCurrentPopup();
-            }
-
-            ImGui::EndPopup();
-        }
-    }
-
     void sceneDialogPopup() {
         
         if (ImGui::BeginPopup("SCENE_DIALOG")) {
@@ -362,26 +226,63 @@ namespace Deer {
         }
     }
 
-    void deleteScenePopup() {
-        if (ImGui::BeginPopup("DELETE_SCENE")) {
-            ImGui::Text("Are you sure you want to delete ");
-            ImGui::SameLine();
-            ImGui::TextColored(ImVec4(1, 0.5f, 0.5f, 1.0f), m_deleteSceneName.generic_string().c_str());
+    void deleteScene() {
+        SceneDataStore::deleteSceneJson(m_deleteSceneName);
+    }
+    void createFolderName(const std::string& name) {
+        std::string correctInput = sanitizeInput(name);
 
-            ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 122, 122, 255));
-            bool delete_button = ImGui::Button("Delete");
-            ImGui::PopStyleColor();
-            ImGui::SameLine();
-            bool cancel_button = ImGui::Button("Cancel");
+        if (name.size() != 0) {
+            DataStore::createFolder(m_currentScenePath / correctInput);
+        }
+    }
+    void saveSceneName(const std::string& name) {
+        std::string correctInput = sanitizeInput(name);
 
-            if (delete_button) {
-                SceneDataStore::deleteSceneJson(m_deleteSceneName);
-                ImGui::CloseCurrentPopup();
-            }else if (cancel_button) {
-                ImGui::CloseCurrentPopup();
+        if (name.size() != 0) {
+            Path fullName;
+            if (m_currentScenePath == DEER_SCENE_PATH)
+                fullName = correctInput;
+            else
+                fullName = m_currentScenePath.lexically_relative(DEER_SCENE_PATH) / correctInput;
+
+            m_currentSceneName = fullName;
+            SceneDataStore::exportSceneJson(Project::m_scene, fullName);
+        }
+    }
+    void saveBeforeCreatingNew(bool save) {
+        if (save) {
+            if (m_currentSceneName == "") {
+                ImGui::OpenPopup("SAVE_SCENE_NAME_CREATE_NEW");
+                return;
             }
+            else {
+                ActiveEntity::clear();
+                SceneDataStore::exportSceneJson(Project::m_scene, m_currentSceneName);
+                Project::m_scene = Scene();
+                m_currentSceneName = Path();
+            }
+        } 
+        else {
+            ActiveEntity::clear();
+            Project::m_scene = Scene();
+            m_currentSceneName = Path();
+        }
+    }
+    void saveSceneNameBeforeCreatingNew(const std::string& name) {
+        std::string correctInput = sanitizeInput(name);
 
-            ImGui::EndPopup();
+        if (name.size() != 0) {
+            Path fullName;
+            if (m_currentScenePath == DEER_SCENE_PATH)
+                fullName = correctInput;
+            else
+                fullName = m_currentScenePath.lexically_relative(DEER_SCENE_PATH) / correctInput;
+
+            SceneDataStore::exportSceneJson(Project::m_scene, fullName);
+            ActiveEntity::clear();
+            Project::m_scene = Scene();
+            m_currentSceneName = Path();
         }
     }
 }
