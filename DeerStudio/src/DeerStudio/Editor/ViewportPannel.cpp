@@ -107,17 +107,24 @@ namespace Deer {
         glm::mat4 projectionMatrix = m_virtualCamera.camera.getMatrix();
         glm::mat4 invertZ = glm::scale(glm::mat4(1.0f), glm::vec3(1, 1, -1));
 
-        glm::vec3 rayDir = camMatrix * glm::vec4(x * 2 - 1, y * 2 - 1, 1, 1);
+        glm::mat4 cameraProjectionMatrix = projectionMatrix * invertZ * camMatrix;
+        cameraProjectionMatrix = glm::inverse(cameraProjectionMatrix);
+
+        glm::vec3 rayDir = cameraProjectionMatrix * glm::vec4(                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
         rayDir -= m_virtualCamera.transform.position;
+        rayDir = glm::normalize(rayDir);
 
         if (Project::m_scene.getVoxelWorld()) {
             VoxelRayResult res = Project::m_scene.getVoxelWorld()->rayCast(m_virtualCamera.transform.position, rayDir);
 
             Project::m_scene.getMainGizmoRenderer().refresh();
             Project::m_scene.getMainGizmoRenderer().drawVoxelLine(res.xPos, res.yPos, res.zPos);
-
-            Project::m_scene.getMainGizmoRenderer().drawLine(res.xPos, res.yPos, res.zPos);
-
+             
+            Project::m_scene.getMainGizmoRenderer().drawLine(rayDir + rayDir + rayDir + rayDir + rayDir + m_virtualCamera.transform.position, m_virtualCamera.transform.position + glm::vec3(1, 1, 1));
+            Project::m_scene.getMainGizmoRenderer().drawLine(glm::vec3(rayDir.x, 0, 0), glm::vec3(0, 0, 0), glm::vec3(1, 0, 0));
+            Project::m_scene.getMainGizmoRenderer().drawLine(glm::vec3(0, rayDir.y, 0), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+            Project::m_scene.getMainGizmoRenderer().drawLine(glm::vec3(0, 0, rayDir.z), glm::vec3(0, 0, 0), glm::vec3(0, 0, 1));
+            DEER_CORE_INFO("{0} {1} {2}", x, y, 0);
         }
 
     }

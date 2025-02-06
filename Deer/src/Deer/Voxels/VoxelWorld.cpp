@@ -87,11 +87,6 @@ namespace Deer {
 					minDistance = distanceAxis[i];
 			}
 
-			if (minDistance < 0) {
-				DEER_CORE_ERROR("Que coño????");
-				break;
-			}
-
 			result.distance = minDistance;
 			if (result.distance > maxDistance)
 				break;
@@ -114,6 +109,7 @@ namespace Deer {
 			}
 		}
 
+		result.distance = maxDistance;
 		return result;
 	}
 }
