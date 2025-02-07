@@ -36,6 +36,60 @@ namespace Deer {
 
 	}
 
+	void GizmoRenderer::drawVoxelLineFace(int x, int y, int z, uint8_t face, glm::vec3 color) {
+		glm::vec3 points[4];
+
+		switch (face)
+		{
+		case 0:
+			points[0] = glm::vec3(x + 0, y + 0, z + 0);
+			points[1] = glm::vec3(x + 0, y + 0, z + 1);
+			points[2] = glm::vec3(x + 0, y + 1, z + 0);
+			points[3] = glm::vec3(x + 0, y + 1, z + 1);
+			break;
+		case 1:
+			points[0] = glm::vec3(x + 1, y + 0, z + 0);
+			points[1] = glm::vec3(x + 1, y + 0, z + 1);
+			points[2] = glm::vec3(x + 1, y + 1, z + 0);
+			points[3] = glm::vec3(x + 1, y + 1, z + 1);
+			break;
+		case 2:
+			points[0] = glm::vec3(x + 0, y + 0, z + 0);
+			points[1] = glm::vec3(x + 1, y + 0, z + 0);
+			points[2] = glm::vec3(x + 0, y + 0, z + 1);
+			points[3] = glm::vec3(x + 1, y + 0, z + 1);
+			break;
+		case 3:
+			points[0] = glm::vec3(x + 0, y + 1, z + 0);
+			points[1] = glm::vec3(x + 1, y + 1, z + 0);
+			points[2] = glm::vec3(x + 0, y + 1, z + 1);
+			points[3] = glm::vec3(x + 1, y + 1, z + 1);
+			break;
+		case 4:
+			points[0] = glm::vec3(x + 0, y + 0, z + 0);
+			points[1] = glm::vec3(x + 1, y + 0, z + 0);
+			points[2] = glm::vec3(x + 0, y + 1, z + 0);
+			points[3] = glm::vec3(x + 1, y + 1, z + 0);
+			break;
+		case 5:
+			points[0] = glm::vec3(x + 0, y + 0, z + 1);
+			points[1] = glm::vec3(x + 1, y + 0, z + 1);
+			points[2] = glm::vec3(x + 0, y + 1, z + 1);
+			points[3] = glm::vec3(x + 1, y + 1, z + 1);
+			break;
+		default:
+			points[0] = glm::vec3(0);
+			points[1] = glm::vec3(0);
+			points[2] = glm::vec3(0);
+			points[3] = glm::vec3(0);
+		}
+
+		drawLine(points[0], points[1], color);
+		drawLine(points[2], points[3], color);
+		drawLine(points[0], points[2], color);
+		drawLine(points[1], points[3], color);
+	}
+
 	void GizmoRenderer::render(SceneCamera& camera) {
 		glm::mat4 camMatrix = glm::inverse(camera.transform.getMatrix());
 		glm::mat4 projectionMatrix = camera.camera.getMatrix();

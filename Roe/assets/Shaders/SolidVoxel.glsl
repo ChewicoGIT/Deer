@@ -10,6 +10,10 @@ layout(location = 5) in float a_v;
 uniform mat4 u_viewMatrix;
 uniform mat4 u_worldMatrix;
 
+uniform int u_chunkID_x;
+uniform int u_chunkID_y;
+uniform int u_chunkID_z;
+
 out vec2 uv;
 flat out uint normal;
 
@@ -17,7 +21,7 @@ void main() {
 
 	normal = a_normal;
 	uv = vec2(a_u, a_v);
-	gl_Position = u_viewMatrix * u_worldMatrix * vec4(a_xPos, a_yPos, a_zPos, 1.0);
+	gl_Position = u_viewMatrix * u_worldMatrix * vec4(a_xPos + u_chunkID_x * 32, a_yPos + u_chunkID_y * 32, a_zPos + u_chunkID_z * 32, 1.0);
 }
 
 #type fragment

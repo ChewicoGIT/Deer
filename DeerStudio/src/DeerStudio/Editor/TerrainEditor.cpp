@@ -73,7 +73,7 @@ namespace Deer {
 		if (ImGui::Button("Create Base")) {
 
 			VoxelWorldProps worldProps = voxelWorld->getVoxelWorldProps();
-			for (int x = 0; x < 32 * worldProps.chunkSizeX; x++) {
+			for (int x = 0; x < 0 * worldProps.chunkSizeX; x++) {
 				for (int y = 0; y < 1; y++) {
 					for (int z = 0; z < 32 * worldProps.chunkSizeZ; z++) {
 						Project::m_scene.getVoxelWorld()->modVoxel(x, y, z).id = 1;
@@ -84,6 +84,28 @@ namespace Deer {
 		}
 
 		ImGui::Separator();
+
+        // Main Content
+        ImGui::BeginChild("LeftPanel", ImVec2(200, 0), true);
+        {
+            // Brush Tools
+			int ci = 0;
+			int s = 0;
+			float st = 0;
+            ImGui::Text("Brush Tools");
+            ImGui::Combo("Brush Type", &ci, "Cube\0Sphere\0Flatten\0Smooth\0");
+            ImGui::SliderInt("Brush Size", &s, 1, 32);
+            ImGui::SliderFloat("Strength", &st, 0.0f, 1.0f);
+
+            // Material Palette
+            ImGui::Separator();
+            ImGui::Text("Materials");
+            ImGui::ColorButton("Grass", ImVec4(0, 1, 0, 1));
+            ImGui::SameLine();
+            ImGui::ColorButton("Dirt", ImVec4(0.5f, 0.3f, 0.1f, 1));
+            // Add more materials...
+        }
+        ImGui::EndChild();
 
 		if (ImGui::Button("Delete voxel world")) {
 			ImGui::OpenPopup("DELETE_VOXEL_WORLD");

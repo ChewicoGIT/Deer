@@ -23,6 +23,19 @@ namespace Deer {
 			return chunkID.z + chunkID.y * chunkSizeZ + chunkID.x * chunkSizeZ * chunkSizeY;
 		}
 
+		inline ChunkID getChunkPosition(int id) {
+			ChunkID c_id;
+			
+			c_id.x = id / (chunkSizeZ * chunkSizeY);
+			id -= c_id.x * (chunkSizeZ * chunkSizeY);
+
+			c_id.y = id / chunkSizeZ;
+			id -= c_id.y * chunkSizeZ;
+
+			c_id.z = id;
+			return c_id;
+		}
+
 		inline bool isValid(ChunkID chunkID) {
 			return chunkID.x >= 0 && chunkID.x < chunkSizeX
 				&& chunkID.y >= 0 && chunkID.y < chunkSizeY

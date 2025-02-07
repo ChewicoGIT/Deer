@@ -1,12 +1,8 @@
 #include "DeerStudio.h"
 
 #include "DeerStudio/Editor/PropertiesPannel.h"
-#include "DeerStudio/Editor/ViewportPannel.h"
 #include "DeerStudio/Editor/AssetManagerPannel.h"
 #include "DeerStudio/Editor/GamePannel.h"
-#include "DeerStudio/Editor/TerrainEditorPannel.h"
-#include "DeerStudio/Editor/VoxelPannel.h"
-#include "DeerStudio/Editor/TerrainEditor.h"
 
 #include "Deer/Core/Project.h"
 #include "Deer/Scene/Scene.h"
@@ -19,6 +15,8 @@
 
 #include "Editor/SceneExplorer.h"
 #include "Editor/TreePannel.h"
+#include "Editor/Viewport.h"
+#include "Editor/TerrainEditor.h"
 
 #include "Style.h"
 #include "Editor/Icons.h"
@@ -46,18 +44,12 @@ namespace Deer {
         setNatureStyle();
 
         auto m_propertiesPannel = Ref<PropertiesPannel>(new PropertiesPannel());
-        auto m_viewportPannel = Ref<ViewportPannel>(new ViewportPannel("Scene viewport"));
         auto m_assetPannel = Ref<AssetManagerPannel>(new AssetManagerPannel());
         auto m_gamePannel = Ref<GamePannel>(new GamePannel());
-        //auto m_terrainEditor = Ref<TerrainEditorPannel>(new TerrainEditorPannel());
-        //auto m_voxelPannel = Ref<VoxelPannel>(new VoxelPannel());
 
         pannels.push_back(m_propertiesPannel);
-        pannels.push_back(m_viewportPannel);
         pannels.push_back(m_assetPannel);
         pannels.push_back(m_gamePannel);
-        //pannels.push_back(m_terrainEditor);
-        //pannels.push_back(m_voxelPannel);
 
     }
 
@@ -88,6 +80,8 @@ namespace Deer {
     void DeerStudioApplication::onEvent(Event& e) {
         for (auto& pannel : pannels)
             pannel->onEventCallback(e);
+
+        viewport_onEvent(e);
     }
 
     void DeerStudioApplication::onImGUI() {
@@ -131,6 +125,7 @@ namespace Deer {
         sceneExplorer_onImGUI();
         treePannel_onImGui();
         terrainEditor_onImGui();
+        viewport_onImGui();
         // ---- PANNELS -----
 
         ImGui::End();

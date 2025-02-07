@@ -46,6 +46,8 @@ namespace Deer {
 			ChunkRender& chunkRender = m_chunksRender[x];
 			if (!chunkRender.hasData)
 				continue;
+
+			ChunkID chunkID = m_worldProps.getChunkPosition(x);
 			chunkRender.solidVoxel->bind();
 
 			int textureAssetID = AssetManager::loadAsset<Texture2D>("assets/Textures/Dirt.png");
@@ -60,6 +62,9 @@ namespace Deer {
 			shaderAsset.value->uploadUniformMat4("u_worldMatrix", glm::mat4(1.0f));
 			shaderAsset.value->uploadUniformInt("u_objectID", -1);
 			shaderAsset.value->uploadUniformInt("u_texture", 0);
+			shaderAsset.value->uploadUniformInt("u_chunkID_x", chunkID.x);
+			shaderAsset.value->uploadUniformInt("u_chunkID_y", chunkID.y);
+			shaderAsset.value->uploadUniformInt("u_chunkID_z", chunkID.z);
 
 			Render::submit(chunkRender.solidVoxel);
 		}

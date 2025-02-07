@@ -1,7 +1,9 @@
 #include "VoxelWorld.h"
+#include "Deer/Core/Log.h"
+
 #include <math.h>
 #include <cmath>
-#include "Deer/Core/Log.h"
+#include <vector>
 
 namespace Deer {
 	VoxelWorld::VoxelWorld(const VoxelWorldProps& props) 
@@ -70,13 +72,11 @@ namespace Deer {
 			if (dir[i] < 0) {
 				stepAxis[i] = -1.0f / dir[i];
 				directionAxis[i] = -1;
-				distanceAxis[i] = stepAxis[i];
-				//distanceAxis[i] -= (position[i] - (float)(&result.xPos)[i]);
+				distanceAxis[i] = stepAxis[i] * ((float)position[i] - (float)(&result.xPos)[i]);
 			}
 			else if (dir[i] > 0) {
 				stepAxis[i] = 1.0f / dir[i];
-				distanceAxis[i] = stepAxis[i];
-				//distanceAxis[i] += (position[i] - (float)(&result.xPos)[i]);
+				distanceAxis[i] = stepAxis[i] * (1 - (float)position[i] + (float)(&result.xPos)[i]);
 			}
 		}
 
@@ -102,7 +102,11 @@ namespace Deer {
 						continue;
 
 					if (hitVoxel != 0) {
-						result.face = i;
+						result.face = i * 2;
+
+						if (directionAxis[i] == -1)
+							result.face++;
+
 						return result;
 					}
 				}
