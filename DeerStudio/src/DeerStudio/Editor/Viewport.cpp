@@ -27,9 +27,11 @@ namespace Deer {
 
     float viewport_relativeXMouse, viewport_relativeYMouse;
     bool viewport_isActive;
+    SceneCamera viewport_sceneCamera;
 
     bool m_lastMousePressedButton1;
     bool m_handleClick;
+    bool viewport_hasClicked;
 
     float m_sensitivity = 0.005f;
 
@@ -40,15 +42,15 @@ namespace Deer {
     };
 
     TransformMode m_transformMode = TransformMode::Translate;
-    SceneCamera m_virtualCamera;
 
     void processMovment();
     bool viewport_onClickEvent(MouseButtonPressedEvent mouseEvent);
     bool viewport_onKeyEvent(KeyPressedEvent keyEvent);
     bool drawGizmos(int wPosX, int wPosY, int wSizeX, int wSizeY);
-    void drawVoxelRay(int wPosX, int wPosY, int wSizeX, int wSizeY);
 
-	void viewport_onImGui() {
+    void viewport_onImGui() {
+        viewport_hasClicked = ImGui::GetMouseClickedCount(0) == 1;
+
         processMovment();
 
         if (!m_frameBuffer) {
@@ -59,8 +61,8 @@ namespace Deer {
         ImGui::Begin("Viewport");
 
         ImVec2 contentRegionMin = ImGui::GetWindowContentRegionMin();
-        ImVec2 pos = ImGui::GetWindowPos();
-        pos.y += contentRegionMin.y;
+        ImVec2 wPos = ImGui::GetWindowPos();
+        wPos.y += contentRegionMin.y;
 
         if (ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup | ImGuiHoveredFlags_AllowWhenBlockedByActiveItem)
             && ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
@@ -73,7 +75,7 @@ namespace Deer {
         if (m_lastWindowSize != *(glm::vec2*)&windowSize) {
             m_lastWindowSize = { windowSize.x, windowSize.y };
             m_frameBuffer->resize(windowSize.x, windowSize.y);
-            m_virtualCamera.camera.aspect = (float)windowSize.x / (float)windowSize.y;
+            viewport_sceneCamera.camera.aspect = (float)windowSize.x / (float)windowSize.y;
         }
 
         m_frameBuffer->bind();
@@ -82,26 +84,23 @@ namespace Deer {
         m_frameBuffer->clearBuffer(1, &clearData);
         unsigned char clearColor[4]{ 15, 10, 10, 255 };
         m_frameBuffer->clearBuffer(0, &clearColor);
-        
+
         ImVec2 mPos = ImGui::GetMousePos();
-        ImVec2 wPos = ImGui::GetWindowPos();
 
         viewport_relativeXMouse = (mPos.x - wPos.x) / windowSize.x;
-        viewport_relativeYMouse = 1 - (mPos.y - wPos.y) / windowSize.x;
+        viewport_relativeYMouse = 1 - (mPos.y - wPos.y) / windowSize.y;
 
-        drawVoxelRay(pos.x, pos.y, windowSize.x, windowSize.y);
-
-        Project::m_scene.render(m_virtualCamera);
+        Project::m_scene.render(viewport_sceneCamera);
 
         ImGui::Image((void*)m_frameBuffer->getTextureBufferID(0), windowSize, ImVec2(0, 1), ImVec2(1, 0));
-        bool isUsingDrawGizmo = drawGizmos(pos.x, pos.y, windowSize.x, windowSize.y);
+        bool isUsingDrawGizmo = drawGizmos(wPos.x, wPos.y, windowSize.x, windowSize.y);
 
         if (!isUsingDrawGizmo && m_handleClick) {
             int relativeX, relativeY;
 
             ImVec2 mPos = ImGui::GetMousePos();
-            relativeX = mPos.x - pos.x;
-            relativeY = windowSize.y - (mPos.y - pos.y);
+            relativeX = mPos.x - wPos.x;
+            relativeY = windowSize.y - (mPos.y - wPos.y);
 
             if (relativeX >= 0 && relativeX < windowSize.x &&
                 relativeY >= 0 && relativeY < windowSize.y) {
@@ -123,7 +122,7 @@ namespace Deer {
         m_frameBuffer->unbind();
         ImGui::End();
         ImGui::PopStyleVar();
-	}
+    }
 
     void processMovment() {
         if (!viewport_isActive)
@@ -138,19 +137,19 @@ namespace Deer {
                 vel = 1.0f;
 
             if (Input::isKeyPressed(DEER_KEY_W))
-                m_virtualCamera.transform.position += m_virtualCamera.transform.rotation * glm::vec3(0, 0, 1) * 0.02f * vel;
+                viewport_sceneCamera.transform.position += viewport_sceneCamera.transform.rotation * glm::vec3(0, 0, 1) * 0.02f * vel;
 
             if (Input::isKeyPressed(DEER_KEY_S))
-                m_virtualCamera.transform.position += m_virtualCamera.transform.rotation * glm::vec3(0, 0, -1) * 0.02f * vel;
+                viewport_sceneCamera.transform.position += viewport_sceneCamera.transform.rotation * glm::vec3(0, 0, -1) * 0.02f * vel;
 
             if (Input::isKeyPressed(DEER_KEY_D))
-                m_virtualCamera.transform.position += m_virtualCamera.transform.rotation * glm::vec3(1, 0, 0) * 0.02f * vel;
+                viewport_sceneCamera.transform.position += viewport_sceneCamera.transform.rotation * glm::vec3(1, 0, 0) * 0.02f * vel;
 
             if (Input::isKeyPressed(DEER_KEY_A))
-                m_virtualCamera.transform.position += m_virtualCamera.transform.rotation * glm::vec3(-1, 0, 0) * 0.02f * vel;
+                viewport_sceneCamera.transform.position += viewport_sceneCamera.transform.rotation * glm::vec3(-1, 0, 0) * 0.02f * vel;
 
             if (Input::isKeyPressed(DEER_KEY_SPACE))
-                m_virtualCamera.transform.position.y += 0.02f;
+                viewport_sceneCamera.transform.position.y += 0.02f;
 
         }
 
@@ -165,7 +164,7 @@ namespace Deer {
                 glm::quat pitchQuat = glm::angleAxis(mouseDiff.y * m_sensitivity, glm::vec3(1, 0, 0));
                 glm::quat yawQuat = glm::angleAxis(mouseDiff.x * m_sensitivity, glm::vec3(0, 1, 0));
 
-                m_virtualCamera.transform.rotation = yawQuat * m_virtualCamera.transform.rotation * pitchQuat;
+                viewport_sceneCamera.transform.rotation = yawQuat * viewport_sceneCamera.transform.rotation * pitchQuat;
             }
 
             m_lastMousePos = newMousePos;
@@ -179,8 +178,8 @@ namespace Deer {
         ImGuizmo::SetOrthographic(false);
         ImGuizmo::SetDrawlist();
 
-        glm::mat4 camMatrix = glm::inverse(m_virtualCamera.transform.getMatrix());
-        glm::mat4 projectionMatrix = m_virtualCamera.camera.getMatrix() * glm::scale(glm::mat4(1.0f), glm::vec3(1, 1, -1));
+        glm::mat4 camMatrix = glm::inverse(viewport_sceneCamera.transform.getMatrix());
+        glm::mat4 projectionMatrix = viewport_sceneCamera.camera.getMatrix() * glm::scale(glm::mat4(1.0f), glm::vec3(1, 1, -1));
 
         ImGuizmo::SetRect(wPosX, wPosY, wSizeX, wSizeY);
         if (ActiveEntity::count() != 0) {
@@ -209,54 +208,6 @@ namespace Deer {
         }
 
         return false;
-    }
-    void drawVoxelRay(int wPosX, int wPosY, int wSizeX, int wSizeY) {
-        ImVec2 mPos = ImGui::GetMousePos();
-        ImVec2 pos = ImGui::GetWindowPos();
-        ImVec2 windowSize = ImGui::GetContentRegionMax();
-        int relativeX, relativeY;
-
-        relativeX = mPos.x - wPosX;
-        relativeY = mPos.y - wPosY;
-
-        float x = (float)relativeX / (float)wSizeX;
-        float y = 1 - (float)relativeY / (float)wSizeY;
-
-        if (x < 0 || x > 1 || y < 0 || y > 1)
-            return;
-
-        glm::mat4 camMatrix = glm::inverse(m_virtualCamera.transform.getMatrix());
-        glm::mat4 projectionMatrix = m_virtualCamera.camera.getMatrix();
-        glm::mat4 invertZ = glm::scale(glm::mat4(1.0f), glm::vec3(1, 1, -1));
-
-        glm::mat4 cameraProjectionMatrix = projectionMatrix * invertZ * camMatrix;
-        cameraProjectionMatrix = glm::inverse(cameraProjectionMatrix);
-
-        glm::vec4 nearPoint = cameraProjectionMatrix * glm::vec4(x * 2 - 1, y * 2 - 1, -1, 1);
-        glm::vec4 farPoint = cameraProjectionMatrix * glm::vec4(x * 2 - 1, y * 2 - 1, 1, 1);
-
-        nearPoint /= nearPoint.w;
-        farPoint /= farPoint.w;
-
-        glm::vec3 rayDir = farPoint - nearPoint;
-        rayDir = glm::normalize(rayDir);
-
-        if (Project::m_scene.getVoxelWorld()) {
-            VoxelRayResult res = Project::m_scene.getVoxelWorld()->rayCast(m_virtualCamera.transform.position, rayDir);
-
-            if (res.distance != 1000) {
-                Project::m_scene.getMainGizmoRenderer().refresh();
-                Project::m_scene.getMainGizmoRenderer().drawVoxelLine(res.xPos, res.yPos, res.zPos);
-                Project::m_scene.getMainGizmoRenderer().drawVoxelLineFace(res.xPos, res.yPos, res.zPos, res.face, glm::vec3(1, 0, 0));
-
-                Project::m_scene.getMainGizmoRenderer().drawLine(rayDir + rayDir + rayDir + rayDir + rayDir, glm::vec3(0));
-                Project::m_scene.getMainGizmoRenderer().drawLine(glm::vec3(rayDir.x, 0, 0), glm::vec3(0), glm::vec3(1, 0, 0));
-                Project::m_scene.getMainGizmoRenderer().drawLine(glm::vec3(0, rayDir.y, 0), glm::vec3(0), glm::vec3(0, 1, 0));
-                Project::m_scene.getMainGizmoRenderer().drawLine(glm::vec3(0, 0, rayDir.z), glm::vec3(0), glm::vec3(0, 0, 1));
-
-                DEER_CORE_INFO("{0} {1} {2}", x, y, res.distance);
-            }
-        }
     }
 
     void viewport_onEvent(Event& e) {

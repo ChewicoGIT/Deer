@@ -7,13 +7,20 @@
 #include "Deer/Voxels/VoxelWorldProps.h"
 
 #include "imgui.h"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/glm.hpp"
 
+#include "DeerRender/Scene/SceneCamera.h"
 #include "EditorUtils.h"
+#include "Viewport.h"
+#include "DeerRender/Render/Texture.h"
+#include "Icons.h"
 
 #include <string>
 
 namespace Deer {
 	void deleteVoxelWorld();
+	void drawVoxelRay();
 
 	void terrainEditor_onImGui() {
 		ImGui::Begin("Terrain Editor");
@@ -70,10 +77,10 @@ namespace Deer {
 			return;
 		}
 
-		if (ImGui::Button("Create Base")) {
+		if (ImGui::Button("Create world base")) {
 
 			VoxelWorldProps worldProps = voxelWorld->getVoxelWorldProps();
-			for (int x = 0; x < 0 * worldProps.chunkSizeX; x++) {
+			for (int x = 0; x < 32 * worldProps.chunkSizeX; x++) {
 				for (int y = 0; y < 1; y++) {
 					for (int z = 0; z < 32 * worldProps.chunkSizeZ; z++) {
 						Project::m_scene.getVoxelWorld()->modVoxel(x, y, z).id = 1;
@@ -85,33 +92,27 @@ namespace Deer {
 
 		ImGui::Separator();
 
-        // Main Content
-        ImGui::BeginChild("LeftPanel", ImVec2(200, 0), true);
-        {
-            // Brush Tools
-			int ci = 0;
-			int s = 0;
-			float st = 0;
-            ImGui::Text("Brush Tools");
-            ImGui::Combo("Brush Type", &ci, "Cube\0Sphere\0Flatten\0Smooth\0");
-            ImGui::SliderInt("Brush Size", &s, 1, 32);
-            ImGui::SliderFloat("Strength", &st, 0.0f, 1.0f);
+		static int selectedMode = 0;
+		float windowWidth = ImGui::GetWindowContentRegionWidth();
+		
+		ImGui::Text("Editor mode:");
+		if (ImGui::ImageButton((ImTextureID)add_icon->getTextureID(), ImVec2(windowWidth / 4 - 20, windowWidth / 4 - 20), ImVec2(0, 1), ImVec2(1, 0))) {
+			selectedMode = 0;
+		}
+		ImGui::SameLine();
 
-            // Material Palette
-            ImGui::Separator();
-            ImGui::Text("Materials");
-            ImGui::ColorButton("Grass", ImVec4(0, 1, 0, 1));
-            ImGui::SameLine();
-            ImGui::ColorButton("Dirt", ImVec4(0.5f, 0.3f, 0.1f, 1));
-            // Add more materials...
-        }
-        ImGui::EndChild();
+		if (ImGui::ImageButton((ImTextureID)substract_icon->getTextureID(), ImVec2(windowWidth / 4 - 20, windowWidth / 4 - 20), ImVec2(0, 1), ImVec2(1, 0))) {
+			selectedMode = 1;
+		}
+
+
 
 		if (ImGui::Button("Delete voxel world")) {
 			ImGui::OpenPopup("DELETE_VOXEL_WORLD");
 		}
 
 		deleteInputPopup<deleteVoxelWorld>("DELETE_VOXEL_WORLD", "Are you sure you want to delete voxel world?");
+		drawVoxelRay();
 
 		ImGui::End();
 	}
@@ -120,4 +121,43 @@ namespace Deer {
 	void deleteVoxelWorld() {
 		Project::m_scene.deleteVoxelWorld();
 	}
+
+	void drawVoxelRay() {
+		if (viewport_relativeXMouse < 0 || viewport_relativeXMouse > 1 || viewport_relativeYMouse < 0 || viewport_relativeYMouse > 1)
+			return;
+
+		glm::mat4 camMatrix = glm::inverse(viewport_sceneCamera.transform.getMatrix());
+		glm::mat4 projectionMatrix = viewport_sceneCamera.camera.getMatrix();
+		glm::mat4 invertZ = glm::scale(glm::mat4(1.0f), glm::vec3(1, 1, -1));
+
+		glm::mat4 cameraProjectionMatrix = projectionMatrix * invertZ * camMatrix;
+		cameraProjectionMatrix = glm::inverse(cameraProjectionMatrix);
+
+		glm::vec4 nearPoint = cameraProjectionMatrix * glm::vec4(viewport_relativeXMouse * 2 - 1, viewport_relativeYMouse * 2 - 1, -1, 1);
+		glm::vec4 farPoint = cameraProjectionMatrix * glm::vec4(viewport_relativeXMouse * 2 - 1, viewport_relativeYMouse * 2 - 1, 1, 1);
+
+		nearPoint /= nearPoint.w;
+		farPoint /= farPoint.w;
+
+		glm::vec3 rayDir = farPoint - nearPoint;
+		rayDir = glm::normalize(rayDir);
+
+		if (Project::m_scene.getVoxelWorld()) {
+			VoxelRayResult res = Project::m_scene.getVoxelWorld()->rayCast(viewport_sceneCamera.transform.position, rayDir);
+
+			if (res.distance != 1000) {
+				Project::m_scene.getMainGizmoRenderer().refresh();
+				Project::m_scene.getMainGizmoRenderer().drawVoxelLineFace(res.xPos, res.yPos, res.zPos, res.face);
+
+				if (viewport_isActive && viewport_hasClicked) {
+					int xPos = res.xPos + NORMAL_DIR(0, res.face);
+					int yPos = res.yPos + NORMAL_DIR(1, res.face);
+					int zPos = res.zPos + NORMAL_DIR(2, res.face);
+
+					Project::m_scene.getVoxelWorld()->modVoxel(xPos, yPos, zPos).id = 1;
+				}
+			}
+		}
+	}
+
 }

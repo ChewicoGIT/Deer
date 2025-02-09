@@ -53,5 +53,5 @@ void main()
 		light = 0.2;
 
 	fragColor = texture(u_texture, uv) * light;
-    objectID = u_objectID;
+    objectID = -1;
 }

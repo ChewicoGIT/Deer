@@ -22,7 +22,6 @@ namespace Deer {
 	}
 
 	void PropertiesPannel::onImGui() {
-
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(20, 20));
 		ImGui::Begin("Properties");
 

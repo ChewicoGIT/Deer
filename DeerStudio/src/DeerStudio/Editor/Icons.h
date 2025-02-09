@@ -9,6 +9,8 @@ namespace Deer {
 
 	extern Ref<Texture2D> scene_icon;
 	extern Ref<Texture2D> folder_icon;
+	extern Ref<Texture2D> add_icon;
+	extern Ref<Texture2D> substract_icon;
 	
 	void setupIcons();
 }
