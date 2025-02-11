@@ -27,6 +27,32 @@ namespace Deer {
 		bakeChunk(nextChunk);
 	}
 
+	VoxelLight VoxelWorld::readLight(int x, int y, int z) {
+		ChunkID chunkID;
+		ChunkVoxelID chunkVoxelID;
+
+		extractCordinates(x, y, z, chunkID, chunkVoxelID);
+		if (!m_worldProps.isValid(chunkID))
+			return lightVoxel;
+
+		Chunk& chunk = m_chunks[m_worldProps.getInternalID(chunkID)];
+		return chunk.readLight(chunkVoxelID);
+	}
+
+	VoxelLight& VoxelWorld::modLight(int x, int y, int z) {
+		ChunkID chunkID;
+		ChunkVoxelID chunkVoxelID;
+
+		extractCordinates(x, y, z, chunkID, chunkVoxelID);
+		if (!m_worldProps.isValid(chunkID))
+			return lightVoxel;
+
+		m_chunkQueue.addChunk(chunkID);
+
+		Chunk& chunk = m_chunks[m_worldProps.getInternalID(chunkID)];
+		return chunk.modLight(chunkVoxelID);
+	}
+
 	void VoxelWorld::bakeChunk(ChunkID chunkID) {
 		int chunk_internal_id = m_worldProps.getInternalID(chunkID);
 
@@ -60,12 +86,11 @@ namespace Deer {
 			shaderAsset.value->bind();
 			shaderAsset.value->uploadUniformMat4("u_viewMatrix", cameraProjectionMatrix);
 			shaderAsset.value->uploadUniformMat4("u_worldMatrix", glm::mat4(1.0f));
-			shaderAsset.value->uploadUniformInt("u_objectID", -1);
 			shaderAsset.value->uploadUniformInt("u_texture", 0);
 			shaderAsset.value->uploadUniformInt("u_chunkID_x", chunkID.x);
 			shaderAsset.value->uploadUniformInt("u_chunkID_y", chunkID.y);
 			shaderAsset.value->uploadUniformInt("u_chunkID_z", chunkID.z);
-
+			
 			Render::submit(chunkRender.solidVoxel);
 		}
 	}

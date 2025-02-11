@@ -60,12 +60,14 @@ void main()
 #version 410 core	
 
 layout(location = 0) out vec4 fragColor;
+layout(location = 1) out int objectID;
 
 uniform vec3 u_color;
 
 void main()
 {
 	fragColor = vec4(u_color, 1.0);
+	objectID = -1;
 })";
 
 		return Shader::create(vertexSrc, fragmentSrc);

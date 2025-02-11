@@ -8,6 +8,7 @@
 #include "DeerRender/Voxels/ChunkRender.h"
 #include "DeerRender/Voxels/ChunkBaker.h"
 #include "DeerRender/Voxels/ChunkUpdateQueue.h"
+#include "DeerRender/Voxels/Voxel.h"
 #include "DeerRender/Render/Camera.h"
 #include "DeerRender/Scene/SceneCamera.h"
 #endif
@@ -32,6 +33,9 @@ namespace Deer {
 		void render(SceneCamera camera);
 		void bakeChunk(int x, int y, int z);
 		void bakeNextChunk();
+
+		VoxelLight readLight(int x, int y, int z);
+		VoxelLight& modLight(int x, int y, int z);
 
 	private:
 		ChunkRender* m_chunksRender;
