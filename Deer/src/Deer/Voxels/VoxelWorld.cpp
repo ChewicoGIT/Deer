@@ -8,7 +8,8 @@
 namespace Deer {
 	VoxelWorld::VoxelWorld(const VoxelWorldProps& props) 
 		: m_worldProps(props) {
-		m_chunks = new Chunk[m_worldProps.getChunkCount()];
+		m_chunks = new Chunk[m_worldProps.getChunkCount()]();
+		m_layers = new Layer[m_worldProps.getLayerCount()]();
 #ifdef DEER_RENDER
 		m_chunksRender = new ChunkRender[m_worldProps.getChunkCount()];
 #endif
@@ -16,6 +17,7 @@ namespace Deer {
 
 	VoxelWorld::~VoxelWorld() {
 		delete[] m_chunks;
+		delete[] m_layers;
 #ifdef DEER_RENDER
 		delete[] m_chunksRender;
 #endif
@@ -25,27 +27,65 @@ namespace Deer {
 		ChunkID chunkID;
 		ChunkVoxelID chunkVoxelID;
 
-		extractCordinates(x, y, z, chunkID, chunkVoxelID);
+		extractChunkCordinates(x, y, z, chunkID, chunkVoxelID);
 		if (!m_worldProps.isValid(chunkID))
 			return nullVoxel;
 
-		Chunk& chunk = m_chunks[m_worldProps.getInternalID(chunkID)];
+		Chunk& chunk = m_chunks[m_worldProps.getWorldChunkID(chunkID)];
 		return chunk.readVoxel(chunkVoxelID);
 	}
 
-	Voxel& VoxelWorld::modVoxel(int x, int y, int z) {
+	void VoxelWorld::setVoxel(int x, int y, int z, Voxel info) {
 		ChunkID chunkID;
 		ChunkVoxelID chunkVoxelID;
 
-		extractCordinates(x, y, z, chunkID, chunkVoxelID);
+		extractChunkCordinates(x, y, z, chunkID, chunkVoxelID);
 		if (!m_worldProps.isValid(chunkID))
-			return nullVoxel;
+			return;
 
 #ifdef DEER_RENDER
 		m_chunkQueue.addChunk(chunkID);
 #endif
-		Chunk& chunk = m_chunks[m_worldProps.getInternalID(chunkID)];
-		return chunk.modVoxel(chunkVoxelID);
+		Chunk& chunk = m_chunks[m_worldProps.getWorldChunkID(chunkID)];
+		chunk.modVoxel(chunkVoxelID) = info;
+
+		LayerID layerID;
+		LayerVoxelID layerVoxelID;
+
+		extractLayerCordinates(x, z, layerID, layerVoxelID);
+
+		Layer& layer = m_layers[m_worldProps.getWorldLayerID(layerID)];
+		LayerVoxel& layerVoxel = layer.modLayerVoxel(layerVoxelID);
+
+		if (info.id == 0)
+			layerVoxel.height = getLayerVoxelHeight(x, z);
+		else if (y >= layerVoxel.height)
+			layerVoxel.height = y + 1;
+
+	}
+
+	LayerVoxel VoxelWorld::readLayerVoxel(int x, int z) {
+		LayerID layerID;
+		LayerVoxelID layerVoxelID;
+
+		extractLayerCordinates(x, z, layerID, layerVoxelID);
+		if (!m_worldProps.isValid(layerID))
+			return LayerVoxel();
+
+		Layer& layer = m_layers[m_worldProps.getWorldLayerID(layerID)];
+		return layer.readLayerVoxel(layerVoxelID);
+	}
+
+	LayerVoxel& VoxelWorld::modLayerVoxel(int x, int z) {
+		LayerID layerID;
+		LayerVoxelID layerVoxelID;
+
+		extractLayerCordinates(x, z, layerID, layerVoxelID);
+		if (!m_worldProps.isValid(layerID))
+			return nullLayerVoxel;
+
+		Layer& layer = m_layers[m_worldProps.getWorldLayerID(layerID)];
+		return layer.modLayerVoxel(layerVoxelID);
 	}
 
 	VoxelRayResult VoxelWorld::rayCast(glm::vec3 position, glm::vec3 dir, float maxDistance) {
@@ -115,5 +155,23 @@ namespace Deer {
 
 		result.distance = maxDistance;
 		return result;
+	}
+
+	uint16_t VoxelWorld::getLayerVoxelHeight(int x, int z) {
+		LayerVoxelID layerVoxelID;
+		LayerID layerID;
+
+		extractLayerCordinates(x, z, layerID, layerVoxelID);
+		ChunkID chunkID(layerID.x, m_worldProps.chunkSizeY - 1, layerID.z);
+
+		for (; chunkID.y > 0; chunkID.y--) {
+			Chunk& chunk = m_chunks[m_worldProps.getWorldChunkID(chunkID)];
+			uint8_t chunkVoxelHeight = chunk.getLayerVoxelHeight(layerVoxelID);
+
+			if (chunkVoxelHeight != 0) {
+				return chunkVoxelHeight + chunkID.y * CHUNK_SIZE_Y;
+			}
+		}
+		return 0;
 	}
 }

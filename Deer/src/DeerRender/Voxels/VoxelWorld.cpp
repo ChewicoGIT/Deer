@@ -14,28 +14,243 @@
 #include "glm/gtc/matrix_inverse.hpp"
 
 namespace Deer {
-	void VoxelWorld::bakeChunk(int x, int y, int z) {
-		ChunkID chunkID(x, y, z);
-		bakeChunk(chunkID);
-	}
-
 	void VoxelWorld::bakeNextChunk() {
 		if (!m_chunkQueue.hasChunk())
 			return;
 
+		// Pull the next chunk to render
 		ChunkID nextChunk = m_chunkQueue.pullChunk();
-		bakeChunk(nextChunk);
+		m_vertexData.clear();
+		m_indices.clear();
+
+		// For each voxel
+		for (int x = 0; x < CHUNK_SIZE_X; x++) {
+			for (int y = 0; y < CHUNK_SIZE_Y; y++) {
+				for (int z = 0; z < CHUNK_SIZE_Z; z++) {
+					genSolidVoxel(nextChunk, ChunkVoxelID(x, y, z));
+				}
+			}
+		}
+
+		// Pass the data to the GPU
+		Ref<VertexArray> va = VertexArray::create();
+		va->bind();
+		Ref<VertexBuffer> vb = VertexBuffer::create(m_vertexData.data(), m_vertexData.size() * sizeof(SolidVoxelVertexData));
+		Ref<IndexBuffer> ib = IndexBuffer::create(m_indices.data(), m_indices.size() * sizeof(uint32_t), IndexDataType::Unsigned_Int);
+
+		BufferLayout layout({
+			{ "a_xPos", DataType::Unsigned_Byte, ShaderDataType::FloatingPoint },
+			{ "a_yPos", DataType::Unsigned_Byte, ShaderDataType::FloatingPoint },
+			{ "a_zPos", DataType::Unsigned_Byte, ShaderDataType::FloatingPoint },
+			{ "a_normal", DataType::Unsigned_Byte, ShaderDataType::Integer },
+			{ "a_u", DataType::Unsigned_Byte, ShaderDataType::FloatingPoint },
+			{ "a_v", DataType::Unsigned_Byte, ShaderDataType::FloatingPoint },
+			{ "ambient_light", DataType::Unsigned_Byte, ShaderDataType::FloatingPoint }
+			});
+		vb->setLayout(layout);
+		va->addVertexBuffer(vb);
+		va->setIndexBuffer(ib);
+
+		// Update the data to the chunk render
+		int id = m_worldProps.getWorldChunkID(nextChunk);
+		ChunkRender& chunkRender = m_chunksRender[id];
+		chunkRender.solidVoxel = va;
+		chunkRender.hasData = true;
+	}
+
+	void VoxelWorld::genSolidVoxel(ChunkID chunkID, ChunkVoxelID chunkVoxelID) {
+		Chunk& workingChunk = m_chunks[m_worldProps.getWorldChunkID(chunkID)];
+		Voxel voxel = workingChunk.readVoxel(chunkVoxelID);
+		
+		// If voxel is air do not process
+		if (voxel.id == 0)
+			return;
+
+		for (int i = 0; i < 6; i++) {
+			// Next means the voxel in the face of the direction
+			int nextX = NORMAL_DIR(X_AXIS, i) + chunkVoxelID.x;
+			int nextY = NORMAL_DIR(Y_AXIS, i) + chunkVoxelID.y;
+			int nextZ = NORMAL_DIR(Z_AXIS, i) + chunkVoxelID.z;
+
+			Voxel nextVoxel;
+
+			// If facing voxel is out of chunk bound ask voxel world not the chunk
+			if (nextX < 0 || nextY < 0 || nextZ < 0 || nextX >= CHUNK_SIZE_X || nextY >= CHUNK_SIZE_Y || nextZ >= CHUNK_SIZE_Z) {
+				int nextWorldX = nextX + CHUNK_SIZE_X * chunkID.x;
+				int nextWorldY = nextY + CHUNK_SIZE_Y * chunkID.y;
+				int nextWorldZ = nextZ + CHUNK_SIZE_Z * chunkID.z;
+
+				nextVoxel = readVoxel(nextWorldX, nextWorldY, nextWorldZ);
+			}
+			else {
+				ChunkVoxelID nextVoxelID(nextX, nextY, nextZ);
+
+				nextVoxel = workingChunk.readVoxel(nextVoxelID);
+			}
+
+			if (nextVoxel.id != 0)
+				continue;
+
+			int vertexID = m_vertexData.size();
+			m_indices.push_back(vertexID);
+			m_indices.push_back(vertexID + 2);
+			m_indices.push_back(vertexID + 1);
+
+			m_indices.push_back(vertexID + 1);
+			m_indices.push_back(vertexID + 2);
+			m_indices.push_back(vertexID + 3);
+
+			int ambientOcclusionValue[4] = { 0 };
+			for (int v = 0; v < 4; v++) {
+				bool solidEdge[3] = { false };
+
+				// Calculate ambient occlusion
+				for (int a = 0; a < 4; a++) {
+					if (a == 3 && solidEdge[1] && solidEdge[2])
+						continue;
+
+					int checkDirX = chunkVoxelID.x + AMBIENT_OCCLUSION_VERTEX(X_AXIS, a, v, i);
+					int checkDirY = chunkVoxelID.y + AMBIENT_OCCLUSION_VERTEX(Y_AXIS, a, v, i);
+					int checkDirZ = chunkVoxelID.z + AMBIENT_OCCLUSION_VERTEX(Z_AXIS, a, v, i);
+
+					Voxel voxelData;
+					VoxelLight lightData;
+					if (checkDirX < 0 || checkDirY < 0 || checkDirZ < 0 || checkDirX >= CHUNK_SIZE_X || checkDirY >= CHUNK_SIZE_Y || checkDirZ >= CHUNK_SIZE_Z) {
+						int nextWorldX = checkDirX + CHUNK_SIZE_X * chunkID.x;
+						int nextWorldY = checkDirY + CHUNK_SIZE_Y * chunkID.y;
+						int nextWorldZ = checkDirZ + CHUNK_SIZE_Z * chunkID.z;
+
+						voxelData = readVoxel(nextWorldX, nextWorldY, nextWorldZ);
+						lightData = readLight(nextWorldX, nextWorldY, nextWorldZ);
+					}
+					else {
+						ChunkVoxelID nextVoxelID(checkDirX, checkDirY, checkDirZ);
+
+						voxelData = workingChunk.readVoxel(nextVoxelID);
+						lightData = workingChunk.readLight(nextVoxelID);
+					}
+
+					if (a != 3)
+						solidEdge[a] = voxelData.id != 0;
+
+					ambientOcclusionValue[v] += lightData.ambient_light;
+				}
+				ambientOcclusionValue[v] /= 4;
+			}
+
+			for (int v = 0; v < 4; v++) {
+				SolidVoxelVertexData vertexData(
+					chunkVoxelID.x + NORMAL_VERTEX_POS(X_AXIS, v, i),
+					chunkVoxelID.y + NORMAL_VERTEX_POS(Y_AXIS, v, i),
+					chunkVoxelID.z + NORMAL_VERTEX_POS(Z_AXIS, v, i),
+					i, VERTEX_UV(X_AXIS, v), VERTEX_UV(Y_AXIS, v),
+					ambientOcclusionValue[v]);
+
+				m_vertexData.push_back(vertexData);
+			}
+		}
+	}
+
+	void VoxelWorld::resolveNextAmbientLightPropagation() {
+		VoxelCordinates position = m_ambientLightPropagation.front();
+		m_ambientLightPropagation.pop();
+
+		VoxelLight currentLight = readLight(position.x, position.y, position.z);
+		bool solidCheck[6] = { false };
+		// Check for every simple dir
+		for (int i = 0; i < 6; i++) {
+			int nextX = position.x + NORMAL_DIR(X_AXIS, i);
+			int nextY = position.y + NORMAL_DIR(Y_AXIS, i);
+			int nextZ = position.z + NORMAL_DIR(Z_AXIS, i);
+
+			Voxel nextVoxel = readVoxel(nextX, nextY, nextZ);
+			solidCheck[i] = nextVoxel.id != 0;
+			if (nextVoxel.id != 0)
+				continue;
+
+			VoxelLight nextLight = readLight(nextX, nextY, nextZ);
+			uint8_t nextLightMinValue = currentLight.ambient_light - LIGHT_PROPAGATION_SIMPLE_FALL;
+
+			if (nextLight.ambient_light < nextLightMinValue) {
+				modLight(nextX, nextY, nextZ).ambient_light = nextLightMinValue;
+				m_ambientLightPropagation.push(VoxelCordinates(nextX, nextY, nextZ));
+			}
+		}
+
+		// Check for every complex dir
+		for (int i = 0; i < 6; i++) {
+			int cDir0 = LIGHT_PROPAGATION_COMPLEX_DIR(0, i);
+			int cDir1 = LIGHT_PROPAGATION_COMPLEX_DIR(1, i);
+
+			if (solidCheck[cDir0] || solidCheck[cDir1])
+				continue;
+
+			int nextX = position.x + NORMAL_DIR(X_AXIS, cDir0) + NORMAL_DIR(X_AXIS, cDir1);
+			int nextY = position.y + NORMAL_DIR(Y_AXIS, cDir0) + NORMAL_DIR(Y_AXIS, cDir1);
+			int nextZ = position.z + NORMAL_DIR(Z_AXIS, cDir0) + NORMAL_DIR(Z_AXIS, cDir1);
+
+			Voxel nextVoxel = readVoxel(nextX, nextY, nextZ);
+			solidCheck[i] = nextVoxel.id != 0;
+			if (nextVoxel.id != 0)
+				continue;
+
+			VoxelLight nextLight = readLight(nextX, nextY, nextZ);
+			uint8_t nextLightMinValue = currentLight.ambient_light - LIGHT_PROPAGATION_COMPLEX_FALL;
+
+			if (nextLight.ambient_light < nextLightMinValue) {
+				modLight(nextX, nextY, nextZ).ambient_light = nextLightMinValue;
+				m_ambientLightPropagation.push(VoxelCordinates(nextX, nextY, nextZ));
+			}
+		}
+	}
+
+	void VoxelWorld::bakeAmbientLight(int minX, int maxX, int minZ, int maxZ) {
+		int xPos = minX;
+		for (; xPos <= maxX; xPos++) {
+			int zPos = minZ;
+			for (; zPos <= maxZ; zPos++) {
+				LayerVoxel layer = readLayerVoxel(xPos, zPos);
+				uint16_t maxHeight = layer.height;
+
+				ChunkID chunkID;
+				ChunkVoxelID chunkVoxelID;
+
+				int yPos = 0;
+				// All light blocks under the max height must be put to 0 ambient light and above to 255
+				for (; yPos < maxHeight; yPos++) {
+					extractChunkCordinates(xPos, yPos, zPos, chunkID, chunkVoxelID);
+					Chunk& chunk = m_chunks[m_worldProps.getWorldChunkID(chunkID)];
+					VoxelLight& voxelLight = chunk.modLight(chunkVoxelID);
+
+					voxelLight.ambient_light = 0;
+				}
+
+				for (; yPos < m_worldProps.chunkSizeY * 32; yPos++) {
+					extractChunkCordinates(xPos, yPos, zPos, chunkID, chunkVoxelID);
+					Chunk& chunk = m_chunks[m_worldProps.getWorldChunkID(chunkID)];
+					VoxelLight& voxelLight = chunk.modLight(chunkVoxelID);
+
+					voxelLight.ambient_light = 255;
+					m_ambientLightPropagation.push(VoxelCordinates(xPos, yPos, zPos));
+				}
+			}
+		}
+
+		//Resolve ambient light propagation
+		while (!m_ambientLightPropagation.empty()) {
+			resolveNextAmbientLightPropagation();
+		}
 	}
 
 	VoxelLight VoxelWorld::readLight(int x, int y, int z) {
 		ChunkID chunkID;
 		ChunkVoxelID chunkVoxelID;
 
-		extractCordinates(x, y, z, chunkID, chunkVoxelID);
+		extractChunkCordinates(x, y, z, chunkID, chunkVoxelID);
 		if (!m_worldProps.isValid(chunkID))
 			return lightVoxel;
 
-		Chunk& chunk = m_chunks[m_worldProps.getInternalID(chunkID)];
+		Chunk& chunk = m_chunks[m_worldProps.getWorldChunkID(chunkID)];
 		return chunk.readLight(chunkVoxelID);
 	}
 
@@ -43,21 +258,14 @@ namespace Deer {
 		ChunkID chunkID;
 		ChunkVoxelID chunkVoxelID;
 
-		extractCordinates(x, y, z, chunkID, chunkVoxelID);
+		extractChunkCordinates(x, y, z, chunkID, chunkVoxelID);
 		if (!m_worldProps.isValid(chunkID))
 			return lightVoxel;
 
 		m_chunkQueue.addChunk(chunkID);
 
-		Chunk& chunk = m_chunks[m_worldProps.getInternalID(chunkID)];
+		Chunk& chunk = m_chunks[m_worldProps.getWorldChunkID(chunkID)];
 		return chunk.modLight(chunkVoxelID);
-	}
-
-	void VoxelWorld::bakeChunk(ChunkID chunkID) {
-		int chunk_internal_id = m_worldProps.getInternalID(chunkID);
-
-		Chunk& chunk = m_chunks[chunk_internal_id];
-		m_chunksRender[chunk_internal_id] = m_chunkBaker.bakeChunk(chunk);
 	}
 
 	void VoxelWorld::render(SceneCamera camera) {
@@ -73,7 +281,7 @@ namespace Deer {
 			if (!chunkRender.hasData)
 				continue;
 
-			ChunkID chunkID = m_worldProps.getChunkPosition(x);
+			ChunkID chunkID = m_worldProps.getChunkID(x);
 			chunkRender.solidVoxel->bind();
 
 			int textureAssetID = AssetManager::loadAsset<Texture2D>("assets/Textures/Dirt.png");

@@ -83,11 +83,16 @@ namespace Deer {
 			for (int x = 0; x < 32 * worldProps.chunkSizeX; x++) {
 				for (int y = 0; y < 1; y++) {
 					for (int z = 0; z < 32 * worldProps.chunkSizeZ; z++) {
-						Project::m_scene.getVoxelWorld()->modVoxel(x, y, z).id = 1;
+						Project::m_scene.getVoxelWorld()->setVoxel(x, y, z, Voxel(1));
 					}
 				}
 			}
 
+		}
+
+		if (ImGui::Button("Bake light")) {
+			Project::m_scene.getVoxelWorld()->bakeAmbientLight(0, 31, 0, 31);
+			Project::m_scene.getVoxelWorld()->setVoxel(30, 30, 30, Voxel(0));
 		}
 
 		ImGui::Separator();
@@ -154,7 +159,16 @@ namespace Deer {
 					int yPos = res.yPos + NORMAL_DIR(1, res.face);
 					int zPos = res.zPos + NORMAL_DIR(2, res.face);
 
-					Project::m_scene.getVoxelWorld()->modVoxel(xPos, yPos, zPos).id = 1;
+					Project::m_scene.getVoxelWorld()->setVoxel(xPos, yPos, zPos, Voxel(1));
+					Project::m_scene.getVoxelWorld()->bakeAmbientLight(0, 31, 0, 31);
+				}
+				else if (viewport_isActive && ImGui::GetMouseClickedCount(ImGuiMouseButton_Right)) {
+					int xPos = res.xPos;
+					int yPos = res.yPos;
+					int zPos = res.zPos;
+
+					Project::m_scene.getVoxelWorld()->setVoxel(xPos, yPos, zPos, Voxel(0));
+					Project::m_scene.getVoxelWorld()->bakeAmbientLight(0, 31, 0, 31);
 				}
 			}
 		}

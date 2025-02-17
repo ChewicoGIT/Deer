@@ -25,6 +25,18 @@ namespace Deer {
 				loadVoxels();
 			return m_voxels[VOXEL_POSITION(id)];
 		}
+
+		inline uint8_t getLayerVoxelHeight(LayerVoxelID layerVoxelID) {
+			if (!m_voxels)
+				return 0;
+
+			ChunkVoxelID voxelID(layerVoxelID.x, CHUNK_SIZE_Y - 1, layerVoxelID.z);
+			for (; voxelID.y > 0; voxelID.y--) {
+				if (m_voxels[VOXEL_POSITION(voxelID)].id != 0)
+					return voxelID.y + 1;
+			}
+			return 0;
+		}
 	private:
 		Voxel* m_voxels = nullptr;
 
@@ -32,14 +44,10 @@ namespace Deer {
 #ifdef DEER_RENDER
 	public:
 		inline VoxelLight readLight(ChunkVoxelID id) {
-			if (m_lightInfo)
-				return m_lightInfo[VOXEL_POSITION(id)];
-			return lightVoxel;
+			return m_lightInfo[VOXEL_POSITION(id)];
 		}
 
 		inline VoxelLight& modLight(ChunkVoxelID id) {
-			if (!m_voxels)
-				loadVoxels();
 			return m_lightInfo[VOXEL_POSITION(id)];
 		}
 	private:
