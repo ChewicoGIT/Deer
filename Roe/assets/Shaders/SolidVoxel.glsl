@@ -56,6 +56,6 @@ void main()
 	if (light < 0.1)
 		light = 0.1;
 
-	fragColor = texture(u_texture, uv) * light;
+	fragColor = vec4(light);
     objectID = -1;
 }

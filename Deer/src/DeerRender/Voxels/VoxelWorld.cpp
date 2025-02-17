@@ -91,16 +91,7 @@ namespace Deer {
 			if (nextVoxel.id != 0)
 				continue;
 
-			int vertexID = m_vertexData.size();
-			m_indices.push_back(vertexID);
-			m_indices.push_back(vertexID + 2);
-			m_indices.push_back(vertexID + 1);
-
-			m_indices.push_back(vertexID + 1);
-			m_indices.push_back(vertexID + 2);
-			m_indices.push_back(vertexID + 3);
-
-			int ambientOcclusionValue[4] = { 0 };
+			int ambient_oclusion[4] = { 0 };
 			for (int v = 0; v < 4; v++) {
 				bool solidEdge[3] = { false };
 
@@ -133,21 +124,40 @@ namespace Deer {
 					if (a != 3)
 						solidEdge[a] = voxelData.id != 0;
 
-					ambientOcclusionValue[v] += lightData.ambient_light;
+					ambient_oclusion[v] += lightData.ambient_light;
 				}
-				ambientOcclusionValue[v] /= 4;
-			}
 
-			for (int v = 0; v < 4; v++) {
 				SolidVoxelVertexData vertexData(
 					chunkVoxelID.x + NORMAL_VERTEX_POS(X_AXIS, v, i),
 					chunkVoxelID.y + NORMAL_VERTEX_POS(Y_AXIS, v, i),
 					chunkVoxelID.z + NORMAL_VERTEX_POS(Z_AXIS, v, i),
 					i, VERTEX_UV(X_AXIS, v), VERTEX_UV(Y_AXIS, v),
-					ambientOcclusionValue[v]);
+					ambient_oclusion[v]
+					/ 4);
 
 				m_vertexData.push_back(vertexData);
 			}
+
+			int vertexID = m_vertexData.size();
+			if (ambient_oclusion[0] + ambient_oclusion[2] < ambient_oclusion[1] + ambient_oclusion[3]) {
+				m_indices.push_back(vertexID);
+				m_indices.push_back(vertexID + 2);
+				m_indices.push_back(vertexID + 1);
+
+				m_indices.push_back(vertexID + 1);
+				m_indices.push_back(vertexID + 2);
+				m_indices.push_back(vertexID + 3);
+			}
+			else {
+				m_indices.push_back(vertexID);
+				m_indices.push_back(vertexID + 3);
+				m_indices.push_back(vertexID + 1);
+
+				m_indices.push_back(vertexID + 2);
+				m_indices.push_back(vertexID + 3);
+				m_indices.push_back(vertexID);
+			}
+
 		}
 	}
 
