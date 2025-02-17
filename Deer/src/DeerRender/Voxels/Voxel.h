@@ -9,7 +9,7 @@
 
 #define NORMAL_VERTEX_POS(axis, id, normal) normalFacePositions[axis + id * 3 + normal * 3 * 4]
 #define VERTEX_UV(axis, id) uvFace[axis + id * 2]
-#define AMBIENT_OCCLUSION_VERTEX(axis, id, vertex, normal) ambientOcclusionVertex[axis + id * 3 + vertex * 3 * 4 + normal * 3 * 4 * 4];
+#define AMBIENT_OCCLUSION_VERTEX(axis, id, vertex, normal) ambientOcclusionVertex[axis + id * 3 + vertex * 3 * 2 + normal * 3 * 2 * 4]
 
 namespace Deer {
 	struct VoxelLight;
@@ -18,8 +18,8 @@ namespace Deer {
 	extern int lightPropagationComplexDir[12 * 2];
 	extern int normalFacePositions[3 * 4 * 6];
 	extern int uvFace[2 * 4];
-	// 6 Dirs * 4 vertices * 4 checks * 3 dirs
-	extern int ambientOcclusionVertex[6 * 4 * 4 * 3];
+	// 6 Dirs * 4 vertices * 2 checks * 3 dirs
+	extern int ambientOcclusionVertex[6 * 4 * 2 * 3];
 
 	struct VoxelLight {
 		uint8_t r_light;

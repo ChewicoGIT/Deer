@@ -13,6 +13,7 @@ extern Deer::Application* createApplication(int argc, char** argv);
 
 namespace Deer {
 	int Main(int argc, char** argv) {
+
 		Log::init();
 		DEER_CORE_TRACE("Initializing");
 

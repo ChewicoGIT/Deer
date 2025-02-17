@@ -62,33 +62,33 @@ namespace Deer {
 		1, 1
 	};
 
-	int ambientOcclusionVertex[6 * 4 * 4 * 3]{
-		-1, 0, 0,       -1, -1, 0,      -1, 0, 1,       -1, -1, 1,
-		-1, 0, 0,       -1, -1, 0,      -1, 0, -1,      -1, -1, -1,
-		-1, 0, 0,       -1, 1, 0,       -1, 0, 1,       -1, 1, 1,
-		-1, 0, 0,       -1, 1, 0,       -1, 0, -1,      -1, 1, -1,
-		1, 0, 0,        1, -1, 0,       1, 0, -1,       1, -1, -1,
-		1, 0, 0,        1, -1, 0,       1, 0, 1,        1, -1, 1,
-		1, 0, 0,        1, 1, 0,        1, 0, -1,       1, 1, -1,
-		1, 0, 0,        1, 1, 0,        1, 0, 1,        1, 1, 1,
-		0, -1, 0,       -1, -1, 0,      0, -1, 1,       -1, -1, 1,
-		0, -1, 0,       1, -1, 0,       0, -1, 1,       1, -1, 1,
-		0, -1, 0,       -1, -1, 0,      0, -1, -1,      -1, -1, -1,
-		0, -1, 0,       1, -1, 0,       0, -1, -1,      1, -1, -1,
-		0, 1, 0,        -1, 1, 0,       0, 1, -1,       -1, 1, -1,
-		0, 1, 0,        1, 1, 0,        0, 1, -1,       1, 1, -1,
-		0, 1, 0,        -1, 1, 0,       0, 1, 1,        -1, 1, 1,
-		0, 1, 0,        1, 1, 0,        0, 1, 1,        1, 1, 1,
-		0, 0, -1,       -1, 0, -1,      0, -1, -1,      -1, -1, -1,
-		0, 0, -1,       1, 0, -1,       0, -1, -1,      1, -1, -1,
-		0, 0, -1,       -1, 0, -1,      0, 1, -1,       -1, 1, -1,
-		0, 0, -1,       1, 0, -1,       0, 1, -1,       1, 1, -1,
-		0, 0, 1,        1, 0, 1,        0, -1, 1,       1, -1, 1,
-		0, 0, 1,        -1, 0, 1,       0, -1, 1,       -1, -1, 1,
-		0, 0, 1,        1, 0, 1,        0, 1, 1,        1, 1, 1,
-		0, 0, 1,        -1, 0, 1,       0, 1, 1,        -1, 1, 1
+	int ambientOcclusionVertex[6 * 2 * 4 * 3]{
+		0, -1, 0,       0, 0, 1,
+		0, -1, 0,       0, 0, -1,
+		0, 1, 0,        0, 0, 1,
+		0, 1, 0,        0, 0, -1,
+		0, -1, 0,       0, 0, -1,
+		0, -1, 0,       0, 0, 1,
+		0, 1, 0,        0, 0, -1,
+		0, 1, 0,        0, 0, 1,
+		-1, 0, 0,       0, 0, 1,
+		1, 0, 0,        0, 0, 1,
+		-1, 0, 0,       0, 0, -1,
+		1, 0, 0,        0, 0, -1,
+		-1, 0, 0,       0, 0, -1,
+		1, 0, 0,        0, 0, -1,
+		-1, 0, 0,       0, 0, 1,
+		1, 0, 0,        0, 0, 1,
+		-1, 0, 0,       0, -1, 0,
+		1, 0, 0,        0, -1, 0,
+		-1, 0, 0,       0, 1, 0,
+		1, 0, 0,        0, 1, 0,
+		1, 0, 0,        0, -1, 0,
+		-1, 0, 0,       0, -1, 0,
+		1, 0, 0,        0, 1, 0,
+		-1, 0, 0,       0, 1, 0
 	};
-	/**/
+
 	void calcFaces() {
 		std::string out;
 
@@ -102,54 +102,40 @@ namespace Deer {
 				int yPos = NORMAL_VERTEX_POS(Y_AXIS, vertex, f);
 				int zPos = NORMAL_VERTEX_POS(Z_AXIS, vertex, f);
 
-				out += std::to_string(normalDirX) + ", ";
-				out += std::to_string(normalDirY) + ", ";
-				out += std::to_string(normalDirZ) + ", \t";
-
 				int sideX = (xPos == 1) ? 1 : -1;
 				int sideY = (yPos == 1) ? 1 : -1;
 				int sideZ = (zPos == 1) ? 1 : -1;
 
 				if (normalDirX == 1 || normalDirX == -1) {
-					out += std::to_string(sideX) + ", ";
+					out += std::to_string(0) + ", ";
 					out += std::to_string(sideY) + ", ";
 					out += std::to_string(0) + ",\t";
 
-					out += std::to_string(sideX) + ", ";
 					out += std::to_string(0) + ", ";
-					out += std::to_string(sideZ) + ",\t";
-
-					out += std::to_string(sideX) + ", ";
-					out += std::to_string(sideY) + ", ";
+					out += std::to_string(0) + ", ";
 					out += std::to_string(sideZ) + ",\n";
 				}
 
 				if (normalDirY == 1 || normalDirY == -1) {
 					out += std::to_string(sideX) + ", ";
-					out += std::to_string(sideY) + ", ";
+					out += std::to_string(0) + ", ";
 					out += std::to_string(0) + ",\t";
 
 					out += std::to_string(0) + ", ";
-					out += std::to_string(sideY) + ", ";
-					out += std::to_string(sideZ) + ",\t";
-
-					out += std::to_string(sideX) + ", ";
-					out += std::to_string(sideY) + ", ";
+					out += std::to_string(0) + ", ";
 					out += std::to_string(sideZ) + ",\n";
+
 				}
 
 				if (normalDirZ == 1 || normalDirZ == -1) {
 					out += std::to_string(sideX) + ", ";
 					out += std::to_string(0) + ", ";
-					out += std::to_string(sideZ) + ",\t";
+					out += std::to_string(0) + ",\t";
 
 					out += std::to_string(0) + ", ";
 					out += std::to_string(sideY) + ", ";
-					out += std::to_string(sideZ) + ",\t";
+					out += std::to_string(0) + ",\n";
 
-					out += std::to_string(sideX) + ", ";
-					out += std::to_string(sideY) + ", ";
-					out += std::to_string(sideZ) + ",\n";
 				}
 			}
 		}

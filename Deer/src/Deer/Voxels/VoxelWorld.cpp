@@ -29,7 +29,7 @@ namespace Deer {
 
 		extractChunkCordinates(x, y, z, chunkID, chunkVoxelID);
 		if (!m_worldProps.isValid(chunkID))
-			return nullVoxel;
+			return emptyVoxel;
 
 		Chunk& chunk = m_chunks[m_worldProps.getWorldChunkID(chunkID)];
 		return chunk.readVoxel(chunkVoxelID);

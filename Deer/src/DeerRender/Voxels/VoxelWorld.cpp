@@ -73,6 +73,7 @@ namespace Deer {
 			int nextZ = NORMAL_DIR(Z_AXIS, i) + chunkVoxelID.z;
 
 			Voxel nextVoxel;
+			VoxelLight nextVoxelLight;
 
 			// If facing voxel is out of chunk bound ask voxel world not the chunk
 			if (nextX < 0 || nextY < 0 || nextZ < 0 || nextX >= CHUNK_SIZE_X || nextY >= CHUNK_SIZE_Y || nextZ >= CHUNK_SIZE_Z) {
@@ -81,28 +82,28 @@ namespace Deer {
 				int nextWorldZ = nextZ + CHUNK_SIZE_Z * chunkID.z;
 
 				nextVoxel = readVoxel(nextWorldX, nextWorldY, nextWorldZ);
+				nextVoxelLight = readLight(nextWorldX, nextWorldY, nextWorldZ);
 			}
 			else {
 				ChunkVoxelID nextVoxelID(nextX, nextY, nextZ);
 
 				nextVoxel = workingChunk.readVoxel(nextVoxelID);
+				nextVoxelLight = workingChunk.readLight(nextVoxelID);
 			}
 
 			if (nextVoxel.id != 0)
 				continue;
 
-			int ambient_oclusion[4] = { 0 };
+			int vertexID = m_vertexData.size();
+			int ambient_oclusion[4] = { nextVoxelLight.ambient_light, nextVoxelLight.ambient_light, nextVoxelLight.ambient_light, nextVoxelLight.ambient_light };
 			for (int v = 0; v < 4; v++) {
-				bool solidEdge[3] = { false };
 
+				bool airEdge[3] = { false };
 				// Calculate ambient occlusion
-				for (int a = 0; a < 4; a++) {
-					if (a == 3 && solidEdge[1] && solidEdge[2])
-						continue;
-
-					int checkDirX = chunkVoxelID.x + AMBIENT_OCCLUSION_VERTEX(X_AXIS, a, v, i);
-					int checkDirY = chunkVoxelID.y + AMBIENT_OCCLUSION_VERTEX(Y_AXIS, a, v, i);
-					int checkDirZ = chunkVoxelID.z + AMBIENT_OCCLUSION_VERTEX(Z_AXIS, a, v, i);
+				for (int a = 0; a < 2; a++) {
+					int checkDirX = nextX + AMBIENT_OCCLUSION_VERTEX(X_AXIS, a, v, i);
+					int checkDirY = nextY + AMBIENT_OCCLUSION_VERTEX(Y_AXIS, a, v, i);
+					int checkDirZ = nextZ + AMBIENT_OCCLUSION_VERTEX(Z_AXIS, a, v, i);
 
 					Voxel voxelData;
 					VoxelLight lightData;
@@ -121,25 +122,53 @@ namespace Deer {
 						lightData = workingChunk.readLight(nextVoxelID);
 					}
 
-					if (a != 3)
-						solidEdge[a] = voxelData.id != 0;
-
+					airEdge[a] = voxelData.id == 0;
 					ambient_oclusion[v] += lightData.ambient_light;
 				}
+
+				if (airEdge[0] || airEdge[1]) {
+					int checkDirX = nextX + AMBIENT_OCCLUSION_VERTEX(X_AXIS, 0, v, i) + AMBIENT_OCCLUSION_VERTEX(X_AXIS, 1, v, i);
+					int checkDirY = nextY + AMBIENT_OCCLUSION_VERTEX(Y_AXIS, 0, v, i) + AMBIENT_OCCLUSION_VERTEX(Y_AXIS, 1, v, i);
+					int checkDirZ = nextZ + AMBIENT_OCCLUSION_VERTEX(Z_AXIS, 0, v, i) + AMBIENT_OCCLUSION_VERTEX(Z_AXIS, 1, v, i);
+
+					Voxel voxelData;
+					VoxelLight lightData;
+					if (checkDirX < 0 || checkDirY < 0 || checkDirZ < 0 || checkDirX >= CHUNK_SIZE_X || checkDirY >= CHUNK_SIZE_Y || checkDirZ >= CHUNK_SIZE_Z) {
+						int nextWorldX = checkDirX + CHUNK_SIZE_X * chunkID.x;
+						int nextWorldY = checkDirY + CHUNK_SIZE_Y * chunkID.y;
+						int nextWorldZ = checkDirZ + CHUNK_SIZE_Z * chunkID.z;
+
+						voxelData = readVoxel(nextWorldX, nextWorldY, nextWorldZ);
+						lightData = readLight(nextWorldX, nextWorldY, nextWorldZ);
+					}
+					else {
+						ChunkVoxelID nextVoxelID(checkDirX, checkDirY, checkDirZ);
+
+						voxelData = workingChunk.readVoxel(nextVoxelID);
+						lightData = workingChunk.readLight(nextVoxelID);
+					}
+
+					airEdge[2] = voxelData.id == 0;
+					ambient_oclusion[v] += lightData.ambient_light;
+				}
+				else
+					airEdge[2] = false;
+
+				int airEdgeCount = (int)!airEdge[0] + (int)!airEdge[1];// +(int)!airEdge[2];
+				ambient_oclusion[v] += 50 * airEdgeCount;
+				//ambient_oclusion[v] += (nextVoxelLight.ambient_light * airEdgeCount * 2) / 3;
 
 				SolidVoxelVertexData vertexData(
 					chunkVoxelID.x + NORMAL_VERTEX_POS(X_AXIS, v, i),
 					chunkVoxelID.y + NORMAL_VERTEX_POS(Y_AXIS, v, i),
 					chunkVoxelID.z + NORMAL_VERTEX_POS(Z_AXIS, v, i),
 					i, VERTEX_UV(X_AXIS, v), VERTEX_UV(Y_AXIS, v),
-					ambient_oclusion[v]
-					/ 4);
+					ambient_oclusion[v] / 4);
 
 				m_vertexData.push_back(vertexData);
 			}
 
-			int vertexID = m_vertexData.size();
-			if (ambient_oclusion[0] + ambient_oclusion[2] < ambient_oclusion[1] + ambient_oclusion[3]) {
+			if ((ambient_oclusion[0] + ambient_oclusion[3]) < (ambient_oclusion[1] + ambient_oclusion[2])) {
 				m_indices.push_back(vertexID);
 				m_indices.push_back(vertexID + 2);
 				m_indices.push_back(vertexID + 1);
