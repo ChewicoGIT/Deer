@@ -162,9 +162,11 @@ namespace Deer {
 		LayerID layerID;
 
 		extractLayerCordinates(x, z, layerID, layerVoxelID);
-		ChunkID chunkID(layerID.x, m_worldProps.chunkSizeY - 1, layerID.z);
+		ChunkID chunkID(layerID.x, 0, layerID.z);
 
-		for (; chunkID.y > 0; chunkID.y--) {
+		for (int y = m_worldProps.chunkSizeY - 1; y >= 0; y--) {
+			chunkID.y = y;
+
 			Chunk& chunk = m_chunks[m_worldProps.getWorldChunkID(chunkID)];
 			uint8_t chunkVoxelHeight = chunk.getLayerVoxelHeight(layerVoxelID);
 

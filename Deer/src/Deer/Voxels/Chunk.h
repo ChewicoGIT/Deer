@@ -31,7 +31,9 @@ namespace Deer {
 				return 0;
 
 			ChunkVoxelID voxelID(layerVoxelID.x, CHUNK_SIZE_Y - 1, layerVoxelID.z);
-			for (; voxelID.y > 0; voxelID.y--) {
+			for (int y = CHUNK_SIZE_Y - 1; y >= 0; y--) {
+				voxelID.y = y;
+
 				if (m_voxels[VOXEL_POSITION(voxelID)].id != 0)
 					return voxelID.y + 1;
 			}

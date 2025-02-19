@@ -96,6 +96,7 @@ namespace Deer {
 
 			int vertexID = m_vertexData.size();
 			int ambient_oclusion[4] = { nextVoxelLight.ambient_light, nextVoxelLight.ambient_light, nextVoxelLight.ambient_light, nextVoxelLight.ambient_light };
+			int air_count[4];
 			for (int v = 0; v < 4; v++) {
 
 				bool airEdge[3] = { false };
@@ -154,8 +155,9 @@ namespace Deer {
 				else
 					airEdge[2] = false;
 
-				int airEdgeCount = (int)!airEdge[0] + (int)!airEdge[1];// +(int)!airEdge[2];
-				ambient_oclusion[v] += 50 * airEdgeCount;
+				air_count[v] = (int)airEdge[0] + (int)airEdge[1] + (int)airEdge[2] + 1;
+				ambient_oclusion[v] = (int)((float)ambient_oclusion[v] / ((float)air_count[v] / 4.0f * 3.0f + 1));
+				//ambient_oclusion[v] += 50 * airEdgeCount;
 				//ambient_oclusion[v] += (nextVoxelLight.ambient_light * airEdgeCount * 2) / 3;
 
 				SolidVoxelVertexData vertexData(
@@ -163,7 +165,7 @@ namespace Deer {
 					chunkVoxelID.y + NORMAL_VERTEX_POS(Y_AXIS, v, i),
 					chunkVoxelID.z + NORMAL_VERTEX_POS(Z_AXIS, v, i),
 					i, VERTEX_UV(X_AXIS, v), VERTEX_UV(Y_AXIS, v),
-					ambient_oclusion[v] / 4);
+					ambient_oclusion[v]);
 
 				m_vertexData.push_back(vertexData);
 			}
