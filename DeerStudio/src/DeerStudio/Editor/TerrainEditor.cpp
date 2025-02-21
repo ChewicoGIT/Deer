@@ -91,8 +91,8 @@ namespace Deer {
 		}
 
 		if (ImGui::Button("Bake light")) {
-			Project::m_scene.getVoxelWorld()->bakeAmbientLight(0, 31, 0, 31);
-			Project::m_scene.getVoxelWorld()->setVoxel(30, 30, 30, Voxel(0));
+			VoxelWorldProps worldProps = voxelWorld->getVoxelWorldProps();
+			Project::m_scene.getVoxelWorld()->bakeAmbientLight(0, 32 * worldProps.chunkSizeX - 1, 0, 32 * worldProps.chunkSizeZ - 1);
 		}
 
 		ImGui::Separator();

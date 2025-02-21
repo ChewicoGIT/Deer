@@ -11,7 +11,7 @@
 namespace Deer {
 	class Chunk {
 	public:
-		Chunk();
+		Chunk() = default;
 		~Chunk();
 
 		inline Voxel readVoxel(ChunkVoxelID id) {
@@ -46,10 +46,14 @@ namespace Deer {
 #ifdef DEER_RENDER
 	public:
 		inline VoxelLight readLight(ChunkVoxelID id) {
-			return m_lightInfo[VOXEL_POSITION(id)];
+			if (m_voxels)
+				return m_lightInfo[VOXEL_POSITION(id)];
+			return VoxelLight();
 		}
 
 		inline VoxelLight& modLight(ChunkVoxelID id) {
+			if (!m_voxels)
+				loadVoxels();
 			return m_lightInfo[VOXEL_POSITION(id)];
 		}
 	private:

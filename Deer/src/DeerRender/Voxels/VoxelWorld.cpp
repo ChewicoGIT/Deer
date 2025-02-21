@@ -75,21 +75,12 @@ namespace Deer {
 			Voxel nextVoxel;
 			VoxelLight nextVoxelLight;
 
-			// If facing voxel is out of chunk bound ask voxel world not the chunk
-			if (nextX < 0 || nextY < 0 || nextZ < 0 || nextX >= CHUNK_SIZE_X || nextY >= CHUNK_SIZE_Y || nextZ >= CHUNK_SIZE_Z) {
-				int nextWorldX = nextX + CHUNK_SIZE_X * chunkID.x;
-				int nextWorldY = nextY + CHUNK_SIZE_Y * chunkID.y;
-				int nextWorldZ = nextZ + CHUNK_SIZE_Z * chunkID.z;
+			int nextWorldX = nextX + CHUNK_SIZE_X * chunkID.x;
+			int nextWorldY = nextY + CHUNK_SIZE_Y * chunkID.y;
+			int nextWorldZ = nextZ + CHUNK_SIZE_Z * chunkID.z;
 
-				nextVoxel = readVoxel(nextWorldX, nextWorldY, nextWorldZ);
-				nextVoxelLight = readLight(nextWorldX, nextWorldY, nextWorldZ);
-			}
-			else {
-				ChunkVoxelID nextVoxelID(nextX, nextY, nextZ);
-
-				nextVoxel = workingChunk.readVoxel(nextVoxelID);
-				nextVoxelLight = workingChunk.readLight(nextVoxelID);
-			}
+			nextVoxel = readVoxel(nextWorldX, nextWorldY, nextWorldZ);
+			nextVoxelLight = readLight(nextWorldX, nextWorldY, nextWorldZ);
 
 			if (nextVoxel.id != 0)
 				continue;
@@ -108,20 +99,13 @@ namespace Deer {
 
 					Voxel voxelData;
 					VoxelLight lightData;
-					if (checkDirX < 0 || checkDirY < 0 || checkDirZ < 0 || checkDirX >= CHUNK_SIZE_X || checkDirY >= CHUNK_SIZE_Y || checkDirZ >= CHUNK_SIZE_Z) {
-						int nextWorldX = checkDirX + CHUNK_SIZE_X * chunkID.x;
-						int nextWorldY = checkDirY + CHUNK_SIZE_Y * chunkID.y;
-						int nextWorldZ = checkDirZ + CHUNK_SIZE_Z * chunkID.z;
 
-						voxelData = readVoxel(nextWorldX, nextWorldY, nextWorldZ);
-						lightData = readLight(nextWorldX, nextWorldY, nextWorldZ);
-					}
-					else {
-						ChunkVoxelID nextVoxelID(checkDirX, checkDirY, checkDirZ);
+					int nextWorldX = checkDirX + CHUNK_SIZE_X * chunkID.x;
+					int nextWorldY = checkDirY + CHUNK_SIZE_Y * chunkID.y;
+					int nextWorldZ = checkDirZ + CHUNK_SIZE_Z * chunkID.z;
 
-						voxelData = workingChunk.readVoxel(nextVoxelID);
-						lightData = workingChunk.readLight(nextVoxelID);
-					}
+					voxelData = readVoxel(nextWorldX, nextWorldY, nextWorldZ);
+					lightData = readLight(nextWorldX, nextWorldY, nextWorldZ);
 
 					airEdge[a] = voxelData.id == 0;
 					ambient_oclusion[v] += lightData.ambient_light;
@@ -134,20 +118,13 @@ namespace Deer {
 
 					Voxel voxelData;
 					VoxelLight lightData;
-					if (checkDirX < 0 || checkDirY < 0 || checkDirZ < 0 || checkDirX >= CHUNK_SIZE_X || checkDirY >= CHUNK_SIZE_Y || checkDirZ >= CHUNK_SIZE_Z) {
-						int nextWorldX = checkDirX + CHUNK_SIZE_X * chunkID.x;
-						int nextWorldY = checkDirY + CHUNK_SIZE_Y * chunkID.y;
-						int nextWorldZ = checkDirZ + CHUNK_SIZE_Z * chunkID.z;
+					
+					int nextWorldX = checkDirX + CHUNK_SIZE_X * chunkID.x;
+					int nextWorldY = checkDirY + CHUNK_SIZE_Y * chunkID.y;
+					int nextWorldZ = checkDirZ + CHUNK_SIZE_Z * chunkID.z;
 
-						voxelData = readVoxel(nextWorldX, nextWorldY, nextWorldZ);
-						lightData = readLight(nextWorldX, nextWorldY, nextWorldZ);
-					}
-					else {
-						ChunkVoxelID nextVoxelID(checkDirX, checkDirY, checkDirZ);
-
-						voxelData = workingChunk.readVoxel(nextVoxelID);
-						lightData = workingChunk.readLight(nextVoxelID);
-					}
+					voxelData = readVoxel(nextWorldX, nextWorldY, nextWorldZ);
+					lightData = readLight(nextWorldX, nextWorldY, nextWorldZ);
 
 					airEdge[2] = voxelData.id == 0;
 					ambient_oclusion[v] += lightData.ambient_light;
@@ -156,7 +133,7 @@ namespace Deer {
 					airEdge[2] = false;
 
 				air_count[v] = (int)airEdge[0] + (int)airEdge[1] + (int)airEdge[2] + 1;
-				ambient_oclusion[v] = (int)((float)ambient_oclusion[v] / ((float)air_count[v] / 4.0f * 3.0f + 1));
+				ambient_oclusion[v] = (ambient_oclusion[v] * 4) / (air_count[v] * 3 + 4);
 				//ambient_oclusion[v] += 50 * airEdgeCount;
 				//ambient_oclusion[v] += (nextVoxelLight.ambient_light * airEdgeCount * 2) / 3;
 
@@ -204,13 +181,15 @@ namespace Deer {
 			int nextY = position.y + NORMAL_DIR(Y_AXIS, i);
 			int nextZ = position.z + NORMAL_DIR(Z_AXIS, i);
 
+			//DEER_CORE_ASSERT(nextX < 32, "well");
+
 			Voxel nextVoxel = readVoxel(nextX, nextY, nextZ);
 			solidCheck[i] = nextVoxel.id != 0;
 			if (nextVoxel.id != 0)
 				continue;
 
 			VoxelLight nextLight = readLight(nextX, nextY, nextZ);
-			uint8_t nextLightMinValue = currentLight.ambient_light - LIGHT_PROPAGATION_SIMPLE_FALL;
+			int nextLightMinValue = currentLight.ambient_light - LIGHT_PROPAGATION_SIMPLE_FALL;
 
 			if (nextLight.ambient_light < nextLightMinValue) {
 				modLight(nextX, nextY, nextZ).ambient_light = nextLightMinValue;
@@ -236,7 +215,7 @@ namespace Deer {
 				continue;
 
 			VoxelLight nextLight = readLight(nextX, nextY, nextZ);
-			uint8_t nextLightMinValue = currentLight.ambient_light - LIGHT_PROPAGATION_COMPLEX_FALL;
+			int nextLightMinValue = currentLight.ambient_light - LIGHT_PROPAGATION_COMPLEX_FALL;
 
 			if (nextLight.ambient_light < nextLightMinValue) {
 				modLight(nextX, nextY, nextZ).ambient_light = nextLightMinValue;
@@ -253,6 +232,20 @@ namespace Deer {
 				LayerVoxel layer = readLayerVoxel(xPos, zPos);
 				uint16_t maxHeight = layer.height;
 
+				uint16_t maxHeightSorroundings = maxHeight;
+				for (int i = 0; i < 8; i++) {
+					int checkX = xPos + LAYER_CHECK_DIRS(X_AXIS, i);
+					int checkZ = zPos + LAYER_CHECK_DIRS(Y_AXIS, i);
+
+					LayerVoxel layer = readLayerVoxel(checkX, checkZ);
+					if (layer.height> maxHeightSorroundings)
+						maxHeightSorroundings = layer.height;
+				}
+
+				maxHeightSorroundings++;
+				if (maxHeightSorroundings >= CHUNK_SIZE_Y * m_worldProps.chunkSizeY)
+					maxHeightSorroundings = CHUNK_SIZE_Y * m_worldProps.chunkSizeY - 1;
+
 				ChunkID chunkID;
 				ChunkVoxelID chunkVoxelID;
 
@@ -266,7 +259,8 @@ namespace Deer {
 					voxelLight.ambient_light = 0;
 				}
 
-				for (; yPos < m_worldProps.chunkSizeY * 32; yPos++) {
+				// Fill with light blocks and add queue to update light propagation
+				for (; yPos < maxHeightSorroundings; yPos++) {
 					extractChunkCordinates(xPos, yPos, zPos, chunkID, chunkVoxelID);
 					Chunk& chunk = m_chunks[m_worldProps.getWorldChunkID(chunkID)];
 					VoxelLight& voxelLight = chunk.modLight(chunkVoxelID);
@@ -274,6 +268,16 @@ namespace Deer {
 					voxelLight.ambient_light = 255;
 					m_ambientLightPropagation.push(VoxelCordinates(xPos, yPos, zPos));
 				}
+
+				yPos++;
+				if (yPos < CHUNK_SIZE_Y * m_worldProps.chunkSizeY) {
+					extractChunkCordinates(xPos, yPos, zPos, chunkID, chunkVoxelID);
+					Chunk& chunk = m_chunks[m_worldProps.getWorldChunkID(chunkID)];
+					VoxelLight& voxelLight = chunk.modLight(chunkVoxelID);
+
+					voxelLight.ambient_light = 255;
+				}
+
 			}
 		}
 

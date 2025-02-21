@@ -11,7 +11,7 @@ namespace Deer {
 		m_chunks = new Chunk[m_worldProps.getChunkCount()]();
 		m_layers = new Layer[m_worldProps.getLayerCount()]();
 #ifdef DEER_RENDER
-		m_chunksRender = new ChunkRender[m_worldProps.getChunkCount()];
+		m_chunksRender = new ChunkRender[m_worldProps.getChunkCount()]();
 #endif
 	}
 

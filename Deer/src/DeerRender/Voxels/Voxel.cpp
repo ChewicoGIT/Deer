@@ -89,6 +89,17 @@ namespace Deer {
 		-1, 0, 0,       0, 1, 0
 	};
 
+	int layerCheckDirections[2 * 8]{
+		-1,	0,
+		-1,	1,
+		0,	1,
+		1,	1,
+		1,	0,
+		1,	-1,
+		0,	-1,
+		-1,	-1
+	};
+
 	void calcFaces() {
 		std::string out;
 
