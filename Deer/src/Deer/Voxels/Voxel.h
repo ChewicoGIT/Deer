@@ -53,6 +53,9 @@ namespace Deer {
 
 	struct LayerVoxel {
 		uint16_t height = 0;
+#ifdef DEER_RENDER
+		uint16_t ambient_light_height = 0;
+#endif 
 
 		LayerVoxel() = default;
 		LayerVoxel(uint16_t _height) : height(height) { }

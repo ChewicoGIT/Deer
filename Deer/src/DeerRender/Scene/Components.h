@@ -39,7 +39,7 @@ namespace Deer {
 
 		inline glm::mat4 getMatrix() { return glm::perspective(fov, aspect, nearZ, farZ); }
 
-		float fov = glm::radians(50.0f), aspect = 16 / 9, nearZ = 0.1f, farZ = 100;
+		float fov = glm::radians(50.0f), aspect = 16 / 9, nearZ = 0.1f, farZ = 1000;
 	};
 
 }

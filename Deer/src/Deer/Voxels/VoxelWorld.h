@@ -26,6 +26,7 @@ namespace Deer {
 		// Voxel data
 		Voxel readVoxel(int x, int y, int z);
 		void setVoxel(int x, int y, int z, Voxel info);
+		void fillVoxels(int minX, int maxX, int minY, int maxY, int minZ, int maxZ, Voxel info);
 
 		// Layer data
 		LayerVoxel readLayerVoxel(int x, int z);
@@ -51,6 +52,7 @@ namespace Deer {
 
 		// Light baking
 		void bakeAmbientLight(int minX, int maxX, int minZ, int maxZ);
+		void bakeAmbientLightFromPoint(int x, int z);
 
 		// Light data
 		VoxelLight readLight(int x, int y, int z);

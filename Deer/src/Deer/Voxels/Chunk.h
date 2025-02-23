@@ -26,6 +26,20 @@ namespace Deer {
 			return m_voxels[VOXEL_POSITION(id)];
 		}
 
+		inline void fillVoxels(ChunkVoxelID min, ChunkVoxelID max, Voxel info) {
+			if (!m_voxels)
+				loadVoxels();
+
+			ChunkVoxelID voxelID;
+			for (voxelID.x = min.x; voxelID.x <= max.x; voxelID.x++) {
+				for (voxelID.y = min.y; voxelID.y <= max.y; voxelID.y++) {
+					for (voxelID.z = min.z; voxelID.z <= max.x; voxelID.z++) {
+						m_voxels[VOXEL_POSITION(voxelID)] = info;
+					}
+				}
+			}
+		}
+
 		inline uint8_t getLayerVoxelHeight(LayerVoxelID layerVoxelID) {
 			if (!m_voxels)
 				return 0;

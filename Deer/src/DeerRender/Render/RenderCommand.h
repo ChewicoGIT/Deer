@@ -30,6 +30,10 @@ namespace Deer {
 			s_renderAPI->setDepthBuffer(state);
 		}
 
+		static inline void init() {
+			s_renderAPI->init();
+		}
+
 	private:
 		static Scope<RenderAPI> s_renderAPI;
 	};

@@ -18,6 +18,20 @@ namespace Deer {
 				loadData();
 			return m_layerInfo[LAYER_VOXEL_POSITION(id)];
 		}
+
+		inline void fillVoxelLayerMaxHeight(LayerVoxelID min, LayerVoxelID max, uint8_t maxHeight) {
+			if (!m_layerInfo)
+				loadData();
+
+			LayerVoxelID layerVoxelID;
+			for (layerVoxelID.x = min.x; layerVoxelID.x <= max.x; layerVoxelID.x++) {
+				for (layerVoxelID.z = min.x; layerVoxelID.z <= max.z; layerVoxelID.z++) {
+					int id = LAYER_VOXEL_POSITION(layerVoxelID);
+					if (m_layerInfo[id].height <= maxHeight)
+						m_layerInfo[id].height = maxHeight + 1;
+				}
+			}
+		}
 	private:
 		void loadData();
 

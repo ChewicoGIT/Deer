@@ -1,13 +1,17 @@
 #pragma once
 #include "Deer/Core/Log.h"
 #include "Deer/Core/Application.h"
-#include "DeerRender/Render/RenderUtils.h"
 #include "Deer/Scripting/ComponentScript.h"
 #include "Deer/Scripting/ScriptEngine.h"
 #include "Deer/Scene/Entity.h"
 
 //Temp
 #include "Deer/Core/Project.h"
+
+#ifdef DEER_RENDER
+#include "DeerRender/Render/RenderUtils.h"
+#include "DeerRender/Render/RenderCommand.h"
+#endif
 
 extern Deer::Application* createApplication(int argc, char** argv);
 
@@ -21,6 +25,7 @@ namespace Deer {
 
 #ifdef DEER_RENDER
 		RenderUtils::initializeRenderUtils();
+		RenderCommand::init();
 #endif
 
 		Project::initializeBaseSystems();
