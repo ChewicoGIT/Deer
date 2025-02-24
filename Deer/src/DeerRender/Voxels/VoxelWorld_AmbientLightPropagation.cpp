@@ -23,6 +23,9 @@ namespace Deer {
 				uint16_t maxHeight = layer.height;
 				uint16_t minHeight = layer.ambient_light_height;
 
+				if (minHeight > layer.height)
+					minHeight = layer.height;
+
 				uint16_t maxHeightSorroundings = maxHeight;
 				for (int i = 0; i < 8; i++) {
 					int checkX = xPos + LAYER_CHECK_DIRS(X_AXIS, i);

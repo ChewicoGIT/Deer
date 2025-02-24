@@ -31,6 +31,7 @@ namespace Deer {
 
 	TerrainEditMode m_terrainEditMode = TerrainEditMode_Add;
 
+	extern bool testing;
 	void terrainEditor_onImGui() {
 		ImGui::Begin("Terrain Editor");
 
@@ -123,6 +124,20 @@ namespace Deer {
 		if (ImGui::ImageButton((ImTextureID)fill_empty_icon->getTextureID(), ImVec2(windowWidth / 4 - 20, windowWidth / 4 - 20), ImVec2(0, 1), ImVec2(1, 0),
 			-1, ImVec4(0, 0, 0, 0), ImVec4(1, 1, (m_terrainEditMode == TerrainEditMode_Empty) ? 0.7f : 1.0f, 1.0f))) {
 			m_terrainEditMode = TerrainEditMode_Empty;
+		}
+
+		VoxelWorldProps worldProps = voxelWorld->getVoxelWorldProps();
+		if (testing) {
+			if (ImGui::Button("notest")) {
+				testing = !testing;
+				Project::m_scene.getVoxelWorld()->bakeAmbientLight(0, 32 * worldProps.chunkSizeX - 1, 0, 32 * worldProps.chunkSizeZ - 1);
+			}
+		}
+		else {
+			if (ImGui::Button("test")) {
+				testing = !testing;
+				Project::m_scene.getVoxelWorld()->bakeAmbientLight(0, 32 * worldProps.chunkSizeX - 1, 0, 32 * worldProps.chunkSizeZ - 1);
+			}
 		}
 
 		if (ImGui::Button("Delete voxel world")) {
