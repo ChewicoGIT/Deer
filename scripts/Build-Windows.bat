@@ -1,6 +1,8 @@
-@echo off
+#!/bin/bash
 
-pushd ..
-vendor\premake5.exe --file=Build.lua vs2022
+pushd $(dirname "$0")
+
+./vendor/premake5 --file=Build.lua gmake2
+
+# Go back to the original directory
 popd
-pause

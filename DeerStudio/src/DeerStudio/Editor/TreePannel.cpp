@@ -227,7 +227,7 @@ namespace Deer {
 
 			std::string& name = m_contextMenuEntity->getComponent<TagComponent>().tag;
 			char nameBuffer[256];
-			strcpy_s(nameBuffer, 256, name.c_str());
+			std::strncpy(nameBuffer, name.c_str(), sizeof(nameBuffer) - 1);
 
 			ImGui::Text("Rename");
 			if (ImGui::InputText("##", nameBuffer, 256, ImGuiInputTextFlags_EnterReturnsTrue)) {

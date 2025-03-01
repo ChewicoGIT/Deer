@@ -4,6 +4,12 @@
 *.sln
 *.ini
 *.dbscn
+*.make
+*.code-workspace
+Makefile
+
+.vscode/
 bin/
 .vs/
 AS_DEBUG/
+Tasks/

@@ -29,6 +29,7 @@ project "GLFW"
 
 	filter "system:linux"
 		pic "On"
+       	toolset "clang"
 
 		systemversion "latest"
 		

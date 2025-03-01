@@ -11,12 +11,15 @@
 
 #include <string>
 
+#ifdef WINDOWS
 // WINDOWS SPECIFIC
 #include <windows.h>
 #include <shellapi.h>
+#endif
 
 namespace Deer {
     void openFileExplorer(const std::string& relativePath) {
+        #ifdef WINDOWS
         // Convert std::string to std::wstring
         std::wstring widePath(relativePath.begin(), relativePath.end());
         wchar_t buffer[MAX_PATH];
@@ -24,6 +27,7 @@ namespace Deer {
 
         // Open the file explorer at the given path
         ShellExecuteW(nullptr, L"open", buffer, nullptr, nullptr, SW_SHOW);
+        #endif
     }
 
     namespace fs = std::filesystem;

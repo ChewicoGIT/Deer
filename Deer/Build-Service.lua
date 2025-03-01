@@ -26,23 +26,31 @@ project "DeerService"
    targetdir ("../bin/" .. OutputDir .. "/%{prj.name}")
    objdir ("../bin/int/" .. OutputDir .. "/%{prj.name}")
    
-   filter "system:windows"
+    filter "system:windows"
        systemversion "latest"
        defines { }
 
-   filter "configurations:Debug"
+    filter "system:linux"
+        toolset "gcc"
+        buildoptions { "-std=c++20" }
+        files {
+            "src/Plattform/linux/**.h",
+            "src/Plattform/linux/**.cpp"
+        }
+
+    filter "configurations:Debug"
        defines { "DEBUG" }
        runtime "Debug"
        symbols "On"
 
-   filter "configurations:Release"
+    filter "configurations:Release"
        defines { "RELEASE" }
        runtime "Release"
        optimize "On"
        symbols "On"
 
-   filter "configurations:Dist"
-       defines { "DIST" }
-       runtime "Release"
-       optimize "On"
-       symbols "Off"
+    filter "configurations:Dist"
+        defines { "DIST" }
+        runtime "Release"
+        optimize "On"
+        symbols "Off"

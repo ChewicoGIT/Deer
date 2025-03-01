@@ -9,15 +9,18 @@
 #include "Deer/Scene/SceneDataStore.h"
 #include "Deer/Scene/Scene.h"
 #include "DeerStudio/Editor/ActiveEntity.h"
+#include "Deer/Core/Log.h"
 
 #include "EditorUtils.h"
 
 #include <regex>
 #include <string>
 
+#ifdef WINDOWS
 // WINDOWS SPECIFIC
 #include <windows.h>
 #include <shellapi.h>
+#endif
 
 namespace Deer {
     Path m_currentScenePath(DEER_SCENE_PATH);
