@@ -144,15 +144,17 @@ namespace Deer {
 						faceShadow[2] = true;
 				}
 				else
-					airEdge[2] = false;
+					airEdge[2] = true;
 
 				air_count[v] = (int)airEdge[0] + (int)airEdge[1] + (int)airEdge[2] + 1;
 				ambient_oclusion[v] = (ambient_oclusion[v] * 4) / (air_count[v] * 3 + 4);
 
 				int faceShadowC = (int)isFaceShadow + (int)faceShadow[0] + (int)faceShadow[1] + (int)faceShadow[2];
 
-				if (faceShadowC > 0 && testing)
-					ambient_oclusion[v] = ambient_oclusion[v] * (14 - faceShadowC) / 14;
+				if (testing)
+					ambient_oclusion[v] = ambient_oclusion[v] * (22 - faceShadowC) / 20;
+
+				ambient_oclusion[v] = (ambient_oclusion[v] > 255) ? 255 : ambient_oclusion[v];
 
 				SolidVoxelVertexData vertexData(
 					chunkVoxelID.x + NORMAL_VERTEX_POS(X_AXIS, v, i),

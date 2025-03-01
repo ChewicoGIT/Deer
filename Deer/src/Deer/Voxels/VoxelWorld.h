@@ -34,6 +34,7 @@ namespace Deer {
 
 		// Math operations
 		VoxelRayResult rayCast(glm::vec3 position, glm::vec3 dir, float maxDistance = 1000.0f);
+		VoxelRayResult rayCast_ignoreInnerWall(glm::vec3 position, glm::vec3 dir, float maxDistance = 1000.0f);
 
 		inline const VoxelWorldProps& getVoxelWorldProps() { return m_worldProps; }
 	private:

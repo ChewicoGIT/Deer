@@ -176,7 +176,7 @@ namespace Deer {
 		rayDir = glm::normalize(rayDir);
 
 		if (Project::m_scene.getVoxelWorld()) {
-			VoxelRayResult res = Project::m_scene.getVoxelWorld()->rayCast(viewport_sceneCamera.transform.position, rayDir);
+			VoxelRayResult res = Project::m_scene.getVoxelWorld()->rayCast_ignoreInnerWall(viewport_sceneCamera.transform.position, rayDir);
 
 			if (res.distance != 1000) {
 				Project::m_scene.getMainGizmoRenderer().refresh();

@@ -17,6 +17,8 @@ namespace Deer {
 		glFrontFace(GL_CW);
 
 		glDepthFunc(GL_LESS);
+		glfwWindowHint(GLFW_SAMPLES, 4);
+		glEnable(GL_MULTISAMPLE);
 		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	}
