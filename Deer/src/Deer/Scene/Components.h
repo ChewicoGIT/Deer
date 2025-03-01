@@ -42,12 +42,13 @@ namespace Deer {
 	};
 
 	struct TransformComponent {
-		TransformComponent() = default;
-		TransformComponent(const TransformComponent&) = default;
-
 		glm::vec3 position = glm::vec3(0.0f);
 		glm::vec3 scale = glm::vec3(1.0f);
 		glm::quat rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
+
+		TransformComponent() = default;
+		TransformComponent(glm::vec3 _position) : position(_position) { }
+		TransformComponent(const TransformComponent&) = default;
 
 		inline const glm::vec3& getEulerAngles() { return glm::degrees(glm::eulerAngles(rotation)); }
 		inline void setEulerAngles(const glm::vec3& eulerAngles) { rotation = glm::quat(glm::radians(eulerAngles)); }

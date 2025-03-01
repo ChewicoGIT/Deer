@@ -118,7 +118,9 @@ namespace Deer {
 					workingChunk.fillVoxels(workingMin, workingMax, info);
 					workingLayer.fillVoxelLayerMaxHeight(workingMinLayer, workingMaxLayer, maxY);
 
+					#ifdef DEER_RENDER
 					m_chunkQueue.addChunk(workingChunkID);
+					#endif
 				}
 			}
 		}

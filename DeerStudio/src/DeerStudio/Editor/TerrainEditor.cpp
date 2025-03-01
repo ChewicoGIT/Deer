@@ -4,6 +4,7 @@
 #include "Deer/Core/Project.h"
 #include "Deer/Scene/Scene.h"
 #include "Deer/Voxels/VoxelWorld.h"
+#include "Deer/Voxels/Voxel.h"
 #include "Deer/Voxels/VoxelWorldProps.h"
 
 #include "imgui.h"
@@ -176,26 +177,27 @@ namespace Deer {
 		rayDir = glm::normalize(rayDir);
 
 		if (Project::m_scene.getVoxelWorld()) {
-			VoxelRayResult res = Project::m_scene.getVoxelWorld()->rayCast_ignoreInnerWall(viewport_sceneCamera.transform.position, rayDir);
+			VoxelRayResult res = Project::m_scene.getVoxelWorld()->rayCast_editor(viewport_sceneCamera.transform.position, rayDir);
 
 			if (res.distance != 1000) {
 				Project::m_scene.getMainGizmoRenderer().refresh();
 				Project::m_scene.getMainGizmoRenderer().drawVoxelLineFace(res.xPos, res.yPos, res.zPos, res.face);
 
 				if (viewport_isActive && ImGui::GetMouseClickedCount(0) > 0) {
-					//int xPos = res.xPos + NORMAL_DIR(0, res.face);
-					//int yPos = res.yPos + NORMAL_DIR(1, res.face);
-					//int zPos = res.zPos + NORMAL_DIR(2, res.face);
-					//
-					//Project::m_scene.getVoxelWorld()->setVoxel(xPos, yPos, zPos, Voxel(1));
-					//Project::m_scene.getVoxelWorld()->bakeAmbientLightFromPoint(xPos, zPos);
 
-					int xPos = res.xPos;
-					int yPos = res.yPos;
-					int zPos = res.zPos;
-				
-					Project::m_scene.getVoxelWorld()->setVoxel(xPos, yPos, zPos, Voxel(0));
-					Project::m_scene.getVoxelWorld()->bakeAmbientLightFromPoint(xPos, zPos);
+					if (m_terrainEditMode == TerrainEditMode_Substract) {
+						if (res.yPos >= 0) {
+							Project::m_scene.getVoxelWorld()->setVoxel(res.xPos, res.yPos, res.zPos, emptyVoxel);
+							Project::m_scene.getVoxelWorld()->bakeAmbientLightFromPoint(res.xPos, res.zPos);
+						}
+					} else if (m_terrainEditMode == TerrainEditMode_Add) {
+						int xPos = res.xPos + NORMAL_DIR(0, res.face);
+						int yPos = res.yPos + NORMAL_DIR(1, res.face);
+						int zPos = res.zPos + NORMAL_DIR(2, res.face);
+						
+						Project::m_scene.getVoxelWorld()->setVoxel(xPos, yPos, zPos, Voxel(1));
+						Project::m_scene.getVoxelWorld()->bakeAmbientLightFromPoint(xPos, zPos);
+					}
 				}
 				//else if (viewport_isActive && ImGui::GetMouseClickedCount(ImGuiMouseButton_Right)) {
 				//	int xPos = res.xPos;

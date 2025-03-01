@@ -25,7 +25,7 @@ project "angelScript"
 	"AS_X64_MSVC"}
 
     filter "system:linux"
-        toolset "clang"
+        toolset "gcc"
         defines { "LINUX" }
         buildoptions { "-std=c++20" }
         files {

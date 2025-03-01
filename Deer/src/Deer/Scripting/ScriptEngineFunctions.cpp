@@ -102,12 +102,12 @@ namespace Deer {
     }
 
     void registerVec3(asIScriptEngine* engine) {
-        engine->RegisterObjectType("Vec3", sizeof(glm::vec3), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<glm::vec3>());
+        engine->RegisterObjectType("Vec3", sizeof(glm::vec3), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<glm::vec3>() | asOBJ_APP_CLASS_ALLFLOATS);
 
         engine->RegisterObjectBehaviour("Vec3", asBEHAVE_CONSTRUCT, "void f()", asFUNCTIONPR([](void* memory) {
             new (memory) glm::vec3();
             }, (void*), void), asCALL_CDECL_OBJLAST);
-        engine->RegisterObjectBehaviour("Vec3", asBEHAVE_CONSTRUCT, "void f(float = 0, float = 0, float = 0)", asFUNCTIONPR([](float x, float y, float z, void* memory) {
+        engine->RegisterObjectBehaviour("Vec3", asBEHAVE_CONSTRUCT, "void f(float, float = 0, float = 0)", asFUNCTIONPR([](float x, float y, float z, void* memory) {
             new (memory) glm::vec3(x, y, z);
             }, (float, float, float, void*), void), asCALL_CDECL_OBJLAST);
         engine->RegisterObjectProperty("Vec3", "float x", asOFFSET(glm::vec3, x));
@@ -115,7 +115,7 @@ namespace Deer {
         engine->RegisterObjectProperty("Vec3", "float z", asOFFSET(glm::vec3, z));
 
         engine->RegisterObjectMethod("Vec3", "Vec3 opAdd(const Vec3 &in) const",
-            asFUNCTIONPR([](const glm::vec3& a, const glm::vec3& b) {
+            asFUNCTIONPR([](const glm::vec3& a, const glm::vec3& b) -> glm::vec3 {
                 return a + b;
                 }, (const glm::vec3&, const glm::vec3&), glm::vec3), asCALL_CDECL_OBJFIRST);
 

@@ -8,6 +8,7 @@
 #include "DeerRender/Render/Render.h"
 #include "DeerRender/Render/RenderUtils.h"
 #include "DeerRender/Render/Texture.h"
+#include "Deer/Voxels/Voxel.h"
 
 #include "Deer/Core/Log.h"
 
@@ -63,15 +64,15 @@ namespace Deer {
 			RenderUtils::m_lineShader->bind();
 			RenderUtils::m_lineShader->uploadUniformMat4("u_viewMatrix", cameraProjectionMatrix);
 			RenderUtils::m_lineShader->uploadUniformFloat3("u_color", glm::vec3(.5f, .5f, .5f));
-			for (int x = 0; x < 11; x++) {
-				RenderUtils::m_lineShader->uploadUniformFloat3("u_posA", glm::vec3(x * 2 - 10, 0, -10));
-				RenderUtils::m_lineShader->uploadUniformFloat3("u_posB", glm::vec3(x * 2 - 10, 0, 10));
+			for (int x = 0; x < CHUNK_SIZE_X + 1; x++) {
+				RenderUtils::m_lineShader->uploadUniformFloat3("u_posA", glm::vec3(x, 0, 0));
+				RenderUtils::m_lineShader->uploadUniformFloat3("u_posB", glm::vec3(x, 0, CHUNK_SIZE_Z));
 
 				Render::submitLine(RenderUtils::m_lineVertexArray);
 			}
-			for (int z = 0; z < 11; z++) {
-				RenderUtils::m_lineShader->uploadUniformFloat3("u_posA", glm::vec3(-10, 0, z * 2 - 10));
-				RenderUtils::m_lineShader->uploadUniformFloat3("u_posB", glm::vec3(10, 0, z * 2 - 10));
+			for (int z = 0; z < CHUNK_SIZE_Z + 1; z++) {
+				RenderUtils::m_lineShader->uploadUniformFloat3("u_posA", glm::vec3(0, 0, z));
+				RenderUtils::m_lineShader->uploadUniformFloat3("u_posB", glm::vec3(CHUNK_SIZE_X, 0, z));
 
 				Render::submitLine(RenderUtils::m_lineVertexArray);
 			}

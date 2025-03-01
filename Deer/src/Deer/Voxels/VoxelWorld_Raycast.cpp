@@ -75,7 +75,7 @@ namespace Deer {
 		return result;
 	}
 
-	VoxelRayResult VoxelWorld::rayCast_ignoreInnerWall(glm::vec3 position, glm::vec3 dir, float maxDistance) {
+	VoxelRayResult VoxelWorld::rayCast_editor(glm::vec3 position, glm::vec3 dir, float maxDistance) {
 		VoxelRayResult result;
 
 		result.xPos = (int32_t)std::floor(position.x);
@@ -128,6 +128,15 @@ namespace Deer {
 					Voxel hitVoxel = readVoxel(result.xPos, result.yPos, result.zPos);
 
 					if (hitVoxel.id == 0) {
+						if (has_exit_inner_walls && result.yPos < 0) {
+							result.face = i * 2;
+
+							if (directionAxis[i] == -1)
+								result.face++;
+	
+							return result;
+						}
+
 						has_exit_inner_walls = true;
 					} else if (hitVoxel.id != 0 && has_exit_inner_walls) {
 						result.face = i * 2;

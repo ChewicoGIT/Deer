@@ -28,11 +28,13 @@ project "DeerService"
    
     filter "system:windows"
        systemversion "latest"
+        defines { "WINDOWS"}
        defines { }
 
     filter "system:linux"
         toolset "gcc"
         buildoptions { "-std=c++20" }
+        defines { "LINUX"}
         files {
             "src/Plattform/linux/**.h",
             "src/Plattform/linux/**.cpp"

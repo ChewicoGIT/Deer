@@ -38,7 +38,7 @@ namespace Deer {
         io.Fonts->Clear();
         ImFontConfig cnfg;
         //cnfg.SizePixels = 26
-        io.Fonts->AddFontFromFileTTF("editor/fonts/Roboto-Regular.ttf", 28);
+        io.Fonts->AddFontFromFileTTF("editor/fonts/Roboto-Regular.ttf", 18);
         io.Fonts->AddFontDefault(&cnfg);
     
         

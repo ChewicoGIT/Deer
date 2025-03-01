@@ -27,7 +27,7 @@ namespace Deer {
 
     float viewport_relativeXMouse, viewport_relativeYMouse;
     bool viewport_isActive;
-    SceneCamera viewport_sceneCamera;
+    SceneCamera viewport_sceneCamera(TransformComponent(glm::vec3(16, 16, -16)), CameraComponent());
 
     bool m_lastMousePressedButton1;
     bool m_handleClick;

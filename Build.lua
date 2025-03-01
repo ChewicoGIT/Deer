@@ -9,6 +9,7 @@ workspace "Deer"
 OutputDir = "%{cfg.system}-%{cfg.architecture}/%{cfg.buildcfg}"
 
 group "core"
+include "Deer/Build-Service.lua"
 include "Deer/Build.lua"
 group ""
 
