@@ -7,8 +7,7 @@ project "angelScript"
 
    files {
    "src/**.h",
-   "src/**.cpp",
-   "src/as_callfunc_x64_msvc_asm.asm"
+   "src/**.cpp"
    }
 
    includedirs
@@ -25,13 +24,24 @@ project "angelScript"
     "_LIB",
 	"AS_X64_MSVC"}
 
+    filter "system:linux"
+        toolset "gcc"
+        defines { "LINUX" }
+        buildoptions { "-std=c++20" }
+        files {
+         "src/as_callfunc_arm64_gcc.S"
+         }
+
    filter "system:windows"
        systemversion "latest"
        defines { }
+       files {
+        "src/as_callfunc_x64_msvc_asm.asm"
+        }
 
    filter "configurations:Debug"
        defines { "DEBUG" , 
-		"AS_DEBUG",
+		--"AS_DEBUG",
 		"_DEBUG" }
 		
        runtime "Debug"

@@ -8,11 +8,10 @@ namespace Deer {
 	class Texture2D;
 	class DeerStudioLayer;
 	class SceneSerializer;
-	class ActiveEntity;
 
 	class AssetManagerPannel : public EditorPannel{
 	public:
-		AssetManagerPannel(Ref<ActiveEntity>);
+		AssetManagerPannel();
 		void onImGui() override;
 	private:
 		void drawFolder(const std::filesystem::path&);
@@ -20,7 +19,6 @@ namespace Deer {
 		void updateContextMenu();
 	private:
 		std::filesystem::path m_currentScenePath;
-		Ref<ActiveEntity> m_activeEntity;
 
 		std::filesystem::path m_currentPath; // Assets/path...
 		Ref<Texture2D> m_folderIcon;

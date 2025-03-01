@@ -9,12 +9,11 @@
 namespace Deer {
 	class PropertiesPannel : public EditorPannel {
 	public:
-		PropertiesPannel(Ref<ActiveEntity>& activeEntity) : m_activeEntity(activeEntity) { }
+		PropertiesPannel() { }
 		void onImGui() override;
 
 	private:
 		void addComponentContext();
-		Ref<ActiveEntity> m_activeEntity;
 
 	private:
 		template<typename T>

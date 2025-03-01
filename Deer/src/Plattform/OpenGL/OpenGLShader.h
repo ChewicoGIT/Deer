@@ -1,5 +1,5 @@
 #pragma once
-#include "Deer/Render/Shader.h"
+#include "DeerRender/Render/Shader.h"
 
 #include "glm/glm.hpp"
 #include <string>
@@ -9,6 +9,7 @@ namespace Deer {
 	class OpenGLShader : public Shader {
 	public:
 		OpenGLShader(const std::string& filePath);
+		OpenGLShader(uint8_t* data, uint32_t size);
 		OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc);
 		~OpenGLShader() override;
 

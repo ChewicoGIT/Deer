@@ -6,13 +6,20 @@ project "Deer"
    staticruntime "off"
 
    files {
-   "src/**.h",
-   "src/**.cpp",
+   "src/Deer/**.h",
+   "src/Deer/**.cpp",
+   "src/DeerRender/**.h",
+   "src/DeerRender/**.cpp",
+   "src/Plattform/OpenGL/**.h",
+   "src/Plattform/OpenGL/**.cpp",
+   "src/Plattform/ImGUI/**.h",
+   "src/Plattform/ImGUI/**.cpp",
    "vendor/ImGuizmo/**.cpp",
    "vendor/stb/stb_image.cpp"
    }
 
    links { "spdlog", "GLFW", "glad", "ImGui", "angelScript" } 
+   defines { "DEER_RENDER" }
 
    includedirs
    {
@@ -35,7 +42,21 @@ project "Deer"
 
    filter "system:windows"
        systemversion "latest"
-       defines { }
+       defines {"WINDOWS"}
+	   files {
+		"src/Plattform/windows/**.h",
+		"src/Plattform/windows/**.cpp"
+	   }
+    
+   filter "system:linux"
+       toolset "clang"
+       defines {"LINUX"}
+       buildoptions { "-std=c++20" }
+       links { "GL" }
+       files {
+           "src/Plattform/Linux/**.h",
+           "src/Plattform/Linux/**.cpp"
+       }
 
    filter "configurations:Debug"
        defines { "DEBUG" }

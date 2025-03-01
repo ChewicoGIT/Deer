@@ -16,23 +16,8 @@
 namespace fs = std::filesystem;
 
 namespace Deer {
-	void ScriptEngine::initScriptEngine() {
-		m_scriptEngine = asCreateScriptEngine();
-
-		RegisterStdString(m_scriptEngine);
-		RegisterScriptMath(m_scriptEngine);
-
-		// Regist data types
-		registerEntity(m_scriptEngine);
-		registerVec3(m_scriptEngine);
-
-		// Regist functions
-		registerDeerFunctions(m_scriptEngine);
-		registerInputFunctions(m_scriptEngine);
-		registerEntityTransformFunctions(m_scriptEngine);
-	}
-
 	void ScriptEngine::shutdownScriptEngine() {
+		m_componentScripts.clear();
 		m_scriptEngine->ShutDownAndRelease();
 	}
 
@@ -44,8 +29,13 @@ namespace Deer {
 		m_context->Release();
 	}
 
-	void ScriptEngine::loadScripts(const std::filesystem::path& modulePath) {
+	void ScriptEngine::compileScriptEngine(const std::filesystem::path& modulePath) {
+		m_scriptEngine = asCreateScriptEngine();
+		m_isCompilationValid = true;
+
+		registerBaseComponents();
 		loadModuleFolder(modulePath, "Deer");
+
 		m_scriptModule = m_scriptEngine->GetModule("Deer");
 		asITypeInfo* m_deerScript = m_scriptModule->GetTypeInfoByName("ComponentScript");
 
@@ -99,7 +89,9 @@ namespace Deer {
 		*entityValue = scriptEntity.getUID();
 	
 		asIScriptFunction* updateFunction = type->GetMethodByDecl("void update()");
+		asIScriptFunction* startFunction = type->GetMethodByDecl("void start()");
 		instance->m_updateFunction = updateFunction;
+		instance->m_startFuction = startFunction;
 		instance->m_object = obj;
 
 		return Ref<ComponentScriptInstance>(instance);
@@ -128,6 +120,21 @@ namespace Deer {
 		r = builder.BuildModule();
 		if (r < 0) {
 			DEER_SCRIPT_INFO("Please correct the errors in the script and try again.");
+			m_isCompilationValid = false;
 		}
+	}
+
+	void ScriptEngine::registerBaseComponents() {
+		RegisterStdString(m_scriptEngine);
+		RegisterScriptMath(m_scriptEngine);
+
+		// Regist data types
+		registerEntity(m_scriptEngine);
+		registerVec3(m_scriptEngine);
+
+		// Regist functions
+		registerDeerFunctions(m_scriptEngine);
+		registerInputFunctions(m_scriptEngine);
+		registerEntityTransformFunctions(m_scriptEngine);
 	}
 }

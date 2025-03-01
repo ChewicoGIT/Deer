@@ -17,6 +17,10 @@ project "spdlog"
    targetdir ("../../../bin/" .. OutputDir .. "/%{prj.name}")
    objdir ("../../../bin/int/" .. OutputDir .. "/%{prj.name}")
 
+   filter "system:linux"
+       toolset "clang"
+       buildoptions { "-std=c++20" }
+       
    filter "system:windows"
        systemversion "latest"
        defines { }

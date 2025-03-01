@@ -1,22 +1,26 @@
 #include "ActiveEntity.h"
 
 namespace Deer {
+    namespace ActiveEntity {
+        std::vector<Entity*> entities;
+    }
+
     void ActiveEntity::addEntity(Entity& entt) {
         if (!contains(entt))
-            m_entites.push_back(&entt);
+            entities.push_back(&entt);
     }
 
     void ActiveEntity::removeEntity(Entity& entt) {
-        auto it = std::remove(m_entites.begin(), m_entites.end(), &entt);
+        auto it = std::remove(entities.begin(), entities.end(), &entt);
 
-        if (it != m_entites.end())
-            m_entites.erase(it, m_entites.end());
+        if (it != entities.end())
+            entities.erase(it, entities.end());
 	}
 
     bool ActiveEntity::contains(Entity& entity) {
-        auto it = std::find(m_entites.begin(), m_entites.end(), &entity);
+        auto it = std::find(entities.begin(), entities.end(), &entity);
 
-        return it != m_entites.end();
+        return it != entities.end();
 
     }
 }

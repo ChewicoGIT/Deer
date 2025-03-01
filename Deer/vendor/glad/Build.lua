@@ -15,6 +15,11 @@ project "glad"
    targetdir ("../../../bin/" .. OutputDir .. "/%{prj.name}")
    objdir ("../../../bin/int/" .. OutputDir .. "/%{prj.name}")
 
+   filter "system:linux"
+       toolset "gcc"
+       defines { "LINUX" }
+       links { "GL" }
+
    filter "system:windows"
        systemversion "latest"
        defines { }

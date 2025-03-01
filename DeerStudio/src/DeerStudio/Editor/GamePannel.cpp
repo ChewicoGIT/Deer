@@ -2,15 +2,15 @@
 #include "Deer/Scene/Enviroment.h"
 #include "Deer/Scene/Scene.h"
 #include "Deer/Scene/Entity.h"
-#include "Deer/Scene/SceneSerializer.h"
-#include "Deer/Core/Project.h"
+#include "Deer/Core/Project.h".
+#include "Deer/Scripting/ScriptEngine.h"
+#include "Deer/Scene/SceneDataStore.h"
 
 #include "imgui.h"
 #include <filesystem>
 
 namespace Deer {
-    GamePannel::GamePannel(Ref<ActiveEntity>& activeEntity)
-        : m_activeEntity(activeEntity) {
+    GamePannel::GamePannel() {
         FrameBufferSpecification fbSpecs = FrameBufferSpecification(100, 100, { TextureBufferType::RGBA8 }, 1, false);
         m_frameBuffer = FrameBuffer::create(fbSpecs);
     }
@@ -20,24 +20,22 @@ namespace Deer {
         ImGui::Begin("Game Window");
         ImGui::PopStyleVar();
 
-        Ref<Environment> environment = Project::m_scene->getMainEnviroment();
+        Ref<Environment> environment = Project::m_scene.getMainEnviroment();
         uid cameraUID = environment->tryGetMainCamera();
 
         if (cameraUID == 0) {
             ImGui::TextColored(ImVec4(.3f, .3f, .8f, 1.0f), "There is no camera");
 
-            if (!Project::m_scene->getExecutingState()) {
-                if (ImGui::Button("Execute")) {
-                    m_activeEntity->clear();
-                    Project::m_sceneSerializer->serializeBinary("temp_scene.dbscn");
-                    Project::m_scene->execute();
+            if (!Project::m_scene.getExecutingState()) {
+                if (Project::m_scriptEngine->isCompilationValid() && ImGui::Button("Execute")) {
+                    SceneDataStore::exportRuntimeScene(Project::m_scene);
+                    Project::m_scene.beginExecution();
                 }
             }
             else {
                 if (ImGui::Button("Stop")) {
-                    m_activeEntity->clear();
-                    Project::m_scene->stop();
-                    Project::m_sceneSerializer->deserializeBinary("temp_scene.dbscn");
+                    Project::m_scene.endExecution();
+                    Project::m_scene = SceneDataStore::importRuntimeScene();
                 }
             }
 
@@ -67,25 +65,23 @@ namespace Deer {
         unsigned char clearColor[4]{ 0, 0, 0, 255 };
         m_frameBuffer->clearBuffer(0, &clearColor);
 
-        Project::m_scene->render();
+        Project::m_scene.render();
         m_frameBuffer->unbind();
 
-        ImGui::Image((void*)m_frameBuffer->getTextureBufferID(0), windowSize);
+        ImGui::Image((void*)m_frameBuffer->getTextureBufferID(0), windowSize, ImVec2(0, 1), ImVec2(1, 0));
 
         ImGui::SetCursorPos(cursorPos);
 
-        if (!Project::m_scene->getExecutingState()) {
-            if (ImGui::Button("Execute")) {
-                m_activeEntity->clear();
-                Project::m_sceneSerializer->serializeBinary("temp_scene.dbscn");
-                Project::m_scene->execute();
+        if (!Project::m_scene.getExecutingState()) {
+            if (Project::m_scriptEngine->isCompilationValid() && ImGui::Button("Execute")) {
+                SceneDataStore::exportRuntimeScene(Project::m_scene);
+                Project::m_scene.beginExecution();
             }
         }
         else {
             if (ImGui::Button("Stop")) {
-                m_activeEntity->clear();
-                Project::m_scene->stop();
-                Project::m_sceneSerializer->deserializeBinary("temp_scene.dbscn");
+                Project::m_scene.endExecution();
+                Project::m_scene = SceneDataStore::importRuntimeScene();
             }
         }
 

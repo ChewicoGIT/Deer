@@ -17,6 +17,11 @@ namespace Deer {
     void setEntityScale(glm::vec3 scale, uid& entityUID);
     // Entity Transformations -------------
 
+    // Entity Relationship ------------
+    uid getEntityParent(uid& entityUID);
+    bool isEntityValid(uid& entityUID);
+    // Entity Relationship ------------
+
     void registerVec3(asIScriptEngine* engine);
     void registerEntity(asIScriptEngine* engine);
 

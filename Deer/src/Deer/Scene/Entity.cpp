@@ -1,5 +1,6 @@
 #include "Entity.h"
 #include "Deer/Core/Core.h"
+#include "Deer/Scene/Components.h"
 
 namespace Deer {
 	Entity Entity::nullEntity = Entity();
@@ -12,6 +13,7 @@ namespace Deer {
 		DEER_CORE_ASSERT(child.m_environment == m_environment, "Can not remove childrens from diferent enviroments");
 
 		std::vector<uid>& children = getChildren();
+
 		auto it = std::find(children.begin(), children.end(), child.m_entityUID);
 		if (it != children.end())
 		{
@@ -32,7 +34,6 @@ namespace Deer {
 
 		if (m_parentUID != 0){
 			Entity& current_parent = getParent();
-
 			if (parent.isDescendant(*this)) {
 				return;
 			}
@@ -45,8 +46,7 @@ namespace Deer {
 		parent.getChildren().push_back(m_entityUID);
 	}
 
-	bool Entity::isDescendant(Entity& parent)
-	{
+	bool Entity::isDescendant(Entity& parent) {
 		if (m_entityUID == parent.m_entityUID)
 			return true;
 		
@@ -57,12 +57,13 @@ namespace Deer {
 	}
 
 	Entity& Entity::duplicate() {
-		Entity& creation = m_environment->createEntity(getComponent<TagComponent>().tag + " (duplicated)");
+		Entity& creation = m_environment->createEntity(getComponent<TagComponent>().tag + "(d)");
 
 		creation.getComponent<TransformComponent>() = getComponent<TransformComponent>();
 		Entity& parent = m_environment->getEntity(m_parentUID);
 		creation.setParent(parent);
 
+#ifdef DEER_RENDER
 		if (m_environment->m_registry.any_of<MeshRenderComponent>(m_entityHandle))
 			creation.addComponent<MeshRenderComponent>(getComponent<MeshRenderComponent>());
 
@@ -71,7 +72,7 @@ namespace Deer {
 
 		if (m_environment->m_registry.any_of<TextureBindingComponent>(m_entityHandle))
 			creation.addComponent<TextureBindingComponent>(getComponent<TextureBindingComponent>());
-
+#endif
 		return creation;
 	}
 
@@ -111,7 +112,7 @@ namespace Deer {
 		return getComponent<TransformComponent>().getMatrix();
 	}
 
-	void Entity::update() {
+	void Entity::updateInternalVars() {
 		TagComponent& tag = getComponent<TagComponent>();
 		RelationshipComponent& relation = getComponent<RelationshipComponent>();
 
@@ -119,10 +120,8 @@ namespace Deer {
 		m_parentUID = relation.parent_UID;
 		m_isRoot = relation.parent_UID == 0;
 
-		if (m_isRoot) {
-			m_environment->m_registry.destroy(m_environment->m_rootEntity->m_entityHandle);
-			m_environment->m_rootEntity = &m_environment->m_entities[tag.entityUID];
-		}
+		if (m_isRoot)
+			m_environment->m_rootEntity = tag.entityUID;
 		m_environment->m_entities[tag.entityUID] = *this;
 	}
 }

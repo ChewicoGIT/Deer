@@ -1,6 +1,6 @@
 #include "OpenGLRenderAPI.h"
 #include "Plattform/OpenGL/OpenGLBuffer.h"
-#include "Deer/Render/VertexArray.h"
+#include "DeerRender/Render/VertexArray.h"
 
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
@@ -9,15 +9,29 @@
 
 namespace Deer {
 	void OpenGLRenderAPI::init() {
-		glEnable(GL_BLEND);
+		//glEnable(GL_BLEND);
 		glEnable(GL_DEPTH_TEST);
+
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+		glFrontFace(GL_CW);
+
 		glDepthFunc(GL_LESS);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glfwWindowHint(GLFW_SAMPLES, 4);
+		glEnable(GL_MULTISAMPLE);
+		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	}
 
 	void OpenGLRenderAPI::clearColor(const glm::vec4& color) {
 		glClearColor(color.r, color.g, color.b, color.a);
+	}
+
+	void OpenGLRenderAPI::setDepthBuffer(bool enable) {
+		if (enable)
+			glEnable(GL_DEPTH_TEST);
+		else
+			glDisable(GL_DEPTH_TEST);
 	}
 
 	void OpenGLRenderAPI::clear() {

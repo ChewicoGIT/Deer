@@ -4,6 +4,8 @@ project "DeerStudio"
    cppdialect "C++20"
    targetdir "bin/%{cfg.buildcfg}"
    staticruntime "off"
+   
+   debugdir "../Roe"
 
    files { "src/**.h", "src/**.cpp" }
 
@@ -24,9 +26,18 @@ project "DeerStudio"
 	  "spdlog",
 	  "ImGui"
    }
+   defines { "DEER_RENDER" }
 
    targetdir ("../bin/" .. OutputDir .. "/%{prj.name}")
    objdir ("../bin/int/" .. OutputDir .. "/%{prj.name}")
+
+   filter "system:linux"
+       toolset "clang"
+       defines { "LINUX" }
+       links { "GL", "glfw" }
+       links { "glad" }
+       links { "angelScript" }
+       buildoptions { "-std=c++20" }
 
    filter "system:windows"
        systemversion "latest"

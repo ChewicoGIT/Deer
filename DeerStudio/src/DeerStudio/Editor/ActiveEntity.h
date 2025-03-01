@@ -4,32 +4,27 @@
 #include <vector>
 
 namespace Deer {
-	class ActiveEntity {
-	public:
+	namespace ActiveEntity {
+		extern std::vector<Entity*> entities;
+
 		void addEntity(Entity& entt);
 		void removeEntity(Entity& entt);
 
-		Entity& getEntity(unsigned int pos) { return *m_entites[pos]; }
+		inline Entity& getEntity(unsigned int pos) { return *entities[pos]; }
 		bool contains(Entity& entity);
-		
-		void clear() { m_entites.clear(); }
-		int count() { return m_entites.size(); }
+
+		inline void clear() { entities.clear(); }
+		inline int count() { return entities.size(); }
 
 		template <typename T>
-		bool shareComponent() {
-			for (auto &entity : m_entites) {
+		inline bool shareComponent() {
+			for (auto& entity : entities) {
 				if (!entity->hasComponent<T>())
 					return false;
 			}
 
 			return true;
 		}
-
-		std::vector<Entity*>::iterator begin() { return m_entites.begin(); }
-		std::vector<Entity*>::iterator end() { return m_entites.end(); }
-
-	private:
-		std::vector<Entity*> m_entites;
-	};
+	}
 }
 

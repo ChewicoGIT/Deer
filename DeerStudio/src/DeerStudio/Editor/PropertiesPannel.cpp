@@ -1,8 +1,8 @@
 #include "PropertiesPannel.h"
-#include "Deer/Core/Input.h"
-#include "Deer/Core/KeyCodes.h"
+#include "DeerRender/Core/Input/Input.h"
+#include "DeerRender/Core/Input/KeyCodes.h"
 #include "Deer/Core/Project.h"
-#include "Deer/Render/Texture.h"
+#include "DeerRender/Render/Texture.h"
 #include "Deer/Asset/AssetManager.h"
 #include "Deer/Scripting/ScriptEngine.h"
 #include "imgui.h"
@@ -22,17 +22,16 @@ namespace Deer {
 	}
 
 	void PropertiesPannel::onImGui() {
-
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(20, 20));
 		ImGui::Begin("Properties");
 
-		if (m_activeEntity->count() == 0) {
+		if (ActiveEntity::count() == 0) {
 			ImGui::End();
 			ImGui::PopStyleVar();
 			return;
 		}
 
-		Entity& activeEntity = m_activeEntity->getEntity(0);
+		Entity& activeEntity = ActiveEntity::getEntity(0);
 
 		auto& tag = activeEntity.getComponent<TagComponent>();
 		if (tag.tag == "")
@@ -41,12 +40,13 @@ namespace Deer {
 			ImGui::Text(tag.tag.c_str());
 
 		ImGui::SameLine();
+		ImGui::Text("id : %u", tag.entityUID);
+
+		ImGui::SameLine();
 		addComponentContext();
 		ImGui::Dummy(ImVec2(0.0f, 10.0f));
 
-		if (collapsingComponentHeader<TransformComponent>("Transform Component", false))
-		{
-
+		if (collapsingComponentHeader<TransformComponent>("Transform Component", false)) {
 			auto& transform = activeEntity.getComponent<TransformComponent>();
 			ImGui::Dummy(ImVec2(0.0f, 10.0f));
 			ImGui::Indent();
@@ -98,7 +98,7 @@ namespace Deer {
 			if (mesh.meshAssetID == 0)
 				meshName = " null ";
 			else
-				meshName = Project::m_assetManager->getAssetLocation(mesh.meshAssetID).generic_string();
+				meshName = AssetManager::getAssetLocation(mesh.meshAssetID).generic_string();
 
 			ImGui::Text("Mesh   : ");
 			ImGui::SameLine();
@@ -106,7 +106,7 @@ namespace Deer {
 			if (ImGui::BeginDragDropTarget()) {
 				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("_MESH")) {
 					std::string receivedData = std::string((const char*)payload->Data);
-					mesh.meshAssetID = Project::m_assetManager->loadAsset<Mesh>(receivedData);
+					mesh.meshAssetID = AssetManager::loadAsset<Mesh>(receivedData);
 				}
 				ImGui::EndDragDropTarget();
 			}
@@ -116,7 +116,7 @@ namespace Deer {
 			if (mesh.shaderAssetID == 0)
 				shaderName = " null ";
 			else
-				shaderName = Project::m_assetManager->getAssetLocation(mesh.shaderAssetID).generic_string();
+				shaderName = AssetManager::getAssetLocation(mesh.shaderAssetID).generic_string();
 
 			ImGui::Text("Shader : ");
 			ImGui::SameLine();
@@ -124,7 +124,7 @@ namespace Deer {
 			if (ImGui::BeginDragDropTarget()) {
 				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("_SHADER")) {
 					std::string receivedData = std::string((const char*)payload->Data);
-					mesh.shaderAssetID = Project::m_assetManager->loadAsset<Shader>(receivedData);
+					mesh.shaderAssetID = AssetManager::loadAsset<Shader>(receivedData);
 				}
 				ImGui::EndDragDropTarget();
 			}
@@ -149,7 +149,7 @@ namespace Deer {
 
 				textureBindingCount++;
 
-				std::string textureBindingName = Project::m_assetManager->getAssetLocation(textureBinding.textureAssetID[x]).generic_string();
+				std::string textureBindingName = AssetManager::getAssetLocation(textureBinding.textureAssetID[x]).generic_string();
 				int currentID = textureBinding.textureBindID[x];
 
 				ImGui::Text("Texture : ");
@@ -161,7 +161,7 @@ namespace Deer {
 						std::string receivedData = std::string((const char*)payload->Data);
 
 						textureBinding.textureAssetID[x]
-							= Project::m_assetManager->loadAsset<Texture2D>(std::filesystem::path(receivedData));
+							= AssetManager::loadAsset<Texture2D>(std::filesystem::path(receivedData));
 					}
 					ImGui::EndDragDropTarget();
 				}
@@ -193,7 +193,7 @@ namespace Deer {
 							if (textureBinding.textureAssetID[x] != 0)
 								continue;
 
-							textureBinding.textureAssetID[x] = Project::m_assetManager->loadAsset<Texture2D>(std::filesystem::path(receivedData));
+							textureBinding.textureAssetID[x] = AssetManager::loadAsset<Texture2D>(std::filesystem::path(receivedData));
 							textureBinding.textureBindID[x] = 0;
 							break;
 						}
@@ -351,11 +351,11 @@ namespace Deer {
 	template<typename T>
 	inline bool PropertiesPannel::collapsingComponentHeader(const std::string& componentName, bool canDelete)
 	{
-		if (!m_activeEntity->shareComponent<T>())
+		if (!ActiveEntity::shareComponent<T>())
 			return false;
 
 		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_CollapsingHeader | ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnArrow;
-		bool collapsingHeader = m_activeEntity->shareComponent<T>() && ImGui::TreeNodeEx(componentName.c_str(), flags);
+		bool collapsingHeader = ActiveEntity::shareComponent<T>() && ImGui::TreeNodeEx(componentName.c_str(), flags);
 
 		if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
 			ImGui::OpenPopup(componentName.c_str());
@@ -365,14 +365,14 @@ namespace Deer {
 		if (ImGui::BeginPopup(componentName.c_str())) {
 
 			if (ImGui::Selectable("reset")) {
-				for (auto& entity : *m_activeEntity)
+				for (auto& entity : ActiveEntity::entities)
 					entity->getComponent<T>() = T();
 
 				ImGui::CloseCurrentPopup();
 			}
 
 			if (canDelete && ImGui::Selectable("delete")) {
-				for (auto& entity : *m_activeEntity)
+				for (auto& entity : ActiveEntity::entities)
 					entity->removeComponent<T>();
 
 				ImGui::CloseCurrentPopup();
@@ -390,10 +390,10 @@ namespace Deer {
 	}
 
 	void PropertiesPannel::addScriptButton(const std::string& scriptID) {
-		ImGuiSelectableFlags selectableFlag = (m_activeEntity->shareComponent<ScriptComponent>()) ? ImGuiSelectableFlags_Disabled : ImGuiSelectableFlags_None;
+		ImGuiSelectableFlags selectableFlag = (ActiveEntity::shareComponent<ScriptComponent>()) ? ImGuiSelectableFlags_Disabled : ImGuiSelectableFlags_None;
 		if (ImGui::Selectable(scriptID.c_str(), false, selectableFlag)) {
 
-			for (auto& entity : *m_activeEntity) {
+			for (auto& entity : ActiveEntity::entities) {
 				if (!entity->hasComponent<ScriptComponent>())
 					entity->addComponent<ScriptComponent>(scriptID);
 			}
@@ -405,10 +405,10 @@ namespace Deer {
 	template<typename T>
 	void PropertiesPannel::addComponentButton(const std::string& componentName)
 	{
-		ImGuiSelectableFlags selectableFlag = (m_activeEntity->shareComponent<T>()) ? ImGuiSelectableFlags_Disabled : ImGuiSelectableFlags_None;
+		ImGuiSelectableFlags selectableFlag = (ActiveEntity::shareComponent<T>()) ? ImGuiSelectableFlags_Disabled : ImGuiSelectableFlags_None;
 		if (ImGui::Selectable(componentName.c_str(), false, selectableFlag)) {
 			
-			for (auto& entity : *m_activeEntity) {
+			for (auto& entity : ActiveEntity::entities) {
 				if (!entity->hasComponent<T>())
 					entity->addComponent<T>();
 			}

@@ -1,6 +1,6 @@
 #pragma once
-#include "Deer/Render/VertexArray.h"
-#include "Deer/Render/Buffer.h"
+#include "DeerRender/Render/VertexArray.h"
+#include "DeerRender/Render/Buffer.h"
 #include "Deer/Core/Core.h"
 
 #include <vector>
@@ -10,7 +10,7 @@ namespace Deer {
 	class OpenGLVertexArray : public VertexArray {
 	public:
 		OpenGLVertexArray();
-		OpenGLVertexArray(const std::string& filePath);
+		OpenGLVertexArray(uint8_t* data, uint32_t size);
 		~OpenGLVertexArray() override;
 
 		void bind() const override;

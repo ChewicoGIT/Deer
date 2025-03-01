@@ -17,13 +17,24 @@ namespace Deer {
 		m_object->Release();
 	}
 
-	void ComponentScriptInstance::update() {
+	void ComponentScriptInstance::updateInternalVars() {
 		if (!m_updateFunction)
 			return;
 
 		asIScriptContext* context = Project::m_scriptEngine->getExecutionContext();
 
 		context->Prepare(m_updateFunction);
+		context->SetObject(m_object);
+		context->Execute();
+	}
+
+	void ComponentScriptInstance::start() {
+		if (!m_startFuction)
+			return;
+
+		asIScriptContext* context = Project::m_scriptEngine->getExecutionContext();
+
+		context->Prepare(m_startFuction);
 		context->SetObject(m_object);
 		context->Execute();
 	}

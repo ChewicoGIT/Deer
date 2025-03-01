@@ -10,12 +10,11 @@ namespace Deer {
 
 	class GamePannel : public EditorPannel {
 	public:
-		GamePannel(Ref<ActiveEntity>& activeEntity);
+		GamePannel();
 		void onImGui() override;
 
 	private:
 		Ref<FrameBuffer> m_frameBuffer;
-		Ref<ActiveEntity> m_activeEntity;
 
 		glm::vec2 m_lastWindowSize;
 	};

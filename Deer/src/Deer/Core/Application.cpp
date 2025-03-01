@@ -1,38 +1,27 @@
 #include "Application.h"
 #include "Deer/Core/Log.h"
-#include "Deer/Core/Timestep.h"
 
-#include "Deer/Render/RenderCommand.h"
-#include "Deer/Render/Render.h"
+#ifdef DEER_RENDER
+#include "DeerRender/Render/RenderCommand.h"
+#include "DeerRender/Render/Render.h"
+#include "imgui.h"
 
 #include <functional>
-
-#include "glad/glad.h"
-#include "GLFW/glfw3.h"
+#endif
 
 namespace Deer {
 	Application* Application::s_application;
 
-	Application::Application(const WindowProps& props) {
-		m_window = Scope<Window>(Window::create(props));
-		m_window->setEventCallback(std::bind(&Application::onEvent, this, std::placeholders::_1));
-	}
+    Application::Application() : m_running(false) {
+    }
 
-	void Application::pushLayer(Layer* layer) {
-		m_layerStack.pushLayer(layer);
-		if(m_running)
-			layer->onAttach();
+#ifdef DEER_RENDER
+    Application::Application(const WindowProps& props)
+        : m_running(false) {
+        m_window = Scope<Window>(Window::create(props));
+        m_window->setEventCallback(std::bind(&Application::onEventCallback, this, std::placeholders::_1));
 	}
-
-	void Application::onEvent(Event& e) {
-		for (auto it = m_layerStack.end(); it != m_layerStack.begin();) {
-			(*--it)->onEvent(e);
-		}
-		m_imGuiLayer.onEvent(e);
-
-		EventDispatcher dispatcher(e);
-		dispatcher.dispatch<WindowCloseEvent>(std::bind(&Application::onWindowClose, this, std::placeholders::_1));
-	}
+#endif
 
 	void Application::run() {
         s_application = this;
@@ -45,10 +34,9 @@ namespace Deer {
         double accumulatedUpdateTime = 0.0;
         double accumulatedRenderTime = 0.0;
 
+#ifdef DEER_RENDER
         m_imGuiLayer.onAttach();
-        for (auto it : m_layerStack) {
-            it->onAttach();
-        }
+#endif
         onInit();
 
         while (m_running) {
@@ -63,51 +51,54 @@ namespace Deer {
             // Fixed Update loop (60 FPS)
             while (accumulatedUpdateTime >= targetUpdateTime) {
                 Timestep timestep = (float)targetUpdateTime;
-                for (auto it : m_layerStack) {
-                    it->onUpdate(timestep);
-                }
+                onUpdate(timestep);
                 accumulatedUpdateTime -= targetUpdateTime;
             }
 
+#ifdef DEER_RENDER
             // Render loop (User-defined FPS)
             if (accumulatedRenderTime >= targetRenderTime) {
                 RenderCommand::setClearColor({ 0.2f, 0.2f, 0.3f, 1.0f });
                 RenderCommand::clear();
 
-                Render::execute();
-                for (auto it : m_layerStack) {
-                    it->onRender(Timestep((float)targetRenderTime));
-                }
-                Render::stop();
+                Render::beginExecution();
+                onRender(Timestep((float)targetRenderTime));
+                Render::endExecution();
 
                 ImGuiIO& io = ImGui::GetIO();
                 io.DeltaTime = (float)targetRenderTime;
                 m_imGuiLayer.begin();
-                for (auto it : m_layerStack) {
-                    it->onImGUI();
-                }
+                onImGUI();
                 m_imGuiLayer.end();
 
                 accumulatedRenderTime -= targetRenderTime;
 
-                // Handle window events and update (if necessary)
                 m_window->onRender();
             }
+#endif
 
-            // Optional: Sleep to avoid CPU overuse
             std::this_thread::sleep_for(std::chrono::milliseconds(1));
         }
 
-        // Detach all layers before shutting down
-        for (auto it = m_layerStack.begin(); it != m_layerStack.end(); it++) {
-            (*it)->onDetach();
-        }
+#ifdef DEER_RENDER
         m_imGuiLayer.onDetach();
+#endif
+        onShutdown();
 	}
 
-	bool Application::onWindowClose(WindowCloseEvent& e)
-	{
-		m_running = false;
-		return true;
-	}
+#ifdef DEER_RENDER
+    void Application::onEventCallback(Event& e) {
+        onEvent(e);
+        m_imGuiLayer.onEvent(e);
+
+        EventDispatcher dispatcher(e);
+        dispatcher.dispatch<WindowCloseEvent>(std::bind(&Application::onWindowClose, this, std::placeholders::_1));
+    }
+
+    bool Application::onWindowClose(WindowCloseEvent& e)
+    {
+        m_running = false;
+        return true;
+    }
+#endif
 }

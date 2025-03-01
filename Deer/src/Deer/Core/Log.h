@@ -1,7 +1,7 @@
 #pragma once
+#include "Deer/Core/Core.h"
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
-#include <memory>
 
 namespace spdlog {
 	class logger;
@@ -16,13 +16,13 @@ namespace Deer {
 
 		static void coreTrace(const char* msg);
 
-		static inline std::shared_ptr<spdlog::logger>& getCoreLogger() { return coreLogger; }
-		static inline std::shared_ptr<spdlog::logger>& getClientLogger() { return clientLogger; }
-		static inline std::shared_ptr<spdlog::logger>& getScriptLogger() { return scriptLogger; }
+		static inline Ref<spdlog::logger>& getCoreLogger() { return coreLogger; }
+		static inline Ref<spdlog::logger>& getClientLogger() { return clientLogger; }
+		static inline Ref<spdlog::logger>& getScriptLogger() { return scriptLogger; }
 	private:
-		static std::shared_ptr<spdlog::logger> coreLogger;
-		static std::shared_ptr<spdlog::logger> clientLogger;
-		static std::shared_ptr<spdlog::logger> scriptLogger;
+		static Ref<spdlog::logger> coreLogger;
+		static Ref<spdlog::logger> clientLogger;
+		static Ref<spdlog::logger> scriptLogger;
 	};
 }
 
@@ -36,5 +36,11 @@ namespace Deer {
 #define DEER_SCRIPT_WARN( ... ) Deer::Log::getScriptLogger()->warn(__VA_ARGS__)
 #define DEER_SCRIPT_ERROR( ... ) Deer::Log::getScriptLogger()->error(__VA_ARGS__)
 
+#ifdef LINUX
+#define DEER_CORE_ASSERT(condition , ... ) if (!(condition)) {Deer::Log::getCoreLogger()->error(__VA_ARGS__);}
+#define DEER_SCRIPT_ASSERT(condition , ... ) if (!(condition)) {Deer::Log::getScriptLogger()->error(__VA_ARGS__);}
+#endif
+#ifdef WINDOWS
 #define DEER_CORE_ASSERT(condition , ... ) if (!(condition)) {Deer::Log::getCoreLogger()->error(__VA_ARGS__);__debugbreak();}
 #define DEER_SCRIPT_ASSERT(condition , ... ) if (!(condition)) {Deer::Log::getScriptLogger()->error(__VA_ARGS__);__debugbreak();}
+#endif

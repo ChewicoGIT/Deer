@@ -1,0 +1,110 @@
+{
+    "scene": {
+        "main_environment": {
+            "entities": [
+                {
+                    "id": 1,
+                    "name": "root",
+                    "transform": {
+                        "position": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 1.0
+                        }
+                    },
+                    "relationship": {
+                        "parentUID": 0,
+                        "childrensUIDs": [
+                            4
+                        ]
+                    },
+                    "has_meshRenderComponent": false,
+                    "has_cameraComponent": false,
+                    "has_textureBindingComponent": false,
+                    "has_scriptComponent": false
+                },
+                {
+                    "id": 1,
+                    "name": "root",
+                    "transform": {
+                        "position": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 1.0
+                        }
+                    },
+                    "relationship": {
+                        "parentUID": 0,
+                        "childrensUIDs": [
+                            4
+                        ]
+                    },
+                    "has_meshRenderComponent": false,
+                    "has_cameraComponent": false,
+                    "has_textureBindingComponent": false,
+                    "has_scriptComponent": false
+                },
+                {
+                    "id": 4,
+                    "name": "CCC",
+                    "transform": {
+                        "position": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 1.0
+                        }
+                    },
+                    "relationship": {
+                        "parentUID": 1,
+                        "childrensUIDs": []
+                    },
+                    "has_meshRenderComponent": true,
+                    "meshRenderComponent": {
+                        "mesh": "assets/3dObjects/skull.obj",
+                        "shader": "assets/Shaders/BasicShader.glsl"
+                    },
+                    "has_cameraComponent": false,
+                    "has_textureBindingComponent": true,
+                    "textureBindingComponent": {
+                        "bindings": []
+                    },
+                    "has_scriptComponent": false
+                }
+            ],
+            "mainCameraUID": 0
+        }
+    }
+}

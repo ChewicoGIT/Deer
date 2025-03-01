@@ -1,4 +1,5 @@
--- premake5.lua
+require("vendor/premake-vscode")
+
 workspace "Deer"
    architecture "x64"
    configurations { "Debug", "Release", "Dist" }
@@ -8,6 +9,7 @@ workspace "Deer"
 OutputDir = "%{cfg.system}-%{cfg.architecture}/%{cfg.buildcfg}"
 
 group "core"
+include "Deer/Build-Service.lua"
 include "Deer/Build.lua"
 group ""
 
@@ -18,6 +20,10 @@ include "Deer/vendor/glad/Build.lua"
 include "Deer/vendor/imgui/Build.lua"
 include "Deer/vendor/angelScript/Build.lua"
 group ""
+
+-- group "Runtime"
+-- include "DeerRuntime/Build.lua"
+-- group ""
 
 group "Studio"
 include "DeerStudio/Build.lua"

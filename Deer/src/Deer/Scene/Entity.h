@@ -2,8 +2,6 @@
 #include "Deer/Core/Core.h"
 #include "Deer/Core/Log.h"
 #include "Deer/Scene/Enviroment.h"
-#include "Deer/Scene/Components.h"
-#include "Deer/Scene/Entity.h"
 
 #include "entt/entt.hpp"
 
@@ -51,6 +49,8 @@ namespace Deer {
 		void destroy();
 
 		Entity& getParent();
+		inline uid getParentUID() { return m_parentUID; }
+
 		// TODO, enable transfer entitys from difrent enviroments
 		void setParent(Entity& parent);
 		bool isDescendant(Entity& parent);
@@ -65,7 +65,7 @@ namespace Deer {
 		glm::mat4 getWorldMatrix();
 		glm::mat4 getRelativeMatrix();
 
-		void update();
+		void updateInternalVars();
 
 		inline bool isValid() const { return m_entityUID != 0 && m_environment != nullptr && m_environment->m_registry.valid(m_entityHandle); }
 		inline bool operator== (const Entity& b) const { return m_environment == b.m_environment && m_entityUID == b.m_entityUID; }

@@ -5,6 +5,10 @@
 #include "glad/glad.h"
 
 namespace Deer {
+	Ref<FrameBuffer> FrameBuffer::create(const FrameBufferSpecification& spec) {
+		return Ref<FrameBuffer>(new OpenGLFrameBuffer(spec));
+	}
+
 	OpenGLFrameBuffer::OpenGLFrameBuffer(const FrameBufferSpecification& frameBufferSpecification)
 		: m_specification(frameBufferSpecification) {
 		invalidate();

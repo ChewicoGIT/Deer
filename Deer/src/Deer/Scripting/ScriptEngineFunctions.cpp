@@ -7,23 +7,23 @@
 #include "Deer/Scripting/ScriptEngine.h"
 #include "angelscript.h"
 #include "Deer/Core/Log.h"
-#include "Deer/Core/Input.h"
+#include "DeerRender/Core/Input/Input.h"
 
 #include "glm/glm.hpp"
 
 namespace Deer {
     void messageCallback(const asSMessageInfo* msg, void* param) {
         if (msg->type == asMSGTYPE_WARNING) {
-            DEER_SCRIPT_WARN("({0} {1}) : {2} \n {3}", msg->row, msg->col, msg->message, msg->section);
+            DEER_SCRIPT_WARN("({0} {1}) : {2} {3}", msg->row, msg->col, msg->message, msg->section);
         }
         else if (msg->type == asMSGTYPE_ERROR) {
-            DEER_SCRIPT_ERROR("({0} {1}) : {2} \n {3}", msg->row, msg->col, msg->message, msg->section);
+            DEER_SCRIPT_ERROR("({0} {1}) : {2} {3}", msg->row, msg->col, msg->message, msg->section);
         }
         else if (msg->type == asMSGTYPE_INFORMATION) {
-            DEER_SCRIPT_INFO("({0} {1}) : {2} \n {3}", msg->row, msg->col, msg->message, msg->section);
+            DEER_SCRIPT_INFO("({0} {1}) : {2} {3}", msg->row, msg->col, msg->message, msg->section);
         }
         else {
-            DEER_SCRIPT_WARN("({0} {1}) : {2} \n {3}", msg->row, msg->col, msg->message, msg->section);
+            DEER_SCRIPT_WARN("({0} {1}) : {2} {3}", msg->row, msg->col, msg->message, msg->section);
         }
     }
 
@@ -32,40 +32,82 @@ namespace Deer {
     }
 
     glm::vec3 getEntityPosition(uid& entityUID) {
-        Ref<Environment>& m_environment = Project::m_scene->getMainEnviroment();
+        if (entityUID == 0 || entityUID == 1) {
+            DEER_SCRIPT_ERROR("Entity is not invalid");
+            return glm::vec3();
+        }
+
+        Ref<Environment>& m_environment = Project::m_scene.getMainEnviroment();
         Entity& entt = m_environment->getEntity(entityUID);
 
         return entt.getComponent<TransformComponent>().position;
     }
 
     void setEntityPosition(glm::vec3 position, uid& entityUID) {
-        Ref<Environment>& m_environment = Project::m_scene->getMainEnviroment();
+        if (entityUID == 0 || entityUID == 1) {
+            DEER_SCRIPT_ERROR("Entity is not invalid");
+            return;
+        }
+
+        Ref<Environment>& m_environment = Project::m_scene.getMainEnviroment();
         Entity& entt = m_environment->getEntity(entityUID);
 
         entt.getComponent<TransformComponent>().position = position;
     }
 
     glm::vec3 getEntityScale(uid& entityUID) {
-        Ref<Environment>& m_environment = Project::m_scene->getMainEnviroment();
+        if (entityUID == 0 || entityUID == 1) {
+            DEER_SCRIPT_ERROR("Entity is not invalid");
+            return glm::vec3();
+        }
+
+        Ref<Environment>& m_environment = Project::m_scene.getMainEnviroment();
         Entity& entt = m_environment->getEntity(entityUID);
 
         return entt.getComponent<TransformComponent>().scale;
     }
 
     void setEntityScale(glm::vec3 scale, uid& entityUID) {
-        Ref<Environment>& m_environment = Project::m_scene->getMainEnviroment();
+        if (entityUID == 0 || entityUID == 1) {
+            DEER_SCRIPT_ERROR("Entity is not invalid");
+            return;
+        }
+
+        Ref<Environment>& m_environment = Project::m_scene.getMainEnviroment();
         Entity& entt = m_environment->getEntity(entityUID);
 
         entt.getComponent<TransformComponent>().scale = scale;
     }
 
+    uid getEntityParent(uid& entityUID) {
+        if (entityUID == 0 || entityUID == 1) {
+            DEER_SCRIPT_ERROR("Entity is not invalid");
+            return 0;
+        }
+
+        Ref<Environment>& m_environment = Project::m_scene.getMainEnviroment();
+        Entity& entt = m_environment->getEntity(entityUID);
+
+        return entt.getParentUID();
+    }
+
+    bool isEntityValid(uid& entityUID) {
+        if (entityUID == 0 || entityUID == 1)
+            return false;
+
+        Ref<Environment>& m_environment = Project::m_scene.getMainEnviroment();
+        Entity& entt = m_environment->getEntity(entityUID);
+
+        return entt.isValid();
+    }
+
     void registerVec3(asIScriptEngine* engine) {
-        engine->RegisterObjectType("Vec3", sizeof(glm::vec3), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<glm::vec3>());
+        engine->RegisterObjectType("Vec3", sizeof(glm::vec3), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<glm::vec3>() | asOBJ_APP_CLASS_ALLFLOATS);
 
         engine->RegisterObjectBehaviour("Vec3", asBEHAVE_CONSTRUCT, "void f()", asFUNCTIONPR([](void* memory) {
             new (memory) glm::vec3();
             }, (void*), void), asCALL_CDECL_OBJLAST);
-        engine->RegisterObjectBehaviour("Vec3", asBEHAVE_CONSTRUCT, "void f(float = 0, float = 0, float = 0)", asFUNCTIONPR([](float x, float y, float z, void* memory) {
+        engine->RegisterObjectBehaviour("Vec3", asBEHAVE_CONSTRUCT, "void f(float, float = 0, float = 0)", asFUNCTIONPR([](float x, float y, float z, void* memory) {
             new (memory) glm::vec3(x, y, z);
             }, (float, float, float, void*), void), asCALL_CDECL_OBJLAST);
         engine->RegisterObjectProperty("Vec3", "float x", asOFFSET(glm::vec3, x));
@@ -73,7 +115,7 @@ namespace Deer {
         engine->RegisterObjectProperty("Vec3", "float z", asOFFSET(glm::vec3, z));
 
         engine->RegisterObjectMethod("Vec3", "Vec3 opAdd(const Vec3 &in) const",
-            asFUNCTIONPR([](const glm::vec3& a, const glm::vec3& b) {
+            asFUNCTIONPR([](const glm::vec3& a, const glm::vec3& b) -> glm::vec3 {
                 return a + b;
                 }, (const glm::vec3&, const glm::vec3&), glm::vec3), asCALL_CDECL_OBJFIRST);
 
@@ -120,6 +162,14 @@ namespace Deer {
     void registerEntity(asIScriptEngine* engine) {
         engine->RegisterObjectType("Entity", sizeof(unsigned int), asOBJ_VALUE | asOBJ_POD | asOBJ_APP_PRIMITIVE);
         engine->RegisterObjectProperty("Entity", "uint uid", 0);
+
+        engine->RegisterObjectMethod("Entity", "Entity getParent()", asFUNCTION(Deer::getEntityParent), asCALL_CDECL_OBJLAST);
+        engine->RegisterObjectMethod("Entity", "bool isValid()", asFUNCTION(Deer::isEntityValid), asCALL_CDECL_OBJLAST);
+
+        engine->RegisterGlobalFunction("Entity getEntity(uint)", asFUNCTIONPR([](uid id) {
+            return id;
+            }, (uid), uid), asCALL_CDECL);
+
     }
 
     void registerDeerFunctions(asIScriptEngine* scriptEngine) {

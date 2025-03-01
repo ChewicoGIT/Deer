@@ -24337,7 +24337,7 @@ public:
           owner{},
           construction{allocator},
           destruction{allocator},
-          update{allocator} {}
+          updateInternalVars{allocator} {}
 
     /**
      * @brief Move constructor.
@@ -24348,7 +24348,7 @@ public:
           owner{other.owner},
           construction{std::move(other.construction)},
           destruction{std::move(other.destruction)},
-          update{std::move(other.update)} {}
+          updateInternalVars{std::move(other.updateInternalVars)} {}
 
     /**
      * @brief Allocator-extended move constructor.
@@ -24360,7 +24360,7 @@ public:
           owner{other.owner},
           construction{std::move(other.construction), allocator},
           destruction{std::move(other.destruction), allocator},
-          update{std::move(other.update), allocator} {}
+          updateInternalVars{std::move(other.updateInternalVars), allocator} {}
 
     /**
      * @brief Move assignment operator.
@@ -24372,7 +24372,7 @@ public:
         owner = other.owner;
         construction = std::move(other.construction);
         destruction = std::move(other.destruction);
-        update = std::move(other.update);
+        updateInternalVars = std::move(other.updateInternalVars);
         return *this;
     }
 
@@ -24386,7 +24386,7 @@ public:
         swap(owner, other.owner);
         swap(construction, other.construction);
         swap(destruction, other.destruction);
-        swap(update, other.update);
+        swap(updateInternalVars, other.updateInternalVars);
     }
 
     /**
@@ -24416,7 +24416,7 @@ public:
      * @return A temporary sink object.
      */
     [[nodiscard]] auto on_update() noexcept {
-        return sink{update};
+        return sink{updateInternalVars};
     }
 
     /**
@@ -24484,7 +24484,7 @@ public:
     template<typename... Func>
     decltype(auto) patch(const entity_type entt, Func &&...func) {
         underlying_type::patch(entt, std::forward<Func>(func)...);
-        update.publish(owner_or_assert(), entt);
+        updateInternalVars.publish(owner_or_assert(), entt);
         return this->get(entt);
     }
 
@@ -24527,7 +24527,7 @@ private:
     basic_registry_type *owner;
     sigh_type construction;
     sigh_type destruction;
-    sigh_type update;
+    sigh_type updateInternalVars;
 };
 
 } // namespace entt
@@ -24594,7 +24594,7 @@ struct basic_collector<> {
      * @return The updated collector.
      */
     template<typename AnyOf>
-    static constexpr auto update() noexcept {
+    static constexpr auto updateInternalVars() noexcept {
         return basic_collector<matcher<type_list<>, type_list<>, AnyOf>>{};
     }
 };
@@ -24629,7 +24629,7 @@ struct basic_collector<matcher<type_list<Reject...>, type_list<Require...>, Rule
      * @return The updated collector.
      */
     template<typename AnyOf>
-    static constexpr auto update() noexcept {
+    static constexpr auto updateInternalVars() noexcept {
         return basic_collector<matcher<type_list<>, type_list<>, AnyOf>, current_type, Other...>{};
     }
 
@@ -39467,7 +39467,7 @@ class basic_continuous_loader {
     }
 
     template<typename Container>
-    auto update(int, Container &container) -> decltype(typename Container::mapped_type{}, void()) {
+    auto updateInternalVars(int, Container &container) -> decltype(typename Container::mapped_type{}, void()) {
         // map like container
         Container other;
 
@@ -39490,7 +39490,7 @@ class basic_continuous_loader {
     }
 
     template<typename Container>
-    auto update(char, Container &container) -> decltype(typename Container::value_type{}, void()) {
+    auto updateInternalVars(char, Container &container) -> decltype(typename Container::value_type{}, void()) {
         // vector like container
         static_assert(std::is_same_v<typename Container::value_type, entity_type>, "Invalid value type");
 
@@ -39500,14 +39500,14 @@ class basic_continuous_loader {
     }
 
     template<typename Component, typename Other, typename Member>
-    void update([[maybe_unused]] Component &instance, [[maybe_unused]] Member Other::*member) {
+    void updateInternalVars([[maybe_unused]] Component &instance, [[maybe_unused]] Member Other::*member) {
         if constexpr(!std::is_same_v<Component, Other>) {
             return;
         } else if constexpr(std::is_same_v<Member, entity_type>) {
             instance.*member = map(instance.*member);
         } else {
             // maybe a container? let's try...
-            update(0, instance.*member);
+            updateInternalVars(0, instance.*member);
         }
     }
 
@@ -71716,8 +71716,8 @@ class process {
 
     template<typename Target = Derived>
     auto next(std::integral_constant<state, state::running>, Delta delta, void *data)
-        -> decltype(std::declval<Target>().update(delta, data), void()) {
-        static_cast<Target *>(this)->update(delta, data);
+        -> decltype(std::declval<Target>().updateInternalVars(delta, data), void()) {
+        static_cast<Target *>(this)->updateInternalVars(delta, data);
     }
 
     template<typename Target = Derived>
@@ -71946,7 +71946,7 @@ struct process_adaptor: process<process_adaptor<Func, Delta>, Delta>, private Fu
      * @param delta Elapsed time.
      * @param data Optional data.
      */
-    void update(const Delta delta, void *data) {
+    void updateInternalVars(const Delta delta, void *data) {
         Func::operator()(
             delta,
             data,
@@ -73751,7 +73751,7 @@ template<typename Delta>
 struct basic_process_handler {
     virtual ~basic_process_handler() = default;
 
-    virtual bool update(const Delta, void *) = 0;
+    virtual bool updateInternalVars(const Delta, void *) = 0;
     virtual void abort(const bool) = 0;
 
     // std::shared_ptr because of its type erased allocator which is useful here
@@ -73764,7 +73764,7 @@ struct process_handler final: basic_process_handler<Delta> {
     process_handler(Args &&...args)
         : process{std::forward<Args>(args)...} {}
 
-    bool update(const Delta delta, void *data) override {
+    bool updateInternalVars(const Delta delta, void *data) override {
         if(process.tick(delta, data); process.rejected()) {
             this->next.reset();
         }
@@ -73941,7 +73941,7 @@ public:
         static_assert(std::is_base_of_v<process<Proc, Delta>, Proc>, "Invalid process type");
         auto &ref = handlers.first().emplace_back(std::allocate_shared<handler_type<Proc>>(handlers.second(), std::forward<Args>(args)...));
         // forces the process to exit the uninitialized state
-        ref->update({}, nullptr);
+        ref->updateInternalVars({}, nullptr);
         return *this;
     }
 
@@ -74042,14 +74042,14 @@ public:
      * @param delta Elapsed time.
      * @param data Optional data.
      */
-    void update(const delta_type delta, void *data = nullptr) {
+    void updateInternalVars(const delta_type delta, void *data = nullptr) {
         for(auto next = handlers.first().size(); next; --next) {
-            if(const auto pos = next - 1u; handlers.first()[pos]->update(delta, data)) {
+            if(const auto pos = next - 1u; handlers.first()[pos]->updateInternalVars(delta, data)) {
                 // updating might spawn/reallocate, cannot hold refs until here
                 if(auto &curr = handlers.first()[pos]; curr->next) {
                     curr = std::move(curr->next);
                     // forces the process to exit the uninitialized state
-                    curr->update({}, nullptr);
+                    curr->updateInternalVars({}, nullptr);
                 } else {
                     curr = std::move(handlers.first().back());
                     handlers.first().pop_back();
@@ -89230,12 +89230,12 @@ public:
      * @param id Name used to map the event queue within the dispatcher.
      */
     template<typename Type>
-    void update(const id_type id = type_hash<Type>::value()) {
+    void updateInternalVars(const id_type id = type_hash<Type>::value()) {
         assure<Type>(id).publish();
     }
 
     /*! @brief Delivers all the pending events. */
-    void update() const {
+    void updateInternalVars() const {
         for(auto &&cpool: pools.first()) {
             cpool.second->publish();
         }

@@ -6,15 +6,14 @@
 
 namespace Deer {
 	Scene::Scene() {
-		DEER_CORE_TRACE("Creating scene");
-		m_enviroment = Ref<Environment>(new Environment("Scene Root"));
+		m_enviroment = Ref<Environment>(new Environment());
+		m_voxelWorld = nullptr;
 	}
 
 	Scene::~Scene() {
-		DEER_CORE_TRACE("Destroying scene");
 	}
 
-	void Scene::execute() {
+	void Scene::beginExecution() {
 		DEER_CORE_ASSERT(!m_isExecuting, "Deer scene is already executing");
 		m_isExecuting = true;
 
@@ -29,20 +28,21 @@ namespace Deer {
 
 			Entity& entity = m_enviroment->getEntity(tagComponent.entityUID);
 			componentScript.roeInstance = Project::m_scriptEngine->createComponentScriptInstance(componentScript.scriptID, entity);
+		
+			componentScript.roeInstance->start();
 		}
-
 	}
 
-	void Scene::update() {
+	void Scene::updateInternalVars() {
 		// Update all scripts
 		auto view = m_enviroment->m_registry.view<ScriptComponent>();
 		for (auto& entID : view) {
 			auto& componentScript = view.get<ScriptComponent>(entID);
-			componentScript.roeInstance->update();
+			componentScript.roeInstance->updateInternalVars();
 		}
 	}
 
-	void Scene::stop() {
+	void Scene::endExecution() {
 		DEER_CORE_ASSERT(m_isExecuting, "Deer scene is not executing");
 		m_isExecuting = false;
 
@@ -56,16 +56,16 @@ namespace Deer {
 		DEER_CORE_INFO("Stoping Scene...");
 	}
 
-	void Scene::render() {
-		uid mainCamera = m_enviroment->tryGetMainCamera();
-		if (mainCamera == 0)
-			return;
+	void Scene::createVoxelWorld(const VoxelWorldProps& props) {
+		m_voxelWorld = Ref<VoxelWorld>(new VoxelWorld(props));
+	}
 
-		Entity& m_cameraEntity = m_enviroment->getEntity(mainCamera);
-		m_enviroment->render(m_cameraEntity);
+	void Scene::deleteVoxelWorld() {
+		m_voxelWorld.reset();
 	}
 
 	void Scene::clear() {
 		m_enviroment->clear();
+		m_voxelWorld.reset();
 	}
 }
