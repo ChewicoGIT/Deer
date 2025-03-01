@@ -128,12 +128,8 @@ namespace Deer {
 					Voxel hitVoxel = readVoxel(result.xPos, result.yPos, result.zPos);
 
 					if (hitVoxel.id == 0) {
-						if (has_exit_inner_walls && result.yPos < 0) {
-							result.face = i * 2;
-
-							if (directionAxis[i] == -1)
-								result.face++;
-	
+						if (has_exit_inner_walls && result.yPos == -1 && directionAxis[1] == -1 && i == 1) {
+							result.face = NORMAL_UP;
 							return result;
 						}
 
