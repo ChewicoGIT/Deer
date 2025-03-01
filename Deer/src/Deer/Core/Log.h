@@ -36,5 +36,11 @@ namespace Deer {
 #define DEER_SCRIPT_WARN( ... ) Deer::Log::getScriptLogger()->warn(__VA_ARGS__)
 #define DEER_SCRIPT_ERROR( ... ) Deer::Log::getScriptLogger()->error(__VA_ARGS__)
 
+#ifdef LINUX
+#define DEER_CORE_ASSERT(condition , ... ) if (!(condition)) {Deer::Log::getCoreLogger()->error(__VA_ARGS__);}
+#define DEER_SCRIPT_ASSERT(condition , ... ) if (!(condition)) {Deer::Log::getScriptLogger()->error(__VA_ARGS__);}
+#endif
+#ifdef WINDOWS
 #define DEER_CORE_ASSERT(condition , ... ) if (!(condition)) {Deer::Log::getCoreLogger()->error(__VA_ARGS__);__debugbreak();}
 #define DEER_SCRIPT_ASSERT(condition , ... ) if (!(condition)) {Deer::Log::getScriptLogger()->error(__VA_ARGS__);__debugbreak();}
+#endif

@@ -35,10 +35,10 @@ namespace Deer {
 
         // IMGUI STYLE
         ImGuiIO& io = ImGui::GetIO();
-        //io.Fonts->Clear();
-        //ImFontConfig cnfg;
-        //cnfg.SizePixels = 17;
-        //io.Fonts->AddFontDefault(&cnfg);
+        io.Fonts->Clear();
+        ImFontConfig cnfg;
+        cnfg.SizePixels = 26;
+        io.Fonts->AddFontDefault(&cnfg);
         
         ImGui_ImplOpenGL3_CreateFontsTexture();
         setNatureStyle();

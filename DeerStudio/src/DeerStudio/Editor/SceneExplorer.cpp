@@ -15,9 +15,11 @@
 #include <regex>
 #include <string>
 
+#ifdef WINDOWS
 // WINDOWS SPECIFIC
 #include <windows.h>
 #include <shellapi.h>
+#endif
 
 namespace Deer {
     Path m_currentScenePath(DEER_SCENE_PATH);

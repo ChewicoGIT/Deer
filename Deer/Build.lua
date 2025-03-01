@@ -42,11 +42,21 @@ project "Deer"
 
    filter "system:windows"
        systemversion "latest"
-       defines { }
+       defines {"WINDOWS"}
 	   files {
 		"src/Plattform/windows/**.h",
 		"src/Plattform/windows/**.cpp"
 	   }
+    
+   filter "system:linux"
+       toolset "clang"
+       defines {"LINUX"}
+       buildoptions { "-std=c++20" }
+       links { "GL" }
+       files {
+           "src/Plattform/Linux/**.h",
+           "src/Plattform/Linux/**.cpp"
+       }
 
    filter "configurations:Debug"
        defines { "DEBUG" }

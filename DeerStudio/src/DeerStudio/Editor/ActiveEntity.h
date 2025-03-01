@@ -18,6 +18,8 @@ namespace Deer {
 
 		template <typename T>
 		inline bool shareComponent() {
+				Entity ent();
+
 			for (auto& entity : entities) {
 				if (!entity->hasComponent<T>())
 					return false;
