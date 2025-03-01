@@ -37,8 +37,10 @@ namespace Deer {
         ImGuiIO& io = ImGui::GetIO();
         io.Fonts->Clear();
         ImFontConfig cnfg;
-        cnfg.SizePixels = 26;
+        //cnfg.SizePixels = 26
+        io.Fonts->AddFontFromFileTTF("editor/fonts/Roboto-Regular.ttf", 28);
         io.Fonts->AddFontDefault(&cnfg);
+    
         
         ImGui_ImplOpenGL3_CreateFontsTexture();
         setNatureStyle();

@@ -9,6 +9,7 @@
 #include "Deer/Scene/SceneDataStore.h"
 #include "Deer/Scene/Scene.h"
 #include "DeerStudio/Editor/ActiveEntity.h"
+#include "Deer/Core/Log.h"
 
 #include "EditorUtils.h"
 
