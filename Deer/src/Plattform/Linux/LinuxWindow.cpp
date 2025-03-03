@@ -1,5 +1,6 @@
 #include "LinuxWindow.h"
 #include "Deer/Core/Log.h"
+#include "Deer/Core/Core.h"
 
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
@@ -13,14 +14,16 @@
 
 #include <string>
 #include <sstream>
+#include <gtk/gtk.h>
 
 namespace Deer {
     Window* Window::create(const WindowProps& props) {
         return new LinuxWindow(props);
     }
 
-    LinuxWindow::LinuxWindow(const WindowProps& props)
-    {
+    LinuxWindow::LinuxWindow(const WindowProps& props) {
+        gtk_init(&Core::argc, &Core::argv);
+
         m_data.height = props.height;
         m_data.width = props.width;
 
@@ -184,4 +187,28 @@ namespace Deer {
         ImGui_ImplGlfw_InitForOpenGL(m_window, true);
     }
 
+    Path LinuxWindow::folderDialog(const char *) {
+        GtkWidget *dialog;
+        GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER;
+        gint res;
+
+        dialog = gtk_file_chooser_dialog_new ("Select Folder",
+            NULL,
+            action,
+            "_Cancel", GTK_RESPONSE_CANCEL,
+            "_Open", GTK_RESPONSE_ACCEPT,
+            NULL);
+        
+        res = gtk_dialog_run (GTK_DIALOG (dialog));
+        Path returnValue;
+        if (res == GTK_RESPONSE_ACCEPT) {
+            char *folderName;
+            GtkFileChooser *chooser = GTK_FILE_CHOOSER (dialog);
+            folderName = gtk_file_chooser_get_filename (chooser);
+            returnValue = Path(folderName);
+            g_free (folderName);
+        }
+
+        return returnValue;
+    }
 }

@@ -5,7 +5,6 @@
 #define MAX_CHILDRENS 16
 
 namespace Deer {
-
 	template<typename T>
 	using Scope = std::unique_ptr<T>;
 
@@ -17,4 +16,9 @@ namespace Deer {
 
 	// Unique identifier
 	using uid = uint32_t;
+
+	namespace Core {
+		extern int argc;
+		extern char **argv;
+	}
 }

@@ -33,7 +33,7 @@ namespace Deer {
     namespace fs = std::filesystem;
 
     AssetManagerPannel::AssetManagerPannel()
-        : m_currentPath("assets"){
+        : m_currentPath(DataStore::rootPath / "assets"){
 
         m_folderIcon = Texture2D::create("editor/icons/folder.png");
         m_fileIcon = Texture2D::create("editor/icons/file.png");

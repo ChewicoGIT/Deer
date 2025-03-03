@@ -33,6 +33,8 @@ namespace Deer {
 		void getMousePos(float& x, float& y) override;
 		void initImGUI() override;
 
+		Path folderDialog(const char*) override;
+
 		inline bool isVSync() const override { return m_data.vSync; }
 	private:
 		GLFWwindow* m_window;

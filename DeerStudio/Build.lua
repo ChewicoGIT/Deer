@@ -24,7 +24,8 @@ project "DeerStudio"
    {
       "Deer",
 	  "spdlog",
-	  "ImGui"
+	  "ImGui",
+      "angelScript"
    }
    defines { "DEER_RENDER" }
 
@@ -36,8 +37,20 @@ project "DeerStudio"
        defines { "LINUX" }
        links { "GL", "glfw" }
        links { "glad" }
-       links { "angelScript" }
        buildoptions { "-std=c++20" }
+        -- Link libraries for GTK3 and its dependencies
+        links {
+            "gtk-3",           -- GTK3 library
+            "gdk-3",           -- GDK library
+            "glib-2.0",        -- GLib library
+            "pango-1.0",       -- Pango library
+            "atk-1.0",         -- ATK library
+            "cairo",           -- Cairo graphics library
+            "gdk_pixbuf-2.0",  -- GDK Pixbuf library
+            "gio-2.0",        -- GIO library
+            "gobject-2.0",     -- GObject library
+            "pthread"         -- POSIX threads library
+        }
 
    filter "system:windows"
        systemversion "latest"

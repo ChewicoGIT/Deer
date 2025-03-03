@@ -23,7 +23,7 @@
 #endif
 
 namespace Deer {
-    Path m_currentScenePath(DEER_SCENE_PATH);
+    Path m_currentScenePath("null");
     Path m_currentSceneName;
     Path m_loadSceneName;
     Path m_deleteSceneName;
@@ -43,6 +43,9 @@ namespace Deer {
     void openFileExplorer(const std::string& relativePath);
 
 	void sceneExplorer_onImGUI() {
+        if (m_currentScenePath == "null")
+            m_currentScenePath = DataStore::rootPath / DEER_SCENE_PATH;
+
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(20, 10));
 		ImGui::Begin("Scene Explorer", (bool*)0, ImGuiWindowFlags_MenuBar);
         ImGui::PopStyleVar();

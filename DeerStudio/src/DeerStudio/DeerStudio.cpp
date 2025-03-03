@@ -27,8 +27,10 @@
 
 namespace Deer {
     void DeerStudioApplication::onInit() {
-        Project::m_scriptEngine->compileScriptEngine(std::filesystem::path("scripts"));
+        Path projectPath = Application::m_window->folderDialog(nullptr);
+        Project::m_scriptEngine->compileScriptEngine(projectPath / std::filesystem::path("scripts"));
 
+        DataStore::rootPath = projectPath;
         DataStore::setupDataAccess(new PhyisicalDataAccess());
 
         setupIcons();
@@ -36,9 +38,15 @@ namespace Deer {
         // IMGUI STYLE
         ImGuiIO& io = ImGui::GetIO();
         io.Fonts->Clear();
+        
+        std::string fLoc = (projectPath / "imgui.ini").generic_string();
+        char* filenameFLoc = new char[fLoc.size() + 1]();
+        strcpy(filenameFLoc, fLoc.c_str());
+        io.IniFilename = filenameFLoc;
         ImFontConfig cnfg;
         //cnfg.SizePixels = 26
-        io.Fonts->AddFontFromFileTTF("editor/fonts/Roboto-Regular.ttf", 18);
+        Path rfPath = projectPath / "editor/fonts/Roboto-Regular.ttf";
+        io.Fonts->AddFontFromFileTTF(rfPath.generic_string().c_str(), 18);
         io.Fonts->AddFontDefault(&cnfg);
     
         

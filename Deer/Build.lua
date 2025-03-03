@@ -52,7 +52,42 @@ project "Deer"
        toolset "clang"
        defines {"LINUX"}
        buildoptions { "-std=c++20" }
+       
+       local gtk_libs = os.outputof("pkg-config --libs gtk+-3.0")
+
        links { "GL" }
+       -- Files for GTK
+       includedirs {
+            "/usr/include/gtk-3.0",               -- GTK3 headers
+            "/usr/include/gdk-pixbuf-2.0",        -- GDK Pixbuf headers
+            "/usr/include/cairo",                 -- Cairo graphics library headers
+            "/usr/include/pango-1.0",            -- Pango text layout and rendering headers
+            "/usr/include/atk-1.0",              -- ATK accessibility toolkit headers
+            "/usr/include/gdk-3.0",              -- GDK headers
+            "/usr/include/glib-2.0",             -- GLib headers
+            "/usr/lib/x86_64-linux-gnu/glib-2.0/include", -- GLib additional headers
+            "/usr/include/harfbuzz"
+        }
+
+        -- Link libraries for GTK3 and its dependencies
+        links {
+            "gtk-3",           -- GTK3 library
+            "gdk-3",           -- GDK library
+            "glib-2.0",        -- GLib library
+            "pango-1.0",       -- Pango library
+            "atk-1.0",         -- ATK library
+            "cairo",           -- Cairo graphics library
+            "gdk_pixbuf-2.0",  -- GDK Pixbuf library
+            "gio-2.0",        -- GIO library
+            "gobject-2.0",     -- GObject library
+            "pthread"         -- POSIX threads library
+        }
+
+
+        links { "pthread" }
+        buildoptions { "-pthread" }
+        linkoptions { "-pthread" }
+
        files {
            "src/Plattform/Linux/**.h",
            "src/Plattform/Linux/**.cpp"

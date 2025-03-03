@@ -1,5 +1,6 @@
 #pragma once
 #include "DeerRender/Core/Events/Event.h"
+#include "Deer/DataStore/Path.h"
 
 #include <string>
 #include <functional>
@@ -36,6 +37,8 @@ namespace Deer {
 		virtual bool getMouseButton(int button) = 0;
 		virtual void getMousePos(float& x, float& y) = 0;
 		virtual void initImGUI() = 0;
+
+		virtual Path folderDialog(const char*) = 0;
 
 		static Window* create(const WindowProps& props = WindowProps());
 	};
