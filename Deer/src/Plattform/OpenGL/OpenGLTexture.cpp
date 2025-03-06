@@ -37,7 +37,7 @@ namespace Deer {
 		}
 
 		if (internalFormat == 0 || dataFormat == 0) {
-			DEER_CORE_ERROR("Texture format not supported!");
+			DEER_CORE_ERROR("Texture format not supported! (Loaded from memory)");
 			return;
 		}
 
