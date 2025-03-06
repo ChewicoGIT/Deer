@@ -27,7 +27,7 @@ namespace Deer {
             ImGui::TextColored(ImVec4(.3f, .3f, .8f, 1.0f), "There is no camera");
 
             if (!Project::m_scene.getExecutingState()) {
-                if (Project::m_scriptEngine->isCompilationValid() && ImGui::Button("Execute")) {
+                if (ScriptEngine::isCompilationValid() && ImGui::Button("Execute")) {
                     SceneDataStore::exportRuntimeScene(Project::m_scene);
                     Project::m_scene.beginExecution();
                 }
@@ -73,7 +73,7 @@ namespace Deer {
         ImGui::SetCursorPos(cursorPos);
 
         if (!Project::m_scene.getExecutingState()) {
-            if (Project::m_scriptEngine->isCompilationValid() && ImGui::Button("Execute")) {
+            if (ScriptEngine::isCompilationValid() && ImGui::Button("Execute")) {
                 SceneDataStore::exportRuntimeScene(Project::m_scene);
                 Project::m_scene.beginExecution();
             }

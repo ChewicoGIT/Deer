@@ -1,5 +1,6 @@
 #include "ScriptEngine.h"
 #include "Deer/Core/Log.h"
+#include "Deer/Core/Project.h"
 
 #include "angelscript.h"
 #include "scriptbuilder.h"
@@ -16,9 +17,21 @@
 namespace fs = std::filesystem;
 
 namespace Deer {
+	namespace ScriptEngine {
+		asIScriptEngine* m_scriptEngine;
+		asIScriptModule* m_scriptModule;
+	
+		bool m_isCompilationValid = false;
+	
+		asIScriptContext* m_context;
+		ComponentScriptMap m_componentScripts;
+	
+		void loadModuleFolder(const std::filesystem::path& modulePath, const char* moduleName);
+		void registerBaseComponents();
+	}
+
 	void ScriptEngine::shutdownScriptEngine() {
 		m_componentScripts.clear();
-		m_scriptEngine->ShutDownAndRelease();
 	}
 
 	void ScriptEngine::beginExecutionContext() {
@@ -55,7 +68,7 @@ namespace Deer {
 
 	Ref<ComponentScriptInstance> ScriptEngine::createComponentScriptInstance(const std::string& scriptID, Entity& scriptEntity) {
 		ComponentScript& script = getComponentScript(scriptID);
-		asITypeInfo* type = script.m_typeInfo;
+		asITypeInfo* type = script.getTypeInfo();
 
 		ComponentScriptInstance* instance = new ComponentScriptInstance();
 

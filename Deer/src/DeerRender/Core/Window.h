@@ -14,14 +14,14 @@ namespace Deer {
 		WindowProps(const std::string& _title = "Deer Engine",
 			unsigned int _width = 1280,
 			unsigned int _height = 720)
-			: title(_title), width(_width), height(_height) 
-		{
+			: title(_title), width(_width), height(_height)  {
 		}
 	};
 
 	class Window {
 	public:
 		virtual ~Window() = default;
+		virtual void initWindow() = 0;
 
 		virtual void onRender() = 0;
 		virtual void clear() = 0;

@@ -16,8 +16,9 @@ namespace Deer {
 	class LinuxWindow : public Window
 	{
 	public:
-	LinuxWindow(const WindowProps& props);
+		LinuxWindow(const WindowProps& props);
 		virtual ~LinuxWindow();
+		void initWindow() override;
 
 		void onRender() override;
 		void clear() override;
@@ -37,9 +38,10 @@ namespace Deer {
 
 		inline bool isVSync() const override { return m_data.vSync; }
 	private:
-		GLFWwindow* m_window;
+		GLFWwindow* m_window = nullptr;
+		RenderContext* m_renderContext= nullptr;
 		LinuxWindowData m_data;
-		RenderContext* m_renderContext;
+		WindowProps m_windowProps;
 	};
 }
 

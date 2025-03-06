@@ -21,21 +21,8 @@ namespace Deer {
         return new LinuxWindow(props);
     }
 
-    LinuxWindow::LinuxWindow(const WindowProps& props) {
-        gtk_init(&Core::argc, &Core::argv);
-
-        m_data.height = props.height;
-        m_data.width = props.width;
-
-        if (!glfwInit())
-        {
-            DEER_CORE_ERROR("Failed to initialize GLFW");
-            return;
-        }
-
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    void LinuxWindow::initWindow() {
+        WindowProps& props = m_windowProps;
         m_window = glfwCreateWindow(props.width, props.height, props.title.c_str(), NULL, NULL);
         if (!m_window) {
             DEER_CORE_ERROR("Window or OpenGL context creation failed (GLFW)");
@@ -133,12 +120,29 @@ namespace Deer {
             KeyTypedEvent event(key);
             data.callback(event);
         });
-
     }
 
-    LinuxWindow::~LinuxWindow()
-    {
-        glfwDestroyWindow(m_window);
+    LinuxWindow::LinuxWindow(const WindowProps& props)
+        : m_windowProps(props) {
+        gtk_init(&Core::argc, &Core::argv);
+
+        m_data.height = props.height;
+        m_data.width = props.width;
+
+        if (!glfwInit())
+        {
+            DEER_CORE_ERROR("Failed to initialize GLFW");
+            return;
+        }
+
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    }
+
+    LinuxWindow::~LinuxWindow() {
+        if (m_window)
+            glfwDestroyWindow(m_window);
         glfwTerminate();
     }
 
@@ -209,6 +213,7 @@ namespace Deer {
             g_free (folderName);
         }
 
+        gtk_widget_destroy(dialog);
         return returnValue;
     }
 }

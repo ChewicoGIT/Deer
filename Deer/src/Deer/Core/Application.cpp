@@ -4,6 +4,7 @@
 #ifdef DEER_RENDER
 #include "DeerRender/Render/RenderCommand.h"
 #include "DeerRender/Render/Render.h"
+#include "DeerRender/Render/RenderUtils.h"
 #include "imgui.h"
 
 #include <functional>
@@ -13,17 +14,24 @@ namespace Deer {
 	Application* Application::s_application;
 
     Application::Application() : m_running(false) {
+#ifdef DEER_RENDER
+        m_window = Scope<Window>(Window::create(m_windowProps));
+#endif
     }
 
 #ifdef DEER_RENDER
     Application::Application(const WindowProps& props)
-        : m_running(false) {
-        m_window = Scope<Window>(Window::create(props));
-        m_window->setEventCallback(std::bind(&Application::onEventCallback, this, std::placeholders::_1));
+        : m_running(false), m_windowProps(props) {
+        m_window = Scope<Window>(Window::create(m_windowProps));
 	}
+
+    void Application::initializeWindow() {
+        m_window->initWindow();
+        m_window->setEventCallback(std::bind(&Application::onEventCallback, this, std::placeholders::_1));
+    }
 #endif
 
-	void Application::run() {
+	int Application::run() {
         s_application = this;
         m_running = true;
 
@@ -34,10 +42,25 @@ namespace Deer {
         double accumulatedUpdateTime = 0.0;
         double accumulatedRenderTime = 0.0;
 
+        int res = onPreInit();
+        if (res != 0)
+            return res;
+
 #ifdef DEER_RENDER
+        initializeWindow();
         m_imGuiLayer.onAttach();
+		RenderUtils::initializeRenderUtils();
+		RenderCommand::init();
 #endif
-        onInit();
+
+        res = onInit();
+        if (res != 0){
+
+#ifdef DEER_RENDER
+            m_imGuiLayer.onDetach();
+#endif
+            return res;
+        }
 
         while (m_running) {
             // Time handling
@@ -84,6 +107,7 @@ namespace Deer {
         m_imGuiLayer.onDetach();
 #endif
         onShutdown();
+        return 0;
 	}
 
 #ifdef DEER_RENDER

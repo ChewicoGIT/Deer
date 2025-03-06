@@ -18,7 +18,7 @@ namespace Deer {
 		m_isExecuting = true;
 
 		DEER_CORE_INFO("Executing Scene...");
-		Project::m_scriptEngine->beginExecutionContext();
+		ScriptEngine::beginExecutionContext();
 
 		// Instantiate all the scripts
 		auto view = m_enviroment->m_registry.view<ScriptComponent, TagComponent>();
@@ -27,7 +27,7 @@ namespace Deer {
 			auto& componentScript = view.get<ScriptComponent>(entID);
 
 			Entity& entity = m_enviroment->getEntity(tagComponent.entityUID);
-			componentScript.roeInstance = Project::m_scriptEngine->createComponentScriptInstance(componentScript.scriptID, entity);
+			componentScript.roeInstance = ScriptEngine::createComponentScriptInstance(componentScript.scriptID, entity);
 		
 			componentScript.roeInstance->start();
 		}

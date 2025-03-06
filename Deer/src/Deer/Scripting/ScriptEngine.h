@@ -12,7 +12,6 @@ class asIScriptModule;
 class asIScriptContext;
 class asIScriptFunction;
 class asITypeInfo;
-class Scene;
 
 namespace Deer {
 	class Scene;
@@ -20,8 +19,11 @@ namespace Deer {
 
 	using ComponentScriptMap = std::unordered_map<std::string, ComponentScript>;
 
-	class ScriptEngine {
-	public:
+	namespace ScriptEngine {
+		extern asIScriptContext* m_context;
+		extern bool m_isCompilationValid;
+		extern ComponentScriptMap m_componentScripts;
+
 		void compileScriptEngine(const std::filesystem::path& scriptPath);
 		void shutdownScriptEngine();
 
@@ -35,17 +37,6 @@ namespace Deer {
 		inline ComponentScript& getComponentScript(const std::string& scriptID) { return m_componentScripts[scriptID]; }
 		
 		Ref<ComponentScriptInstance> createComponentScriptInstance(const std::string& scriptID, Entity& scriptEntity);
-	private:
-		asIScriptEngine* m_scriptEngine;
-		asIScriptModule* m_scriptModule;
-
-		bool m_isCompilationValid = false;
-
-		asIScriptContext* m_context;
-		ComponentScriptMap m_componentScripts;
-
-		void loadModuleFolder(const std::filesystem::path& modulePath, const char* moduleName);
-		void registerBaseComponents();
-	};
+	}
 }
 

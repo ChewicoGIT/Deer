@@ -26,11 +26,19 @@
 #include <functional>
 
 namespace Deer {
-    void DeerStudioApplication::onInit() {
+    int DeerStudioApplication::onPreInit() { 
         Path projectPath = Application::m_window->folderDialog(nullptr);
-        Project::m_scriptEngine->compileScriptEngine(projectPath / std::filesystem::path("scripts"));
+        if (projectPath.empty())
+            return 1;
 
         DataStore::rootPath = projectPath;
+        return 0;
+    }
+
+
+    int DeerStudioApplication::onInit() {
+        ScriptEngine::compileScriptEngine(DataStore::rootPath  / std::filesystem::path("scripts"));
+
         DataStore::setupDataAccess(new PhyisicalDataAccess());
 
         setupIcons();
@@ -39,13 +47,13 @@ namespace Deer {
         ImGuiIO& io = ImGui::GetIO();
         io.Fonts->Clear();
         
-        std::string fLoc = (projectPath / "imgui.ini").generic_string();
+        std::string fLoc = (DataStore::rootPath  / "imgui.ini").generic_string();
         char* filenameFLoc = new char[fLoc.size() + 1]();
         strcpy(filenameFLoc, fLoc.c_str());
         io.IniFilename = filenameFLoc;
         ImFontConfig cnfg;
         //cnfg.SizePixels = 26
-        Path rfPath = projectPath / "editor/fonts/Roboto-Regular.ttf";
+        Path rfPath = DataStore::rootPath / "editor/fonts/Roboto-Regular.ttf";
         io.Fonts->AddFontFromFileTTF(rfPath.generic_string().c_str(), 18);
         io.Fonts->AddFontDefault(&cnfg);
     
@@ -61,13 +69,14 @@ namespace Deer {
         pannels.push_back(m_assetPannel);
         pannels.push_back(m_gamePannel);
 
+        return 0;
     }
 
     void DeerStudioApplication::onShutdown() {
         if (Project::m_scene.getExecutingState())
             Project::m_scene.endExecution();
 
-        Project::m_scriptEngine->shutdownScriptEngine();
+        ScriptEngine::shutdownScriptEngine();
         pannels.clear();
     }
 
@@ -219,8 +228,8 @@ namespace Deer {
 
         if (ImGui::BeginMenu("Scripts")) {
             if (ImGui::MenuItem("Reload scripts") && !Project::m_scene.getExecutingState()) {
-                Project::m_scriptEngine->shutdownScriptEngine();
-                Project::m_scriptEngine->compileScriptEngine(std::filesystem::path("scripts"));
+                ScriptEngine::shutdownScriptEngine();
+                ScriptEngine::compileScriptEngine(std::filesystem::path("scripts"));
             }
 
             ImGui::EndMenu();

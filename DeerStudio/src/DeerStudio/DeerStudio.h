@@ -14,7 +14,8 @@ namespace Deer {
 	private:
 		int originEntity, dirEntity, hitEntity;
 	private:
-		void onInit() override;
+		int onPreInit() override;
+		int onInit() override;
 		void onShutdown() override;
 
 		void onRender(Timestep delta) override;

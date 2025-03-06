@@ -8,16 +8,5 @@
 #include "Deer/DataStore/DataStore.h"
 
 namespace Deer {
-	Ref<ScriptEngine> Project::m_scriptEngine;
-
 	Scene Project::m_scene;
-
-	void Project::initializeBaseSystems() {
-		m_scriptEngine = Ref<ScriptEngine>(new ScriptEngine());
-
-	}
-
-	void Project::releaseBaseSystems() {
-		m_scriptEngine.reset();
-	}
 }

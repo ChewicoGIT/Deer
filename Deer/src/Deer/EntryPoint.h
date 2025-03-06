@@ -8,11 +8,6 @@
 //Temp
 #include "Deer/Core/Project.h"
 
-#ifdef DEER_RENDER
-#include "DeerRender/Render/RenderUtils.h"
-#include "DeerRender/Render/RenderCommand.h"
-#endif
-
 extern Deer::Application* createApplication(int argc, char** argv);
 
 namespace Deer {
@@ -25,22 +20,13 @@ namespace Deer {
 
 		Application* app = createApplication(argc, argv);
 
-#ifdef DEER_RENDER
-		RenderUtils::initializeRenderUtils();
-		RenderCommand::init();
-#endif
-
-		Project::initializeBaseSystems();
-
-		app->run();
+		int runResult = app->run();
 		delete app;
-
-		Project::releaseBaseSystems();
 
 		DEER_CORE_TRACE("Deinitializing");
 		Log::shutdown();
 
-		return 0;
+		return runResult;
 	}
 }
 

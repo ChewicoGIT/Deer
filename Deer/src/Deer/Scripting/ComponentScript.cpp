@@ -21,7 +21,7 @@ namespace Deer {
 		if (!m_updateFunction)
 			return;
 
-		asIScriptContext* context = Project::m_scriptEngine->getExecutionContext();
+		asIScriptContext* context = ScriptEngine::getExecutionContext();
 
 		context->Prepare(m_updateFunction);
 		context->SetObject(m_object);
@@ -32,7 +32,7 @@ namespace Deer {
 		if (!m_startFuction)
 			return;
 
-		asIScriptContext* context = Project::m_scriptEngine->getExecutionContext();
+		asIScriptContext* context = ScriptEngine::getExecutionContext();
 
 		context->Prepare(m_startFuction);
 		context->SetObject(m_object);

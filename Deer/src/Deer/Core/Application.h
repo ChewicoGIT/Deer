@@ -14,32 +14,36 @@ namespace Deer {
 	{
 	public:
 		Application();
-#ifdef DEER_RENDER
-		Application(const WindowProps& props = WindowProps());
-#endif
-
+		
 		static Application* s_application;
 
-		void run();
+		int run();
 
-		virtual void onInit() {}
+		virtual int onInit() { return 0; }
+		virtual int onPreInit() { return 0; }
 		virtual void onShutdown() {}
 		virtual void onUpdate(Timestep delta) {}
 
+	private:
+		bool m_running;
+		float m_lastFrameTime = 0.0f;
 #ifdef DEER_RENDER
+	public:
+		Application(const WindowProps& props = WindowProps());
+
 		virtual void onRender(Timestep delta) {}
 		virtual void onImGUI() {}
 		virtual void onEvent(Event& event) {}
 
 		Scope<Window> m_window;
 	private:
-		virtual void onEventCallback(Event& e);
-		bool onWindowClose(WindowCloseEvent& e);
 		ImGuiLayer m_imGuiLayer;
+		const WindowProps m_windowProps;
+
+		virtual void onEventCallback(Event& e);
+		void initializeWindow();
+		bool onWindowClose(WindowCloseEvent& e);
 #endif
-	private:
-		bool m_running;
-		float m_lastFrameTime = 0.0f;
 	};
 
 }
