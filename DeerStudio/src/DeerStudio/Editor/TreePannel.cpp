@@ -89,7 +89,7 @@ namespace Deer {
 			if (ActiveEntity::contains(entity))
 				flags |= ImGuiTreeNodeFlags_Selected;
 
-			ImGui::TreeNodeEx(entityID, flags, name.c_str());
+			ImGui::TreeNodeEx(entityID, flags, "%s", name.c_str());
 			if (!updateDragPayload(&entity, tag.tag))
 				updateReciveDragPayload(entity);
 
@@ -111,7 +111,7 @@ namespace Deer {
 		// for the moment i prefer to default open all
 		flags |= ImGuiTreeNodeFlags_DefaultOpen;
 
-		if (ImGui::TreeNodeEx(entityID, flags, name.c_str())) {
+		if (ImGui::TreeNodeEx(entityID, flags, "%s", name.c_str())) {
 			if (!entity.isRoot())
 				updateDragPayload(&entity, tag.tag);
 			updateReciveDragPayload(entity);
@@ -169,7 +169,7 @@ namespace Deer {
 
 		ImGui::SetDragDropPayload("_ENTITY", &entity, sizeof(Entity*));
 
-		ImGui::Text(name.c_str());
+		ImGui::Text("%s", name.c_str());
 		ImGui::EndDragDropSource();
 		return true;
 	}

@@ -81,11 +81,11 @@ namespace Deer {
             ImGui::EndMenuBar();
         }
 
-        ImGui::Text(m_currentScenePath.generic_string().c_str());
+        ImGui::Text("%s", m_currentScenePath.generic_string().c_str());
 
         ImGui::TextDisabled("Active Scene : ");
         ImGui::SameLine();
-        ImGui::TextColored(ImVec4(0.5f, 1.0f, 0.7f, 1), m_currentSceneName.generic_string().c_str());
+        ImGui::TextColored(ImVec4(0.5f, 1.0f, 0.7f, 1), "%s", m_currentSceneName.generic_string().c_str());
 
         float width = ImGui::GetWindowContentRegionWidth();
 
@@ -123,7 +123,7 @@ namespace Deer {
 
             float cursorOffset = (ICON_MIN_SIZE - ImGui::CalcTextSize(entry.path().stem().string().c_str()).x) / 2;
             ImGui::SetCursorPos(ImVec2(cursorOffset + ImGui::GetCursorPos().x, ImGui::GetCursorPos().y));
-            ImGui::Text(entry.path().stem().string().c_str());
+            ImGui::Text("%s", entry.path().stem().string().c_str());
 
             ImGui::NextColumn();
         }
@@ -138,7 +138,7 @@ namespace Deer {
 	}
 
     void drawSceneExplorerFolder(const Path& path) {
-        ImGui::Image((void*)folder_icon->getTextureID(), ImVec2(ICON_MIN_SIZE, ICON_MIN_SIZE), ImVec2(0, 1), ImVec2(1, 0));
+        ImGui::Image((void*)(uint64_t)folder_icon->getTextureID(), ImVec2(ICON_MIN_SIZE, ICON_MIN_SIZE), ImVec2(0, 1), ImVec2(1, 0));
 
         if (ImGui::IsItemClicked(0) && ImGui::IsMouseDoubleClicked(0)) {
             if (path == "..")
@@ -150,7 +150,7 @@ namespace Deer {
     }
 
     void drawSceneExplorerScene(const Path& path) {
-        ImGui::Image((void*)scene_icon->getTextureID(), ImVec2(ICON_MIN_SIZE, ICON_MIN_SIZE), ImVec2(0, 1), ImVec2(1, 0));
+        ImGui::Image((void*)(uint64_t)scene_icon->getTextureID(), ImVec2(ICON_MIN_SIZE, ICON_MIN_SIZE), ImVec2(0, 1), ImVec2(1, 0));
 
         if (ImGui::IsItemClicked(0) && ImGui::IsMouseDoubleClicked(0)) {
             ImGui::OpenPopup("SAVE_SCENE_BEFORE_LOADING");

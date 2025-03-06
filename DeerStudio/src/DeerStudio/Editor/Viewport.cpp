@@ -92,7 +92,7 @@ namespace Deer {
 
         Project::m_scene.render(viewport_sceneCamera);
 
-        ImGui::Image((void*)m_frameBuffer->getTextureBufferID(0), windowSize, ImVec2(0, 1), ImVec2(1, 0));
+        ImGui::Image((void*)(uint64_t)m_frameBuffer->getTextureBufferID(0), windowSize, ImVec2(0, 1), ImVec2(1, 0));
         bool isUsingDrawGizmo = drawGizmos(wPos.x, wPos.y, windowSize.x, windowSize.y);
 
         if (!isUsingDrawGizmo && m_handleClick) {

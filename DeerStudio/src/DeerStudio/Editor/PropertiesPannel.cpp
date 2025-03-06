@@ -37,7 +37,7 @@ namespace Deer {
 		if (tag.tag == "")
 			ImGui::Text("-");
 		else
-			ImGui::Text(tag.tag.c_str());
+			ImGui::Text("%s", tag.tag.c_str());
 
 		ImGui::SameLine();
 		ImGui::Text("id : %u", tag.entityUID);
@@ -264,7 +264,7 @@ namespace Deer {
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2());
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 0.0f); // Set FrameRounding to 0 for hard edges
 
-		ImGui::Text(text.c_str());
+		ImGui::Text("%s", text.c_str());
 
 		ImGui::NextColumn();
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.7f, 0.2f, 0.2f, 1.0f)); // Red background

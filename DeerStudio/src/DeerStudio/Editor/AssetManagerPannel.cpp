@@ -81,7 +81,7 @@ namespace Deer {
 
                 float cursorOffset = (m_iconMinSize - ImGui::CalcTextSize(entry.path().filename().string().c_str()).x) / 2;
                 ImGui::SetCursorPos(ImVec2(cursorOffset + ImGui::GetCursorPos().x, ImGui::GetCursorPos().y));
-                ImGui::Text(entry.path().filename().string().c_str());
+                ImGui::Text("%s",entry.path().filename().string().c_str());
 
                 ImGui::NextColumn();
             }
@@ -104,7 +104,7 @@ namespace Deer {
 	}
 
     void AssetManagerPannel::drawFolder(const std::filesystem::path& path) {
-        ImGui::Image((void*)m_folderIcon->getTextureID(), ImVec2(m_iconMinSize , m_iconMinSize), ImVec2(0, 1), ImVec2(1, 0));
+        ImGui::Image((void*)(uint64_t)m_folderIcon->getTextureID(), ImVec2(m_iconMinSize , m_iconMinSize), ImVec2(0, 1), ImVec2(1, 0));
         
         if (ImGui::IsItemClicked(0) && ImGui::IsMouseDoubleClicked(0)) {
             m_currentPath = path;
@@ -129,7 +129,7 @@ namespace Deer {
         std::string extension = path.filename().extension().string();
 
         if (extension == ".dscn") {
-            ImGui::Image((void*)m_scneIcon->getTextureID(), ImVec2(m_iconMinSize, m_iconMinSize), ImVec2(0, 1), ImVec2(1, 0));
+            ImGui::Image((void*)(uint64_t)m_scneIcon->getTextureID(), ImVec2(m_iconMinSize, m_iconMinSize), ImVec2(0, 1), ImVec2(1, 0));
 
             // Open scene
             if (ImGui::IsItemClicked(0) && ImGui::IsMouseDoubleClicked(0)) {
@@ -141,37 +141,37 @@ namespace Deer {
                 }
             }
         } else if (extension == ".obj") {
-            ImGui::Image((void*)m_objectIcon->getTextureID(), ImVec2(m_iconMinSize, m_iconMinSize), ImVec2(0, 1), ImVec2(1, 0));
+            ImGui::Image((void*)(uint64_t)m_objectIcon->getTextureID(), ImVec2(m_iconMinSize, m_iconMinSize), ImVec2(0, 1), ImVec2(1, 0));
 
             if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID)) {
                 std::string pathString = path.string();
                 ImGui::SetDragDropPayload("_MESH", pathString.c_str(), pathString.size() + 1);
-                ImGui::Text(path.string().c_str());
+                ImGui::Text("%s", path.string().c_str());
                 ImGui::EndDragDropSource();
             }
         } else if (extension == ".glsl") {
-            ImGui::Image((void*)m_shaderIcon->getTextureID(), ImVec2(m_iconMinSize, m_iconMinSize), ImVec2(0, 1), ImVec2(1, 0));
+            ImGui::Image((void*)(uint64_t)m_shaderIcon->getTextureID(), ImVec2(m_iconMinSize, m_iconMinSize), ImVec2(0, 1), ImVec2(1, 0));
 
             if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID)) {
                 std::string pathString = path.string();
                 ImGui::SetDragDropPayload("_SHADER", pathString.c_str(), pathString.size() + 1);
-                ImGui::Text(path.string().c_str());
+                ImGui::Text("%s", path.string().c_str());
                 ImGui::EndDragDropSource();
             }
         } else if (extension == ".png" || extension == ".jpg" || extension == ".jpeg") {
             uid textureID = AssetManager::loadAsset<Texture2D>(path.string());
             Asset<Texture2D>& textureAsset = AssetManager::getAsset<Texture2D>(textureID);
 
-            ImGui::Image((void*)textureAsset.value->getTextureID(), ImVec2(m_iconMinSize, m_iconMinSize), ImVec2(0, 1), ImVec2(1, 0));
+            ImGui::Image((void*)(uint64_t)textureAsset.value->getTextureID(), ImVec2(m_iconMinSize, m_iconMinSize), ImVec2(0, 1), ImVec2(1, 0));
         
             if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID)) {
                 std::string pathString = path.string();
                 ImGui::SetDragDropPayload("_TEXTURE2D", pathString.c_str(), pathString.size() + 1);
-                ImGui::Text(path.string().c_str());
+                ImGui::Text("%s", path.string().c_str());
                 ImGui::EndDragDropSource();
             }
         } else {
-            ImGui::Image((void*)m_fileIcon->getTextureID(), ImVec2(m_iconMinSize, m_iconMinSize), ImVec2(0, 1), ImVec2(1, 0));
+            ImGui::Image((void*)(uint64_t)m_fileIcon->getTextureID(), ImVec2(m_iconMinSize, m_iconMinSize), ImVec2(0, 1), ImVec2(1, 0));
         }
 
     }

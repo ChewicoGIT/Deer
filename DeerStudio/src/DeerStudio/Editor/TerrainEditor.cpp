@@ -55,21 +55,21 @@ namespace Deer {
 
 			ImGui::Text("Total chunks: ");
 			ImGui::SameLine();
-			ImGui::Text(std::to_string(values[0] * values[1] * values[2]).c_str());
+			ImGui::Text("%s", std::to_string(values[0] * values[1] * values[2]).c_str());
 
 			ImGui::Separator();
 
-			ImGui::Text("Units x: ");
+			ImGui::Text("%s", "Units x: ");
 			ImGui::SameLine();
-			ImGui::Text(std::to_string(values[0] * 32).c_str());
+			ImGui::Text("%s", std::to_string(values[0] * 32).c_str());
 
-			ImGui::Text("Units y: ");
+			ImGui::Text("%s", "Units y: ");
 			ImGui::SameLine();
-			ImGui::Text(std::to_string(values[1] * 32).c_str());
+			ImGui::Text("%s", std::to_string(values[1] * 32).c_str());
 
-			ImGui::Text("Units z: ");
+			ImGui::Text("%s", "Units z: ");
 			ImGui::SameLine();
-			ImGui::Text(std::to_string(values[2] * 32).c_str());
+			ImGui::Text("%s", std::to_string(values[2] * 32).c_str());
 
 			ImGui::Separator();
 			ImGui::Spacing();
@@ -107,22 +107,22 @@ namespace Deer {
 		float windowWidth = ImGui::GetWindowContentRegionWidth();
 		
 		ImGui::Text("Editor mode:");
-		if (ImGui::ImageButton((ImTextureID)add_icon->getTextureID(), ImVec2(windowWidth / 4 - 20, windowWidth / 4 - 20), ImVec2(0, 1), ImVec2(1, 0),
+		if (ImGui::ImageButton((ImTextureID)(uint64_t)add_icon->getTextureID(), ImVec2(windowWidth / 4 - 20, windowWidth / 4 - 20), ImVec2(0, 1), ImVec2(1, 0),
 			-1, ImVec4(0, 0, 0, 0), ImVec4(1, 1, (m_terrainEditMode == TerrainEditMode_Add)? 0.7f : 1.0f, 1.0f))) {
 			m_terrainEditMode = TerrainEditMode_Add;
 		}
 		ImGui::SameLine();
-		if (ImGui::ImageButton((ImTextureID)substract_icon->getTextureID(), ImVec2(windowWidth / 4 - 20, windowWidth / 4 - 20), ImVec2(0, 1), ImVec2(1, 0),
+		if (ImGui::ImageButton((ImTextureID)(uint64_t)substract_icon->getTextureID(), ImVec2(windowWidth / 4 - 20, windowWidth / 4 - 20), ImVec2(0, 1), ImVec2(1, 0),
 			- 1, ImVec4(0, 0, 0, 0), ImVec4(1, 1, (m_terrainEditMode == TerrainEditMode_Substract) ? 0.7f : 1.0f, 1.0f))) {
 			m_terrainEditMode = TerrainEditMode_Substract;
 		}
 		ImGui::SameLine();
-		if (ImGui::ImageButton((ImTextureID)fill_icon->getTextureID(), ImVec2(windowWidth / 4 - 20, windowWidth / 4 - 20), ImVec2(0, 1), ImVec2(1, 0),
+		if (ImGui::ImageButton((ImTextureID)(uint64_t)fill_icon->getTextureID(), ImVec2(windowWidth / 4 - 20, windowWidth / 4 - 20), ImVec2(0, 1), ImVec2(1, 0),
 			-1, ImVec4(0, 0, 0, 0), ImVec4(1, 1, (m_terrainEditMode == TerrainEditMode_Fill) ? 0.7f : 1.0f, 1.0f))) {
 			m_terrainEditMode = TerrainEditMode_Fill;
 		}
 		ImGui::SameLine();
-		if (ImGui::ImageButton((ImTextureID)fill_empty_icon->getTextureID(), ImVec2(windowWidth / 4 - 20, windowWidth / 4 - 20), ImVec2(0, 1), ImVec2(1, 0),
+		if (ImGui::ImageButton((ImTextureID)(uint64_t)fill_empty_icon->getTextureID(), ImVec2(windowWidth / 4 - 20, windowWidth / 4 - 20), ImVec2(0, 1), ImVec2(1, 0),
 			-1, ImVec4(0, 0, 0, 0), ImVec4(1, 1, (m_terrainEditMode == TerrainEditMode_Empty) ? 0.7f : 1.0f, 1.0f))) {
 			m_terrainEditMode = TerrainEditMode_Empty;
 		}

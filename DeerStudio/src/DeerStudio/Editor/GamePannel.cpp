@@ -2,7 +2,7 @@
 #include "Deer/Scene/Enviroment.h"
 #include "Deer/Scene/Scene.h"
 #include "Deer/Scene/Entity.h"
-#include "Deer/Core/Project.h".
+#include "Deer/Core/Project.h"
 #include "Deer/Scripting/ScriptEngine.h"
 #include "Deer/Scene/SceneDataStore.h"
 
@@ -68,7 +68,7 @@ namespace Deer {
         Project::m_scene.render();
         m_frameBuffer->unbind();
 
-        ImGui::Image((void*)m_frameBuffer->getTextureBufferID(0), windowSize, ImVec2(0, 1), ImVec2(1, 0));
+        ImGui::Image((void*)(uint64_t)m_frameBuffer->getTextureBufferID(0), windowSize, ImVec2(0, 1), ImVec2(1, 0));
 
         ImGui::SetCursorPos(cursorPos);
 

@@ -9,7 +9,7 @@ namespace Deer {
         name_buffer[0] = '\0';
 
         if (ImGui::BeginPopup(nameID)) {
-            ImGui::Text(inputInfo);
+            ImGui::Text("%s", inputInfo);
             
             ImGui::InputText("##nameInputPopup", name_buffer, 256, ImGuiInputTextFlags_EnterReturnsTrue);
 
@@ -30,7 +30,7 @@ namespace Deer {
     void saveInputPopup(const char* nameID, const char* inputInfo) {
 
         if (ImGui::BeginPopup(nameID)) {
-            ImGui::Text(inputInfo);
+            ImGui::Text("%s", inputInfo);
 
             ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(100, 255, 120, 255));
             bool save = ImGui::Button("Save");
@@ -64,7 +64,7 @@ namespace Deer {
     void deleteInputPopup(const char* nameID, const char* inputInfo) {
 
         if (ImGui::BeginPopup(nameID)) {
-            ImGui::Text(inputInfo);
+            ImGui::Text("%s", inputInfo);
 
             ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 122, 122, 255));
             bool delete_button = ImGui::Button("Delete");
