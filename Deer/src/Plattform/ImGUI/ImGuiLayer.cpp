@@ -84,10 +84,7 @@ namespace Deer {
 	bool ImGuiLayer::onKeyPressedEvent(KeyPressedEvent& e) {
 		ImGuiIO& io = ImGui::GetIO();
 		io.KeysDown[e.getKeyCode()] = true;
-
-		if (e.getKeyCode() == DEER_KEY_BACKSPACE) {
-			io.KeysDown[ImGuiKey::ImGuiKey_Backspace];
-		}
+		io.KeysDown[ImGuiKey::ImGuiKey_Backspace] = e.getKeyCode() == DEER_KEY_BACKSPACE;
 
 		io.KeyCtrl = io.KeysDown[GLFW_KEY_LEFT_CONTROL] || io.KeysDown[GLFW_KEY_RIGHT_CONTROL];
 		io.KeyShift = io.KeysDown[GLFW_KEY_LEFT_SHIFT] || io.KeysDown[GLFW_KEY_RIGHT_SHIFT];

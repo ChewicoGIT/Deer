@@ -50,7 +50,7 @@ namespace Deer {
 		TransformComponent(glm::vec3 _position) : position(_position) { }
 		TransformComponent(const TransformComponent&) = default;
 
-		inline const glm::vec3& getEulerAngles() { return glm::degrees(glm::eulerAngles(rotation)); }
+		inline const glm::vec3 getEulerAngles() { return glm::degrees(glm::eulerAngles(rotation)); }
 		inline void setEulerAngles(const glm::vec3& eulerAngles) { rotation = glm::quat(glm::radians(eulerAngles)); }
 
 		glm::mat4 getMatrix();

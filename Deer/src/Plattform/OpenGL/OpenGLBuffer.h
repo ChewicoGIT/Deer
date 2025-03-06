@@ -26,7 +26,7 @@ namespace Deer {
 
 		void bind() const override;
 		IndexDataType getIndexDataType() const override { return m_indexDataType; }
-		unsigned int getCount() const { return m_count; }
+		unsigned int getCount() const override { return m_count; } 
 	private:
 		unsigned int m_bufferID;
 		unsigned int m_count;

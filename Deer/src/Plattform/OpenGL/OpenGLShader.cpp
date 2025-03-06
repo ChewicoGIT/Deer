@@ -180,7 +180,7 @@ namespace Deer {
 
 			// Use the infoLog as you see fit.
 			DEER_CORE_ERROR("Error compiling vertex shader. \n{0}", infoLog);
-			delete infoLog;
+			delete[] infoLog;
 
 			// In this simple program, we'll just leave
 			return;
@@ -216,7 +216,7 @@ namespace Deer {
 
 			// Use the infoLog as you see fit.
 			DEER_CORE_ERROR("Error compiling fragment shader. \n{0}", infoLog);
-			delete infoLog;
+			delete[] infoLog;
 
 			// In this simple program, we'll just leave
 			return;
@@ -254,7 +254,7 @@ namespace Deer {
 
 			// Use the infoLog as you see fit.
 			DEER_CORE_ERROR("Error when linking shader. \n{0}", infoLog);
-			delete infoLog;
+			delete[] infoLog;
 
 			// In this simple program, we'll just leave
 			return;

@@ -58,7 +58,7 @@ namespace Deer {
 #endif 
 
 		LayerVoxel() = default;
-		LayerVoxel(uint16_t _height) : height(height) { }
+		LayerVoxel(uint16_t _height) : height(_height) { }
 	};
 
 	struct VoxelRayResult {

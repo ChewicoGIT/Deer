@@ -65,8 +65,7 @@ namespace Deer {
 		return m_entities[id];
 	}
 
-	Entity& Environment::createEmptyEntity()
-	{
+	Entity Environment::createEmptyEntity() {
 		entt::entity entityID = m_registry.create();
 		Entity entity = { entityID, this };
 

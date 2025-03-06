@@ -28,7 +28,7 @@ namespace Deer {
 
 		Entity& getEntity(uid id);
 		Entity& createEntity(const std::string& name = std::string());
-		Entity& createEmptyEntity();
+		Entity createEmptyEntity();
 		
 		//FEO
 		uid tryGetMainCamera();

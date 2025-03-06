@@ -16,11 +16,11 @@ namespace Deer {
 		void resize(unsigned int width, unsigned int height) override;
 
 		unsigned int getTextureBufferID(int id = 0) override { return m_colorsAttachments[id]; }
-		virtual void clearBuffer(unsigned int bufferId, void* data);
+		void clearBuffer(unsigned int bufferId, void* data) override;
 
 		int getTextureBufferPixel(int id, unsigned int x, unsigned int y) override;
 
-		const FrameBufferSpecification& getSpecification() { return m_specification; }
+		const FrameBufferSpecification& getSpecification() override { return m_specification; }
 	private:
 		void invalidate();
 	private:

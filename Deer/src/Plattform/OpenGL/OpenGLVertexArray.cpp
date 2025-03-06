@@ -89,11 +89,11 @@ namespace Deer {
 			switch (element.shaderType) {
 			case ShaderDataType::None: DEER_CORE_ERROR("Shader datas type none not suported!"); break;
 			case ShaderDataType::FloatingPoint:
-				glVertexAttribPointer(index, dataTypeCount(element.type), getOpenGLDataType(element.type), GL_FALSE, layout.getStride(), (const void*)element.offset); break;
+				glVertexAttribPointer(index, dataTypeCount(element.type), getOpenGLDataType(element.type), GL_FALSE, layout.getStride(), (const void*)(uint64_t)element.offset); break;
 			case ShaderDataType::NormalizedFloatingPoint:
-				glVertexAttribPointer(index, dataTypeCount(element.type), getOpenGLDataType(element.type), GL_TRUE, layout.getStride(), (const void*)element.offset); break;
+				glVertexAttribPointer(index, dataTypeCount(element.type), getOpenGLDataType(element.type), GL_TRUE, layout.getStride(), (const void*)(uint64_t)element.offset); break;
 			case ShaderDataType::Integer:
-				glVertexAttribIPointer(index, dataTypeCount(element.type), getOpenGLDataType(element.type), layout.getStride(), (const void*)element.offset); break;
+				glVertexAttribIPointer(index, dataTypeCount(element.type), getOpenGLDataType(element.type), layout.getStride(), (const void*)(uint64_t)element.offset); break;
 			}
 
 			index++;

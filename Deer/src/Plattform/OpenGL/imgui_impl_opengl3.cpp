@@ -140,7 +140,11 @@
 // - You can temporarily use an unstripped version. See https://github.com/dearimgui/gl3w_stripped/releases
 // Changes to this backend using new APIs should be accompanied by a regenerated stripped loader version.
 #define IMGL3W_IMPL
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmacro-redefined"
 #include "backends/imgui_impl_opengl3_loader.h"
+#pragma clang diagnostic pop
+
 #endif
 
 // Vertex arrays are not supported on ES2/WebGL1 unless Emscripten which uses an extension
