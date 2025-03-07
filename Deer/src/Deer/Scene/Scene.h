@@ -1,16 +1,18 @@
 #pragma once
 #include "Deer/Core/Core.h"
-#include "Deer/Voxels/VoxelWorld.h"
-#include "Deer/Scene/Enviroment.h"
+#include "Deer/Voxels/VoxelWorldProps.h"
 
 #ifdef DEER_RENDER
 #include "DeerRender/Scene/GizmoRenderer.h"
-#endif // DEER_RENDER
+#endif
 
 #include <vector>
 #include <string>
 
 namespace Deer {
+	class VoxelWorld;
+	class Environment;
+
 	class Scene {
 	public:
 		Scene();

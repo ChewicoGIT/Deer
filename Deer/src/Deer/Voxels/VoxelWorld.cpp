@@ -1,5 +1,7 @@
 #include "VoxelWorld.h"
 #include "Deer/Core/Log.h"
+#include "Deer/Voxels/Chunk.h"
+#include "Deer/Voxels/Layer.h"
 
 #include <math.h>
 #include <cmath>

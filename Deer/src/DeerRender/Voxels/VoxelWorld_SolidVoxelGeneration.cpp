@@ -1,4 +1,5 @@
 #include "Deer/Voxels/VoxelWorld.h"
+#include "Deer/Voxels/Chunk.h"
 #include "Deer/Core/Application.h"
 #include "Deer/Core/Project.h"
 #include "Deer/Asset/AssetManager.h"
@@ -7,6 +8,7 @@
 #include "DeerRender/Render/Render.h"
 #include "DeerRender/Render/RenderUtils.h"
 #include "DeerRender/Render/Texture.h"
+#include "DeerRender/Voxels/ChunkRender.h"
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"

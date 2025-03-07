@@ -1,11 +1,10 @@
 #pragma once
 #include "Deer/Core/Core.h"
-
-#include <filesystem>
-#include "Path.h"
+#include "Deer/DataStore/Path.h"
 
 #include <vector>
 #include <string>
+#include <filesystem>
 
 #define DEER_SCENE_PATH "scenes"
 #define DEER_SCRIPT_PATH "scripts"

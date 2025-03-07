@@ -25,6 +25,7 @@ namespace Deer {
 
 		virtual void onRender() = 0;
 		virtual void clear() = 0;
+		virtual void resolveEvents() = 0;
 
 		inline virtual int getWitdth() const = 0;
 		inline virtual int getHeight() const = 0;

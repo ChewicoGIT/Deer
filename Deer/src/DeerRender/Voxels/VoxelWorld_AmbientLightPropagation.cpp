@@ -1,4 +1,5 @@
 #include "Deer/Voxels/VoxelWorld.h"
+#include "Deer/Voxels/Chunk.h"
 #include "Deer/Core/Application.h"
 #include "Deer/Core/Project.h"
 #include "Deer/Asset/AssetManager.h"

@@ -2,10 +2,11 @@
 #include "Deer/Core/Core.h"
 #include "Deer/Core/Log.h"
 
-#include <string>
 #include "Deer/DataStore/Path.h"
 #include "Deer/DataStore/DataAccess.h"
 #include "Deer/DataStore/DataStore.h"
+
+#include <string>
 
 namespace Deer {
 	template <typename T>

@@ -1,6 +1,7 @@
 #include "Deer/Scene/Scene.h"
 #include "Deer/Scene/Entity.h"
 #include "Deer/Scene/Components.h"
+#include "Deer/Voxels/VoxelWorld.h"
 #include "DeerRender/Render/RenderCommand.h"
 
 namespace Deer {

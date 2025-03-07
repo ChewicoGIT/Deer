@@ -22,6 +22,7 @@ namespace Deer {
 
 		void onRender() override;
 		void clear() override;
+		void resolveEvents() override;
 
 		inline int getWitdth() const override { return m_data.width; }
 		inline int getHeight() const override { return m_data.height; }

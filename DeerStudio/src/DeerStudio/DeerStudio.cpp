@@ -5,6 +5,7 @@
 #include "DeerStudio/Editor/GamePannel.h"
 
 #include "Deer/Core/Project.h"
+#include "Deer/Voxels/VoxelWorld.h"
 #include "Deer/Scene/Scene.h"
 #include "Deer/Scene/SceneDataStore.h"
 #include "Deer/Scripting/ScriptEngine.h"

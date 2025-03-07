@@ -98,6 +98,8 @@ namespace Deer {
 
                 m_window->onRender();
             }
+
+            m_window->resolveEvents();
 #endif
 
             std::this_thread::sleep_for(std::chrono::milliseconds(1));

@@ -8,8 +8,6 @@
 #include <string>
 
 namespace cereal {
-
-
     template<class Archive>
     void save(Archive& archive,
         std::filesystem::path const& path)
@@ -25,7 +23,6 @@ namespace cereal {
         archive(_path);
         path = std::filesystem::path(_path);
     }
-
 }
 
 namespace Deer {

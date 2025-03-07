@@ -1,23 +1,24 @@
 #pragma once
 #include "Deer/Core/Core.h"
 #include "Deer/Voxels/Voxel.h"
-#include "Deer/Voxels/Chunk.h"
-#include "Deer/Voxels/Layer.h"
 #include "Deer/Voxels/VoxelWorldProps.h"
 
-#include "glm/glm.hpp"
-#include <vector>
-#include <queue>
-
 #ifdef DEER_RENDER
-#include "DeerRender/Voxels/ChunkRender.h"
 #include "DeerRender/Voxels/ChunkUpdateQueue.h"
+#include "DeerRender/Voxels/ChunkRender.h"
 #include "DeerRender/Voxels/Voxel.h"
 #include "DeerRender/Render/Camera.h"
 #include "DeerRender/Scene/SceneCamera.h"
 #endif
 
+#include "glm/glm.hpp"
+#include <vector>
+#include <queue>
+
 namespace Deer {
+	class Chunk;
+	class Layer;
+
 	class VoxelWorld {
 	public:
 		VoxelWorld(const VoxelWorldProps& props);

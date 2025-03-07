@@ -152,8 +152,12 @@ namespace Deer {
         m_renderContext->swapBuffers();
     }
 
-    void LinuxWindow::clear()
-    {
+    void LinuxWindow::resolveEvents() {
+        while (gtk_events_pending())
+            gtk_main_iteration();
+    }
+
+    void LinuxWindow::clear() {
         glClearColor(0.1f, 0.1f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }

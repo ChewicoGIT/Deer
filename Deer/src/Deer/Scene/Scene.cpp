@@ -1,6 +1,8 @@
 #include "Scene.h"
 #include "Deer/Core/Log.h"
-#include "Deer/Core/Project.h"
+#include "Deer/Voxels/VoxelWorld.h"
+#include "Deer/Scene/Enviroment.h"
+
 #include "Deer/Scripting/ScriptEngine.h"
 #include "Deer/Scene/Components.h"
 
