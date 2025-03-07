@@ -1,5 +1,5 @@
 #pragma once
-#include "Deer/Core/Core.h"
+
 
 namespace Deer {
 	class Scene;

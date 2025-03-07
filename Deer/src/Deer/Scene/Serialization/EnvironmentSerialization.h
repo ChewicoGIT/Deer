@@ -1,5 +1,5 @@
 #pragma once
-#include "Deer/Core/Core.h"
+
 #include "Deer/Scene/Enviroment.h"
 
 #include <vector>

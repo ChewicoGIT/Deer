@@ -1,5 +1,5 @@
 #pragma once
-#include "Deer/Core/Core.h"
+
 #include "DeerRender/Render/VertexArray.h"
 #include "DeerRender/Render/Shader.h"
 #define GLM_ENABLE_EXPERIMENTAL

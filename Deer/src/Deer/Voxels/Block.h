@@ -1,5 +1,5 @@
 #pragma once
-#include "Deer/Core/Core.h"
+
 #include <vector>
 
 namespace Deer {

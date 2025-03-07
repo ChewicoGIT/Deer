@@ -1,5 +1,5 @@
 #pragma once
-#include "Deer/Core/Core.h"
+
 #include "Deer/Core/Project.h"
 #include "Deer/Asset/AssetManager.h"
 #include "Deer/Scene/Entity.h"

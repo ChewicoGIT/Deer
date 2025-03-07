@@ -1,5 +1,7 @@
 #pragma once
 #include "Deer/Core/Core.h"
+#include "Deer/Core/Memory.h"
+
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtc/quaternion.hpp"
 #include "glm/glm.hpp"

@@ -1,5 +1,5 @@
 #pragma once
-#include "Deer/Core/Core.h"
+#include "Deer/Core/Memory.h"
 #include "Deer/Core/Timestep.h"
 
 #ifdef DEER_RENDER

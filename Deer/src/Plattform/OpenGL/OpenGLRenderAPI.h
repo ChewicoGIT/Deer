@@ -1,6 +1,6 @@
 #pragma once
 #include "DeerRender/Render/RenderAPI.h" 
-#include "Deer/Core/Core.h" 
+ 
 
 namespace Deer {
 	class OpenGLRenderAPI : public RenderAPI {

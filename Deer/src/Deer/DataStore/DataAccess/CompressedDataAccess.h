@@ -1,5 +1,5 @@
 #pragma once
-#include "Deer/Core/Core.h"
+
 #include "Deer/DataStore/DataAccess.h"
 #include "Deer/DataStore/Path.h"
 #include "Deer/DataStore/DataStructure.h"

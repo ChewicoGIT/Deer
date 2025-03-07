@@ -1,5 +1,5 @@
 #pragma once
-#include "Deer/Core/Core.h"
+#include "Deer/Core/Memory.h"
 #include "glm/glm.hpp"
 
 namespace Deer {

@@ -1,7 +1,8 @@
 #pragma once
+#include "Deer/Core/Core.h"
+
 #include <string>
 #include "glm/glm.hpp"
-#include "Deer/Core/Core.h"
 
 struct asSMessageInfo;
 class asIScriptEngine;

@@ -1,5 +1,5 @@
 #include "Entity.h"
-#include "Deer/Core/Core.h"
+
 #include "Deer/Scene/Components.h"
 
 namespace Deer {

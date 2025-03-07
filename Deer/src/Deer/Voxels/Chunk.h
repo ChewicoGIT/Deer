@@ -1,5 +1,5 @@
 #pragma once
-#include "Deer/Core/Core.h"
+
 #include "Voxel.h"
 
 #ifdef DEER_RENDER
