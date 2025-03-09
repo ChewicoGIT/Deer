@@ -1,7 +1,6 @@
 #include "DeerStudio.h"
 
 #include "DeerStudio/Editor/PropertiesPannel.h"
-#include "DeerStudio/Editor/AssetManagerPannel.h"
 #include "DeerStudio/Editor/GamePannel.h"
 
 #include "Deer/Core/Project.h"
@@ -38,12 +37,13 @@ namespace Deer {
         VoxelData::createExampleVoxelAspect();
         VoxelData::loadVoxelsData();
         VoxelData::loadVoxelsAspect();
-        VoxelData::generateTextureAtlas();
         return 0;
     }
 
 
     int DeerStudioApplication::onInit() {
+
+        VoxelData::generateTextureAtlas();
         ScriptEngine::compileScriptEngine(DataStore::rootPath  / std::filesystem::path("scripts"));
 
         DataStore::setupDataAccess(new PhyisicalDataAccess());
@@ -69,11 +69,9 @@ namespace Deer {
         setNatureStyle();
 
         auto m_propertiesPannel = Ref<PropertiesPannel>(new PropertiesPannel());
-        auto m_assetPannel = Ref<AssetManagerPannel>(new AssetManagerPannel());
         auto m_gamePannel = Ref<GamePannel>(new GamePannel());
 
         pannels.push_back(m_propertiesPannel);
-        pannels.push_back(m_assetPannel);
         pannels.push_back(m_gamePannel);
 
         return 0;

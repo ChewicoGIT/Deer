@@ -3,6 +3,12 @@
 
 #include <vector>
 
+#ifdef DEER_RENDER
+#include "Deer/Core/Memory.h"
+
+namespace Deer { class Texture2D; }
+#endif
+
 namespace Deer {
     namespace VoxelData {
         extern std::vector<VoxelInfo> voxelsInfo;
@@ -16,6 +22,8 @@ namespace Deer {
         void loadVoxelsAspect();
         void createExampleVoxelAspect();
         void generateTextureAtlas();
+
+        Ref<Texture2D>& getVoxelColorTextureAtlas();
 #endif
     }
 }

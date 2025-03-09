@@ -6,8 +6,8 @@
 #define VOXEL_ASPECT_TYPE_CUSTOM "custom"
 
 // TEMP
-#define VOXEL_TEXTURE_SIZE_X 32
-#define VOXEL_TEXTURE_SIZE_Y 32
+#define VOXEL_TEXTURE_SIZE_X 128
+#define VOXEL_TEXTURE_SIZE_Y 128
 
 namespace Deer {
     enum class VoxelAspectType : uint8_t {

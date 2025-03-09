@@ -8,6 +8,7 @@
 #include "DeerRender/Render/Render.h"
 #include "DeerRender/Render/RenderUtils.h"
 #include "DeerRender/Render/Texture.h"
+#include "Deer/Voxels/VoxelData.h"
 
 #include "Deer/Core/Log.h"
 #include "glm/glm.hpp"
@@ -49,6 +50,8 @@ namespace Deer {
 		// Lets invert the z axis for engine convenience
 		glm::mat4 cameraProjectionMatrix = projectionMatrix * invertZ * camMatrix;
 
+		VoxelData::getVoxelColorTextureAtlas()->bind(0);
+
 		for (int x = 0; x < m_worldProps.getChunkCount(); x++) {
 			ChunkRender& chunkRender = m_chunksRender[x];
 			if (!chunkRender.hasData)
@@ -57,10 +60,8 @@ namespace Deer {
 			ChunkID chunkID = m_worldProps.getChunkID(x);
 			chunkRender.solidVoxel->bind();
 
-			int textureAssetID = AssetManager::loadAsset<Texture2D>(DataStore::rootPath / "assets/textures/dirt.png");
-			Asset<Texture2D>& textureAsset = AssetManager::getAsset<Texture2D>(textureAssetID);
-			textureAsset.value->bind(0);
-
+			VoxelData::getVoxelColorTextureAtlas()->bind(0);
+			
 			int assetID = AssetManager::loadAsset<Shader>(DataStore::rootPath / "assets/shaders/solid_voxel.glsl");
 			Asset<Shader>& shaderAsset = AssetManager::getAsset<Shader>(assetID);
 
