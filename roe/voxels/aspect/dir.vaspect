@@ -1,0 +1,14 @@
+{
+    "voxelAspect": {
+        "name": "dirt",
+        "aspectType": "voxel",
+        "textureFaces": {
+            "left": "dirt",
+            "right": "dirt",
+            "down": "dirt",
+            "up": "dirt",
+            "front": "dirt",
+            "back": "dirt"
+        }
+    }
+}

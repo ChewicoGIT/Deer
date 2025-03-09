@@ -1,6 +1,6 @@
 #include "TerrainEditor.h"
 
-#include "Deer/Core/Core.h"
+
 #include "Deer/Core/Project.h"
 #include "Deer/Scene/Scene.h"
 #include "Deer/Voxels/VoxelWorld.h"

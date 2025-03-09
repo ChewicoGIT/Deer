@@ -1,0 +1,6 @@
+{
+    "voxel": {
+        "name": "dirt",
+        "type": "solid"
+    }
+}

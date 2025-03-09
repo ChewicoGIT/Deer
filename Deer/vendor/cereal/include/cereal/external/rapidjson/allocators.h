@@ -96,9 +96,9 @@ public:
 // MemoryPoolAllocator
 
 //! Default memory allocator used by the parser and DOM.
-/*! This allocator allocate memory blocks from pre-allocated memory chunks. 
+/*! This allocator allocate memory voxelsInfo from pre-allocated memory chunks. 
 
-    It does not free memory blocks. And Realloc() only allocate new memory.
+    It does not free memory voxelsInfo. And Realloc() only allocate new memory.
 
     The memory chunks are allocated by BaseAllocator, which is CrtAllocator by default.
 
@@ -175,7 +175,7 @@ public:
         return capacity;
     }
 
-    //! Computes the memory blocks allocated.
+    //! Computes the memory voxelsInfo allocated.
     /*! \return total used bytes.
     */
     size_t Size() const {

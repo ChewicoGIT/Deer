@@ -3,7 +3,7 @@
 #include "DeerRender/Render/FrameBuffer.h"
 #include "DeerRender/Scene/GizmoRenderer.h"
 
-#include "Deer/Core/Core.h"
+
 #include "DeerRender/Core/Input/Input.h"
 #include "Deer/Core/Project.h"
 #include "Deer/Scene/Scene.h"

@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Voxel.h"
 
 #ifdef DEER_RENDER

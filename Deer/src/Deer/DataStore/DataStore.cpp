@@ -28,7 +28,10 @@ namespace Deer {
         Path filePath = rootPath / toLowerCasePath(path);
         std::ifstream file(filePath, std::ios::in | std::ios::binary);
 
-        DEER_CORE_ASSERT(file, "Could not open file {0}", filePath.generic_string().c_str());
+        if (!file) {
+            file.close();
+            return nullptr;
+        }
 
         file.seekg(0, std::ios::end);
         *size = (size_t)file.tellg();

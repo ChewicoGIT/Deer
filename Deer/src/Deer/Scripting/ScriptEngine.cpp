@@ -117,13 +117,14 @@ namespace Deer {
 		DEER_SCRIPT_ASSERT(r >= 0, "Unrecoverable error while starting a new module. {0}", moduleName);
 
 		try {
+			DEER_CORE_INFO("=== Loading Scripts ===");
 			for (const auto& entry : fs::recursive_directory_iterator(modulePath)) {
 				if (fs::is_regular_file(entry) && entry.path().extension() == ".as") {
 
 					r = builder.AddSectionFromFile(entry.path().generic_string().c_str());
 					DEER_SCRIPT_ASSERT(r >= 0, "Please correct the errors in the script and try again. {0}", entry.path().generic_string().c_str());
 
-					DEER_SCRIPT_TRACE("Loading script : {0}", entry.path().filename().string().c_str());
+					DEER_CORE_TRACE("  {0}", entry.path().filename().string().c_str());
 				}
 			}
 		} catch (const fs::filesystem_error& e) {

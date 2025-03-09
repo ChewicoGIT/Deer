@@ -1,0 +1,14 @@
+{
+    "voxelAspect": {
+        "name": "",
+        "aspectType": "empty",
+        "textureFaces": {
+            "left": "",
+            "right": "",
+            "down": "",
+            "up": "",
+            "front": "",
+            "back": ""
+        }
+    }
+}

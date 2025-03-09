@@ -13,6 +13,7 @@
 #include "Deer/DataStore/DataAccess/PhyisicalDataAccess.h"
 
 #include "Deer/DataStore/DataStore.h"
+#include "Deer/Voxels/VoxelData.h"
 
 #include "Editor/SceneExplorer.h"
 #include "Editor/TreePannel.h"
@@ -33,6 +34,11 @@ namespace Deer {
             return 1;
 
         DataStore::rootPath = projectPath;
+        VoxelData::createExampleVoxelData();
+        VoxelData::createExampleVoxelAspect();
+        VoxelData::loadVoxelsData();
+        VoxelData::loadVoxelsAspect();
+        VoxelData::generateTextureAtlas();
         return 0;
     }
 

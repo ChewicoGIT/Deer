@@ -1,0 +1,14 @@
+{
+    "voxelAspect": {
+        "name": "wood",
+        "aspectType": "voxel",
+        "textureFaces": {
+            "left": "wood",
+            "right": "wood",
+            "down": "wood",
+            "up": "wood",
+            "front": "wood",
+            "back": "wood"
+        }
+    }
+}

@@ -57,11 +57,11 @@ namespace Deer {
 			ChunkID chunkID = m_worldProps.getChunkID(x);
 			chunkRender.solidVoxel->bind();
 
-			int textureAssetID = AssetManager::loadAsset<Texture2D>("assets/textures/dirt.png");
+			int textureAssetID = AssetManager::loadAsset<Texture2D>(DataStore::rootPath / "assets/textures/dirt.png");
 			Asset<Texture2D>& textureAsset = AssetManager::getAsset<Texture2D>(textureAssetID);
 			textureAsset.value->bind(0);
 
-			int assetID = AssetManager::loadAsset<Shader>("assets/shaders/solid_voxel.glsl");
+			int assetID = AssetManager::loadAsset<Shader>(DataStore::rootPath / "assets/shaders/solid_voxel.glsl");
 			Asset<Shader>& shaderAsset = AssetManager::getAsset<Shader>(assetID);
 
 			shaderAsset.value->bind();

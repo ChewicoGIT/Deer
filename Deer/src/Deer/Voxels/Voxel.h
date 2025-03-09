@@ -1,4 +1,5 @@
 #pragma once
+#include "VoxelData.h"
 #include <cstdint>
 
 #define CHUNK_SIZE_X 32

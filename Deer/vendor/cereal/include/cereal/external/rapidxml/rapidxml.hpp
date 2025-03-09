@@ -123,7 +123,7 @@ namespace rapidxml
 #ifndef CEREAL_RAPIDXML_DYNAMIC_POOL_SIZE
     // Size of dynamic memory block of memory_pool.
     // Define CEREAL_RAPIDXML_DYNAMIC_POOL_SIZE before including rapidxml.hpp if you want to override the default value.
-    // After the static block is exhausted, dynamic blocks with approximately this size are allocated by memory_pool.
+    // After the static block is exhausted, dynamic voxelsInfo with approximately this size are allocated by memory_pool.
     #define CEREAL_RAPIDXML_DYNAMIC_POOL_SIZE (64 * 1024)
 #endif
 
@@ -373,7 +373,7 @@ namespace rapidxml
     //! <br><br>
     //! Pool maintains <code>CEREAL_RAPIDXML_STATIC_POOL_SIZE</code> bytes of statically allocated memory.
     //! Until static memory is exhausted, no dynamic memory allocations are done.
-    //! When static memory is exhausted, pool allocates additional blocks of memory of size <code>CEREAL_RAPIDXML_DYNAMIC_POOL_SIZE</code> each,
+    //! When static memory is exhausted, pool allocates additional voxelsInfo of memory of size <code>CEREAL_RAPIDXML_DYNAMIC_POOL_SIZE</code> each,
     //! by using global <code>new[]</code> and <code>delete[]</code> operators.
     //! This behaviour can be changed by setting custom allocation routines.
     //! Use set_allocator() function to set them.
@@ -383,7 +383,7 @@ namespace rapidxml
     //! <br><br>
     //! To obtain absolutely top performance from the parser,
     //! it is important that all nodes are allocated from a single, contiguous block of memory.
-    //! Otherwise, cache misses when jumping between two (or more) disjoint blocks of memory can slow down parsing quite considerably.
+    //! Otherwise, cache misses when jumping between two (or more) disjoint voxelsInfo of memory can slow down parsing quite considerably.
     //! If required, you can tweak <code>CEREAL_RAPIDXML_STATIC_POOL_SIZE</code>, <code>CEREAL_RAPIDXML_DYNAMIC_POOL_SIZE</code> and <code>CEREAL_RAPIDXML_ALIGNMENT</code>
     //! to obtain best wasted memory to performance compromise.
     //! To do it, define their values before rapidxml.hpp file is included.

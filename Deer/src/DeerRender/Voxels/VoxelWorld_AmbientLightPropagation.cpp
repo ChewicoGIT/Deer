@@ -45,7 +45,7 @@ namespace Deer {
 				ChunkVoxelID chunkVoxelID;
 
 				int yPos = minHeight;
-				// All light blocks under the max height must be put to 0 ambient light and above to 255
+				// All light voxelsInfo under the max height must be put to 0 ambient light and above to 255
 				for (; yPos < maxHeight; yPos++) {
 					extractChunkCordinates(xPos, yPos, zPos, chunkID, chunkVoxelID);
 					Chunk& chunk = m_chunks[m_worldProps.getWorldChunkID(chunkID)];
@@ -54,7 +54,7 @@ namespace Deer {
 					voxelLight.ambient_light = 0;
 				}
 
-				// Fill with light blocks and add queue to update light propagation
+				// Fill with light voxelsInfo and add queue to update light propagation
 				for (; yPos < maxHeightSorroundings; yPos++) {
 					extractChunkCordinates(xPos, yPos, zPos, chunkID, chunkVoxelID);
 					Chunk& chunk = m_chunks[m_worldProps.getWorldChunkID(chunkID)];

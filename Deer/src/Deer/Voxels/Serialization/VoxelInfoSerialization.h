@@ -1,38 +1,46 @@
 #pragma once
+#include "Deer/Voxels/VoxelInfo.h"
+#include "Deer/Core/Log.h"
 
 #include "cereal/cereal.hpp"
-#include "cereal/types/vector.hpp"
 #include "cereal/types/string.hpp"
 
-#include "Deer/Voxels/VoxelInfo.h"
-#include "Deer/Voxels/VoxelList.h"
+namespace Deer{
+    template<class Archive>
+    void save(Archive & archive, VoxelInfo const & block) { 
+        archive(cereal::make_nvp("name", block.name));
+        
+        // To avoid breaking things we set it up to Air
+        const char* blockTypeChar = VOXEL_INFO_TYPE_AIR;
+        switch (block.type)
+        {
+        case VoxelInfoType::Air :
+            blockTypeChar = VOXEL_INFO_TYPE_AIR;
+            break;
+        case VoxelInfoType::Solid :
+            blockTypeChar = VOXEL_INFO_TYPE_SOLID;
+            break;
+        }
 
-namespace Deer {
+        std::string blockTypeString(blockTypeChar);
+        archive(cereal::make_nvp("type", blockTypeString));
+    }
 
-	
-	template<class Archive>
-	void save(Archive& archive,
-		VoxelInfo const& vi)
-	{
-		archive(cereal::make_nvp("id", vi.id));
-		archive(cereal::make_nvp("type", (uint8_t)vi.type));
-	}
+    template<class Archive>
+    void load(Archive & archive, VoxelInfo & block) {archive(cereal::make_nvp("name", block.name));
+        std::string blockTypeString;
 
-	template<class Archive>
-	void load(Archive& archive,
-		VoxelInfo& vi)
-	{
-		uint8_t type;
-		archive(cereal::make_nvp("id", vi.id));
-		archive(cereal::make_nvp("type", type));
-
-		vi.type = (VoxelType)type;
-	}
-
-	template<class Archive>
-	void serialize(Archive& archive,
-		VoxelList& vl)
-	{
-		archive(cereal::make_nvp("voxels", vl.voxelInfo));
-	}
+        archive(cereal::make_nvp("name", block.name));
+        archive(cereal::make_nvp("type", blockTypeString));
+        
+        if (blockTypeString == VOXEL_INFO_TYPE_AIR)
+            block.type = VoxelInfoType::Air;
+        else if (blockTypeString == VOXEL_INFO_TYPE_SOLID)
+            block.type = VoxelInfoType::Solid;
+        else {
+            block.type = VoxelInfoType::Air;
+            DEER_CORE_ERROR("Failed to resolve voxel type for {0}, unknown type : {1}",
+                block.name.c_str(), blockTypeString.c_str());
+        }
+    } 
 }

@@ -1923,7 +1923,7 @@ static stbi_uc *stbi__hdr_to_ldr(float   *data, int x, int y, int comp)
 //        - non-interleaved case requires this anyway
 //        - allows good upsampling (see next)
 //    high-quality
-//      - upsampled channels are bilinearly interpolated, even across blocks
+//      - upsampled channels are bilinearly interpolated, even across voxelsInfo
 //      - quality integer IDCT derived from IJG's 'slow'
 //    performance
 //      - fast huffman; reasonable integer IDCT
@@ -1973,7 +1973,7 @@ typedef struct
       void *raw_data, *raw_coeff;
       stbi_uc *linebuf;
       short   *coeff;   // progressive only
-      int      coeff_w, coeff_h; // number of 8x8 coefficient blocks
+      int      coeff_w, coeff_h; // number of 8x8 coefficient voxelsInfo
    } img_comp[4];
 
    stbi__uint32   code_buffer; // jpeg entropy-coded buffer
@@ -2956,7 +2956,7 @@ static int stbi__parse_entropy_coded_data(stbi__jpeg *z)
          int n = z->order[0];
          // non-interleaved data, we just need to process one block at a time,
          // in trivial scanline order
-         // number of blocks to do just depends on how many actual "pixels" this
+         // number of voxelsInfo to do just depends on how many actual "pixels" this
          // component has, independent of interleaved MCU blocking and such
          int w = (z->img_comp[n].x+7) >> 3;
          int h = (z->img_comp[n].y+7) >> 3;
@@ -3013,7 +3013,7 @@ static int stbi__parse_entropy_coded_data(stbi__jpeg *z)
          int n = z->order[0];
          // non-interleaved data, we just need to process one block at a time,
          // in trivial scanline order
-         // number of blocks to do just depends on how many actual "pixels" this
+         // number of voxelsInfo to do just depends on how many actual "pixels" this
          // component has, independent of interleaved MCU blocking and such
          int w = (z->img_comp[n].x+7) >> 3;
          int h = (z->img_comp[n].y+7) >> 3;
@@ -3154,7 +3154,7 @@ static int stbi__process_marker(stbi__jpeg *z, int m)
          return L==0;
    }
 
-   // check for comment block or APP blocks
+   // check for comment block or APP voxelsInfo
    if ((m >= 0xE0 && m <= 0xEF) || m == 0xFE) {
       L = stbi__get16be(z->s);
       if (L < 2) {
@@ -3324,7 +3324,7 @@ static int stbi__process_frame_header(stbi__jpeg *z, int scan)
       z->img_comp[i].y = (s->img_y * z->img_comp[i].v + v_max-1) / v_max;
       // to simplify generation, we'll allocate enough memory to decode
       // the bogus oversized data from using interleaved MCUs and their
-      // big blocks (e.g. a 16x16 iMCU on an image of width 33); we won't
+      // big voxelsInfo (e.g. a 16x16 iMCU on an image of width 33); we won't
       // discard the extra data until colorspace conversion
       //
       // img_mcu_x, img_mcu_y: <=17 bits; comp[i].h and .v are <=4 (checked earlier)
@@ -3337,7 +3337,7 @@ static int stbi__process_frame_header(stbi__jpeg *z, int scan)
       z->img_comp[i].raw_data = stbi__malloc_mad2(z->img_comp[i].w2, z->img_comp[i].h2, 15);
       if (z->img_comp[i].raw_data == NULL)
          return stbi__free_jpeg_components(z, i+1, stbi__err("outofmem", "Out of memory"));
-      // align blocks for idct using mmx/sse
+      // align voxelsInfo for idct using mmx/sse
       z->img_comp[i].data = (stbi_uc*) (((size_t) z->img_comp[i].raw_data + 15) & ~15);
       if (z->progressive) {
          // w2, h2 are multiples of 8 (see above)
@@ -3376,7 +3376,7 @@ static int stbi__decode_jpeg_header(stbi__jpeg *z, int scan)
       if (!stbi__process_marker(z,m)) return 0;
       m = stbi__get_marker(z);
       while (m == STBI__MARKER_none) {
-         // some files have extra padding after their blocks, so ok, we'll scan
+         // some files have extra padding after their voxelsInfo, so ok, we'll scan
          if (stbi__at_eof(z->s)) return stbi__err("no SOF", "Corrupt JPEG");
          m = stbi__get_marker(z);
       }
