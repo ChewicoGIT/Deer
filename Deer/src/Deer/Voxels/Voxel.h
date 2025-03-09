@@ -41,6 +41,16 @@ namespace Deer {
 		inline bool operator== (const Voxel& b) const {
 			return id == b.id;
 		}
+
+#ifdef DEER_RENDER
+		inline bool isVoxelAspectType() const {
+			return VoxelData::voxelsAspect[id].definition.aspectType == VoxelAspectType::Voxel;
+		}
+
+		inline uint16_t getVoxelTextureID(int axis) {
+			return VoxelData::voxelsAspect[id].textureFacesIDs[axis];
+		}
+#endif
 	};
 
 	struct VoxelCordinates {

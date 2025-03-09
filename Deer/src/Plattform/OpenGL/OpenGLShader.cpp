@@ -94,7 +94,6 @@ namespace Deer {
 	void OpenGLShader::uploadUniformInt(const std::string& name, int value) {
 		int location = glGetUniformLocation(m_shaderID, name.c_str());
 		if (location == -1) {
-			DEER_CORE_WARN("OpenGL did not find uniform {0}", name.c_str());
 			return;
 		}
 		glUniform1i(location, value);
@@ -103,7 +102,6 @@ namespace Deer {
 	void OpenGLShader::uploadUniformMat4(const std::string& name, const glm::mat4 mat) {
 		int location = glGetUniformLocation(m_shaderID, name.c_str());
 		if (location == -1) {
-			DEER_CORE_WARN("OpenGL did not find uniform {0}", name.c_str());
 			return;
 		}
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(mat));

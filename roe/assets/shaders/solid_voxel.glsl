@@ -1,12 +1,13 @@
 #type vertex
 #version 410 core
-layout(location = 0) in float a_xPos;
-layout(location = 1) in float a_yPos;
-layout(location = 2) in float a_zPos;
-layout(location = 3) in uint a_normal;
-layout(location = 4) in float a_u;
-layout(location = 5) in float a_v;
-layout(location = 6) in float a_ambient_light;
+layout(location = 0) in int a_textureID;
+layout(location = 1) in float a_xPos;
+layout(location = 2) in float a_yPos;
+layout(location = 3) in float a_zPos;
+layout(location = 4) in uint a_normal;
+layout(location = 5) in float a_u;
+layout(location = 6) in float a_v;
+layout(location = 7) in float a_ambient_light;
 
 uniform mat4 u_viewMatrix;
 uniform mat4 u_worldMatrix;
@@ -14,15 +15,21 @@ uniform mat4 u_worldMatrix;
 uniform int u_chunkID_x;
 uniform int u_chunkID_y;
 uniform int u_chunkID_z;
+uniform int u_textureSize;
 
-out vec2 uv;
+out vec2 texturePosition;
 out float ambient_light;
 flat out uint normal;
 
 void main() {
 
 	normal = a_normal;
-	uv = vec2(a_u, a_v);
+	
+	int posY = a_textureID / u_textureSize;
+	int posX = a_textureID - posY * u_textureSize;
+
+	texturePosition = vec2((a_u + float(posX)) / float(u_textureSize), (a_v + float(posY)) / float(u_textureSize));
+
 	ambient_light = a_ambient_light;
 	gl_Position = u_viewMatrix * u_worldMatrix * vec4(a_xPos + u_chunkID_x * 32, a_yPos + u_chunkID_y * 32, a_zPos + u_chunkID_z * 32, 1.0);
 }
@@ -33,7 +40,7 @@ void main() {
 layout(location = 0) out vec4 fragColor;
 layout(location = 1) out int objectID;
 
-in vec2 uv;
+in vec2 texturePosition;
 in float ambient_light;
 flat in uint normal;
 
@@ -56,6 +63,6 @@ void main()
 	if (light < 0.1)
 		light = 0.1;
 
-	fragColor = texture(u_texture, uv) * light;
+	fragColor = texture(u_texture, texturePosition) * light;
     objectID = -1;
 }

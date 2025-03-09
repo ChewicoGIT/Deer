@@ -15,8 +15,9 @@ namespace Deer {
     namespace VoxelData {
         extern std::unordered_map<std::string, uint16_t> texturesIDs;
 
+        int squareTextureSize = 0;
         uint8_t* voxelColorTextureAtlasData = nullptr;
-        Ref<Texture2D> voxelColorTextureAtlas;
+        Ref<Texture2D> voxelColorTextureAtlas = nullptr;
     }
 
     void VoxelData::generateTextureAtlas() {
@@ -25,11 +26,11 @@ namespace Deer {
             voxelColorTextureAtlasData = nullptr;
         }
 
-        int squareTextureSize = 1;
+        squareTextureSize = 1;
         int textureCount = texturesIDs.size();
         while (squareTextureSize * squareTextureSize < textureCount)
             squareTextureSize++;
-        
+
         int textureAtlasSize = squareTextureSize * VOXEL_TEXTURE_SIZE_X * squareTextureSize * VOXEL_TEXTURE_SIZE_Y  * 3;
         voxelColorTextureAtlasData = new uint8_t[textureAtlasSize]{};
 
@@ -94,6 +95,9 @@ namespace Deer {
 
     }
     
+    int VoxelData::getVoxelTextureAtlasSize() {
+        return squareTextureSize;
+    }
 
     Ref<Texture2D>& VoxelData::getVoxelColorTextureAtlas() {
         return voxelColorTextureAtlas;

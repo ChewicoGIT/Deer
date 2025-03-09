@@ -42,19 +42,20 @@ namespace Deer {
 		std::string name;
 		DataType type;
 		ShaderDataType shaderType;
-		unsigned int offset;
+		int offset;
 
-		BufferElement(std::string _name, DataType _type , ShaderDataType _shaderType = ShaderDataType::FloatingPoint)
-			: name(_name), type(_type), shaderType(_shaderType), offset(0){
+		BufferElement(std::string _name, DataType _type , ShaderDataType _shaderType = ShaderDataType::FloatingPoint,
+			int _offset = -1)
+			: name(_name), type(_type), shaderType(_shaderType), offset(_offset){
 		}
 	};
 
 	class BufferLayout {
 	public:
 		BufferLayout() { }
-		BufferLayout(const std::initializer_list<BufferElement>& elements)
-			 : m_bufferElements(elements) {
-			calculateOffsetAndStride();
+		BufferLayout(const std::initializer_list<BufferElement>& elements, int _stride = -1)
+			 : m_bufferElements(elements), m_stride(_stride) {
+				calculateOffsetAndStride();
 		}
 		BufferLayout(const std::vector<BufferElement> elements)
 			: m_bufferElements(elements) {
@@ -67,9 +68,9 @@ namespace Deer {
 		inline int getStride() { return m_stride; }
 	private:
 		void calculateOffsetAndStride();
-	private:
+		
 		std::vector<BufferElement> m_bufferElements;
-		unsigned int m_stride = 0;
+		int m_stride;
 	};
 
 	class VertexBuffer {

@@ -69,6 +69,7 @@ namespace Deer {
 			shaderAsset.value->uploadUniformMat4("u_viewMatrix", cameraProjectionMatrix);
 			shaderAsset.value->uploadUniformMat4("u_worldMatrix", glm::mat4(1.0f));
 			shaderAsset.value->uploadUniformInt("u_texture", 0);
+			shaderAsset.value->uploadUniformInt("u_textureSize", VoxelData::getVoxelTextureAtlasSize());
 			shaderAsset.value->uploadUniformInt("u_chunkID_x", chunkID.x);
 			shaderAsset.value->uploadUniformInt("u_chunkID_y", chunkID.y);
 			shaderAsset.value->uploadUniformInt("u_chunkID_z", chunkID.z);

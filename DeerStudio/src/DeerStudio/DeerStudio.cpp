@@ -42,7 +42,6 @@ namespace Deer {
 
 
     int DeerStudioApplication::onInit() {
-
         VoxelData::generateTextureAtlas();
         ScriptEngine::compileScriptEngine(DataStore::rootPath  / std::filesystem::path("scripts"));
 
@@ -64,7 +63,6 @@ namespace Deer {
         io.Fonts->AddFontFromFileTTF(rfPath.generic_string().c_str(), 18);
         io.Fonts->AddFontDefault(&cnfg);
     
-        
         ImGui_ImplOpenGL3_CreateFontsTexture();
         setNatureStyle();
 

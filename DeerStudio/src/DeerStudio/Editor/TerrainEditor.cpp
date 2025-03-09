@@ -195,7 +195,7 @@ namespace Deer {
 						int yPos = res.yPos + NORMAL_DIR(1, res.face);
 						int zPos = res.zPos + NORMAL_DIR(2, res.face);
 						
-						Project::m_scene.getVoxelWorld()->setVoxel(xPos, yPos, zPos, Voxel(1));
+						Project::m_scene.getVoxelWorld()->setVoxel(xPos, yPos, zPos, Voxel(2));
 						Project::m_scene.getVoxelWorld()->bakeAmbientLightFromPoint(xPos, zPos);
 					}
 				}

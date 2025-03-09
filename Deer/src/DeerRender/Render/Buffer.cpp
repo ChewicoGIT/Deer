@@ -115,11 +115,15 @@ namespace Deer {
 
 	void BufferLayout::calculateOffsetAndStride() {
 		unsigned int offset = 0;
-		m_stride = 0;
+		int calc_stride = 0;
 		for (auto& element : m_bufferElements) {
-			element.offset = offset;
+			if (element.offset == -1)
+				element.offset = offset;
 			offset += dataTypeSize(element.type);
-			m_stride += dataTypeSize(element.type);
+			calc_stride += dataTypeSize(element.type);
 		}
+
+		if (m_stride == -1)
+			m_stride = calc_stride;
 	}
 }

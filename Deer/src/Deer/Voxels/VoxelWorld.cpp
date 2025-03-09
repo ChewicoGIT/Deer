@@ -73,10 +73,12 @@ namespace Deer {
 		Layer& layer = m_layers[m_worldProps.getWorldLayerID(layerID)];
 		LayerVoxel& layerVoxel = layer.modLayerVoxel(layerVoxelID);
 
-		if (info.id == 0)
-			layerVoxel.height = getLayerVoxelHeight(x, z);
-		else if (y >= layerVoxel.height)
+		#ifdef DEER_RENDER
+		if (info.isVoxelAspectType())
 			layerVoxel.height = y + 1;
+		else if (y >= layerVoxel.height)
+			layerVoxel.height = getLayerVoxelHeight(x, z);
+		#endif
 
 	}
 
