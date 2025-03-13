@@ -1,7 +1,6 @@
 {
     "voxelAspect": {
         "name": "wood",
-        "aspectType": "voxel",
         "textureFaces": {
             "left": "wood",
             "right": "wood",
@@ -9,6 +8,11 @@
             "up": "wood",
             "front": "wood",
             "back": "wood"
+        },
+        "emission": {
+            "red": 0,
+            "green": 0,
+            "blue": 0
         }
     }
 }

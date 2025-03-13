@@ -1,4 +1,5 @@
 #pragma once
+#include "imgui.h"
 
 namespace Deer {
 
@@ -85,6 +86,20 @@ namespace Deer {
             ImGui::EndPopup();
         }
 
+    }
+
+    inline void setupColumns(int iconSize) {
+        float width = ImGui::GetWindowContentRegionWidth();
+
+        if (width < iconSize) {
+            ImGui::Columns();
+            return;
+        }
+
+        int cols = (int)(width / (iconSize));
+        float componentWidth = width / (float)cols;
+
+        ImGui::Columns(cols, 0, false);
     }
 
 }

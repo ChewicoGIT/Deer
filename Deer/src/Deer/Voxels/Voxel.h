@@ -42,11 +42,11 @@ namespace Deer {
 			return id == b.id;
 		}
 
-#ifdef DEER_RENDER
-		inline bool isVoxelAspectType() const {
-			return VoxelData::voxelsAspect[id].definition.aspectType == VoxelAspectType::Voxel;
+		inline bool isVoxelType() const {
+			return VoxelData::voxelsInfo[id].type == VoxelInfoType::Voxel;
 		}
 
+#ifdef DEER_RENDER
 		inline uint16_t getVoxelTextureID(int axis) {
 			return VoxelData::voxelsAspect[id].textureFacesIDs[axis];
 		}

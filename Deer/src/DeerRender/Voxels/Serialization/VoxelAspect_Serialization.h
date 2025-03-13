@@ -17,50 +17,17 @@ namespace Deer{
         archive(cereal::make_nvp("back", textureFaceDefinitions.textureFaces[NORMAL_BACK]));
     }
 
-    template<class Archive>
-    void save(Archive & archive, VoxelAspectDefinition const& voxelAspectDefinition) {
-        const char* aspectTypeChar = VOXEL_ASPECT_TYPE_EMPTY;
-        switch (voxelAspectDefinition.aspectType) {
-            case VoxelAspectType::Empty:
-                aspectTypeChar = VOXEL_ASPECT_TYPE_EMPTY;
-                break;
-            case VoxelAspectType::Voxel :
-                aspectTypeChar = VOXEL_ASPECT_TYPE_VOXEL;
-                break;
-            case VoxelAspectType::Custom :
-                aspectTypeChar = VOXEL_ASPECT_TYPE_CUSTOM;
-                break;
-            case VoxelAspectType::Undefined:
-                aspectTypeChar = VOXEL_ASPECT_TYPE_EMPTY;
-                break;
-
-        }
-        std::string aspectTypeString(aspectTypeChar);
-
-        archive(cereal::make_nvp("name", voxelAspectDefinition.voxelName));
-        archive(cereal::make_nvp("aspectType", aspectTypeString));
-        archive(cereal::make_nvp("textureFaces", voxelAspectDefinition.textureFaces));
+    template <class Archive>
+    void serialize(Archive& archive, VoxelColorEmission& voxelEmission) {
+        archive(cereal::make_nvp("red", voxelEmission.r_value));
+        archive(cereal::make_nvp("green", voxelEmission.g_value));
+        archive(cereal::make_nvp("blue", voxelEmission.b_value));
     }
 
     template<class Archive>
-    void load(Archive & archive, VoxelAspectDefinition& voxelAspectDefinition) {
-        std::string aspectTypeString;
-
+    void serialize(Archive & archive, VoxelAspectDefinition& voxelAspectDefinition) {
         archive(cereal::make_nvp("name", voxelAspectDefinition.voxelName));
-        archive(cereal::make_nvp("aspectType", aspectTypeString));
         archive(cereal::make_nvp("textureFaces", voxelAspectDefinition.textureFaces));
-        
-        if (aspectTypeString == VOXEL_ASPECT_TYPE_EMPTY)
-            voxelAspectDefinition.aspectType = VoxelAspectType::Empty;
-        else if (aspectTypeString == VOXEL_ASPECT_TYPE_VOXEL)
-            voxelAspectDefinition.aspectType = VoxelAspectType::Voxel;
-        else if (aspectTypeString == VOXEL_ASPECT_TYPE_CUSTOM)
-            voxelAspectDefinition.aspectType = VoxelAspectType::Custom;
-        else {
-            voxelAspectDefinition.aspectType = VoxelAspectType::Empty;
-            DEER_CORE_ERROR("Failed to resolve voxel aspect type for {0}, unknown type : {1}",
-                voxelAspectDefinition.voxelName.c_str(),
-                aspectTypeString.c_str());
-        }
-    } 
+        archive(cereal::make_nvp("emission", voxelAspectDefinition.colorEmission));
+    }
 }

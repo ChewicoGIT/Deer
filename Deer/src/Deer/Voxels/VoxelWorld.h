@@ -56,6 +56,8 @@ namespace Deer {
 		void bakeAmbientLight(int minX, int maxX, int minZ, int maxZ);
 		void bakeAmbientLightFromPoint(int x, int z);
 
+		void bakeVoxelLight(int minX, int maxX, int minY, int maxY,int minZ, int maxZ);
+
 		// Light data
 		VoxelLight readLight(int x, int y, int z);
 		VoxelLight& modLight(int x, int y, int z);
@@ -67,13 +69,16 @@ namespace Deer {
 		// Voxel creation data
 		std::vector<uint32_t> m_indices;
 		std::vector<SolidVoxelVertexData> m_vertexData;
+		std::vector<VoxelCordinates> tmp_voxelLightSource;
 		std::queue<VoxelCordinates> m_ambientLightPropagation;
+		std::queue<VoxelCordinates> m_voxelLightPropagation;
 
 		// Chunk vertex creation
 		void genSolidVoxel(ChunkID chunkID, ChunkVoxelID chunkVoxelID);
 
 		//Light propagation
 		void resolveNextAmbientLightPropagation();
+		void resolveNextVoxelLightPropagation();
 #endif
 	};
 }

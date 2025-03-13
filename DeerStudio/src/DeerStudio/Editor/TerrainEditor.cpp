@@ -1,6 +1,5 @@
 #include "TerrainEditor.h"
 
-
 #include "Deer/Core/Project.h"
 #include "Deer/Scene/Scene.h"
 #include "Deer/Voxels/VoxelWorld.h"
@@ -30,9 +29,9 @@ namespace Deer {
 		TerrainEditMode_Empty = 3
 	};
 
+	uint16_t selectedVoxelID = 1;
 	TerrainEditMode m_terrainEditMode = TerrainEditMode_Add;
 
-	extern bool testing;
 	void terrainEditor_onImGui() {
 		ImGui::Begin("Terrain Editor");
 
@@ -92,53 +91,91 @@ namespace Deer {
 			VoxelWorldProps worldProps = voxelWorld->getVoxelWorldProps();
 			Project::m_scene.getVoxelWorld()->fillVoxels(
 				0, 32 * worldProps.chunkSizeX - 1,
-				0, 16 * worldProps.chunkSizeY,
+				0, 10,
 				0, 32 * worldProps.chunkSizeZ - 1, 
-				Voxel(1));	
+				Voxel(VoxelData::getVoxelID("dirt")));	
+		}
+
+		if (ImGui::Button("Create Ceiling")) {
+			VoxelWorldProps worldProps = voxelWorld->getVoxelWorldProps();
+			Project::m_scene.getVoxelWorld()->fillVoxels(
+				0, 32 * worldProps.chunkSizeX - 1,
+				16, 16,
+				0, 32 * worldProps.chunkSizeZ - 1, 
+				Voxel(VoxelData::getVoxelID("wood")));	
 		}
 
 		if (ImGui::Button("Bake light")) {
 			VoxelWorldProps worldProps = voxelWorld->getVoxelWorldProps();
 			Project::m_scene.getVoxelWorld()->bakeAmbientLight(0, 32 * worldProps.chunkSizeX - 1, 0, 32 * worldProps.chunkSizeZ - 1);
+			Project::m_scene.getVoxelWorld()->bakeVoxelLight(0, 32 * worldProps.chunkSizeX - 1, 0, 32 * worldProps.chunkSizeY - 1, 0, 32 * worldProps.chunkSizeZ - 1);
 		}
 
 		ImGui::Separator();
-
-		float windowWidth = ImGui::GetWindowContentRegionWidth();
-		
 		ImGui::Text("Editor mode:");
-		if (ImGui::ImageButton((ImTextureID)(uint64_t)add_icon->getTextureID(), ImVec2(windowWidth / 4 - 20, windowWidth / 4 - 20), ImVec2(0, 1), ImVec2(1, 0),
+
+		setupColumns(ICON_BTN_MIN_SIZE + 10);
+
+		if (ImGui::ImageButton((ImTextureID)(uint64_t)add_icon->getTextureID(), ImVec2(ICON_BTN_MIN_SIZE, ICON_BTN_MIN_SIZE), ImVec2(0, 1), ImVec2(1, 0),
 			-1, ImVec4(0, 0, 0, 0), ImVec4(1, 1, (m_terrainEditMode == TerrainEditMode_Add)? 0.7f : 1.0f, 1.0f))) {
 			m_terrainEditMode = TerrainEditMode_Add;
 		}
-		ImGui::SameLine();
-		if (ImGui::ImageButton((ImTextureID)(uint64_t)substract_icon->getTextureID(), ImVec2(windowWidth / 4 - 20, windowWidth / 4 - 20), ImVec2(0, 1), ImVec2(1, 0),
+		ImGui::NextColumn();
+		if (ImGui::ImageButton((ImTextureID)(uint64_t)substract_icon->getTextureID(), ImVec2(ICON_BTN_MIN_SIZE, ICON_BTN_MIN_SIZE), ImVec2(0, 1), ImVec2(1, 0),
 			- 1, ImVec4(0, 0, 0, 0), ImVec4(1, 1, (m_terrainEditMode == TerrainEditMode_Substract) ? 0.7f : 1.0f, 1.0f))) {
 			m_terrainEditMode = TerrainEditMode_Substract;
 		}
-		ImGui::SameLine();
-		if (ImGui::ImageButton((ImTextureID)(uint64_t)fill_icon->getTextureID(), ImVec2(windowWidth / 4 - 20, windowWidth / 4 - 20), ImVec2(0, 1), ImVec2(1, 0),
+		ImGui::NextColumn();
+		if (ImGui::ImageButton((ImTextureID)(uint64_t)fill_icon->getTextureID(), ImVec2(ICON_BTN_MIN_SIZE, ICON_BTN_MIN_SIZE), ImVec2(0, 1), ImVec2(1, 0),
 			-1, ImVec4(0, 0, 0, 0), ImVec4(1, 1, (m_terrainEditMode == TerrainEditMode_Fill) ? 0.7f : 1.0f, 1.0f))) {
 			m_terrainEditMode = TerrainEditMode_Fill;
 		}
-		ImGui::SameLine();
-		if (ImGui::ImageButton((ImTextureID)(uint64_t)fill_empty_icon->getTextureID(), ImVec2(windowWidth / 4 - 20, windowWidth / 4 - 20), ImVec2(0, 1), ImVec2(1, 0),
+		ImGui::NextColumn();
+		if (ImGui::ImageButton((ImTextureID)(uint64_t)fill_empty_icon->getTextureID(), ImVec2(ICON_BTN_MIN_SIZE, ICON_BTN_MIN_SIZE), ImVec2(0, 1), ImVec2(1, 0),
 			-1, ImVec4(0, 0, 0, 0), ImVec4(1, 1, (m_terrainEditMode == TerrainEditMode_Empty) ? 0.7f : 1.0f, 1.0f))) {
 			m_terrainEditMode = TerrainEditMode_Empty;
 		}
 
-		VoxelWorldProps worldProps = voxelWorld->getVoxelWorldProps();
-		if (testing) {
-			if (ImGui::Button("notest")) {
-				testing = !testing;
-				Project::m_scene.getVoxelWorld()->bakeAmbientLight(0, 32 * worldProps.chunkSizeX - 1, 0, 32 * worldProps.chunkSizeZ - 1);
+		ImGui::Columns();
+
+		if (m_terrainEditMode == TerrainEditMode_Add) {
+			ImGui::Text("Voxel: ");
+
+			setupColumns(ICON_BTN_MIN_SIZE + 10);
+
+			int textureSize = VoxelData::getVoxelTextureAtlasSize();
+			for (int id = 0; id < VoxelData::voxelsInfo.size(); id ++) {
+				VoxelInfo& vi = VoxelData::voxelsInfo[id];
+				if (vi.type != VoxelInfoType::Voxel)
+					continue;
+
+				ImGui::PushID(id);
+				VoxelAspect& va = VoxelData::voxelsAspect[id];
+				int textureID = va.textureFacesIDs[NORMAL_FRONT];
+
+				int posY = textureID / textureSize;
+				int posX = textureID - posY * textureSize;
+
+				float minX = (float)(posX + 0) / (float)textureSize;
+				float minY = (float)(posY + 0) / (float)textureSize;
+				float maxX = (float)(posX + 1) / (float)textureSize;
+				float maxY = (float)(posY + 1) / (float)textureSize;
+
+				float wColor = (id == selectedVoxelID)? 1 : 0.6f;
+				if (ImGui::ImageButton((ImTextureID)(uint64_t)VoxelData::getVoxelColorTextureAtlas()->getTextureID(),
+					ImVec2(ICON_BTN_MIN_SIZE, ICON_BTN_MIN_SIZE),
+					ImVec2(minX, maxY), ImVec2(maxX, minY),
+					-1,
+					ImVec4(0, 0, 0, 0), ImVec4(wColor, wColor, wColor, 1.0f))) {
+						selectedVoxelID = id;
+				}
+				ImGui::Text("%s", va.definition.voxelName.c_str());
+
+				ImGui::NextColumn();
+				ImGui::PopID();
 			}
-		}
-		else {
-			if (ImGui::Button("test")) {
-				testing = !testing;
-				Project::m_scene.getVoxelWorld()->bakeAmbientLight(0, 32 * worldProps.chunkSizeX - 1, 0, 32 * worldProps.chunkSizeZ - 1);
-			}
+
+			ImGui::Columns();
 		}
 
 		if (ImGui::Button("Delete voxel world")) {
@@ -150,7 +187,6 @@ namespace Deer {
 
 		ImGui::End();
 	}
-
 
 	void deleteVoxelWorld() {
 		Project::m_scene.deleteVoxelWorld();
@@ -179,12 +215,11 @@ namespace Deer {
 		if (Project::m_scene.getVoxelWorld()) {
 			VoxelRayResult res = Project::m_scene.getVoxelWorld()->rayCast_editor(viewport_sceneCamera.transform.position, rayDir);
 
+			Project::m_scene.getMainGizmoRenderer().refresh();
 			if (res.distance != 1000) {
-				Project::m_scene.getMainGizmoRenderer().refresh();
 				Project::m_scene.getMainGizmoRenderer().drawVoxelLineFace(res.xPos, res.yPos, res.zPos, res.face);
 
 				if (viewport_isActive && ImGui::GetMouseClickedCount(0) > 0) {
-
 					if (m_terrainEditMode == TerrainEditMode_Substract) {
 						if (res.yPos >= 0) {
 							Project::m_scene.getVoxelWorld()->setVoxel(res.xPos, res.yPos, res.zPos, emptyVoxel);
@@ -195,7 +230,7 @@ namespace Deer {
 						int yPos = res.yPos + NORMAL_DIR(1, res.face);
 						int zPos = res.zPos + NORMAL_DIR(2, res.face);
 						
-						Project::m_scene.getVoxelWorld()->setVoxel(xPos, yPos, zPos, Voxel(2));
+						Project::m_scene.getVoxelWorld()->setVoxel(xPos, yPos, zPos, Voxel(selectedVoxelID));
 						Project::m_scene.getVoxelWorld()->bakeAmbientLightFromPoint(xPos, zPos);
 					}
 				}

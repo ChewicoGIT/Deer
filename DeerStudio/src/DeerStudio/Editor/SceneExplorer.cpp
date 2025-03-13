@@ -86,18 +86,8 @@ namespace Deer {
         ImGui::TextDisabled("Active Scene : ");
         ImGui::SameLine();
         ImGui::TextColored(ImVec4(0.5f, 1.0f, 0.7f, 1), "%s", m_currentSceneName.generic_string().c_str());
-
-        float width = ImGui::GetWindowContentRegionWidth();
-
-        if (width < ICON_MIN_SIZE + 80) {
-            ImGui::End();
-            return;
-        }
-
-        int cols = (int)ceilf(width / (ICON_MIN_SIZE + 80));
-        float componentWidth = width / (float)cols;
-
-        ImGui::Columns(cols, 0, false);
+        
+        setupColumns(ICON_MIN_SIZE + 80);
 
         if (m_currentScenePath != DEER_SCENE_PATH) {
             drawSceneExplorerFolder("..");

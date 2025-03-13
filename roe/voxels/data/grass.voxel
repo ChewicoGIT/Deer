@@ -1,6 +1,6 @@
 {
     "voxel": {
-        "name": "dirt",
+        "name": "grass",
         "type": "voxel"
     }
 }

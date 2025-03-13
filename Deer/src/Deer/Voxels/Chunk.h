@@ -3,6 +3,9 @@
 
 #ifdef DEER_RENDER
 #include "DeerRender/Voxels/Voxel.h"
+#include "DeerRender/Voxels/VoxelAspect.h"
+#include "Deer/Voxels/VoxelData.h"
+#include <vector>
 #endif
 
 #include <array>
@@ -68,6 +71,43 @@ namespace Deer {
 			if (!m_voxels)
 				loadVoxels();
 			return m_lightInfo[VOXEL_POSITION(id)];
+		}
+
+		inline void clearVoxelLight(ChunkVoxelID min, ChunkVoxelID max) {
+			ChunkVoxelID voxelID;
+			for (voxelID.x = min.x; voxelID.x <= max.x; voxelID.x++){
+				for (voxelID.y = min.y; voxelID.y <= max.y; voxelID.y++){
+					for (voxelID.z = min.z; voxelID.z <= max.z; voxelID.z++){
+						m_lightInfo[VOXEL_POSITION(voxelID)].b_light = 0;
+						m_lightInfo[VOXEL_POSITION(voxelID)].r_light = 0;
+						m_lightInfo[VOXEL_POSITION(voxelID)].g_light = 0;
+					}
+				}
+			}
+		}
+
+		// This function is the same as clear Voxel Light but it also checks if there is a source of light
+		inline void clearVoxelLightAndSaveSources(ChunkVoxelID min, ChunkVoxelID max, ChunkID chunkID, std::vector<VoxelCordinates>& sources) {
+			ChunkVoxelID voxelID;
+			for (voxelID.x = min.x; voxelID.x <= max.x; voxelID.x++){
+				for (voxelID.y = min.y; voxelID.y <= max.y; voxelID.y++){
+					for (voxelID.z = min.z; voxelID.z <= max.z; voxelID.z++){
+						Voxel voxel = m_voxels[VOXEL_POSITION(voxelID)];
+						VoxelAspect& voxelAspect = VoxelData::voxelsAspect[voxel.id];
+						if (voxelAspect.isLightSource()) {
+							sources.push_back(VoxelCordinates(
+								voxelID.x + chunkID.x * CHUNK_SIZE_X,
+								voxelID.y + chunkID.y * CHUNK_SIZE_Y,
+								voxelID.z + chunkID.z * CHUNK_SIZE_Z
+							));
+						}
+
+						m_lightInfo[VOXEL_POSITION(voxelID)].b_light = 0;
+						m_lightInfo[VOXEL_POSITION(voxelID)].r_light = 0;
+						m_lightInfo[VOXEL_POSITION(voxelID)].g_light = 0;
+					}
+				}
+			}
 		}
 	private:
 		VoxelLight* m_lightInfo = nullptr;

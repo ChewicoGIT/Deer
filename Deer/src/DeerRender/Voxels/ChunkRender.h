@@ -18,6 +18,9 @@ namespace Deer {
 		uint8_t u;
 		uint8_t v;
 		uint8_t ambient_light;
+		uint8_t voxel_red_light;
+		uint8_t voxel_green_light;
+		uint8_t voxel_blue_light;
 
 		SolidVoxelVertexData(
 			uint8_t _xPos = 0,
@@ -27,8 +30,21 @@ namespace Deer {
 			uint8_t _u = 0 ,
 			uint8_t _v = 0,
 			uint8_t _ambient_light = 0,
-			uint16_t _textureID = 0)
-			: xPos(_xPos), yPos(_yPos), zPos(_zPos), normal(_normalID), u(_u), v(_v), ambient_light(_ambient_light), textureID(_textureID) { }
+			uint16_t _textureID = 0,
+			uint8_t _voxel_red_light = 0,
+			uint8_t _voxel_green_light = 0,
+			uint8_t _voxel_blue_light = 0) :
+				xPos(_xPos),
+				yPos(_yPos),
+				zPos(_zPos),
+				normal(_normalID),
+				u(_u),
+				v(_v),
+				ambient_light(_ambient_light),
+				textureID(_textureID),
+				voxel_red_light(_voxel_red_light),
+				voxel_green_light(_voxel_green_light),
+				voxel_blue_light(_voxel_blue_light) { }
 	};
 
 }

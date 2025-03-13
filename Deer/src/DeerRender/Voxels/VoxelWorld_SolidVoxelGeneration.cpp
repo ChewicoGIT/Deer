@@ -47,7 +47,11 @@ namespace Deer {
 			{ "a_normal", DataType::Unsigned_Byte, ShaderDataType::Integer, offsetof(SolidVoxelVertexData, normal) },
 			{ "a_u", DataType::Unsigned_Byte, ShaderDataType::FloatingPoint, offsetof(SolidVoxelVertexData, u) },
 			{ "a_v", DataType::Unsigned_Byte, ShaderDataType::FloatingPoint, offsetof(SolidVoxelVertexData, v) },
-			{ "a_ambient_light", DataType::Unsigned_Byte, ShaderDataType::FloatingPoint, offsetof(SolidVoxelVertexData, ambient_light) }}, sizeof(SolidVoxelVertexData));
+			{ "a_ambient_light", DataType::Unsigned_Byte, ShaderDataType::FloatingPoint, offsetof(SolidVoxelVertexData, ambient_light)},
+			{ "a_r_l", DataType::Unsigned_Byte, ShaderDataType::FloatingPoint, offsetof(SolidVoxelVertexData, voxel_red_light) },
+			{ "a_g_l", DataType::Unsigned_Byte, ShaderDataType::FloatingPoint, offsetof(SolidVoxelVertexData, voxel_green_light) },
+			{ "a_b_l", DataType::Unsigned_Byte, ShaderDataType::FloatingPoint, offsetof(SolidVoxelVertexData, voxel_blue_light) }
+		}, sizeof(SolidVoxelVertexData));
 		vb->setLayout(layout);
 		va->addVertexBuffer(vb);
 		va->setIndexBuffer(ib);
@@ -59,12 +63,11 @@ namespace Deer {
 		chunkRender.hasData = true;
 	}
 
-	bool testing = true;
 	void VoxelWorld::genSolidVoxel(ChunkID chunkID, ChunkVoxelID chunkVoxelID) {
 		Chunk& workingChunk = m_chunks[m_worldProps.getWorldChunkID(chunkID)];
 		Voxel voxel = workingChunk.readVoxel(chunkVoxelID);
 
-		if (!voxel.isVoxelAspectType())
+		if (!voxel.isVoxelType())
 			return;
 
 		for (int i = 0; i < 6; i++) {
@@ -74,7 +77,7 @@ namespace Deer {
 			int facingZ = NORMAL_DIR(Z_AXIS, i) + chunkVoxelID.z + CHUNK_SIZE_Z * chunkID.z;
 
 			Voxel frontVoxel = readVoxel(facingX, facingY, facingZ);
-			if (frontVoxel.isVoxelAspectType())
+			if (frontVoxel.isVoxelType())
 				continue;
 
 			VoxelLight frontVoxelLight = readLight(facingX, facingY, facingZ);
@@ -87,12 +90,17 @@ namespace Deer {
 			Voxel nextVoxel = readVoxel(nextX, nextY, nextZ);
 			VoxelLight nextVoxelLight = readLight(nextX, nextY, nextZ);
 
-			bool isFaceShadow = frontVoxelLight.ambient_light != 255 && (nextVoxel.isVoxelAspectType() || frontVoxelLight.ambient_light > nextVoxelLight.ambient_light);
+			bool isFaceShadow = frontVoxelLight.ambient_light != 255 && (nextVoxel.isVoxelType() || frontVoxelLight.ambient_light > nextVoxelLight.ambient_light);
 
 			int vertexID = m_vertexData.size();
 			int ambient_oclusion[4] = { frontVoxelLight.ambient_light, frontVoxelLight.ambient_light, frontVoxelLight.ambient_light, frontVoxelLight.ambient_light };
+			int voxel_light[4 * 3];
 			int air_count[4];
+
 			for (int v = 0; v < 4; v++) {
+				voxel_light[v * 3 + 0] = frontVoxelLight.r_light;
+				voxel_light[v * 3 + 1] = frontVoxelLight.g_light;
+				voxel_light[v * 3 + 2] = frontVoxelLight.b_light;
 
 				bool airEdge[3] = { false };
 				bool faceShadow[3] = { false };
@@ -105,8 +113,12 @@ namespace Deer {
 					Voxel voxelData = readVoxel(checkDirX, checkDirY, checkDirZ);
 					VoxelLight lightData = readLight(checkDirX, checkDirY, checkDirZ);
 
-					airEdge[a] = !voxelData.isVoxelAspectType();
+					airEdge[a] = !voxelData.isVoxelType();
 					ambient_oclusion[v] += lightData.ambient_light;
+					voxel_light[v * 3 + 0] += lightData.r_light;
+					voxel_light[v * 3 + 1] += lightData.g_light;
+					voxel_light[v * 3 + 2] += lightData.b_light;
+
 
 					if (airEdge[a]) {
 						int checkNextDirX = checkDirX + NORMAL_DIR(X_AXIS, i);
@@ -115,7 +127,7 @@ namespace Deer {
 
 						Voxel nextVoxelData = readVoxel(checkNextDirX, checkNextDirY, checkNextDirZ);
 						VoxelLight nextLightData = readLight(checkNextDirX, checkNextDirY, checkNextDirZ);
-						faceShadow[a] = lightData.ambient_light != 255 && (nextVoxelData.isVoxelAspectType() || lightData.ambient_light > nextLightData.ambient_light);
+						faceShadow[a] = lightData.ambient_light != 255 && (nextVoxelData.isVoxelType() || lightData.ambient_light > nextLightData.ambient_light);
 					}
 					else
 						faceShadow[a] = true;
@@ -129,8 +141,11 @@ namespace Deer {
 					Voxel voxelData = readVoxel(checkDirX, checkDirY, checkDirZ);
 					VoxelLight lightData = readLight(checkDirX, checkDirY, checkDirZ);
 
-					airEdge[2] = !voxelData.isVoxelAspectType();
+					airEdge[2] = !voxelData.isVoxelType();
 					ambient_oclusion[v] += lightData.ambient_light;
+					voxel_light[v * 3 + 0] += lightData.r_light;
+					voxel_light[v * 3 + 1] += lightData.g_light;
+					voxel_light[v * 3 + 2] += lightData.b_light;
 
 					if (airEdge[2]) {
 						int checkNextDirX = checkDirX + NORMAL_DIR(X_AXIS, i);
@@ -139,7 +154,7 @@ namespace Deer {
 
 						Voxel nextVoxelData = readVoxel(checkNextDirX, checkNextDirY, checkNextDirZ);
 						VoxelLight nextLightData = readLight(checkNextDirX, checkNextDirY, checkNextDirZ);
-						faceShadow[2] = lightData.ambient_light != 255 && (nextVoxelData.isVoxelAspectType() || lightData.ambient_light > nextLightData.ambient_light);
+						faceShadow[2] = lightData.ambient_light != 255 && (nextVoxelData.isVoxelType() || lightData.ambient_light > nextLightData.ambient_light);
 					}
 					else
 						faceShadow[2] = true;
@@ -148,13 +163,15 @@ namespace Deer {
 					airEdge[2] = true;
 
 				air_count[v] = (int)airEdge[0] + (int)airEdge[1] + (int)airEdge[2] + 1;
+
 				ambient_oclusion[v] = (ambient_oclusion[v] * 4) / (air_count[v] * 3 + 4);
+				voxel_light[v * 3 + 0] = (voxel_light[v * 3 + 0] * 4) / (air_count[v] * 3 + 4);
+				voxel_light[v * 3 + 1] = (voxel_light[v * 3 + 1] * 4) / (air_count[v] * 3 + 4);
+				voxel_light[v * 3 + 2] = (voxel_light[v * 3 + 2] * 4) / (air_count[v] * 3 + 4);
 
 				int faceShadowC = (int)isFaceShadow + (int)faceShadow[0] + (int)faceShadow[1] + (int)faceShadow[2];
 
-				if (testing)
-					ambient_oclusion[v] = ambient_oclusion[v] * (22 - faceShadowC) / 20;
-
+				//ambient_oclusion[v] = ambient_oclusion[v] * (22 - faceShadowC) / 20;//
 				ambient_oclusion[v] = (ambient_oclusion[v] > 255) ? 255 : ambient_oclusion[v];
 
 				SolidVoxelVertexData vertexData(
@@ -163,7 +180,10 @@ namespace Deer {
 					chunkVoxelID.z + NORMAL_VERTEX_POS(Z_AXIS, v, i),
 					i, VERTEX_UV(X_AXIS, v), VERTEX_UV(Y_AXIS, v),
 					ambient_oclusion[v],
-					voxel.getVoxelTextureID(i));
+					voxel.getVoxelTextureID(i),
+					voxel_light[v * 3 + 0],
+					voxel_light[v * 3 + 1],
+					voxel_light[v * 3 + 2]);
 
 				m_vertexData.push_back(vertexData);
 			}

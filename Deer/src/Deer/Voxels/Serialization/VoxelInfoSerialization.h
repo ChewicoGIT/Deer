@@ -17,8 +17,14 @@ namespace Deer{
         case VoxelInfoType::Air :
             blockTypeChar = VOXEL_INFO_TYPE_AIR;
             break;
-        case VoxelInfoType::Solid :
-            blockTypeChar = VOXEL_INFO_TYPE_SOLID;
+        case VoxelInfoType::Voxel :
+            blockTypeChar = VOXEL_INFO_TYPE_VOXEL;
+            break;
+        case VoxelInfoType::TransparentVoxel :
+            blockTypeChar = VOXEL_INFO_TYPE_TRANSPARENT_VOXEL;
+            break;
+        case VoxelInfoType::Custom :
+            blockTypeChar = VOXEL_INFO_TYPE_CUSTOM;
             break;
         }
 
@@ -35,8 +41,12 @@ namespace Deer{
         
         if (blockTypeString == VOXEL_INFO_TYPE_AIR)
             block.type = VoxelInfoType::Air;
-        else if (blockTypeString == VOXEL_INFO_TYPE_SOLID)
-            block.type = VoxelInfoType::Solid;
+        else if (blockTypeString == VOXEL_INFO_TYPE_VOXEL)
+            block.type = VoxelInfoType::Voxel;
+        else if (blockTypeString == VOXEL_INFO_TYPE_TRANSPARENT_VOXEL)
+            block.type = VoxelInfoType::TransparentVoxel;
+        else if (blockTypeString == VOXEL_INFO_TYPE_CUSTOM)
+            block.type = VoxelInfoType::Custom;
         else {
             block.type = VoxelInfoType::Air;
             DEER_CORE_ERROR("Failed to resolve voxel type for {0}, unknown type : {1}",

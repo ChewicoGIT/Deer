@@ -1,0 +1,18 @@
+{
+    "voxelAspect": {
+        "name": "ceci",
+        "textureFaces": {
+            "left": "ceci",
+            "right": "ceci",
+            "down": "ceci",
+            "up": "ceci",
+            "front": "ceci",
+            "back": "ceci"
+        },
+        "emission": {
+            "red": 255,
+            "green": 255,
+            "blue": 255
+        }
+    }
+}

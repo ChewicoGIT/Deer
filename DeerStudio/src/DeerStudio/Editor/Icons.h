@@ -4,6 +4,8 @@
 #define ICON_MIN_SIZE 90
 #define ICON_MAX_SIZE 160
 
+#define ICON_BTN_MIN_SIZE 40
+
 namespace Deer {
 	class Texture2D;
 

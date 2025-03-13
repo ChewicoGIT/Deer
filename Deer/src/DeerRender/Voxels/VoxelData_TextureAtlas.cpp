@@ -71,7 +71,7 @@ namespace Deer {
 
                 for (int y = 0; y < VOXEL_TEXTURE_SIZE_Y; y++) {
                     for (int x = 0; x < VOXEL_TEXTURE_SIZE_X; x++) {
-                        int inputTextureIndex = (x + y * width) * channels;
+                        int inputTextureIndex = (x + y * width) * 3;
                         int outputTextureIndex = (x + xOffsetPixels + (y + yOffsetPixels) * VOXEL_TEXTURE_SIZE_X * squareTextureSize) * 3;
 
                         voxelColorTextureAtlasData[outputTextureIndex + 0] = textureData[inputTextureIndex + 0];

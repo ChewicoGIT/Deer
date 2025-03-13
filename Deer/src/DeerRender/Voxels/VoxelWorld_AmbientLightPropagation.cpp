@@ -104,6 +104,9 @@ namespace Deer {
 		m_ambientLightPropagation.pop();
 
 		LayerVoxel& layerVoxel = modLayerVoxel(position.x, position.z);
+		if (position.y > layerVoxel.height)
+			return;
+
 		if (layerVoxel.ambient_light_height > position.y)
 			layerVoxel.ambient_light_height = position.y;
 
@@ -115,22 +118,20 @@ namespace Deer {
 			int nextY = position.y + NORMAL_DIR(Y_AXIS, i);
 			int nextZ = position.z + NORMAL_DIR(Z_AXIS, i);
 
-			//DEER_CORE_ASSERT(nextX < 32, "well");
-
 			Voxel nextVoxel = readVoxel(nextX, nextY, nextZ);
-			solidCheck[i] = nextVoxel.id != 0;
-			if (nextVoxel.id != 0)
+			solidCheck[i] = nextVoxel.isVoxelType();
+			if (solidCheck[i])
 				continue;
 
-			VoxelLight nextLight = readLight(nextX, nextY, nextZ);
+			VoxelLight& nextLight = modLight(nextX, nextY, nextZ);
 			int nextLightMinValue = currentLight.ambient_light - LIGHT_PROPAGATION_SIMPLE_FALL;
 
 			if (nextLight.ambient_light < nextLightMinValue) {
-				modLight(nextX, nextY, nextZ).ambient_light = nextLightMinValue;
+				nextLight.ambient_light = nextLightMinValue;
 				m_ambientLightPropagation.push(VoxelCordinates(nextX, nextY, nextZ));
 			}
 		}
-
+		
 		// Check for every complex dir
 		for (int i = 0; i < 6; i++) {
 			int cDir0 = LIGHT_PROPAGATION_COMPLEX_DIR(0, i);
@@ -144,18 +145,16 @@ namespace Deer {
 			int nextZ = position.z + NORMAL_DIR(Z_AXIS, cDir0) + NORMAL_DIR(Z_AXIS, cDir1);
 
 			Voxel nextVoxel = readVoxel(nextX, nextY, nextZ);
-			solidCheck[i] = nextVoxel.id != 0;
-			if (nextVoxel.id != 0)
+			if (nextVoxel.isVoxelType())
 				continue;
 
-			VoxelLight nextLight = readLight(nextX, nextY, nextZ);
+			VoxelLight& nextLight = modLight(nextX, nextY, nextZ);
 			int nextLightMinValue = currentLight.ambient_light - LIGHT_PROPAGATION_COMPLEX_FALL;
 
 			if (nextLight.ambient_light < nextLightMinValue) {
-				modLight(nextX, nextY, nextZ).ambient_light = nextLightMinValue;
+				nextLight.ambient_light = nextLightMinValue;
 				m_ambientLightPropagation.push(VoxelCordinates(nextX, nextY, nextZ));
 			}
 		}
 	}
-
 }

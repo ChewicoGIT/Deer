@@ -1,13 +1,13 @@
 {
     "voxelAspect": {
-        "name": "dirt",
+        "name": "grass",
         "textureFaces": {
-            "left": "dirt",
-            "right": "dirt",
+            "left": "dirt_grass",
+            "right": "dirt_grass",
             "down": "dirt",
-            "up": "dirt",
-            "front": "dirt",
-            "back": "dirt"
+            "up": "grass",
+            "front": "dirt_grass",
+            "back": "dirt_grass"
         },
         "emission": {
             "red": 0,

@@ -40,7 +40,6 @@ namespace Deer {
         return 0;
     }
 
-
     int DeerStudioApplication::onInit() {
         VoxelData::generateTextureAtlas();
         ScriptEngine::compileScriptEngine(DataStore::rootPath  / std::filesystem::path("scripts"));

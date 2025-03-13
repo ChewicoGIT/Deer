@@ -22,7 +22,6 @@ namespace Deer{
         voxelsAspect.resize(voxelsInfo.size());
 
         voxelsAspect[0].definition.voxelName = VOXEL_INFO_TYPE_AIR;
-        voxelsAspect[0].definition.aspectType = VoxelAspectType::Empty;
         
         DEER_CORE_INFO("=== Loading voxel aspect ===");
         DEER_CORE_TRACE("  default - air");
@@ -53,13 +52,6 @@ namespace Deer{
                 continue;
             }
 
-            if (voxelsAspect[voxelID].definition.aspectType != VoxelAspectType::Undefined) {
-                DEER_CORE_ERROR("{0} with name {1} has dupplicated name id",
-                    voxelAspectPath.generic_string().c_str(),
-                    aspectDefinition.voxelName.c_str());
-                continue;
-            }
-
             DEER_CORE_TRACE("  {0} - {1}",
                 voxelAspectPath.filename().generic_string().c_str(),
                 aspectDefinition.voxelName.c_str());
@@ -69,7 +61,7 @@ namespace Deer{
 
         DEER_CORE_INFO("=== Extracting textures ===");
         for (VoxelAspect& voxelAspect : voxelsAspect) {
-            if (voxelAspect.definition.aspectType != VoxelAspectType::Voxel) 
+            if (voxelsInfo[VoxelData::getVoxelID(voxelAspect.definition.voxelName)].type != VoxelInfoType::Voxel) 
                 continue;
             
             for (int i = 0; i < 6; i++) {
@@ -94,13 +86,6 @@ namespace Deer{
                     DEER_CORE_TRACE("  texture {0} - id: {1}",
                         faceTextureString.c_str(), textureID);
                 }
-            }
-        }
-
-        for (int i = 0; i < voxelsAspect.size(); i++) {
-            if (voxelsAspect[i].definition.aspectType == VoxelAspectType::Undefined) {
-                DEER_CORE_WARN("No aspect definition for {0}",
-                    voxelsInfo[i].name.c_str());
             }
         }
     }

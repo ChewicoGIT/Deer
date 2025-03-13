@@ -1,6 +1,6 @@
 {
     "voxel": {
         "name": "wood",
-        "type": "solid"
+        "type": "voxel"
     }
 }
