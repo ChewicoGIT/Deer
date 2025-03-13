@@ -1,6 +1,6 @@
 {
     "voxelAspect": {
-        "name": "ceci",
+        "name": "red",
         "textureFaces": {
             "left": "ceci",
             "right": "ceci",
@@ -11,8 +11,8 @@
         },
         "emission": {
             "red": 255,
-            "green": 125,
-            "blue": 30
+            "green": 0,
+            "blue": 0
         }
     }
 }
