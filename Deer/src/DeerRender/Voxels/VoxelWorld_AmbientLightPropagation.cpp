@@ -132,6 +132,8 @@ namespace Deer {
 			}
 		}
 		
+		return;
+		// TODO
 		// Check for every complex dir
 		for (int i = 0; i < 6; i++) {
 			int cDir0 = LIGHT_PROPAGATION_COMPLEX_DIR(0, i);
