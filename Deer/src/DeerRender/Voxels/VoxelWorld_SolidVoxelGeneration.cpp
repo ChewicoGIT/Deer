@@ -108,19 +108,18 @@ namespace Deer {
 			// col 3 -> blue light
 			int voxel_light[4 * 4];
 			
-			int air_count[4];
-
-			int ambient_oclusion[4] = { frontVoxelLight.ambient_light, frontVoxelLight.ambient_light, frontVoxelLight.ambient_light, frontVoxelLight.ambient_light };
-
 			// For every vertex
 			for (int v = 0; v < 4; v++) {
+				// This var takes the count of the voxels that where added in voxel_light
+				int sample_count = 1;
+
 				voxel_light[v * 4 + 0] = frontVoxelLight.ambient_light;
 				voxel_light[v * 4 + 1] = frontVoxelLight.r_light;
 				voxel_light[v * 4 + 2] = frontVoxelLight.g_light;
 				voxel_light[v * 4 + 3] = frontVoxelLight.b_light;
 
-				bool airEdge[3] = { false };
-				bool faceShadow[3] = { false };
+				//Checks if there is air on the blocks of the side 
+				bool airEdge[2];
 
 				// Calculate ambient occlusion and light difusion
 				for (int a = 0; a < 2; a++) {
@@ -133,25 +132,15 @@ namespace Deer {
 					Voxel checkChordsVoxel = readVoxel(checkChordsID.x, checkChordsID.y, checkChordsID.z);
 					VoxelLight checkChordsVoxelLight = readLight(checkChordsID.x, checkChordsID.y, checkChordsID.z);
 
-					airEdge[a] = !checkChordsVoxel.isVoxelType();
-					voxel_light[v * 4 + 0] += checkChordsVoxelLight.ambient_light;
-					voxel_light[v * 4 + 1] += checkChordsVoxelLight.r_light;
-					voxel_light[v * 4 + 2] += checkChordsVoxelLight.g_light;
-					voxel_light[v * 4 + 3] += checkChordsVoxelLight.b_light;
-
 					// Check for the same chords but 2 voxels apart
+					airEdge[a] = !checkChordsVoxel.isVoxelType();
 					if (airEdge[a]) {
-						VoxelCordinates checkChords2ID(
-							checkChordsID.x + NORMAL_DIR(X_AXIS, i),
-							checkChordsID.y + NORMAL_DIR(Y_AXIS, i),
-							checkChordsID.z + NORMAL_DIR(Z_AXIS, i)
-						);
+						sample_count++;
 
-						Voxel checkChords2Voxel = readVoxel(checkChords2ID.x, checkChords2ID.y, checkChords2ID.z);
-						VoxelLight checkChords2VoxelLight = readLight(checkChords2ID.x, checkChords2ID.y, checkChords2ID.z);
-						faceShadow[a] = checkChords2VoxelLight.ambient_light != 255 && (checkChords2Voxel.isVoxelType() || checkChords2VoxelLight.ambient_light > checkChordsVoxelLight.ambient_light);
-					} else {
-						faceShadow[a] = true;
+						voxel_light[v * 4 + 0] += checkChordsVoxelLight.ambient_light;
+						voxel_light[v * 4 + 1] += checkChordsVoxelLight.r_light;
+						voxel_light[v * 4 + 2] += checkChordsVoxelLight.g_light;
+						voxel_light[v * 4 + 3] += checkChordsVoxelLight.b_light;
 					}
 				}
 
@@ -165,34 +154,20 @@ namespace Deer {
 					Voxel checkChordsVoxel = readVoxel(checkChordsID.x, checkChordsID.y, checkChordsID.z);
 					VoxelLight checkChordsVoxelLight = readLight(checkChordsID.x, checkChordsID.y, checkChordsID.z);
 
-					airEdge[2] = !checkChordsVoxel.isVoxelType();
-					voxel_light[v * 4 + 0] += checkChordsVoxelLight.ambient_light;
-					voxel_light[v * 4 + 1] += checkChordsVoxelLight.r_light;
-					voxel_light[v * 4 + 2] += checkChordsVoxelLight.g_light;
-					voxel_light[v * 4 + 3] += checkChordsVoxelLight.b_light;
+					if (!checkChordsVoxel.isVoxelType()) {
+						sample_count++;
 
-					if (airEdge[2]) {
-						VoxelCordinates checkChords2ID(
-							checkChordsID.x + NORMAL_DIR(X_AXIS, i),
-							checkChordsID.y + NORMAL_DIR(Y_AXIS, i),
-							checkChordsID.z + NORMAL_DIR(Z_AXIS, i)
-						);
-
-						Voxel checkChords2Voxel = readVoxel(checkChords2ID.x, checkChords2ID.y, checkChords2ID.z);
-						VoxelLight checkChords2VoxelLight = readLight(checkChords2ID.x, checkChords2ID.y, checkChords2ID.z);
-						faceShadow[2] = checkChords2VoxelLight.ambient_light != 255 && (checkChords2Voxel.isVoxelType() || checkChords2VoxelLight.ambient_light > checkChordsVoxelLight.ambient_light);
-					} else {
-						faceShadow[2] = true;
+						voxel_light[v * 4 + 0] += checkChordsVoxelLight.ambient_light;
+						voxel_light[v * 4 + 1] += checkChordsVoxelLight.r_light;
+						voxel_light[v * 4 + 2] += checkChordsVoxelLight.g_light;
+						voxel_light[v * 4 + 3] += checkChordsVoxelLight.b_light;
 					}
-				} else {
-					airEdge[2] = true;
 				}
 
 				air_count[v] = (int)airEdge[0] + (int)airEdge[1] + (int)airEdge[2] + 1;
 
 				for (int xi = 0; xi < 4; xi++) {
-					//voxel_light[v * 4 + xi] = (voxel_light[v * 3 + 0] * 4) / (air_count[v] * 3 + 4);
-					voxel_light[v * 4 + xi] = (voxel_light[v * 4 + xi]) / 4;
+					voxel_light[v * 4 + xi] = (voxel_light[v * 4 + xi]) / sample_count;
 					voxel_light[v * 4 + xi] = (voxel_light[v * 4 + xi] > 255)? 255 : voxel_light[v * 4 + xi];
 				}
 
@@ -215,7 +190,7 @@ namespace Deer {
 				m_vertexData.push_back(vertexData);
 			}
 
-			//if ((ambient_oclusion[0] + ambient_oclusion[3]) < (ambient_oclusion[1] + ambient_oclusion[2])) {
+			//if (side0 < side1) {
 				m_indices.push_back(vertexID);
 				m_indices.push_back(vertexID + 2);
 				m_indices.push_back(vertexID + 1);
@@ -223,7 +198,7 @@ namespace Deer {
 				m_indices.push_back(vertexID + 1);
 				m_indices.push_back(vertexID + 2);
 				m_indices.push_back(vertexID + 3);
-				/*
+			/*
 			}
 			else {
 				m_indices.push_back(vertexID);

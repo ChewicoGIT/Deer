@@ -55,7 +55,20 @@ namespace Deer{
 		m_voxelLightPropagation.pop();
 
 		VoxelLight currentLight = readLight(position.x, position.y, position.z);
-		bool solidCheck[6] = { false };
+		bool voxelCheck[6] = { false };
+
+        int highestRGBValue = currentLight.r_light;
+        if (highestRGBValue < currentLight.g_light)
+            highestRGBValue = currentLight.g_light;
+        if (highestRGBValue < currentLight.b_light)
+            highestRGBValue = currentLight.b_light;
+
+        int proportionalDecrease = (LIGHT_PROPAGATION_SIMPLE_FALL * 100) / highestRGBValue;
+
+        int nextLightRedMinValue = currentLight.r_light - (proportionalDecrease * currentLight.r_light) / 100;
+        int nextLightGreenMinValue = currentLight.g_light - (proportionalDecrease * currentLight.g_light) / 100;
+        int nextLightBlueMinValue = currentLight.b_light - (proportionalDecrease * currentLight.b_light) / 100;
+
 		// Check for every simple dir
 		for (int i = 0; i < 6; i++) {
 			int nextX = position.x + NORMAL_DIR(X_AXIS, i);
@@ -63,14 +76,11 @@ namespace Deer{
 			int nextZ = position.z + NORMAL_DIR(Z_AXIS, i);
 
 			Voxel nextVoxel = readVoxel(nextX, nextY, nextZ);
-			solidCheck[i] = nextVoxel.isVoxelType();
-			if (solidCheck[i])
+			voxelCheck[i] = nextVoxel.isVoxelType();
+			if (voxelCheck[i])
 				continue;
 
 			VoxelLight& nextLight = modLight(nextX, nextY, nextZ);
-			int nextLightRedMinValue = currentLight.r_light - LIGHT_PROPAGATION_SIMPLE_FALL;
-			int nextLightGreenMinValue = currentLight.g_light - LIGHT_PROPAGATION_SIMPLE_FALL;
-			int nextLightBlueMinValue = currentLight.b_light - LIGHT_PROPAGATION_SIMPLE_FALL;
 
             bool nextVoxelModified = false;
 			if (nextLight.r_light < nextLightRedMinValue) {
@@ -99,7 +109,7 @@ namespace Deer{
 			int cDir0 = LIGHT_PROPAGATION_COMPLEX_DIR(0, i);
 			int cDir1 = LIGHT_PROPAGATION_COMPLEX_DIR(1, i);
 
-			if (solidCheck[cDir0] || solidCheck[cDir1])
+			if (voxelCheck[cDir0] || voxelCheck[cDir1])
 				continue;
 
 			int nextX = position.x + NORMAL_DIR(X_AXIS, cDir0) + NORMAL_DIR(X_AXIS, cDir1);
