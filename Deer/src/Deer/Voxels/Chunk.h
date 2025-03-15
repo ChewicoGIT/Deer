@@ -88,6 +88,9 @@ namespace Deer {
 
 		// This function is the same as clear Voxel Light but it also checks if there is a source of light
 		inline void clearVoxelLightAndSaveSources(ChunkVoxelID min, ChunkVoxelID max, ChunkID chunkID, std::vector<VoxelCordinates>& sources) {
+			if (!m_voxels)
+				return;
+			
 			ChunkVoxelID voxelID;
 			for (voxelID.x = min.x; voxelID.x <= max.x; voxelID.x++){
 				for (voxelID.y = min.y; voxelID.y <= max.y; voxelID.y++){

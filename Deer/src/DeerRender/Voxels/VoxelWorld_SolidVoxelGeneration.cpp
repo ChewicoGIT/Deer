@@ -41,17 +41,23 @@ namespace Deer {
 
 		BufferLayout layout({
 			{ "a_textureID", DataType::Unsigned_Short2, ShaderDataType::Integer, offsetof(SolidVoxelVertexData, textureID) },
+			{ "a_ambient_occlusion", DataType::Unsigned_Byte, ShaderDataType::FloatingPoint, offsetof(SolidVoxelVertexData, ambient_occlusion) },
+
 			{ "a_xPos", DataType::Unsigned_Byte, ShaderDataType::FloatingPoint, offsetof(SolidVoxelVertexData, xPos) },
 			{ "a_yPos", DataType::Unsigned_Byte, ShaderDataType::FloatingPoint, offsetof(SolidVoxelVertexData, yPos) },
 			{ "a_zPos", DataType::Unsigned_Byte, ShaderDataType::FloatingPoint, offsetof(SolidVoxelVertexData, zPos) },
-			{ "a_normal", DataType::Unsigned_Byte, ShaderDataType::Integer, offsetof(SolidVoxelVertexData, normal) },
+
+			{ "a_a_light", DataType::Unsigned_Byte, ShaderDataType::FloatingPoint, offsetof(SolidVoxelVertexData, a_light) },
+			{ "a_r_light", DataType::Unsigned_Byte, ShaderDataType::FloatingPoint, offsetof(SolidVoxelVertexData, r_light) },
+			{ "a_g_light", DataType::Unsigned_Byte, ShaderDataType::FloatingPoint, offsetof(SolidVoxelVertexData, g_light) },
+			{ "a_b_light", DataType::Unsigned_Byte, ShaderDataType::FloatingPoint, offsetof(SolidVoxelVertexData, b_light) },
+
+			{ "a_normal", DataType::Unsigned_Byte, ShaderDataType::Integer, offsetof(SolidVoxelVertexData, normal)},
+
 			{ "a_u", DataType::Unsigned_Byte, ShaderDataType::FloatingPoint, offsetof(SolidVoxelVertexData, u) },
-			{ "a_v", DataType::Unsigned_Byte, ShaderDataType::FloatingPoint, offsetof(SolidVoxelVertexData, v) },
-			{ "a_ambient_light", DataType::Unsigned_Byte, ShaderDataType::FloatingPoint, offsetof(SolidVoxelVertexData, ambient_light)},
-			{ "a_r_l", DataType::Unsigned_Byte, ShaderDataType::FloatingPoint, offsetof(SolidVoxelVertexData, voxel_red_light) },
-			{ "a_g_l", DataType::Unsigned_Byte, ShaderDataType::FloatingPoint, offsetof(SolidVoxelVertexData, voxel_green_light) },
-			{ "a_b_l", DataType::Unsigned_Byte, ShaderDataType::FloatingPoint, offsetof(SolidVoxelVertexData, voxel_blue_light) }
+			{ "a_v", DataType::Unsigned_Byte, ShaderDataType::FloatingPoint, offsetof(SolidVoxelVertexData, v) }
 		}, sizeof(SolidVoxelVertexData));
+
 		vb->setLayout(layout);
 		va->addVertexBuffer(vb);
 		va->setIndexBuffer(ib);
@@ -101,22 +107,25 @@ namespace Deer {
 			// Save the vertex id for later
 			int vertexID = m_vertexData.size();
 
-			// Formula : vertex * 4 + col
-			// col 0 -> ambient oclusion
-			// col 1 -> red light
-			// col 2 -> green light
-			// col 3 -> blue light
-			int voxel_light[4 * 4];
-			
+			int voxel_count[4];
+
 			// For every vertex
 			for (int v = 0; v < 4; v++) {
 				// This var takes the count of the voxels that where added in voxel_light
 				int sample_count = 1;
+				// Count the blocks to calculate the ambient occlusion, min value 0 max value 2
+				voxel_count[v] = 0;
 
-				voxel_light[v * 4 + 0] = frontVoxelLight.ambient_light;
-				voxel_light[v * 4 + 1] = frontVoxelLight.r_light;
-				voxel_light[v * 4 + 2] = frontVoxelLight.g_light;
-				voxel_light[v * 4 + 3] = frontVoxelLight.b_light;
+				// col 0 -> ambient oclusion
+				// col 1 -> red light
+				// col 2 -> green light
+				// col 3 -> blue light
+				int voxel_light[4];
+			
+				voxel_light[0] = frontVoxelLight.ambient_light;
+				voxel_light[1] = frontVoxelLight.r_light;
+				voxel_light[2] = frontVoxelLight.g_light;
+				voxel_light[3] = frontVoxelLight.b_light;
 
 				//Checks if there is air on the blocks of the side 
 				bool airEdge[2];
@@ -137,10 +146,12 @@ namespace Deer {
 					if (airEdge[a]) {
 						sample_count++;
 
-						voxel_light[v * 4 + 0] += checkChordsVoxelLight.ambient_light;
-						voxel_light[v * 4 + 1] += checkChordsVoxelLight.r_light;
-						voxel_light[v * 4 + 2] += checkChordsVoxelLight.g_light;
-						voxel_light[v * 4 + 3] += checkChordsVoxelLight.b_light;
+						voxel_light[0] += checkChordsVoxelLight.ambient_light;
+						voxel_light[1] += checkChordsVoxelLight.r_light;
+						voxel_light[2] += checkChordsVoxelLight.g_light;
+						voxel_light[3] += checkChordsVoxelLight.b_light;
+					} else {
+						voxel_count[v]++;
 					}
 				}
 
@@ -157,40 +168,42 @@ namespace Deer {
 					if (!checkChordsVoxel.isVoxelType()) {
 						sample_count++;
 
-						voxel_light[v * 4 + 0] += checkChordsVoxelLight.ambient_light;
-						voxel_light[v * 4 + 1] += checkChordsVoxelLight.r_light;
-						voxel_light[v * 4 + 2] += checkChordsVoxelLight.g_light;
-						voxel_light[v * 4 + 3] += checkChordsVoxelLight.b_light;
+						voxel_light[0] += checkChordsVoxelLight.ambient_light;
+						voxel_light[1] += checkChordsVoxelLight.r_light;
+						voxel_light[2] += checkChordsVoxelLight.g_light;
+						voxel_light[3] += checkChordsVoxelLight.b_light;
+					} else {
+						voxel_count[v]++;
 					}
 				}
 
-				air_count[v] = (int)airEdge[0] + (int)airEdge[1] + (int)airEdge[2] + 1;
-
 				for (int xi = 0; xi < 4; xi++) {
-					voxel_light[v * 4 + xi] = (voxel_light[v * 4 + xi]) / sample_count;
-					voxel_light[v * 4 + xi] = (voxel_light[v * 4 + xi] > 255)? 255 : voxel_light[v * 4 + xi];
+					voxel_light[xi] = (voxel_light[xi]) / sample_count;
+					voxel_light[xi] = (voxel_light[xi] > 255)? 255 : voxel_light[xi];
 				}
 
-				int faceShadowC = (int)isFaceShadow + (int)faceShadow[0] + (int)faceShadow[1] + (int)faceShadow[2];
+				SolidVoxelVertexData vertex_data;
+				vertex_data.textureID = voxel.getVoxelTextureID(i);
+				vertex_data.ambient_occlusion = voxel_count[v];
+				
+				vertex_data.xPos = chunkVoxelID.x + NORMAL_VERTEX_POS(X_AXIS, v, i);
+				vertex_data.yPos = chunkVoxelID.y + NORMAL_VERTEX_POS(Y_AXIS, v, i);
+				vertex_data.zPos = chunkVoxelID.z + NORMAL_VERTEX_POS(Z_AXIS, v, i);
+				
+				vertex_data.a_light = voxel_light[0];
+				vertex_data.r_light = voxel_light[1];
+				vertex_data.g_light = voxel_light[2];
+				vertex_data.b_light = voxel_light[3];
 
-				//ambient_oclusion[v] = ambient_oclusion[v] * (22 - faceShadowC) / 20;//
-				//ambient_oclusion[v] = (ambient_oclusion[v] > 255) ? 255 : ambient_oclusion[v];
+				vertex_data.normal = i;
 
-				SolidVoxelVertexData vertexData(
-					chunkVoxelID.x + NORMAL_VERTEX_POS(X_AXIS, v, i),
-					chunkVoxelID.y + NORMAL_VERTEX_POS(Y_AXIS, v, i),
-					chunkVoxelID.z + NORMAL_VERTEX_POS(Z_AXIS, v, i),
-					i, VERTEX_UV(X_AXIS, v), VERTEX_UV(Y_AXIS, v),
-					voxel_light[v * 4 + 0],
-					voxel.getVoxelTextureID(i),
-					voxel_light[v * 4 + 1],
-					voxel_light[v * 4 + 2],
-					voxel_light[v * 4 + 3]);
+				vertex_data.u = VERTEX_UV(X_AXIS, v);
+				vertex_data.v = VERTEX_UV(Y_AXIS, v);
 
-				m_vertexData.push_back(vertexData);
+				m_vertexData.push_back(vertex_data);
 			}
 
-			//if (side0 < side1) {
+			if (voxel_count[0] + voxel_count[3] > voxel_count[1] + voxel_count[2]) {
 				m_indices.push_back(vertexID);
 				m_indices.push_back(vertexID + 2);
 				m_indices.push_back(vertexID + 1);
@@ -198,17 +211,15 @@ namespace Deer {
 				m_indices.push_back(vertexID + 1);
 				m_indices.push_back(vertexID + 2);
 				m_indices.push_back(vertexID + 3);
-			/*
+			} else {
+				m_indices.push_back(vertexID);
+				m_indices.push_back(vertexID + 3);
+				m_indices.push_back(vertexID + 1);
+
+				m_indices.push_back(vertexID + 2);
+				m_indices.push_back(vertexID + 3);
+				m_indices.push_back(vertexID);
 			}
-			else {
-				m_indices.push_back(vertexID);
-				m_indices.push_back(vertexID + 3);
-				m_indices.push_back(vertexID + 1);
-
-				m_indices.push_back(vertexID + 2);
-				m_indices.push_back(vertexID + 3);
-				m_indices.push_back(vertexID);
-			}*/
 		}
 	}
 
