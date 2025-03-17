@@ -42,6 +42,7 @@ namespace Deer {
 
     int DeerStudioApplication::onInit() {
         VoxelData::generateTextureAtlas();
+        VoxelData::loadVoxelsShaders();
         ScriptEngine::compileScriptEngine(DataStore::rootPath  / std::filesystem::path("scripts"));
 
         DataStore::setupDataAccess(new PhyisicalDataAccess());

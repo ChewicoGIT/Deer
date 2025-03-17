@@ -12,6 +12,7 @@
 #define DEER_VOXEL_DATA_PATH "voxels/data"
 #define DEER_VOXEL_ASPECT_PATH "voxels/aspect"
 #define DEER_VOXEL_TEXTURE_PATH "voxels/textures"
+#define DEER_VOXEL_SHADER_PATH "voxels/shaders"
 #define DEER_OBJECT_PATH "objects"
 
 #define DEER_BIN_PATH "bin"

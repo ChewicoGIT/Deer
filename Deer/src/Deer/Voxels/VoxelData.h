@@ -7,7 +7,7 @@
 #include "Deer/Core/Memory.h"
 #include "DeerRender/Voxels/VoxelAspect.h"
 
-namespace Deer { class Texture2D; }
+namespace Deer { class Texture2D; class Shader; }
 #endif
 
 namespace Deer {
@@ -20,14 +20,17 @@ namespace Deer {
         int32_t getVoxelID(const std::string&);
 
 #ifdef DEER_RENDER
-        extern std::vector<VoxelAspect> voxelsAspect;
+        void createExampleVoxelAspect();
 
         void loadVoxelsAspect();
-        void createExampleVoxelAspect();
         void generateTextureAtlas();
+        void loadVoxelsShaders();
 
         int getVoxelTextureAtlasSize();
         Ref<Texture2D>& getVoxelColorTextureAtlas();
+        Ref<Shader>& getSolidVoxelShader();
+
+        extern std::vector<VoxelAspect> voxelsAspect;
 #endif
     }
 }

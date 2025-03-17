@@ -82,6 +82,7 @@ void main()
 	vec3 tLight = vec3(ambient_light, ambient_light, ambient_light) + voxel_light;
 	tLight = vec3(clamp(tLight.r / 255, 0, 1), clamp(tLight.g / 255, 0, 1), clamp(tLight.b / 255, 0, 1));
 
-	vec4 col = texture(u_texture, uv) * vec4(tLight, 1);
-	fragColor = (col * 3) / (3 + ambient_occlusion);
+	vec3 col = texture(u_texture, uv).rgb * vec3(tLight);
+	col = (col * 3) / (3 + ambient_occlusion);
+	fragColor = vec4(col, 1);
 }

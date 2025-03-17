@@ -1,6 +1,7 @@
 #include "Deer/Voxels/VoxelData.h"
 #include "Deer/Core/Log.h"
 #include "Deer/DataStore/DataStore.h"
+#include "DeerRender/Render/Shader.h"
 #include "DeerRender/Voxels/VoxelAspect.h"
 
 #include "cereal/archives/json.hpp"
@@ -14,6 +15,7 @@ namespace Deer{
     namespace VoxelData {
         std::vector<VoxelAspect> voxelsAspect;
         std::unordered_map<std::string, uint16_t> texturesIDs;
+        Ref<Shader> solidVoxelShader;
     }
 
     void VoxelData::loadVoxelsAspect() {
@@ -103,4 +105,16 @@ namespace Deer{
         DataStore::saveFile(Path(DEER_VOXEL_PATH) / "vaspect.example", (uint8_t*)restultString.c_str(), restultString.size());
     }
 
+    void VoxelData::loadVoxelsShaders() {
+        uint32_t size;
+        uint8_t* data = DataStore::readFile(Path(DEER_VOXEL_SHADER_PATH) / "solid_voxel.glsl", &size);
+
+        solidVoxelShader = Shader::create(data, size);
+
+        delete[] data;
+    }
+
+    Ref<Shader>& VoxelData::getSolidVoxelShader() {
+        return solidVoxelShader;
+    }
 }

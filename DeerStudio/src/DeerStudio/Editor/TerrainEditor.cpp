@@ -100,9 +100,16 @@ namespace Deer {
 			VoxelWorldProps worldProps = voxelWorld->getVoxelWorldProps();
 			Project::m_scene.getVoxelWorld()->fillVoxels(
 				0, 32 * worldProps.chunkSizeX - 1,
-				16, 16,
+				0, 16,
 				0, 32 * worldProps.chunkSizeZ - 1, 
-				Voxel(VoxelData::getVoxelID("wood")));	
+				Voxel(VoxelData::getVoxelID("wood")));
+			
+			Project::m_scene.getVoxelWorld()->fillVoxels(
+				1, 32 * worldProps.chunkSizeX - 2,
+				8, 15,
+				1, 32 * worldProps.chunkSizeZ - 2, 
+				Voxel(VoxelData::getVoxelID("air")));
+
 		}
 
 		if (ImGui::Button("Bake light")) {

@@ -2,6 +2,7 @@
 #include "Deer/Voxels/Chunk.h"
 #include "Deer/Core/Application.h"
 #include "Deer/Core/Project.h"
+#include "Deer/Core/Memory.h"
 #include "Deer/Asset/AssetManager.h"
 #include "Deer/Scene/Entity.h"
 #include "Deer/Scene/Components.h"
@@ -52,6 +53,14 @@ namespace Deer {
 
 		VoxelData::getVoxelColorTextureAtlas()->bind(0);
 
+		Ref<Shader>& shader = VoxelData::getSolidVoxelShader();
+		shader->bind();
+
+		shader->uploadUniformMat4("u_viewMatrix", cameraProjectionMatrix);
+		shader->uploadUniformMat4("u_worldMatrix", glm::mat4(1.0f));
+		shader->uploadUniformInt("u_texture", 0);
+		shader->uploadUniformInt("u_textureSize", VoxelData::getVoxelTextureAtlasSize());
+
 		for (int x = 0; x < m_worldProps.getChunkCount(); x++) {
 			ChunkRender& chunkRender = m_chunksRender[x];
 			if (!chunkRender.hasData)
@@ -60,19 +69,9 @@ namespace Deer {
 			ChunkID chunkID = m_worldProps.getChunkID(x);
 			chunkRender.solidVoxel->bind();
 
-			VoxelData::getVoxelColorTextureAtlas()->bind(0);
-			
-			int assetID = AssetManager::loadAsset<Shader>(DataStore::rootPath / "assets/shaders/solid_voxel.glsl");
-			Asset<Shader>& shaderAsset = AssetManager::getAsset<Shader>(assetID);
-
-			shaderAsset.value->bind();
-			shaderAsset.value->uploadUniformMat4("u_viewMatrix", cameraProjectionMatrix);
-			shaderAsset.value->uploadUniformMat4("u_worldMatrix", glm::mat4(1.0f));
-			shaderAsset.value->uploadUniformInt("u_texture", 0);
-			shaderAsset.value->uploadUniformInt("u_textureSize", VoxelData::getVoxelTextureAtlasSize());
-			shaderAsset.value->uploadUniformInt("u_chunkID_x", chunkID.x);
-			shaderAsset.value->uploadUniformInt("u_chunkID_y", chunkID.y);
-			shaderAsset.value->uploadUniformInt("u_chunkID_z", chunkID.z);
+			shader->uploadUniformInt("u_chunkID_x", chunkID.x);
+			shader->uploadUniformInt("u_chunkID_y", chunkID.y);
+			shader->uploadUniformInt("u_chunkID_z", chunkID.z);
 			
 			Render::submit(chunkRender.solidVoxel);
 		}
