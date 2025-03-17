@@ -53,11 +53,6 @@ make -f Bootstrap.mak linux
 cd ..
 ```
 
-Run
-```console
-./bin/linux-x86_64/Debug/DeerStudio/DeerStudio
-```
-
 ### Compile Project
 If you have downloaded the Premake5 binary, replace ./vendor/premake-core/bin/release/premake5 with your Premake5 binary location. Make sure to be in the project root when executing commands.
 
@@ -71,6 +66,11 @@ make
 ```console
 ./vendor/premake-core/bin/release/premake5 gmake
 make config=debug
+```
+
+#### Run
+```console
+./bin/linux-x86_64/Debug/DeerStudio/DeerStudio
 ```
 
 
