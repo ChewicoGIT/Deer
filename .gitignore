@@ -10,6 +10,7 @@ Makefile
 
 .vscode/
 bin/
+/vendor/premake-core/
 .vs/
 AS_DEBUG/
 Tasks/

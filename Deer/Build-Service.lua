@@ -29,7 +29,7 @@ project "DeerService"
       defines { }
 
    filter "system:linux"
-       toolset "gcc"
+       toolset "clang"
        buildoptions { "-std=c++20" }
        defines { "LINUX"}
        files {

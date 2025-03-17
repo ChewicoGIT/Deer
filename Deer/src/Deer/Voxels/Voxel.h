@@ -85,6 +85,9 @@ namespace Deer {
 		uint16_t y = 0;
 		uint16_t z = 0;
 
+		ChunkID() = default;
+		ChunkID(uint16_t _x, uint16_t _y, uint16_t _z) : x(_x), y(_y), z(_z) {  }
+
 		inline bool operator== (const ChunkID& b) const {
 			return x == b.x && y == b.y && z == b.z;
 		}
@@ -94,6 +97,8 @@ namespace Deer {
 		uint16_t x = 0;
 		uint16_t z = 0;
 
+		LayerID() = default;
+		LayerID(uint16_t _x, uint16_t _z) : x(_x), z(_z) { }
 		inline bool operator== (const LayerID& b) const {
 			return x == b.x && z == b.z;
 		}
