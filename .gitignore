@@ -2,7 +2,6 @@
 *.vcxproj.filters
 *.vcxproj.user
 *.sln
-*.ini
 *.dbscn
 *.make
 *.code-workspace
