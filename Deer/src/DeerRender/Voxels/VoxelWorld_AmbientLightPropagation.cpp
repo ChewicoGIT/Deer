@@ -44,14 +44,34 @@ namespace Deer {
 				ChunkID chunkID;
 				ChunkVoxelID chunkVoxelID;
 
-				int yPos = minHeight;
-				// All light voxelsInfo under the max height must be put to 0 ambient light and above to 255
-				for (; yPos < maxHeight; yPos++) {
-					extractChunkCordinates(xPos, yPos, zPos, chunkID, chunkVoxelID);
-					Chunk& chunk = m_chunks[m_worldProps.getWorldChunkID(chunkID)];
-					VoxelLight& voxelLight = chunk.modLight(chunkVoxelID);
+				// Depending if it's an edge we will add to queue to propagate the light
+				bool isPositionEdge = 
+					(xPos == minX) || (xPos == maxX) ||
+					(zPos == minZ) || (zPos == maxZ);
 
-					voxelLight.ambient_light = 0;
+				// All light voxelsInfo under the max height must be put to 0 ambient light and above to 255
+				// I think this is optional
+				
+				int yPos = minHeight;
+				if (!isPositionEdge) {
+					// Empty the ilumination
+					for (; yPos < maxHeight; yPos++) {
+						extractChunkCordinates(xPos, yPos, zPos, chunkID, chunkVoxelID);
+						Chunk& chunk = m_chunks[m_worldProps.getWorldChunkID(chunkID)];
+						VoxelLight& voxelLight = chunk.modLight(chunkVoxelID);
+	
+						voxelLight.ambient_light = 0;
+					}
+				} else {
+					// Add to queue
+					for (; yPos < maxHeight; yPos++) {
+						extractChunkCordinates(xPos, yPos, zPos, chunkID, chunkVoxelID);
+						Chunk& chunk = m_chunks[m_worldProps.getWorldChunkID(chunkID)];
+						VoxelLight voxelLight = chunk.readLight(chunkVoxelID);
+						
+						if (voxelLight.ambient_light > 0)
+							m_ambientLightPropagation.push(VoxelCordinates(xPos, yPos, zPos));
+					}
 				}
 
 				// Fill with light voxelsInfo and add queue to update light propagation
@@ -62,15 +82,6 @@ namespace Deer {
 
 					voxelLight.ambient_light = 255;
 					m_ambientLightPropagation.push(VoxelCordinates(xPos, yPos, zPos));
-				}
-
-				yPos++;
-				if (yPos < CHUNK_SIZE_Y * m_worldProps.chunkSizeY) {
-					extractChunkCordinates(xPos, yPos, zPos, chunkID, chunkVoxelID);
-					Chunk& chunk = m_chunks[m_worldProps.getWorldChunkID(chunkID)];
-					VoxelLight& voxelLight = chunk.modLight(chunkVoxelID);
-
-					voxelLight.ambient_light = 255;
 				}
 
 				modLayerVoxel(xPos, zPos).ambient_light_height = CHUNK_SIZE_Y * m_worldProps.chunkSizeY;
@@ -104,8 +115,6 @@ namespace Deer {
 		m_ambientLightPropagation.pop();
 
 		LayerVoxel& layerVoxel = modLayerVoxel(position.x, position.z);
-		if (position.y > layerVoxel.height)
-			return;
 
 		if (layerVoxel.ambient_light_height > position.y)
 			layerVoxel.ambient_light_height = position.y;

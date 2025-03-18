@@ -231,6 +231,7 @@ namespace Deer {
 						if (res.yPos >= 0) {
 							Project::m_scene.getVoxelWorld()->setVoxel(res.xPos, res.yPos, res.zPos, emptyVoxel);
 							Project::m_scene.getVoxelWorld()->bakeAmbientLightFromPoint(res.xPos, res.zPos);
+							Project::m_scene.getVoxelWorld()->bakeVoxelLightFromPoint(res.xPos, res.yPos, res.zPos);
 						}
 					} else if (m_terrainEditMode == TerrainEditMode_Add) {
 						int xPos = res.xPos + NORMAL_DIR(0, res.face);
@@ -239,6 +240,7 @@ namespace Deer {
 						
 						Project::m_scene.getVoxelWorld()->setVoxel(xPos, yPos, zPos, Voxel(selectedVoxelID));
 						Project::m_scene.getVoxelWorld()->bakeAmbientLightFromPoint(xPos, zPos);
+						Project::m_scene.getVoxelWorld()->bakeVoxelLightFromPoint(res.xPos, res.yPos, res.zPos);
 					}
 				}
 				//else if (viewport_isActive && ImGui::GetMouseClickedCount(ImGuiMouseButton_Right)) {

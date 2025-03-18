@@ -2,14 +2,29 @@
 #include "Deer/Voxels/Chunk.h"
 
 namespace Deer{
+    void VoxelWorld::bakeVoxelLightFromPoint(int x, int y, int z) {
+        int min[3] {x - 16, y - 16, z - 16};
+        int max[3] {x + 16, y + 16, z + 16};
+
+        for (int i = 0; i < 3; i++){
+            min[i] = (min[i] < 0) ? 0 : min[i];
+        }
+
+        max[0] = (max[0] >= CHUNK_SIZE_X * m_worldProps.chunkSizeX) ? CHUNK_SIZE_X * m_worldProps.chunkSizeX - 1 : max[0];
+        max[1] = (max[1] >= CHUNK_SIZE_Y * m_worldProps.chunkSizeY) ? CHUNK_SIZE_Y * m_worldProps.chunkSizeY - 1 : max[1];
+        max[2] = (max[2] >= CHUNK_SIZE_Z * m_worldProps.chunkSizeZ) ? CHUNK_SIZE_Z * m_worldProps.chunkSizeZ - 1 : max[2];
+
+        bakeVoxelLight(min[0], max[0], min[1], max[1], min[2], max[2]);
+    }
+
     void VoxelWorld::bakeVoxelLight(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
         ChunkID minChunkID;
         ChunkID maxChunkID;
         ChunkVoxelID minChunkVoxelID;
         ChunkVoxelID maxChunkVoxelID;
 
-        extractChunkCordinates(minX, minY, minZ, minChunkID, minChunkVoxelID);
-        extractChunkCordinates(maxX, maxY, maxZ, maxChunkID, maxChunkVoxelID);
+        extractChunkCordinates(minX + 1, minY + 1, minZ + 1, minChunkID, minChunkVoxelID);
+        extractChunkCordinates(maxX - 1, maxY - 1, maxZ - 1, maxChunkID, maxChunkVoxelID);
 
         tmp_voxelLightSource.clear();
 
@@ -30,6 +45,52 @@ namespace Deer{
                     Chunk& workingChunk = m_chunks[m_worldProps.getWorldChunkID(workingChunkID)];
                     workingChunk.clearVoxelLightAndSaveSources(workingMinVoxelID, workingMaxVoxelID, workingChunkID, tmp_voxelLightSource);
                 }
+            }
+        }
+
+        // Cover all 6 edges with light propagation
+        for (int x = minX; x <= maxX; x++) {
+            for (int y = minY; y <= maxY; y++) {
+                VoxelCordinates minZEdge(x, y, minZ);
+                VoxelCordinates maxZEdge(x, y, maxZ);
+
+                VoxelLight minZEdgeLight = readLight(minZEdge.x, minZEdge.y, minZEdge.z);
+                VoxelLight maxZEdgeLight = readLight(maxZEdge.x, maxZEdge.y, maxZEdge.z);
+
+                if (minZEdgeLight.b_light || minZEdgeLight.g_light || minZEdgeLight.b_light)
+                    m_voxelLightPropagation.push(minZEdge);
+                if (maxZEdgeLight.b_light || maxZEdgeLight.g_light || maxZEdgeLight.b_light)
+                    m_voxelLightPropagation.push(maxZEdge);
+            }
+        }
+
+        for (int x = minX; x <= maxX; x++) {
+            for (int z = minZ; z <= maxZ; z++) {
+                VoxelCordinates minYEdge(x, minY, z);
+                VoxelCordinates maxYEdge(x, maxY, z);
+
+                VoxelLight minYEdgeLight = readLight(minYEdge.x, minYEdge.y, minYEdge.z);
+                VoxelLight maxYEdgeLight = readLight(maxYEdge.x, maxYEdge.y, maxYEdge.z);
+
+                if (minYEdgeLight.b_light || minYEdgeLight.g_light || minYEdgeLight.b_light)
+                    m_voxelLightPropagation.push(minYEdge);
+                if (maxYEdgeLight.b_light || maxYEdgeLight.g_light || maxYEdgeLight.b_light)
+                    m_voxelLightPropagation.push(maxYEdge);
+            }
+        }
+
+        for (int y = minY; y <= maxY; y++) {
+            for (int z = minZ; z <= maxZ; z++) {
+                VoxelCordinates minXEdge(minX, y, z);
+                VoxelCordinates maxXEdge(maxX, y, z);
+
+                VoxelLight minXEdgeLight = readLight(minXEdge.x, minXEdge.y, minXEdge.z);
+                VoxelLight maxXEdgeLight = readLight(maxXEdge.x, maxXEdge.y, maxXEdge.z);
+
+                if (minXEdgeLight.b_light || minXEdgeLight.g_light || minXEdgeLight.b_light)
+                    m_voxelLightPropagation.push(minXEdge);
+                if (maxXEdgeLight.b_light || maxXEdgeLight.g_light || maxXEdgeLight.b_light)
+                    m_voxelLightPropagation.push(maxXEdge);
             }
         }
 

@@ -57,6 +57,7 @@ namespace Deer {
 		void bakeAmbientLightFromPoint(int x, int z);
 
 		void bakeVoxelLight(int minX, int maxX, int minY, int maxY,int minZ, int maxZ);
+		void bakeVoxelLightFromPoint(int x, int y, int z);
 
 		// Light data
 		VoxelLight readLight(int x, int y, int z);
