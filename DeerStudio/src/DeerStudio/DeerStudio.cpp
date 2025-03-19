@@ -17,7 +17,7 @@
 #include "Editor/SceneExplorer.h"
 #include "Editor/TreePannel.h"
 #include "Editor/Viewport.h"
-#include "Editor/TerrainEditor.h"
+#include "Editor/Terrain/TerrainEditor.h"
 
 #include "Style.h"
 #include "Editor/Icons.h"
@@ -61,15 +61,13 @@ namespace Deer {
         //cnfg.SizePixels = 26
         Path rfPath = DataStore::rootPath / "editor/fonts/Roboto-Regular.ttf";
         io.Fonts->AddFontFromFileTTF(rfPath.generic_string().c_str(), 18);
-        io.Fonts->AddFontDefault(&cnfg);
+        //io.Fonts->AddFontDefault(&cnfg);
     
         ImGui_ImplOpenGL3_CreateFontsTexture();
         setNatureStyle();
 
-        auto m_propertiesPannel = Ref<PropertiesPannel>(new PropertiesPannel());
         auto m_gamePannel = Ref<GamePannel>(new GamePannel());
 
-        pannels.push_back(m_propertiesPannel);
         pannels.push_back(m_gamePannel);
 
         return 0;
@@ -144,9 +142,9 @@ namespace Deer {
         }
 
         // ---- PANNELS -----
-        sceneExplorer_onImGUI();
-        treePannel_onImGui();
-        terrainEditor_onImGui();
+        //sceneExplorer_onImGUI();
+        //treePannel_onImGui();
+        TerrainEditor::terrainEditor_onImGui();
         viewport_onImGui();
         // ---- PANNELS -----
 

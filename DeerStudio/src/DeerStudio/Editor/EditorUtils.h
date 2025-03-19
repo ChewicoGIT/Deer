@@ -102,4 +102,23 @@ namespace Deer {
         ImGui::Columns(cols, 0, false);
     }
 
+
+	inline bool iconButton(ImTextureID textureID, int size, bool active) {
+		return ImGui::ImageButton(textureID, 
+			ImVec2(size, size),
+			ImVec2(0, 1),
+			ImVec2(1, 0), -1,
+			ImVec4(0, 0, 0, 0),
+			ImVec4(active? 1 : 0.8f, active? 1 : 0.8f, active? 1 : 0.8f, 1));
+	}
+
+
+	inline bool iconButton(ImTextureID textureID, int size, bool active, ImVec2 min, ImVec2 max) {
+		return ImGui::ImageButton(textureID, 
+			ImVec2(size, size),
+			min,
+			max, -1,
+			ImVec4(0, 0, 0, 0),
+			ImVec4(active? 1 : 0.8f, active? 1 : 0.8f, active? 1 : 0.8f, 1));
+	}
 }
