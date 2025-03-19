@@ -60,6 +60,9 @@ namespace Deer {
 
 		VoxelCordinates() = default;
 		VoxelCordinates(int32_t _x, int32_t _y, int32_t _z) : x(_x), y(_y), z(_z) {}
+
+		inline bool isNull() const { return x < 0 || y < 0 || z < 0; }
+		inline void makeNull() { x = -1; }
 	};
 
 	struct LayerVoxel {

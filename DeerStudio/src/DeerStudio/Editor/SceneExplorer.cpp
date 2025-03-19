@@ -128,7 +128,7 @@ namespace Deer {
 	}
 
     void drawSceneExplorerFolder(const Path& path) {
-        ImGui::Image((void*)(uint64_t)folder_icon->getTextureID(), ImVec2(ICON_MIN_SIZE, ICON_MIN_SIZE), ImVec2(0, 1), ImVec2(1, 0));
+        ImGui::Image((void*)(uint64_t)Icons::folder_icon->getTextureID(), ImVec2(ICON_MIN_SIZE, ICON_MIN_SIZE), ImVec2(0, 1), ImVec2(1, 0));
 
         if (ImGui::IsItemClicked(0) && ImGui::IsMouseDoubleClicked(0)) {
             if (path == "..")
@@ -140,7 +140,7 @@ namespace Deer {
     }
 
     void drawSceneExplorerScene(const Path& path) {
-        ImGui::Image((void*)(uint64_t)scene_icon->getTextureID(), ImVec2(ICON_MIN_SIZE, ICON_MIN_SIZE), ImVec2(0, 1), ImVec2(1, 0));
+        ImGui::Image((void*)(uint64_t)Icons::scene_icon->getTextureID(), ImVec2(ICON_MIN_SIZE, ICON_MIN_SIZE), ImVec2(0, 1), ImVec2(1, 0));
 
         if (ImGui::IsItemClicked(0) && ImGui::IsMouseDoubleClicked(0)) {
             ImGui::OpenPopup("SAVE_SCENE_BEFORE_LOADING");

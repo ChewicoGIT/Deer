@@ -16,6 +16,11 @@
 #include "glm/glm.hpp"
 
 namespace Deer {
+    namespace TerrainEditor {
+        VoxelCordinates voxelRayCoords;
+        VoxelCordinates voxelFaceRayCoords;
+    }
+
 	void TerrainEditor::voxelRay() {
 		if (viewport_relativeXMouse < 0 || viewport_relativeXMouse > 1 || viewport_relativeYMouse < 0 || viewport_relativeYMouse > 1)
 			return;
@@ -38,9 +43,15 @@ namespace Deer {
 
         VoxelRayResult res = Project::m_scene.getVoxelWorld()->rayCast_editor(viewport_sceneCamera.transform.position, rayDir, 50);
 
-        Project::m_scene.getMainGizmoRenderer().refresh();
-
+        voxelRayCoords.makeNull();
+        voxelFaceRayCoords.makeNull();
         if (res.distance != 50) {
+            voxelRayCoords = VoxelCordinates(res.xPos, res.yPos, res.zPos);
+            voxelFaceRayCoords = VoxelCordinates(
+                res.xPos +  NORMAL_DIR(0, res.face),
+                res.yPos +  NORMAL_DIR(1, res.face),
+                res.zPos +  NORMAL_DIR(2, res.face)
+            );
             Project::m_scene.getMainGizmoRenderer().drawVoxelLineFace(res.xPos, res.yPos, res.zPos, res.face);
 
             if (viewport_isActive && ImGui::GetMouseClickedCount(0) > 0) {

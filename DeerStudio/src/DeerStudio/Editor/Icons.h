@@ -9,12 +9,15 @@
 namespace Deer {
 	class Texture2D;
 
-	extern Ref<Texture2D> scene_icon;
-	extern Ref<Texture2D> folder_icon;
-	extern Ref<Texture2D> add_icon;
-	extern Ref<Texture2D> substract_icon;
-	extern Ref<Texture2D> fill_icon;
-	extern Ref<Texture2D> fill_empty_icon;
-	
-	void setupIcons();
+	namespace Icons {
+		extern Ref<Texture2D> scene_icon;
+		extern Ref<Texture2D> folder_icon;
+		extern Ref<Texture2D> add_icon;
+		extern Ref<Texture2D> substract_icon;
+		extern Ref<Texture2D> fill_icon;
+		extern Ref<Texture2D> fill_empty_icon;
+		extern Ref<Texture2D> box_select;
+		
+		void setupIcons();
+	}
 }

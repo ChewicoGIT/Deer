@@ -3,19 +3,21 @@
 #include "Deer/DataStore/DataStore.h"
 
 namespace Deer {
-	Ref<Texture2D> scene_icon;
-	Ref<Texture2D> folder_icon;
-	Ref<Texture2D> add_icon;
-	Ref<Texture2D> substract_icon;
-	Ref<Texture2D> fill_icon;
-	Ref<Texture2D> fill_empty_icon;
+	Ref<Texture2D> Icons::scene_icon;
+	Ref<Texture2D> Icons::folder_icon;
+	Ref<Texture2D> Icons::add_icon;
+	Ref<Texture2D> Icons::substract_icon;
+	Ref<Texture2D> Icons::fill_icon;
+	Ref<Texture2D> Icons::fill_empty_icon;
+	Ref<Texture2D> Icons::box_select;
 
-	void setupIcons() {
-		scene_icon = Texture2D::create(DataStore::rootPath / "editor/icons/scene.png");
-		folder_icon = Texture2D::create(DataStore::rootPath / "editor/icons/folder.png");
-		add_icon = Texture2D::create(DataStore::rootPath / "editor/icons/add.png");
-		substract_icon = Texture2D::create(DataStore::rootPath / "editor/icons/substract.png");
-		fill_icon = Texture2D::create(DataStore::rootPath / "editor/icons/fill.png");
-		fill_empty_icon = Texture2D::create(DataStore::rootPath / "editor/icons/fill_empty.png");
+	void Icons::setupIcons() {
+		Icons::scene_icon = Texture2D::create(DataStore::rootPath / "editor/icons/scene.png");
+		Icons::folder_icon = Texture2D::create(DataStore::rootPath / "editor/icons/folder.png");
+		Icons::add_icon = Texture2D::create(DataStore::rootPath / "editor/icons/add.png");
+		Icons::substract_icon = Texture2D::create(DataStore::rootPath / "editor/icons/substract.png");
+		Icons::fill_icon = Texture2D::create(DataStore::rootPath / "editor/icons/fill.png");
+		Icons::fill_empty_icon = Texture2D::create(DataStore::rootPath / "editor/icons/fill_empty.png");
+		Icons::box_select = Texture2D::create(DataStore::rootPath / "editor/icons/box_select.png");
 	}
 }

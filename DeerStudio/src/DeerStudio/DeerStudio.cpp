@@ -47,7 +47,7 @@ namespace Deer {
 
         DataStore::setupDataAccess(new PhyisicalDataAccess());
 
-        setupIcons();
+        Icons::setupIcons();
 
         // IMGUI STYLE
         ImGuiIO& io = ImGui::GetIO();
@@ -148,6 +148,7 @@ namespace Deer {
         viewport_onImGui();
         // ---- PANNELS -----
 
+        Project::m_scene.getMainGizmoRenderer().refresh();
         ImGui::End();
     }
 

@@ -45,26 +45,26 @@ namespace Deer {
 		ImGui::Text("Edit mode: ");
 
 		setupColumns(ICON_BTN_MIN_SIZE + 16);
-		if (iconButton((ImTextureID)(uint64_t)add_icon->getTextureID(), ICON_BTN_MIN_SIZE, terrainEditMode == TerrainEditMode_Add)) {
+		if (iconButton((ImTextureID)(uint64_t)Icons::add_icon->getTextureID(), ICON_BTN_MIN_SIZE, terrainEditMode == TerrainEditMode_Add)) {
 			terrainEditMode = TerrainEditMode_Add;
 		}
 		ImGui::NextColumn();
-		if (iconButton((ImTextureID)(uint64_t)substract_icon->getTextureID(), ICON_BTN_MIN_SIZE, terrainEditMode == TerrainEditMode_Substract)) {
+		if (iconButton((ImTextureID)(uint64_t)Icons::substract_icon->getTextureID(), ICON_BTN_MIN_SIZE, terrainEditMode == TerrainEditMode_Substract)) {
 			terrainEditMode = TerrainEditMode_Substract;
 		}
 		ImGui::NextColumn();
-		if (iconButton((ImTextureID)(uint64_t)fill_icon->getTextureID(), ICON_BTN_MIN_SIZE, terrainEditMode == TerrainEditMode_Fill)) {
-			terrainEditMode = TerrainEditMode_Fill;
-		}
-		ImGui::NextColumn();
-		if (iconButton((ImTextureID)(uint64_t)fill_empty_icon->getTextureID(), ICON_BTN_MIN_SIZE, terrainEditMode == TerrainEditMode_Empty)) {
-			terrainEditMode = TerrainEditMode_Empty;
+		if (iconButton((ImTextureID)(uint64_t)Icons::box_select->getTextureID(), ICON_BTN_MIN_SIZE, terrainEditMode == TerrainEditMode_box_select)) {
+			terrainEditMode = TerrainEditMode_box_select;
 		}
 		ImGui::Columns();
 		ImGui::Separator();
 
-		if (terrainEditMode == TerrainEditMode_Add || terrainEditMode == TerrainEditMode_Fill) {
+		if (terrainEditMode == TerrainEditMode_Add) {
 			voxelSelector();
+		}
+
+		if (terrainEditMode == TerrainEditMode_box_select){
+			TerrainEditor::boxSelect();
 		}
 
 		if (ImGui::Button("Delete voxel world")) {
