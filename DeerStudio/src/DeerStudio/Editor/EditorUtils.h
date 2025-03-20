@@ -109,7 +109,7 @@ namespace Deer {
 			ImVec2(0, 1),
 			ImVec2(1, 0), -1,
 			ImVec4(0, 0, 0, 0),
-			ImVec4(active? 1 : 0.8f, active? 1 : 0.8f, active? 1 : 0.8f, 1));
+			ImVec4(active? 1 : 0.65f, active? 1 : 0.65f, active? 1 : 0.65f, 1));
 	}
 
 
@@ -119,6 +119,6 @@ namespace Deer {
 			min,
 			max, -1,
 			ImVec4(0, 0, 0, 0),
-			ImVec4(active? 1 : 0.8f, active? 1 : 0.8f, active? 1 : 0.8f, 1));
+			ImVec4(active? 1 : 0.65f, active? 1 : 0.65f, active? 1 : 0.65f, 1));
 	}
 }

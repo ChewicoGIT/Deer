@@ -81,6 +81,9 @@ namespace Deer{
             props.chunkSizeZ = values[2];
 
             Project::m_scene.createVoxelWorld(props);
+            Project::m_scene.getVoxelWorld()->fillVoxels(0, 31, 0, 0, 0, 31, Voxel(VoxelData::getVoxelID("wood")));
+            Project::m_scene.getVoxelWorld()->bakeAmbientLight(0, 31, 0, 31);
+
             ImGui::CloseCurrentPopup();
         }
 

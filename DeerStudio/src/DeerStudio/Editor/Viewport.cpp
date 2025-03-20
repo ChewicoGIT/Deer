@@ -31,7 +31,6 @@ namespace Deer {
 
     bool m_lastMousePressedButton1;
     bool m_handleClick;
-    bool viewport_hasClicked;
 
     float m_sensitivity = 0.005f;
 
@@ -49,8 +48,6 @@ namespace Deer {
     bool drawGizmos(int wPosX, int wPosY, int wSizeX, int wSizeY);
 
     void viewport_onImGui() {
-        viewport_hasClicked = ImGui::GetMouseClickedCount(0) == 1;
-
         processMovment();
 
         if (!m_frameBuffer) {

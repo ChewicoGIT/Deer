@@ -17,6 +17,8 @@ namespace Deer {
 		extern Ref<Texture2D> fill_icon;
 		extern Ref<Texture2D> fill_empty_icon;
 		extern Ref<Texture2D> box_select;
+		extern Ref<Texture2D> face_voxel_selection;
+		extern Ref<Texture2D> internal_voxel_selection;
 		
 		void setupIcons();
 	}

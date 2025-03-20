@@ -20,6 +20,7 @@ namespace Deer{
     int32_t VoxelData::getVoxelID(const std::string& name) {
         if (blockIDMap.contains(name))
             return blockIDMap[name];
+        DEER_CORE_WARN("Voxel Info {0} Not Found!", name.c_str());
         return -1;
     }
 
