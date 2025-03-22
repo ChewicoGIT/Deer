@@ -1,6 +1,6 @@
 #pragma once
 #include "Deer/Application.h"
-#include "DeerRender/Core/Input/KeyCodes.h"
+#include "DeerRender/KeyCodes.h"
 
 namespace Deer {
 	class Input {

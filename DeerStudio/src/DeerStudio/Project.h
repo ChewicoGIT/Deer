@@ -1,6 +1,4 @@
 #pragma once
-
-
 namespace Deer {
 	class Scene;
 

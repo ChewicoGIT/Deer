@@ -1,6 +1,6 @@
 #pragma once
 #include "DeerRender/Voxels/VoxelAspect.h"
-#include "Deer/Core/Log.h"
+#include "Deer/Log.h"
 #include "Deer/Voxel.h"
 
 #include "cereal/cereal.hpp"

@@ -9,6 +9,11 @@
 
 namespace Deer {
 	class ImGuiLayer;
+	
+	namespace Core {
+		extern int argc;
+		extern char **argv;
+	}
 
 	class Timestep {
 	public:

@@ -13,7 +13,6 @@ project "DeerStudio"
    {
       "src",
 	  "../Deer/Include",
-	  "../Deer/src",
 	  "../Deer/vendor/spdlog/include",
 	  "../Deer/vendor/imgui",
 	  "../Deer/vendor/glm",

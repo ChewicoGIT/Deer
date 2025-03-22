@@ -1,5 +1,5 @@
 #include "Deer/VoxelData.h"
-#include "Deer/Core/Log.h"
+#include "Deer/Log.h"
 #include "Deer/DataStore.h"
 
 #include "Deer/Voxels/Serialization/VoxelInfoSerialization.h"

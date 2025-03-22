@@ -1,13 +1,13 @@
 #include "Deer/Scene.h"
-#include "Deer/Scene/Entity.h"
-#include "Deer/Scene/Components.h"
+#include "Deer/Entity.h"
+#include "Deer/Components.h"
 #include "Deer/VoxelWorld.h"
 #include "DeerRender/Render/RenderCommand.h"
-#include "Deer/Scene/Enviroment.h"
+#include "Deer/Enviroment.h"
 
 namespace Deer {
 	void Scene::render() {
-		uid mainCamera = m_enviroment->tryGetMainCamera();
+		uint32_t mainCamera = m_enviroment->tryGetMainCamera();
 		if (mainCamera == 0)
 			return;
 

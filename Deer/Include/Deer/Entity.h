@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Deer/Core/Log.h"
-#include "Deer/Scene/Enviroment.h"
+#include "Deer/Log.h"
+#include "Deer/Enviroment.h"
 
 #include "entt/entt.hpp"
 
@@ -49,17 +49,17 @@ namespace Deer {
 		void destroy();
 
 		Entity& getParent();
-		inline uid getParentUID() { return m_parentUID; }
+		inline uint32_t getParentUID() { return m_parentUID; }
 
 		// TODO, enable transfer entitys from difrent enviroments
 		void setParent(Entity& parent);
 		bool isDescendant(Entity& parent);
 
-		uid getParentUID() const { return m_parentUID; }
-		uid getUID() const { return m_entityUID; }
+		uint32_t getParentUID() const { return m_parentUID; }
+		uint32_t getUID() const { return m_entityUID; }
 
 		Environment* getEnvironment() const { return m_environment; }
-		std::vector<uid>& getChildren();
+		std::vector<uint32_t>& getChildren();
 
 		bool isRoot() { return m_isRoot; }
 		glm::mat4 getWorldMatrix();
@@ -75,12 +75,12 @@ namespace Deer {
 		
 		entt::entity m_entityHandle = entt::null;
 		Environment* m_environment = nullptr;
-		uid m_entityUID = 0;
-		uid m_parentUID = 0;
+		uint32_t m_entityUID = 0;
+		uint32_t m_parentUID = 0;
 		bool m_isRoot = false;
 
 		friend class Environment;
-		friend class std::unordered_map<uid, Entity>;
+		friend class std::unordered_map<uint32_t, Entity>;
 	};
 }
 

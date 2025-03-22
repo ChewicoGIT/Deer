@@ -1,5 +1,5 @@
 #include "Deer/ScriptAttributes.h"
-#include "Deer/Core/Log.h"
+#include "Deer/Log.h"
 #include "angelscript.h"
 
 namespace Deer {

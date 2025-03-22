@@ -1,15 +1,17 @@
-#include "Deer/Scene/Enviroment.h"
+#include "Deer/Enviroment.h"
 
 #include "Deer/Application.h"
-#include "Deer/Asset/AssetManager.h"
-#include "Deer/Scene/Entity.h"
-#include "Deer/Scene/Components.h"
+#include "Deer/Asset.h"
+#include "Deer/AssetManager.h"
+#include "Deer/Entity.h"
+#include "Deer/Components.h"
+#include "Deer/Voxel.h"
+
 #include "DeerRender/Render/Render.h"
 #include "DeerRender/Render/RenderUtils.h"
 #include "DeerRender/Render/Texture.h"
-#include "Deer/Voxel.h"
 
-#include "Deer/Core/Log.h"
+#include "Deer/Log.h"
 
 namespace Deer {
 	void Environment::render(SceneCamera& camera) {

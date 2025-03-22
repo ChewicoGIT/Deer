@@ -1,5 +1,5 @@
 #include "Deer/VoxelData.h"
-#include "Deer/Core/Log.h"
+#include "Deer/Log.h"
 #include "DeerRender/Voxels/VoxelAspect.h"
 
 #include "stb_image.h"

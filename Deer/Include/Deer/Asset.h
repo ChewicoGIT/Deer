@@ -1,6 +1,6 @@
 #pragma once
-#include "Deer/Core/Core.h"
-#include "Deer/Core/Log.h"
+
+#include "Deer/Log.h"
 
 #include "Deer/Path.h"
 #include "Deer/DataStore/DataAccess.h"
@@ -13,7 +13,7 @@ namespace Deer {
 	class Asset {
 	public:
 		Asset() : m_assetID(0), m_assetLocation("null") { }
-		Asset(uid id, const std::filesystem::path& assetLocation)
+		Asset(uint32_t id, const std::filesystem::path& assetLocation)
 			: m_assetID(id), m_assetLocation(assetLocation) {
 			try {
 				uint32_t size;
@@ -28,12 +28,12 @@ namespace Deer {
 			}
 		}
 
-		inline uid getAssetID() const { return m_assetID; }
+		inline uint32_t getAssetID() const { return m_assetID; }
 		inline Path& getAssetLocation() { return m_assetLocation; }
 
 		Ref<T> value;
 	private:
-		uid m_assetID;
+		uint32_t m_assetID;
 		Path m_assetLocation;
 	};
 
@@ -41,15 +41,15 @@ namespace Deer {
 	class Asset<void> {
 	public:
 		Asset() : m_assetID(0), m_assetLocation("null") { }
-		Asset(uid id, const std::filesystem::path& assetLocation)
+		Asset(uint32_t id, const std::filesystem::path& assetLocation)
 			: m_assetID(id), m_assetLocation(assetLocation) { }
 
-		inline uid getAssetID() const { return m_assetID; }
+		inline uint32_t getAssetID() const { return m_assetID; }
 		inline Path& getAssetLocation() { return m_assetLocation; }
 
 		Ref<void> value;
 	private:
-		uid m_assetID;
+		uint32_t m_assetID;
 		Path m_assetLocation;
 	};
 }

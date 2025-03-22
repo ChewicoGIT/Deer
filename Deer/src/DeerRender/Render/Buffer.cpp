@@ -1,6 +1,6 @@
-#include "Buffer.h"
+#include "DeerRender/Render/Buffer.h"
 
-#include "Deer/Core/Log.h"
+#include "Deer/Log.h"
 #include "DeerRender/Render/Render.h"
 
 namespace Deer {

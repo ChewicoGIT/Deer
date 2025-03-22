@@ -5,7 +5,6 @@
 #include <string>
 
 namespace Deer {
-
 	enum class ShaderDataType {
 		None = 0,
 		FloatingPoint,

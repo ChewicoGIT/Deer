@@ -1,5 +1,5 @@
 #pragma once
-#include "DeerRender/Scene/Components.h"
+#include "DeerRender/Components.h"
 
 namespace Deer {
     // CAMERA COMPONENT

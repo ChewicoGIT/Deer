@@ -1,6 +1,6 @@
-#include "Components.h"
+#include "Deer/Components.h"
 #include "glm/gtc/matrix_transform.hpp"
-#include "Deer/Core/Log.h"
+#include "Deer/Log.h"
 
 namespace Deer {
     glm::mat4 TransformComponent::getMatrix() const{

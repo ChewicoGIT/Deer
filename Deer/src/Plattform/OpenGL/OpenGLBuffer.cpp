@@ -1,6 +1,6 @@
 #include "OpenGLBuffer.h"
 
-#include "Deer/Core/Log.h"
+#include "Deer/Log.h"
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 

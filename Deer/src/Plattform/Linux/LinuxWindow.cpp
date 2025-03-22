@@ -1,6 +1,6 @@
 #include "LinuxWindow.h"
-#include "Deer/Core/Log.h"
-#include "Deer/Core/Core.h"
+#include "Deer/Application.h"
+#include "Deer/Log.h"
 
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"

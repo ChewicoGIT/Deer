@@ -1,12 +1,13 @@
 #include "TreePannel.h"
 #include "DeerStudio/Project.h"
-#include "DeerRender/Core/Input/Input.h"
-#include "DeerRender/Core/Input/KeyCodes.h"
-#include "Deer/Scene.h"
-#include "Deer/Scene/Enviroment.h"
-#include "Deer/Scene/Entity.h"
-
 #include "DeerStudio/Editor/ActiveEntity.h"	
+
+#include "DeerRender/Input.h"
+#include "DeerRender/KeyCodes.h"
+
+#include "Deer/Scene.h"
+#include "Deer/Enviroment.h"
+#include "Deer/Entity.h"
 
 #include "imgui.h"
 

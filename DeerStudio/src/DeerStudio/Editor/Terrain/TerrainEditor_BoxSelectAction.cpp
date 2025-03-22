@@ -1,8 +1,10 @@
 #include "TerrainEditor.h"
-
 #include "DeerStudio/Project.h"
-#include "Deer/Core/Log.h"
+#include "DeerStudio/Editor/Viewport.h"
+#include "DeerStudio/Editor/EditorUtils.h"
+#include "DeerStudio/Editor/Icons.h"
 
+#include "Deer/Log.h"
 #include "Deer/Voxel.h"
 #include "Deer/VoxelWorld.h"
 #include "Deer/Scene.h"
@@ -10,9 +12,6 @@
 #include "DeerRender/GizmoRenderer.h"
 #include "DeerRender/Render/Texture.h"
 
-#include "DeerStudio/Editor/Viewport.h"
-#include "DeerStudio/Editor/EditorUtils.h"
-#include "DeerStudio/Editor/Icons.h"
 
 #include "imgui.h"
 #define FACE_VOXEL_SELECT 0

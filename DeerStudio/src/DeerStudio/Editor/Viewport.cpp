@@ -1,16 +1,16 @@
 #include "Viewport.h"
 #include "DeerStudio/Editor/ActiveEntity.h"
+#include "DeerStudio/Project.h"
+
 #include "DeerRender/Render/FrameBuffer.h"
 #include "DeerRender/GizmoRenderer.h"
-
 #include "DeerRender/Events/MouseEvent.h"
 #include "DeerRender/Events/KeyEvent.h"
+#include "DeerRender/Input.h"
 
-#include "DeerRender/Core/Input/Input.h"
-#include "DeerStudio/Project.h"
 #include "Deer/Scene.h"
-#include "Deer/Scene/Enviroment.h"
-#include "Deer/Scene/Entity.h"
+#include "Deer/Enviroment.h"
+#include "Deer/Entity.h"
 
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
@@ -18,6 +18,7 @@
 
 #include "imgui.h"
 #include "ImGuizmo.h"
+
 #include "glm/glm.hpp"
 #include <string>
 
@@ -110,7 +111,7 @@ namespace Deer {
                     ActiveEntity::clear();
 
                 if (id >= 0) {
-                    Entity& selectedEntity = Project::m_scene.getMainEnviroment()->getEntity((uid)id);
+                    Entity& selectedEntity = Project::m_scene.getMainEnviroment()->getEntity((uint32_t)id);
                     ActiveEntity::addEntity(selectedEntity);
                 }
             }

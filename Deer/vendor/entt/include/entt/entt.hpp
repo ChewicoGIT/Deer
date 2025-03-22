@@ -1536,7 +1536,7 @@ public:
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Type Type of value to use to initialize the first element.
  * @tparam Other Type of value to use to initialize the second element.
  */
@@ -5046,7 +5046,7 @@ struct overloaded: Func... {
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Func Types of function objects.
  */
 template<typename... Func>
@@ -5397,7 +5397,7 @@ struct overloaded: Func... {
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Func Types of function objects.
  */
 template<typename... Func>
@@ -5712,7 +5712,7 @@ public:
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Char Character type.
  * @param str Human-readable identifier.
  * @param len Length of the string to hash.
@@ -5721,7 +5721,7 @@ template<typename Char>
 basic_hashed_string(const Char *str, const std::size_t len) -> basic_hashed_string<Char>;
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Char Character type.
  * @tparam N Number of characters of the identifier.
  * @param str Human-readable identifier.
@@ -7777,7 +7777,7 @@ public:
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Type Type of value to use to initialize the first element.
  * @tparam Other Type of value to use to initialize the second element.
  */
@@ -8166,7 +8166,7 @@ public:
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Char Character type.
  * @param str Human-readable identifier.
  * @param len Length of the string to hash.
@@ -8175,7 +8175,7 @@ template<typename Char>
 basic_hashed_string(const Char *str, const std::size_t len) -> basic_hashed_string<Char>;
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Char Character type.
  * @tparam N Number of characters of the identifier.
  * @param str Human-readable identifier.
@@ -8961,7 +8961,7 @@ struct forward_apply: private Func {
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Func Type of underlying invocable object.
  */
 template<typename Func>
@@ -10227,7 +10227,7 @@ struct overloaded: Func... {
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Func Types of function objects.
  */
 template<typename... Func>
@@ -12618,7 +12618,7 @@ public:
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Char Character type.
  * @param str Human-readable identifier.
  * @param len Length of the string to hash.
@@ -12627,7 +12627,7 @@ template<typename Char>
 basic_hashed_string(const Char *str, const std::size_t len) -> basic_hashed_string<Char>;
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Char Character type.
  * @tparam N Number of characters of the identifier.
  * @param str Human-readable identifier.
@@ -13463,7 +13463,7 @@ struct overloaded: Func... {
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Func Types of function objects.
  */
 template<typename... Func>
@@ -13706,7 +13706,7 @@ struct overloaded: Func... {
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Func Types of function objects.
  */
 template<typename... Func>
@@ -21062,14 +21062,14 @@ template<typename Ret, typename... Args>
 }
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Candidate Function or member to connect to the delegate.
  */
 template<auto Candidate>
 delegate(connect_arg_t<Candidate>) -> delegate<std::remove_pointer_t<internal::function_pointer_t<decltype(Candidate)>>>;
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Candidate Function or member to connect to the delegate.
  * @tparam Type Type of class or type of payload.
  */
@@ -21077,7 +21077,7 @@ template<auto Candidate, typename Type>
 delegate(connect_arg_t<Candidate>, Type &&) -> delegate<std::remove_pointer_t<internal::function_pointer_t<decltype(Candidate), Type>>>;
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Ret Return type of a function type.
  * @tparam Args Types of arguments of a function type.
  */
@@ -23130,7 +23130,7 @@ public:
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Type Type of storage classes used to create the view.
  * @param storage The storage for the types to iterate.
  */
@@ -23138,7 +23138,7 @@ template<typename... Type>
 basic_view(Type &...storage) -> basic_view<get_t<Type...>, exclude_t<>>;
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Get Types of components iterated by the view.
  * @tparam Exclude Types of components used to filter the view.
  */
@@ -23400,7 +23400,7 @@ private:
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Registry Basic registry type.
  */
 template<typename Registry>
@@ -23748,14 +23748,14 @@ template<typename Ret, typename... Args>
 }
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Candidate Function or member to connect to the delegate.
  */
 template<auto Candidate>
 delegate(connect_arg_t<Candidate>) -> delegate<std::remove_pointer_t<internal::function_pointer_t<decltype(Candidate)>>>;
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Candidate Function or member to connect to the delegate.
  * @tparam Type Type of class or type of payload.
  */
@@ -23763,7 +23763,7 @@ template<auto Candidate, typename Type>
 delegate(connect_arg_t<Candidate>, Type &&) -> delegate<std::remove_pointer_t<internal::function_pointer_t<decltype(Candidate), Type>>>;
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Ret Return type of a function type.
  * @tparam Args Types of arguments of a function type.
  */
@@ -24220,7 +24220,7 @@ private:
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  *
  * It allows to deduce the signal handler type of a sink directly from the
  * signal it refers to.
@@ -25047,7 +25047,7 @@ struct overloaded: Func... {
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Func Types of function objects.
  */
 template<typename... Func>
@@ -27314,7 +27314,7 @@ public:
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Type Type of value to use to initialize the first element.
  * @tparam Other Type of value to use to initialize the second element.
  */
@@ -31925,7 +31925,7 @@ public:
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Type Type of value to use to initialize the first element.
  * @tparam Other Type of value to use to initialize the second element.
  */
@@ -32037,7 +32037,7 @@ struct overloaded: Func... {
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Func Types of function objects.
  */
 template<typename... Func>
@@ -33025,7 +33025,7 @@ private:
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Registry Basic registry type.
  */
 template<typename Registry>
@@ -34842,7 +34842,7 @@ public:
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Type Type of value to use to initialize the first element.
  * @tparam Other Type of value to use to initialize the second element.
  */
@@ -42922,7 +42922,7 @@ public:
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Type Type of storage classes used to create the view.
  * @param storage The storage for the types to iterate.
  */
@@ -42930,7 +42930,7 @@ template<typename... Type>
 basic_view(Type &...storage) -> basic_view<get_t<Type...>, exclude_t<>>;
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Get Types of components iterated by the view.
  * @tparam Exclude Types of components used to filter the view.
  */
@@ -45225,7 +45225,7 @@ public:
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Type Type of value to use to initialize the first element.
  * @tparam Other Type of value to use to initialize the second element.
  */
@@ -49836,7 +49836,7 @@ public:
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Type Type of value to use to initialize the first element.
  * @tparam Other Type of value to use to initialize the second element.
  */
@@ -49948,7 +49948,7 @@ struct overloaded: Func... {
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Func Types of function objects.
  */
 template<typename... Func>
@@ -52372,7 +52372,7 @@ public:
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Type Type of value to use to initialize the first element.
  * @tparam Other Type of value to use to initialize the second element.
  */
@@ -56010,7 +56010,7 @@ struct overloaded: Func... {
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Func Types of function objects.
  */
 template<typename... Func>
@@ -56288,7 +56288,7 @@ struct overloaded: Func... {
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Func Types of function objects.
  */
 template<typename... Func>
@@ -56603,7 +56603,7 @@ public:
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Char Character type.
  * @param str Human-readable identifier.
  * @param len Length of the string to hash.
@@ -56612,7 +56612,7 @@ template<typename Char>
 basic_hashed_string(const Char *str, const std::size_t len) -> basic_hashed_string<Char>;
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Char Character type.
  * @tparam N Number of characters of the identifier.
  * @param str Human-readable identifier.
@@ -67961,7 +67961,7 @@ struct overloaded: Func... {
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Func Types of function objects.
  */
 template<typename... Func>
@@ -68276,7 +68276,7 @@ public:
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Char Character type.
  * @param str Human-readable identifier.
  * @param len Length of the string to hash.
@@ -68285,7 +68285,7 @@ template<typename Char>
 basic_hashed_string(const Char *str, const std::size_t len) -> basic_hashed_string<Char>;
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Char Character type.
  * @tparam N Number of characters of the identifier.
  * @param str Human-readable identifier.
@@ -73355,7 +73355,7 @@ public:
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Type Type of value to use to initialize the first element.
  * @tparam Other Type of value to use to initialize the second element.
  */
@@ -75494,7 +75494,7 @@ public:
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Type Type of value to use to initialize the first element.
  * @tparam Other Type of value to use to initialize the second element.
  */
@@ -79281,7 +79281,7 @@ public:
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Type Type of value to use to initialize the first element.
  * @tparam Other Type of value to use to initialize the second element.
  */
@@ -79611,7 +79611,7 @@ struct overloaded: Func... {
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Func Types of function objects.
  */
 template<typename... Func>
@@ -82162,14 +82162,14 @@ template<typename Ret, typename... Args>
 }
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Candidate Function or member to connect to the delegate.
  */
 template<auto Candidate>
 delegate(connect_arg_t<Candidate>) -> delegate<std::remove_pointer_t<internal::function_pointer_t<decltype(Candidate)>>>;
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Candidate Function or member to connect to the delegate.
  * @tparam Type Type of class or type of payload.
  */
@@ -82177,7 +82177,7 @@ template<auto Candidate, typename Type>
 delegate(connect_arg_t<Candidate>, Type &&) -> delegate<std::remove_pointer_t<internal::function_pointer_t<decltype(Candidate), Type>>>;
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Ret Return type of a function type.
  * @tparam Args Types of arguments of a function type.
  */
@@ -83599,7 +83599,7 @@ public:
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Type Type of value to use to initialize the first element.
  * @tparam Other Type of value to use to initialize the second element.
  */
@@ -87257,7 +87257,7 @@ public:
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Type Type of value to use to initialize the first element.
  * @tparam Other Type of value to use to initialize the second element.
  */
@@ -87577,7 +87577,7 @@ public:
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Char Character type.
  * @param str Human-readable identifier.
  * @param len Length of the string to hash.
@@ -87586,7 +87586,7 @@ template<typename Char>
 basic_hashed_string(const Char *str, const std::size_t len) -> basic_hashed_string<Char>;
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Char Character type.
  * @tparam N Number of characters of the identifier.
  * @param str Human-readable identifier.
@@ -88017,7 +88017,7 @@ struct overloaded: Func... {
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Func Types of function objects.
  */
 template<typename... Func>
@@ -88391,14 +88391,14 @@ template<typename Ret, typename... Args>
 }
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Candidate Function or member to connect to the delegate.
  */
 template<auto Candidate>
 delegate(connect_arg_t<Candidate>) -> delegate<std::remove_pointer_t<internal::function_pointer_t<decltype(Candidate)>>>;
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Candidate Function or member to connect to the delegate.
  * @tparam Type Type of class or type of payload.
  */
@@ -88406,7 +88406,7 @@ template<auto Candidate, typename Type>
 delegate(connect_arg_t<Candidate>, Type &&) -> delegate<std::remove_pointer_t<internal::function_pointer_t<decltype(Candidate), Type>>>;
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  * @tparam Ret Return type of a function type.
  * @tparam Args Types of arguments of a function type.
  */
@@ -88863,7 +88863,7 @@ private:
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  *
  * It allows to deduce the signal handler type of a sink directly from the
  * signal it refers to.
@@ -89888,7 +89888,7 @@ private:
 };
 
 /**
- * @brief Deduction guide.
+ * @brief Deduction guint32_te.
  *
  * It allows to deduce the signal handler type of a sink directly from the
  * signal it refers to.

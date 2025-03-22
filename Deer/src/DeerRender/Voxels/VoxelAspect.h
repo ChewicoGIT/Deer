@@ -1,5 +1,5 @@
 #pragma once
-#include "Deer/Core/Core.h"
+
 
 // TEMP
 #define VOXEL_TEXTURE_SIZE_X 128

@@ -1,5 +1,5 @@
 #pragma once
-#include "Deer/Scene/Components.h"
+#include "Deer/Components.h"
 #include "DeerRender/Render/Texture.h"
 #include <string>
 #include <vector>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Deer/Core/Log.h"
+#include "Deer/Log.h"
 
 #include <vector>
 #include <initializer_list>

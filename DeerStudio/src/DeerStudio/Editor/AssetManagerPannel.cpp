@@ -1,11 +1,12 @@
 #include "AssetManagerPannel.h"
-#include "Deer/Core/Log.h"
 #include "DeerStudio/Project.h"
-#include "DeerRender/Render/Texture.h"
-#include "Deer/Asset/AssetManager.h"
-#include "DeerStudio/Editor/ActiveEntity.h"
 
-#include "DeerStudio/Project.h"
+#include "Deer/Log.h"
+#include "Deer/Asset.h"
+#include "Deer/AssetManager.h"
+
+#include "DeerRender/Render/Texture.h"
+#include "DeerStudio/Editor/ActiveEntity.h"
 
 #include "imgui.h"
 
@@ -159,7 +160,7 @@ namespace Deer {
                 ImGui::EndDragDropSource();
             }
         } else if (extension == ".png" || extension == ".jpg" || extension == ".jpeg") {
-            uid textureID = AssetManager::loadAsset<Texture2D>(path.string());
+            uint32_t textureID = AssetManager::loadAsset<Texture2D>(path.string());
             Asset<Texture2D>& textureAsset = AssetManager::getAsset<Texture2D>(textureID);
 
             ImGui::Image((void*)(uint64_t)textureAsset.value->getTextureID(), ImVec2(m_iconMinSize, m_iconMinSize), ImVec2(0, 1), ImVec2(1, 0));

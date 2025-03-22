@@ -9,15 +9,14 @@
 
 #include "DeerStudio/Editor/PropertiesPannel.h"
 #include "DeerStudio/Editor/GamePannel.h"
-#include "DeerStudio/Project.h"
 #include "DeerStudio/Editor/SceneExplorer.h"
 #include "DeerStudio/Editor/TreePannel.h"
 #include "DeerStudio/Editor/Viewport.h"
 #include "DeerStudio/Editor/Terrain/TerrainEditor.h"
 #include "DeerStudio/Editor/Icons.h"
+#include "DeerStudio/Project.h"
 
 #include "Style.h"
-#include "Plattform/OpenGL/imgui_impl_opengl3.h"
 #include <functional>
 
 namespace Deer {
@@ -55,7 +54,6 @@ namespace Deer {
         io.Fonts->AddFontFromFileTTF(rfPath.generic_string().c_str(), 18);
         //io.Fonts->AddFontDefault(&cnfg);
     
-        ImGui_ImplOpenGL3_CreateFontsTexture();
         setNatureStyle();
 
         auto m_gamePannel = Ref<GamePannel>(new GamePannel());

@@ -1,6 +1,6 @@
 #include "OpenGLVertexArray.h"
 #include "Plattform/OpenGL/OpenGLBuffer.h"
-#include "Deer/Core/Log.h"
+#include "Deer/Log.h"
 #include "objload.h"
 
 #include "glad/glad.h"

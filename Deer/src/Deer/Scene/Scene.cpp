@@ -1,13 +1,13 @@
 #include "Deer/Scene.h"
 #include "Deer/Memory.h"
-#include "Deer/Core/Log.h"
+#include "Deer/Log.h"
 #include "Deer/VoxelWorld.h"
-#include "Deer/Scene/Enviroment.h"
+#include "Deer/Enviroment.h"
 #include "Deer/Voxels/Chunk.h"
 #include "Deer/Voxels/Layer.h"
 
 #include "Deer/ScriptEngine.h"
-#include "Deer/Scene/Components.h"
+#include "Deer/Components.h"
 
 #ifdef DEER_RENDER
 #include "DeerRender/Voxels/VoxelWorldRenderData.h"

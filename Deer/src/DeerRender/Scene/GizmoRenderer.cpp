@@ -1,8 +1,8 @@
 #include "DeerRender/GizmoRenderer.h"
 #include "DeerRender/Render/Render.h"
 #include "DeerRender/Render/RenderUtils.h"
-#include "DeerRender/Scene/SceneCamera.h"
-#include "Deer/Scene/Components.h"
+#include "DeerRender/SceneCamera.h"
+#include "Deer/Components.h"
 
 
 namespace Deer {

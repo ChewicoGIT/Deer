@@ -1,7 +1,7 @@
 #include "OpenGLContext.h"
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
-#include "Deer/Core/Log.h"
+#include "Deer/Log.h"
 
 namespace Deer {
 	OpenGLContext::OpenGLContext(GLFWwindow* window)

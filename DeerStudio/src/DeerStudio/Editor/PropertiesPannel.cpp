@@ -1,10 +1,14 @@
 #include "PropertiesPannel.h"
-#include "DeerRender/Core/Input/Input.h"
-#include "DeerRender/Core/Input/KeyCodes.h"
 #include "DeerStudio/Project.h"
+
+#include "DeerRender/Input.h"
+#include "DeerRender/KeyCodes.h"
 #include "DeerRender/Render/Texture.h"
-#include "Deer/Asset/AssetManager.h"
+
+#include "Deer/Asset.h"
+#include "Deer/AssetManager.h"
 #include "Deer/ScriptEngine.h"
+
 #include "imgui.h"
 
 namespace Deer {
@@ -214,7 +218,7 @@ namespace Deer {
 
 			auto& camera = activeEntity.getComponent<CameraComponent>();
 
-			uid currentMainCamera = activeEntity.getEnvironment()->tryGetMainCamera();
+			uint32_t currentMainCamera = activeEntity.getEnvironment()->tryGetMainCamera();
 			if (currentMainCamera == activeEntity.getUID())
 				ImGui::Button("This is the main camera");
 			else if (ImGui::Button("Set main camera")) {

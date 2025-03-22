@@ -1,5 +1,5 @@
 #include "Deer/DataStore.h"
-#include "Deer/Core/Log.h"
+#include "Deer/Log.h"
 #include "Deer/Path.h"
 #include "Deer/DataStore/DataAccess.h"
 

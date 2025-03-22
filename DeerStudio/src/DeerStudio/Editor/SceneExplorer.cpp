@@ -1,26 +1,22 @@
 #include "SceneExplorer.h"
-#include "imgui.h"
-#include "Icons.h"
+#include "DeerStudio/Project.h"
+#include "DeerStudio/Editor/ActiveEntity.h"
 
 #include "Deer/Path.h"
 #include "Deer/DataStore.h"
-#include "DeerRender/Render/Texture.h"
-#include "DeerStudio/Project.h"
 #include "Deer/SceneDataStore.h"
 #include "Deer/Scene.h"
-#include "DeerStudio/Editor/ActiveEntity.h"
-#include "Deer/Core/Log.h"
+#include "Deer/Log.h"
 
+#include "DeerRender/Render/Texture.h"
+
+#include "Icons.h"
 #include "EditorUtils.h"
+
+#include "imgui.h"
 
 #include <regex>
 #include <string>
-
-#ifdef WINDOWS
-// WINDOWS SPECIFIC
-#include <windows.h>
-#include <shellapi.h>
-#endif
 
 namespace Deer {
     Path m_currentScenePath("null");

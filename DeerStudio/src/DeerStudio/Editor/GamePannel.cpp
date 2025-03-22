@@ -1,12 +1,14 @@
 #include "GamePannel.h"
-#include "Deer/Scene/Enviroment.h"
-#include "Deer/Scene.h"
-#include "Deer/Scene/Entity.h"
 #include "DeerStudio/Project.h"
+
+#include "Deer/Enviroment.h"
+#include "Deer/Scene.h"
+#include "Deer/Entity.h"
 #include "Deer/ScriptEngine.h"
 #include "Deer/SceneDataStore.h"
 
 #include "imgui.h"
+
 #include <filesystem>
 
 namespace Deer {
@@ -21,7 +23,7 @@ namespace Deer {
         ImGui::PopStyleVar();
 
         Ref<Environment> environment = Project::m_scene.getMainEnviroment();
-        uid cameraUID = environment->tryGetMainCamera();
+        uint32_t cameraUID = environment->tryGetMainCamera();
 
         if (cameraUID == 0) {
             ImGui::TextColored(ImVec4(.3f, .3f, .8f, 1.0f), "There is no camera");

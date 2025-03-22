@@ -728,20 +728,20 @@ typedef unsigned char validate_uint32[sizeof(stbi__uint32)==4 ? 1 : -1];
 #ifdef _MSC_VER
 
 #if _MSC_VER >= 1400  // not VC6
-#include <intrin.h> // __cpuid
-static int stbi__cpuid3(void)
+#include <intrin.h> // __cpuint32_t
+static int stbi__cpuint32_t3(void)
 {
    int info[4];
-   __cpuid(info,1);
+   __cpuint32_t(info,1);
    return info[3];
 }
 #else
-static int stbi__cpuid3(void)
+static int stbi__cpuint32_t3(void)
 {
    int res;
    __asm {
       mov  eax,1
-      cpuid
+      cpuint32_t
       mov  res,edx
    }
    return res;
@@ -753,7 +753,7 @@ static int stbi__cpuid3(void)
 #if !defined(STBI_NO_JPEG) && defined(STBI_SSE2)
 static int stbi__sse2_available(void)
 {
-   int info3 = stbi__cpuid3();
+   int info3 = stbi__cpuint32_t3();
    return ((info3 >> 26) & 1) != 0;
 }
 #endif

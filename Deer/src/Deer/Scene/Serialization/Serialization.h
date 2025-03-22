@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Deer/Asset/AssetManager.h"
-#include "Deer/Scene/Entity.h"
+#include "Deer/Asset.h"
+#include "Deer/Entity.h"
 
 #include "cereal/cereal.hpp"
 #include "cereal/types/vector.hpp"

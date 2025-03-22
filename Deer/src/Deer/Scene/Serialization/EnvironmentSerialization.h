@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Deer/Scene/Enviroment.h"
+#include "Deer/Enviroment.h"
 
 #include <vector>
 
@@ -28,7 +28,7 @@ namespace Deer {
             return a.getUID() < b.getUID();
             });
 
-        uid mainCameraUID = m_environment->tryGetMainCamera();
+        uint32_t mainCameraUID = m_environment->tryGetMainCamera();
 
         archive(cereal::make_nvp("entities", entityMap));
         archive(cereal::make_nvp("mainCameraUID", mainCameraUID));
@@ -40,7 +40,7 @@ namespace Deer {
         Ref<Environment>& m_environment) {
         EntityVector_Environment entityMap(m_environment);
 
-        uid mainCameraUID;
+        uint32_t mainCameraUID;
 
         archive(cereal::make_nvp("entities", entityMap));
         archive(cereal::make_nvp("mainCameraUID", mainCameraUID));

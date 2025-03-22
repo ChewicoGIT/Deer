@@ -1,6 +1,6 @@
 #pragma once
 #include "DeerRender/Events/Event.h"
-#include "DeerRender/Scene/SceneCamera.h"
+#include "DeerRender/SceneCamera.h"
 
 namespace Deer {
 	extern float viewport_relativeXMouse, viewport_relativeYMouse;

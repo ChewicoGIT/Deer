@@ -1,5 +1,5 @@
 #pragma once
-#include "Deer/Core/Core.h"
+
 
 #include <string>
 #include "glm/glm.hpp"
@@ -12,15 +12,15 @@ namespace Deer {
     void print(std::string& msg);
     
     // Entity Transformations -------------
-    glm::vec3 getEntityPosition(uid& entityUID);
-    void setEntityPosition(glm::vec3 position, uid& entityUID);
-    glm::vec3 getEntityScale(uid& entityUID);
-    void setEntityScale(glm::vec3 scale, uid& entityUID);
+    glm::vec3 getEntityPosition(uint32_t& entityUID);
+    void setEntityPosition(glm::vec3 position, uint32_t& entityUID);
+    glm::vec3 getEntityScale(uint32_t& entityUID);
+    void setEntityScale(glm::vec3 scale, uint32_t& entityUID);
     // Entity Transformations -------------
 
     // Entity Relationship ------------
-    uid getEntityParent(uid& entityUID);
-    bool isEntityValid(uid& entityUID);
+    uint32_t getEntityParent(uint32_t& entityUID);
+    bool isEntityValid(uint32_t& entityUID);
     // Entity Relationship ------------
 
     void registerVec3(asIScriptEngine* engine);

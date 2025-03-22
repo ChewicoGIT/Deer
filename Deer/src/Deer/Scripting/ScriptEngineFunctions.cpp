@@ -1,12 +1,12 @@
 #include "ScriptEngineFunctions.h"
 
-#include "Deer/Scene/Entity.h"
+#include "Deer/Entity.h"
 #include "Deer/Scene.h"
-#include "Deer/Scene/Enviroment.h"
+#include "Deer/Enviroment.h"
 #include "Deer/ScriptEngine.h"
 #include "angelscript.h"
-#include "Deer/Core/Log.h"
-#include "DeerRender/Core/Input/Input.h"
+#include "Deer/Log.h"
+#include "DeerRender/Input.h"
 
 #include "glm/glm.hpp"
 
@@ -30,7 +30,7 @@ namespace Deer {
         DEER_SCRIPT_INFO(msg.c_str());
     }
 
-    glm::vec3 getEntityPosition(uid& entityUID) {
+    glm::vec3 getEntityPosition(uint32_t& entityUID) {
         if (entityUID == 0 || entityUID == 1) {
             DEER_SCRIPT_ERROR("Entity is not invalid");
             return glm::vec3();
@@ -42,7 +42,7 @@ namespace Deer {
         return entt.getComponent<TransformComponent>().position;
     }
 
-    void setEntityPosition(glm::vec3 position, uid& entityUID) {
+    void setEntityPosition(glm::vec3 position, uint32_t& entityUID) {
         if (entityUID == 0 || entityUID == 1) {
             DEER_SCRIPT_ERROR("Entity is not invalid");
             return;
@@ -54,7 +54,7 @@ namespace Deer {
         entt.getComponent<TransformComponent>().position = position;
     }
 
-    glm::vec3 getEntityScale(uid& entityUID) {
+    glm::vec3 getEntityScale(uint32_t& entityUID) {
         if (entityUID == 0 || entityUID == 1) {
             DEER_SCRIPT_ERROR("Entity is not invalid");
             return glm::vec3();
@@ -66,7 +66,7 @@ namespace Deer {
         return entt.getComponent<TransformComponent>().scale;
     }
 
-    void setEntityScale(glm::vec3 scale, uid& entityUID) {
+    void setEntityScale(glm::vec3 scale, uint32_t& entityUID) {
         if (entityUID == 0 || entityUID == 1) {
             DEER_SCRIPT_ERROR("Entity is not invalid");
             return;
@@ -78,7 +78,7 @@ namespace Deer {
         entt.getComponent<TransformComponent>().scale = scale;
     }
 
-    uid getEntityParent(uid& entityUID) {
+    uint32_t getEntityParent(uint32_t& entityUID) {
         if (entityUID == 0 || entityUID == 1) {
             DEER_SCRIPT_ERROR("Entity is not invalid");
             return 0;
@@ -90,7 +90,7 @@ namespace Deer {
         return entt.getParentUID();
     }
 
-    bool isEntityValid(uid& entityUID) {
+    bool isEntityValid(uint32_t& entityUID) {
         if (entityUID == 0 || entityUID == 1)
             return false;
 
@@ -160,14 +160,14 @@ namespace Deer {
 
     void registerEntity(asIScriptEngine* engine) {
         engine->RegisterObjectType("Entity", sizeof(unsigned int), asOBJ_VALUE | asOBJ_POD | asOBJ_APP_PRIMITIVE);
-        engine->RegisterObjectProperty("Entity", "uint uid", 0);
+        engine->RegisterObjectProperty("Entity", "uint uint32_t", 0);
 
         engine->RegisterObjectMethod("Entity", "Entity getParent()", asFUNCTION(Deer::getEntityParent), asCALL_CDECL_OBJLAST);
         engine->RegisterObjectMethod("Entity", "bool isValid()", asFUNCTION(Deer::isEntityValid), asCALL_CDECL_OBJLAST);
 
-        engine->RegisterGlobalFunction("Entity getEntity(uint)", asFUNCTIONPR([](uid id) {
+        engine->RegisterGlobalFunction("Entity getEntity(uint)", asFUNCTIONPR([](uint32_t id) {
             return id;
-            }, (uid), uid), asCALL_CDECL);
+            }, (uint32_t), uint32_t), asCALL_CDECL);
 
     }
 

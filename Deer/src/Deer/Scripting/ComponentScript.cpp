@@ -1,7 +1,7 @@
 #include "Deer/ComponentScript.h"
 #include "angelscript.h"
 
-#include "Deer/Core/Log.h"
+#include "Deer/Log.h"
 #include "Deer/ScriptEngine.h"
 
 namespace Deer {

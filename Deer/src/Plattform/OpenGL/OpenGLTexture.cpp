@@ -1,5 +1,5 @@
 #include "OpenGLTexture.h"
-#include "Deer/Core/Log.h"
+#include "Deer/Log.h"
 #include "stb_image.h"
 
 #include "glad/glad.h"

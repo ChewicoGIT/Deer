@@ -1,6 +1,6 @@
 #pragma once
-#include "Deer/Scene/Entity.h"
-#include "Deer/Scene/Components.h"
+#include "Deer/Entity.h"
+#include "Deer/Components.h"
 #include "Deer/Scene/Serialization/SerializationGlobalVars.h"
 
 namespace Deer {
@@ -30,7 +30,7 @@ namespace Deer {
     void save(Archive& archive,
         Entity const& m_entity) {
 
-        uid id = m_entity.getUID();
+        uint32_t id = m_entity.getUID();
 
         TagComponent& name = m_entity.getComponent<TagComponent>();
         archive(cereal::make_nvp("id", id));
@@ -56,7 +56,7 @@ namespace Deer {
     void load(Archive& archive,
         Entity& m_entity) {
 
-        uid id;
+        uint32_t id;
         std::string name;
         archive(cereal::make_nvp("id", id));
         archive(cereal::make_nvp("name", name));

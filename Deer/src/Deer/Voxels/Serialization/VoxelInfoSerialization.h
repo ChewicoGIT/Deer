@@ -1,6 +1,6 @@
 #pragma once
 #include "Deer/Voxel.h"
-#include "Deer/Core/Log.h"
+#include "Deer/Log.h"
 
 #include "cereal/cereal.hpp"
 #include "cereal/types/string.hpp"

@@ -1,5 +1,6 @@
 #pragma once
-#include "Deer/Scene/Components.h"
+#include "Deer/Components.h"
+#include "Deer/AssetManager.h"
 
 namespace Deer{
     template<class Archive>

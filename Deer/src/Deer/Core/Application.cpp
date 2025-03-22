@@ -1,5 +1,5 @@
 #include "Deer/Application.h"
-#include "Deer/Core/Log.h"
+#include "Deer/Log.h"
 
 #ifdef DEER_RENDER
 #include "DeerRender/Render/RenderCommand.h"
@@ -12,8 +12,13 @@
 #endif
 
 namespace Deer {
-	Application* Application::s_application;
+    namespace Core {
+		int argc;
+		char **argv;
+    }
 
+	Application* Application::s_application;
+    
     Application::Application() : m_running(false) {
 #ifdef DEER_RENDER
         m_window = Scope<Window>(Window::create(m_windowProps));

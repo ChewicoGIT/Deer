@@ -1,6 +1,5 @@
-#include "Entity.h"
-
-#include "Deer/Scene/Components.h"
+#include "Deer/Entity.h"
+#include "Deer/Components.h"
 
 namespace Deer {
 	Entity Entity::nullEntity = Entity();
@@ -12,7 +11,7 @@ namespace Deer {
 	bool Entity::removeChild(Entity& child) {
 		DEER_CORE_ASSERT(child.m_environment == m_environment, "Can not remove childrens from diferent enviroments");
 
-		std::vector<uid>& children = getChildren();
+		std::vector<uint32_t>& children = getChildren();
 
 		auto it = std::find(children.begin(), children.end(), child.m_entityUID);
 		if (it != children.end())
@@ -97,7 +96,7 @@ namespace Deer {
 		return m_environment->getEntity(m_parentUID);
 	}
 
-	std::vector<uid>& Entity::getChildren() {
+	std::vector<uint32_t>& Entity::getChildren() {
 		return getComponent<RelationshipComponent>().children;
 	}
 

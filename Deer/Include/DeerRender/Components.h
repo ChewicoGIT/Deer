@@ -1,7 +1,9 @@
 #pragma once
+#include "Deer/Components.h"
 
 #include "DeerRender/Render/VertexArray.h"
 #include "DeerRender/Render/Shader.h"
+
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtc/quaternion.hpp"
 #include "glm/glm.hpp"
@@ -13,10 +15,10 @@ namespace Deer {
 	struct MeshRenderComponent {
 		MeshRenderComponent() = default;
 		MeshRenderComponent(const MeshRenderComponent&) = default;
-		MeshRenderComponent(uid _mesh, uid _shader) : shaderAssetID(_shader), meshAssetID(_mesh) { }
+		MeshRenderComponent(uint32_t _mesh, uint32_t _shader) : shaderAssetID(_shader), meshAssetID(_mesh) { }
 
-		uid shaderAssetID = 0;
-		uid meshAssetID = 0;
+		uint32_t shaderAssetID = 0;
+		uint32_t meshAssetID = 0;
 	};
 
 	struct TextureBindingComponent {
@@ -28,7 +30,7 @@ namespace Deer {
 		}
 		TextureBindingComponent(const TextureBindingComponent&) = default;
 
-		uid textureAssetID[MAX_TEXTURE_BINDINGS];
+		uint32_t textureAssetID[MAX_TEXTURE_BINDINGS];
 		unsigned char textureBindID[MAX_TEXTURE_BINDINGS];
 	};
 

@@ -1,13 +1,13 @@
-#include "Enviroment.h"
+#include "Deer/Enviroment.h"
 #include "Deer/Application.h"
-#include "Deer/Asset/AssetManager.h"
-#include "Deer/Scene/Entity.h"
-#include "Deer/Scene/Components.h"
+#include "Deer/Asset.h"
+#include "Deer/Entity.h"
+#include "Deer/Components.h"
 #include "DeerRender/Render/Render.h"
 #include "DeerRender/Render/RenderUtils.h"
 #include "DeerRender/Render/Texture.h"
 
-#include "Deer/Core/Log.h"
+#include "Deer/Log.h"
 
 namespace Deer {
 	Environment::Environment() {
@@ -39,14 +39,14 @@ namespace Deer {
 		m_entities.insert({ m_rootEntity, entity });
 	}
 
-	Entity& Environment::getEntity(uid id) {
+	Entity& Environment::getEntity(uint32_t id) {
 		DEER_CORE_ASSERT(m_entities.contains(id), "Entity id : {0} does not exist", id);
 		return m_entities[id];
 	}
 	
 	Entity& Environment::createEntity(const std::string& name)
 	{
-		uid id;
+		uint32_t id;
 		do {
 			id = pullEntityID();
 		} while (m_entities.contains(id));
@@ -71,7 +71,7 @@ namespace Deer {
 		return entity;
 	}
 
-	uid Environment::tryGetMainCamera() {
+	uint32_t Environment::tryGetMainCamera() {
 		return m_mainCamera;
 	}
 

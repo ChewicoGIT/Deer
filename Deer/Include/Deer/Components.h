@@ -1,28 +1,24 @@
 #pragma once
-#include "Deer/Core/Core.h"
 #include "Deer/Memory.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtc/quaternion.hpp"
 #include "glm/glm.hpp"
 
-#ifdef DEER_RENDER
-#include "DeerRender/Scene/Components.h"
-#endif
-
 #include <string>
 #include <vector>
+#include <stdint.h>
 
 namespace Deer {
 	class ComponentScriptInstance;
 
 	struct TagComponent {
 		std::string tag;
-		uid entityUID;
+		uint32_t entityUID;
 
 		TagComponent() = default;
 		TagComponent(const TagComponent&) = default;
-		TagComponent(std::string name, uid _id = 0) : tag(name), entityUID(_id) { }
+		TagComponent(std::string name, uint32_t _id = 0) : tag(name), entityUID(_id) { }
 	};
 
 	struct ScriptComponent {
@@ -35,12 +31,12 @@ namespace Deer {
 	};
 
 	struct RelationshipComponent {
-		uid parent_UID = 0;
-		std::vector<uid> children;
+		uint32_t parent_UID = 0;
+		std::vector<uint32_t> children;
 
 		RelationshipComponent() = default;
 		RelationshipComponent(const RelationshipComponent&) = default;
-		RelationshipComponent(uid parent) : parent_UID(parent) { }
+		RelationshipComponent(uint32_t parent) : parent_UID(parent) { }
 	};
 
 	struct TransformComponent {

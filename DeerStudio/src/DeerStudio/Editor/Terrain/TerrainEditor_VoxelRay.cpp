@@ -1,15 +1,12 @@
 #include "TerrainEditor.h"
-
 #include "DeerStudio/Project.h"
-#include "Deer/Scene.h"
+#include "DeerStudio/Editor/Viewport.h"
 
+#include "Deer/Scene.h"
 #include "Deer/VoxelWorld.h"
 #include "Deer/Voxel.h"
 
-
-#include "DeerRender/Scene/SceneCamera.h"
-
-#include "DeerStudio/Editor/Viewport.h"
+#include "DeerRender/SceneCamera.h"
 
 #include "imgui.h"
 #include "glm/gtc/matrix_transform.hpp"

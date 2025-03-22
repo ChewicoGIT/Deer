@@ -1,6 +1,5 @@
 #pragma once
 #include "ScriptAttributes.h"
-
 #include <string>
 
 class asITypeInfo;
