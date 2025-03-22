@@ -1,8 +1,8 @@
-#include "Deer/VoxelData.h"
+#include "Deer/Voxel.h"
 #include "Deer/Log.h"
 #include "Deer/DataStore.h"
 #include "DeerRender/Render/Shader.h"
-#include "DeerRender/Voxels/VoxelAspect.h"
+#include "DeerRender/VoxelAspect.h"
 
 #include "cereal/archives/json.hpp"
 #include "DeerRender/Voxels/Serialization/VoxelAspect_Serialization.h"

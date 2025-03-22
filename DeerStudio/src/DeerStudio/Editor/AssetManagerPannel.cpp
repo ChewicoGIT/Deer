@@ -3,7 +3,6 @@
 
 #include "Deer/Log.h"
 #include "Deer/Asset.h"
-#include "Deer/AssetManager.h"
 
 #include "DeerRender/Render/Texture.h"
 #include "DeerStudio/Editor/ActiveEntity.h"

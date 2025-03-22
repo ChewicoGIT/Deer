@@ -8,6 +8,7 @@
 
 #include "Deer/ScriptEngine.h"
 #include "Deer/Components.h"
+#include "Deer/ComponentScript.h"
 
 #ifdef DEER_RENDER
 #include "DeerRender/Voxels/VoxelWorldRenderData.h"

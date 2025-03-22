@@ -1,6 +1,15 @@
 #pragma once
-#include "Deer/VoxelData.h"
+#include "Deer/Memory.h"
+
 #include <stdint.h>
+#include <vector>
+#include <string>
+
+#ifdef DEER_RENDER
+#include "DeerRender/VoxelAspect.h"
+
+namespace Deer { class Texture2D; class Shader; }
+#endif
 
 #define VOXEL_INFO_TYPE_AIR "air"
 #define VOXEL_INFO_TYPE_VOXEL "voxel"
@@ -39,6 +48,41 @@ namespace Deer {
 	extern Voxel emptyVoxel;
 	extern LayerVoxel nullLayerVoxel;
 	extern int normalDirs[3 * 6];
+
+	enum class VoxelInfoType : uint8_t {
+		Air = 0,
+		Voxel = 1,
+		TransparentVoxel = 2,
+		Custom = 3
+	};
+
+	struct VoxelInfo {
+		std::string name;
+		VoxelInfoType type = VoxelInfoType::Air;
+	};
+
+    namespace VoxelData {
+        extern std::vector<VoxelInfo> voxelsInfo;
+
+        void loadVoxelsData();
+        void createExampleVoxelData();
+
+        int32_t getVoxelID(const std::string&);
+
+#ifdef DEER_RENDER
+        void createExampleVoxelAspect();
+
+        void loadVoxelsAspect();
+        void generateTextureAtlas();
+        void loadVoxelsShaders();
+
+        int getVoxelTextureAtlasSize();
+        Ref<Texture2D>& getVoxelColorTextureAtlas();
+        Ref<Shader>& getSolidVoxelShader();
+
+        extern std::vector<VoxelAspect> voxelsAspect;
+#endif
+    }
 
 	struct Voxel {
 		uint16_t id = 0;

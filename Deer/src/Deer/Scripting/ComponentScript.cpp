@@ -3,13 +3,14 @@
 
 #include "Deer/Log.h"
 #include "Deer/ScriptEngine.h"
+#include "angelscript.h"
 
 namespace Deer {
 	ComponentScript::ComponentScript(asITypeInfo* typeInfo)
 		: m_typeInfo(typeInfo) { 
 
 		m_scriptID = m_typeInfo->GetName();
-		m_attributes = Utils::extractAttributes(typeInfo);
+		m_attributes = extractAttributes(typeInfo);
 	}
 
 	ComponentScriptInstance::~ComponentScriptInstance() {

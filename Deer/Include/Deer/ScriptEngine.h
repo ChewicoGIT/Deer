@@ -16,6 +16,7 @@ class asITypeInfo;
 namespace Deer {
 	class Scene;
 	class Entity;
+	class ComponentScript;
 
 	using ComponentScriptMap = std::unordered_map<std::string, ComponentScript>;
 

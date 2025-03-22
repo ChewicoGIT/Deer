@@ -1,6 +1,7 @@
 #pragma once
 #include "Deer/Memory.h"
-
+#include "Deer/DataStore.h"
+#include "Deer/Path.h"
 
 #ifdef DEER_RENDER
 #include "DeerRender/GizmoRenderer.h"
@@ -43,5 +44,16 @@ namespace Deer {
 		GizmoRenderer m_gizmoRenderer;
 #endif
 	};
+
+	namespace SceneDataStore {
+		Scene loadScene(const Path& name);
+
+		void deleteSceneJson(const Path& name);
+		void exportSceneJson(Scene& scene, const Path& name);
+		void exportScenesBin();
+
+		void exportRuntimeScene(Scene& scene);
+		Scene importRuntimeScene();
+	}
 }
 

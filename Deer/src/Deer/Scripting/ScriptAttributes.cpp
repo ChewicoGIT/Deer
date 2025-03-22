@@ -1,9 +1,9 @@
-#include "Deer/ScriptAttributes.h"
+#include "Deer/ComponentScript.h"
 #include "Deer/Log.h"
 #include "angelscript.h"
 
 namespace Deer {
-	ScriptAttributeMap Utils::extractAttributes(asITypeInfo* typeInfo) {
+	ScriptAttributeMap extractAttributes(asITypeInfo* typeInfo) {
 		ScriptAttributeMap m_attributes;
 
 		int atributes = typeInfo->GetPropertyCount();

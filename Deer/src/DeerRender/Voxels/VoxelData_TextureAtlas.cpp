@@ -1,6 +1,6 @@
-#include "Deer/VoxelData.h"
+#include "Deer/Voxel.h"
 #include "Deer/Log.h"
-#include "DeerRender/Voxels/VoxelAspect.h"
+#include "DeerRender/VoxelAspect.h"
 
 #include "stb_image.h"
 #include "stb_image_write.h"

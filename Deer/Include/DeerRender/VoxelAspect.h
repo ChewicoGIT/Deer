@@ -1,6 +1,5 @@
 #pragma once
 
-
 // TEMP
 #define VOXEL_TEXTURE_SIZE_X 128
 #define VOXEL_TEXTURE_SIZE_Y 128

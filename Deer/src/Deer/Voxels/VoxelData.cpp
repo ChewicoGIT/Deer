@@ -1,4 +1,4 @@
-#include "Deer/VoxelData.h"
+#include "Deer/Voxel.h"
 #include "Deer/Log.h"
 #include "Deer/DataStore.h"
 

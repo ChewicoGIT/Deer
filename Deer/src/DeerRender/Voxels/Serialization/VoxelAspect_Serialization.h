@@ -1,5 +1,5 @@
 #pragma once
-#include "DeerRender/Voxels/VoxelAspect.h"
+#include "DeerRender/VoxelAspect.h"
 #include "Deer/Log.h"
 #include "Deer/Voxel.h"
 

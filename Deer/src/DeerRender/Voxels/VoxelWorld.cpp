@@ -9,7 +9,7 @@
 #include "DeerRender/Render/RenderUtils.h"
 #include "DeerRender/Render/Texture.h"
 #include "DeerRender/SceneCamera.h"
-#include "Deer/VoxelData.h"
+#include "Deer/Voxel.h"
 
 #include "Deer/Log.h"
 #include "glm/glm.hpp"

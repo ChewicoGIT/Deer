@@ -1,10 +1,8 @@
 #include "DeerStudio.h"
-
-#include "Deer/VoxelData.h"
+#include "Deer/Voxel.h"
 #include "Deer/VoxelWorld.h"
 #include "Deer/DataStore.h"
 #include "Deer/Scene.h"
-#include "Deer/SceneDataStore.h"
 #include "Deer/ScriptEngine.h"
 
 #include "DeerStudio/Editor/PropertiesPannel.h"

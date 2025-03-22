@@ -5,7 +5,6 @@
 #include "Deer/Scene.h"
 #include "Deer/Entity.h"
 #include "Deer/ScriptEngine.h"
-#include "Deer/SceneDataStore.h"
 
 #include "imgui.h"
 

@@ -6,7 +6,6 @@
 #include "DeerRender/Render/Texture.h"
 
 #include "Deer/Asset.h"
-#include "Deer/AssetManager.h"
 #include "Deer/ScriptEngine.h"
 
 #include "imgui.h"

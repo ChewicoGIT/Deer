@@ -1,4 +1,4 @@
-#include "Deer/SceneDataStore.h"
+#include "Deer/Scene.h"
 #include "cereal/archives/json.hpp"
 #include "cereal/archives/portable_binary.hpp"
 
@@ -14,21 +14,15 @@ namespace Deer {
 
 	Scene SceneDataStore::loadScene(const Path& name) {
 		Path realName;
-		if (DataStore::dataAccess->isDataBin())
-			realName = Path(DEER_SCENE_PATH) / (name.string() + ".dbscn");
-		else
-			realName = Path(DEER_SCENE_PATH) / (name.string() + ".dscn");
+		realName = Path(DEER_SCENE_PATH) / (name.string() + ".dscn");
 
 		uint32_t size;
-		uint8_t* data = DataStore::dataAccess->loadData(realName, &size);
+		uint8_t* data = DataStore::readFile(realName, &size);
 
 		Scene scene_data;
-		if (DataStore::dataAccess->isDataBin())
-			scene_data = loadSceneBin(data, size);
-		else
-			scene_data = loadSceneJson(data, size);
+		scene_data = loadSceneJson(data, size);
 
-		DataStore::dataAccess->freeData(name, data);
+		delete[] data;
 		return scene_data;
 	}
 
