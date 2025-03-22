@@ -1,5 +1,6 @@
 #include "Deer/ScriptEngine.h"
 #include "Deer/Log.h"
+#include "Deer/Enviroment.h"
 
 #include "angelscript.h"
 #include "scriptbuilder.h"
@@ -9,7 +10,7 @@
 #include "ScriptEngineFunctions.h"
 
 #include "Deer/ComponentScript.h"
-#include "Deer/Entity.h"
+
 #include "Deer/Scene.h"
 
 #include <filesystem>

@@ -1,9 +1,6 @@
 #pragma once
 #include "Deer/Log.h"
 #include "Deer/Application.h"
-#include "Deer/ComponentScript.h"
-#include "Deer/ScriptEngine.h"
-#include "Deer/Entity.h"
 
 extern Deer::Application* createApplication(int argc, char** argv);
 

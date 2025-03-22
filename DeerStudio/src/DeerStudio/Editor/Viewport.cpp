@@ -10,7 +10,7 @@
 
 #include "Deer/Scene.h"
 #include "Deer/Enviroment.h"
-#include "Deer/Entity.h"
+
 
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"

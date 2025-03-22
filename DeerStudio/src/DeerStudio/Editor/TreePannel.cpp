@@ -7,7 +7,7 @@
 
 #include "Deer/Scene.h"
 #include "Deer/Enviroment.h"
-#include "Deer/Entity.h"
+
 
 #include "imgui.h"
 

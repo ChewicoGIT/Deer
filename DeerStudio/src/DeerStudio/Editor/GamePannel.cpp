@@ -3,7 +3,7 @@
 
 #include "Deer/Enviroment.h"
 #include "Deer/Scene.h"
-#include "Deer/Entity.h"
+
 #include "Deer/ScriptEngine.h"
 
 #include "imgui.h"

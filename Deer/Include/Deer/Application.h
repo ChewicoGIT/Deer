@@ -9,7 +9,6 @@
 
 namespace Deer {
 	class ImGuiLayer;
-	
 	namespace Core {
 		extern int argc;
 		extern char **argv;

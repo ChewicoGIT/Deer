@@ -3,7 +3,7 @@
 #include "DeerStudio/Editor/ActiveEntity.h"
 
 #include "Deer/Memory.h"
-#include "Deer/Entity.h"
+
 
 namespace Deer {
 	class PropertiesPannel : public EditorPannel {

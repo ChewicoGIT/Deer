@@ -1,5 +1,5 @@
 #pragma once
-#include "Deer/Entity.h"
+
 #include "Deer/Components.h"
 #include "Deer/Scene/Serialization/SerializationGlobalVars.h"
 

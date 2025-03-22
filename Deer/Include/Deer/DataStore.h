@@ -19,8 +19,6 @@
 #define DEER_TEMP_PATH "tmp"
 
 namespace Deer {
-	class DataAccess;
-
 	namespace DataStore {
 		void createFolder(const Path& path);
 
@@ -31,11 +29,6 @@ namespace Deer {
 		// Refactor----
 		void compressFiles(std::vector<Path> files, const Path& path);
 		std::vector<Path> getFiles(const Path& path, const std::string& extension);
-		// Refactor----
-
-		// Refactor----
-		extern DataAccess* dataAccess;
-		void setupDataAccess(DataAccess* _dataAccess);
 		// Refactor----
 
 		extern Path rootPath;
