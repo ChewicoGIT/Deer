@@ -1,7 +1,6 @@
 #pragma once
-#include "Deer/DataStore/DataStore.h"
-#include "Deer/DataStore/Path.h"
-
+#include "Deer/DataStore.h"
+#include "Deer/Path.h"
 
 namespace Deer {
 	class Scene;

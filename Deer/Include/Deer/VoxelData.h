@@ -1,16 +1,29 @@
 #pragma once
-#include "VoxelInfo.h"
-
-#include <vector>
+#include "Deer/Memory.h"
 
 #ifdef DEER_RENDER
-#include "Deer/Core/Memory.h"
 #include "DeerRender/Voxels/VoxelAspect.h"
 
 namespace Deer { class Texture2D; class Shader; }
 #endif
 
+#include <vector>
+#include <string>
+#include <stdint.h>
+
 namespace Deer {
+	enum class VoxelInfoType : uint8_t {
+		Air = 0,
+		Voxel = 1,
+		TransparentVoxel = 2,
+		Custom = 3
+	};
+
+	struct VoxelInfo {
+		std::string name;
+		VoxelInfoType type = VoxelInfoType::Air;
+	};
+
     namespace VoxelData {
         extern std::vector<VoxelInfo> voxelsInfo;
 

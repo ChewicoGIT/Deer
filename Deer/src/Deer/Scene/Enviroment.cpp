@@ -1,6 +1,5 @@
 #include "Enviroment.h"
-#include "Deer/Core/Application.h"
-#include "Deer/Core/Project.h"
+#include "Deer/Application.h"
 #include "Deer/Asset/AssetManager.h"
 #include "Deer/Scene/Entity.h"
 #include "Deer/Scene/Components.h"

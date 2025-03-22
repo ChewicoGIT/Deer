@@ -1,5 +1,5 @@
 #pragma once
-#include "Deer/Core/Application.h"
+#include "Deer/Application.h"
 #include "DeerRender/Core/Input/KeyCodes.h"
 
 namespace Deer {

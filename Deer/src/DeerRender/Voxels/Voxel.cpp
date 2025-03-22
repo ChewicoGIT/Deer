@@ -1,5 +1,4 @@
-#include "Voxel.h"
-
+#include "DeerRender/LightVoxel.h"
 
 #include <iostream>
 #include <string>

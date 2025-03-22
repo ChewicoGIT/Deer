@@ -1,6 +1,6 @@
 #pragma once
 #include "Deer/DataStore/DataStructure.h"
-#include "Deer/DataStore/Path.h"
+#include "Deer/Path.h"
 
 #include "cereal/cereal.hpp"
 #include "cereal/types/string.hpp"

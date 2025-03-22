@@ -1,10 +1,10 @@
 #include "GamePannel.h"
 #include "Deer/Scene/Enviroment.h"
-#include "Deer/Scene/Scene.h"
+#include "Deer/Scene.h"
 #include "Deer/Scene/Entity.h"
-#include "Deer/Core/Project.h"
-#include "Deer/Scripting/ScriptEngine.h"
-#include "Deer/Scene/SceneDataStore.h"
+#include "DeerStudio/Project.h"
+#include "Deer/ScriptEngine.h"
+#include "Deer/SceneDataStore.h"
 
 #include "imgui.h"
 #include <filesystem>

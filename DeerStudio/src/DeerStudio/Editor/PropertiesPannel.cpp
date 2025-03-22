@@ -1,10 +1,10 @@
 #include "PropertiesPannel.h"
 #include "DeerRender/Core/Input/Input.h"
 #include "DeerRender/Core/Input/KeyCodes.h"
-#include "Deer/Core/Project.h"
+#include "DeerStudio/Project.h"
 #include "DeerRender/Render/Texture.h"
 #include "Deer/Asset/AssetManager.h"
-#include "Deer/Scripting/ScriptEngine.h"
+#include "Deer/ScriptEngine.h"
 #include "imgui.h"
 
 namespace Deer {

@@ -4,9 +4,9 @@
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 
-#include "DeerRender/Core/Events/ApplicationEvent.h"
-#include "DeerRender/Core/Events/KeyEvent.h"
-#include "DeerRender/Core/Events/MouseEvent.h"
+#include "DeerRender/Events/ApplicationEvent.h"
+#include "DeerRender/Events/KeyEvent.h"
+#include "DeerRender/Events/MouseEvent.h"
 
 #include "Plattform/OpenGL/OpenGLContext.h"
 #include "Plattform/OpenGL/imgui_impl_glfw.h"

@@ -2,7 +2,7 @@
 #include "DeerStudio/Editor/EditorPannel.h"
 #include "DeerStudio/Editor/ActiveEntity.h"
 
-#include "Deer/Core/Memory.h"
+#include "Deer/Memory.h"
 
 #include "Deer/Scene/Entity.h"
 

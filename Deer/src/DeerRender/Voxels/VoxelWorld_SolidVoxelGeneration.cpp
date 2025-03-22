@@ -1,14 +1,13 @@
-#include "Deer/Voxels/VoxelWorld.h"
+#include "Deer/VoxelWorld.h"
 #include "Deer/Voxels/Chunk.h"
-#include "Deer/Core/Application.h"
-#include "Deer/Core/Project.h"
+#include "Deer/Application.h"
 #include "Deer/Asset/AssetManager.h"
 #include "Deer/Scene/Entity.h"
 #include "Deer/Scene/Components.h"
 #include "DeerRender/Render/Render.h"
 #include "DeerRender/Render/RenderUtils.h"
 #include "DeerRender/Render/Texture.h"
-#include "DeerRender/Voxels/ChunkRender.h"
+#include "DeerRender/Voxels/VoxelWorldRenderData.h"
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -16,13 +15,13 @@
 
 namespace Deer {
 	void VoxelWorld::bakeNextChunk() {
-		if (!m_chunkQueue.hasChunk())
+		if (!m_renderData->chunkQueue.hasChunk())
 			return;
 
 		// Pull the next chunk to render
-		ChunkID nextChunk = m_chunkQueue.pullChunk();
-		m_vertexData.clear();
-		m_indices.clear();
+		ChunkID nextChunk = m_renderData->chunkQueue.pullChunk();
+		m_renderData->vertexData.clear();
+		m_renderData->indices.clear();
 
 		// For each voxel
 		for (int x = 0; x < CHUNK_SIZE_X; x++) {
@@ -36,8 +35,8 @@ namespace Deer {
 		// Pass the data to the GPU
 		Ref<VertexArray> va = VertexArray::create();
 		va->bind();
-		Ref<VertexBuffer> vb = VertexBuffer::create(m_vertexData.data(), m_vertexData.size() * sizeof(SolidVoxelVertexData));
-		Ref<IndexBuffer> ib = IndexBuffer::create(m_indices.data(), m_indices.size() * sizeof(uint32_t), IndexDataType::Unsigned_Int);
+		Ref<VertexBuffer> vb = VertexBuffer::create(m_renderData->vertexData.data(), m_renderData->vertexData.size() * sizeof(SolidVoxelVertexData));
+		Ref<IndexBuffer> ib = IndexBuffer::create(m_renderData->indices.data(), m_renderData->indices.size() * sizeof(uint32_t), IndexDataType::Unsigned_Int);
 
 		BufferLayout layout({
 			{ "a_textureID", DataType::Unsigned_Short2, ShaderDataType::Integer, offsetof(SolidVoxelVertexData, textureID) },
@@ -64,7 +63,7 @@ namespace Deer {
 
 		// Update the data to the chunk render
 		int id = m_worldProps.getWorldChunkID(nextChunk);
-		ChunkRender& chunkRender = m_chunksRender[id];
+		ChunkRender& chunkRender = m_renderData->chunksRender[id];
 		chunkRender.solidVoxel = va;
 		chunkRender.hasData = true;
 	}
@@ -105,7 +104,7 @@ namespace Deer {
 			bool isFaceShadow = frontVoxelLight.ambient_light != 255 && (frontVoxel.isVoxelType() || frontVoxelLight.ambient_light > front2VoxelLight.ambient_light);
 
 			// Save the vertex id for later
-			int vertexID = m_vertexData.size();
+			int vertexID = m_renderData->vertexData.size();
 
 			int voxel_count[4];
 
@@ -200,25 +199,25 @@ namespace Deer {
 				vertex_data.u = VERTEX_UV(X_AXIS, v);
 				vertex_data.v = VERTEX_UV(Y_AXIS, v);
 
-				m_vertexData.push_back(vertex_data);
+				m_renderData->vertexData.push_back(vertex_data);
 			}
 
 			if (voxel_count[0] + voxel_count[3] > voxel_count[1] + voxel_count[2]) {
-				m_indices.push_back(vertexID);
-				m_indices.push_back(vertexID + 2);
-				m_indices.push_back(vertexID + 1);
+				m_renderData->indices.push_back(vertexID);
+				m_renderData->indices.push_back(vertexID + 2);
+				m_renderData->indices.push_back(vertexID + 1);
 
-				m_indices.push_back(vertexID + 1);
-				m_indices.push_back(vertexID + 2);
-				m_indices.push_back(vertexID + 3);
+				m_renderData->indices.push_back(vertexID + 1);
+				m_renderData->indices.push_back(vertexID + 2);
+				m_renderData->indices.push_back(vertexID + 3);
 			} else {
-				m_indices.push_back(vertexID);
-				m_indices.push_back(vertexID + 3);
-				m_indices.push_back(vertexID + 1);
+				m_renderData->indices.push_back(vertexID);
+				m_renderData->indices.push_back(vertexID + 3);
+				m_renderData->indices.push_back(vertexID + 1);
 
-				m_indices.push_back(vertexID + 2);
-				m_indices.push_back(vertexID + 3);
-				m_indices.push_back(vertexID);
+				m_renderData->indices.push_back(vertexID + 2);
+				m_renderData->indices.push_back(vertexID + 3);
+				m_renderData->indices.push_back(vertexID);
 			}
 		}
 	}

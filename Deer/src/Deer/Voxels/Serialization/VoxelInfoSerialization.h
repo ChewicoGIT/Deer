@@ -1,5 +1,5 @@
 #pragma once
-#include "Deer/Voxels/VoxelInfo.h"
+#include "Deer/Voxel.h"
 #include "Deer/Core/Log.h"
 
 #include "cereal/cereal.hpp"

@@ -1,29 +1,23 @@
 #include "DeerStudio.h"
 
+#include "Deer/VoxelData.h"
+#include "Deer/VoxelWorld.h"
+#include "Deer/DataStore.h"
+#include "Deer/Scene.h"
+#include "Deer/SceneDataStore.h"
+#include "Deer/ScriptEngine.h"
+
 #include "DeerStudio/Editor/PropertiesPannel.h"
 #include "DeerStudio/Editor/GamePannel.h"
-
-#include "Deer/Core/Project.h"
-#include "Deer/Voxels/VoxelWorld.h"
-#include "Deer/Scene/Scene.h"
-#include "Deer/Scene/SceneDataStore.h"
-#include "Deer/Scripting/ScriptEngine.h"
-
-#include "Deer/DataStore/DataAccess/PhyisicalDataAccess.h"
-
-#include "Deer/DataStore/DataStore.h"
-#include "Deer/Voxels/VoxelData.h"
-
-#include "Editor/SceneExplorer.h"
-#include "Editor/TreePannel.h"
-#include "Editor/Viewport.h"
-#include "Editor/Terrain/TerrainEditor.h"
+#include "DeerStudio/Project.h"
+#include "DeerStudio/Editor/SceneExplorer.h"
+#include "DeerStudio/Editor/TreePannel.h"
+#include "DeerStudio/Editor/Viewport.h"
+#include "DeerStudio/Editor/Terrain/TerrainEditor.h"
+#include "DeerStudio/Editor/Icons.h"
 
 #include "Style.h"
-#include "Editor/Icons.h"
-
 #include "Plattform/OpenGL/imgui_impl_opengl3.h"
-
 #include <functional>
 
 namespace Deer {
@@ -44,8 +38,6 @@ namespace Deer {
         VoxelData::generateTextureAtlas();
         VoxelData::loadVoxelsShaders();
         ScriptEngine::compileScriptEngine(DataStore::rootPath  / std::filesystem::path("scripts"));
-
-        DataStore::setupDataAccess(new PhyisicalDataAccess());
 
         Icons::setupIcons();
 

@@ -1,6 +1,6 @@
-#include "Deer/Voxels/VoxelData.h"
+#include "Deer/VoxelData.h"
 #include "Deer/Core/Log.h"
-#include "Deer/DataStore/DataStore.h"
+#include "Deer/DataStore.h"
 #include "DeerRender/Render/Shader.h"
 #include "DeerRender/Voxels/VoxelAspect.h"
 

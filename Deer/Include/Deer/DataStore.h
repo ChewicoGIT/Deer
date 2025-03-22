@@ -1,5 +1,5 @@
 #pragma once
-#include "Deer/DataStore/Path.h"
+#include "Deer/Path.h"
 
 #include <vector>
 #include <string>

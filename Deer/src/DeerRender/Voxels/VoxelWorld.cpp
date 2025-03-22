@@ -1,20 +1,22 @@
-#include "Deer/Voxels/VoxelWorld.h"
+#include "Deer/VoxelWorld.h"
 #include "Deer/Voxels/Chunk.h"
-#include "Deer/Core/Application.h"
-#include "Deer/Core/Project.h"
-#include "Deer/Core/Memory.h"
+#include "Deer/Application.h"
+#include "Deer/Memory.h"
 #include "Deer/Asset/AssetManager.h"
 #include "Deer/Scene/Entity.h"
 #include "Deer/Scene/Components.h"
 #include "DeerRender/Render/Render.h"
 #include "DeerRender/Render/RenderUtils.h"
 #include "DeerRender/Render/Texture.h"
-#include "Deer/Voxels/VoxelData.h"
+#include "DeerRender/Scene/SceneCamera.h"
+#include "Deer/VoxelData.h"
 
 #include "Deer/Core/Log.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/matrix_inverse.hpp"
+
+#include "DeerRender/Voxels/VoxelWorldRenderData.h"
 
 namespace Deer {
 	VoxelLight VoxelWorld::readLight(int x, int y, int z) {
@@ -37,13 +39,13 @@ namespace Deer {
 		if (!m_worldProps.isValid(chunkID))
 			return lightVoxel;
 
-		m_chunkQueue.addChunk(chunkID);
+		m_renderData->chunkQueue.addChunk(chunkID);
 
 		Chunk& chunk = m_chunks[m_worldProps.getWorldChunkID(chunkID)];
 		return chunk.modLight(chunkVoxelID);
 	}
 
-	void VoxelWorld::render(SceneCamera camera) {
+	void VoxelWorld::render(const SceneCamera& camera) {
 		glm::mat4 camMatrix = glm::inverse(camera.transform.getMatrix());
 		glm::mat4 projectionMatrix = camera.camera.getMatrix();
 		glm::mat4 invertZ = glm::scale(glm::mat4(1.0f), glm::vec3(1, 1, -1));
@@ -62,7 +64,7 @@ namespace Deer {
 		shader->uploadUniformInt("u_textureSize", VoxelData::getVoxelTextureAtlasSize());
 
 		for (int x = 0; x < m_worldProps.getChunkCount(); x++) {
-			ChunkRender& chunkRender = m_chunksRender[x];
+			ChunkRender& chunkRender = m_renderData->chunksRender[x];
 			if (!chunkRender.hasData)
 				continue;
 

@@ -1,7 +1,7 @@
 #include "TerrainEditor.h"
 
-#include "Deer/Voxels/Voxel.h"
-#include "Deer/Voxels/VoxelData.h"
+#include "Deer/Voxel.h"
+#include "Deer/VoxelData.h"
 
 #include "DeerRender/Voxels/VoxelAspect.h"
 #include "DeerRender/Render/Texture.h"

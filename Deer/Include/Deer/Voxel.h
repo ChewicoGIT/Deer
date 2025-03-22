@@ -1,6 +1,11 @@
 #pragma once
-#include "VoxelData.h"
-#include <cstdint>
+#include "Deer/VoxelData.h"
+#include <stdint.h>
+
+#define VOXEL_INFO_TYPE_AIR "air"
+#define VOXEL_INFO_TYPE_VOXEL "voxel"
+#define VOXEL_INFO_TYPE_TRANSPARENT_VOXEL "transparentVoxel"
+#define VOXEL_INFO_TYPE_CUSTOM "custom"
 
 #define CHUNK_SIZE_X 32
 #define CHUNK_SIZE_Y 32
@@ -8,6 +13,8 @@
 
 #define LAYER_VOXELS CHUNK_SIZE_X * CHUNK_SIZE_Z
 #define CHUNK_VOXELS CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z
+
+// TODO: Change this to be a inline function
 #define VOXEL_POSITION(id) id.z + id.y * CHUNK_SIZE_Z + id.x * CHUNK_SIZE_Z * CHUNK_SIZE_Y
 #define LAYER_VOXEL_POSITION(id) id.z + id.x * CHUNK_SIZE_Z
 
@@ -21,6 +28,7 @@
 #define NORMAL_UP 3
 #define NORMAL_BACK 4
 #define NORMAL_FRONT 5
+// TODO: Change this to be a inline function
 #define NORMAL_DIR(axis, normal) normalDirs[axis + normal * 3]
 
 namespace Deer {

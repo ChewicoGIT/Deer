@@ -1,6 +1,5 @@
 #pragma once
-
-#include "Deer/Voxels/Voxel.h"
+#include "Deer/Voxel.h"
 
 #define LIGHT_PROPAGATION_COMPLEX_DIRS 18
 #define LIGHT_PROPAGATION_COMPLEX_DIR(id, dir) lightPropagationComplexDir[id + dir * 2]

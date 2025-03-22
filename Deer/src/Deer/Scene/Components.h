@@ -1,6 +1,6 @@
 #pragma once
 #include "Deer/Core/Core.h"
-#include "Deer/Core/Memory.h"
+#include "Deer/Memory.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtc/quaternion.hpp"
@@ -55,6 +55,6 @@ namespace Deer {
 		inline const glm::vec3 getEulerAngles() { return glm::degrees(glm::eulerAngles(rotation)); }
 		inline void setEulerAngles(const glm::vec3& eulerAngles) { rotation = glm::quat(glm::radians(eulerAngles)); }
 
-		glm::mat4 getMatrix();
+		glm::mat4 getMatrix() const;
 	};
 }

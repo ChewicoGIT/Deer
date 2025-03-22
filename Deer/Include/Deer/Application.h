@@ -1,19 +1,31 @@
 #pragma once
-#include "Deer/Core/Memory.h"
-#include "Deer/Core/Timestep.h"
+#include "Deer/Memory.h"
 
 #ifdef DEER_RENDER
-#include "DeerRender/Core/Events/Event.h"
-#include "DeerRender/Core/Events/ApplicationEvent.h"
-#include "DeerRender/ImGui/ImGuiLayer.h"
-#include "DeerRender/Core/Window.h"
+#include "DeerRender/Events/Event.h"
+#include "DeerRender/Events/ApplicationEvent.h"
+#include "DeerRender/Window.h"
 #endif
 
 namespace Deer {
+	class ImGuiLayer;
+
+	class Timestep {
+	public:
+		Timestep(float time = 0.0f)
+			: m_time(time) { }
+
+		float getSeconds() const { return m_time; }
+		float getMilliseconds() const { return m_time * 1000; }
+	private:
+		float m_time;
+	};
+
 	class Application
 	{
 	public:
 		Application();
+		~Application();
 		
 		static Application* s_application;
 
@@ -37,7 +49,7 @@ namespace Deer {
 
 		Scope<Window> m_window;
 	private:
-		ImGuiLayer m_imGuiLayer;
+		Scope<ImGuiLayer> m_imGuiLayer;
 		const WindowProps m_windowProps;
 
 		virtual void onEventCallback(Event& e);

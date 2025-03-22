@@ -1,5 +1,5 @@
 #include "PhyisicalDataAccess.h"
-#include "Deer/DataStore/DataStore.h"
+#include "Deer/DataStore.h"
 
 namespace Deer {
 	uint8_t* Deer::PhyisicalDataAccess::loadData(const Path& path, uint32_t* size) {

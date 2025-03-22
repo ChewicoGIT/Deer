@@ -37,7 +37,7 @@ namespace Deer {
 		CameraComponent(const CameraComponent&) = default;
 		CameraComponent(float _fov, float _aspect, float _nearZ, float _farZ) : fov(_fov), aspect(_aspect), nearZ(_nearZ), farZ(_farZ) { }
 
-		inline glm::mat4 getMatrix() { return glm::perspective(fov, aspect, nearZ, farZ); }
+		inline glm::mat4 getMatrix() const { return glm::perspective(fov, aspect, nearZ, farZ); }
 
 		float fov = glm::radians(50.0f), aspect = 16 / 9, nearZ = 0.1f, farZ = 1000;
 	};

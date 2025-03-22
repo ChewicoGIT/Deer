@@ -12,6 +12,7 @@ project "DeerStudio"
    includedirs
    {
       "src",
+	  "../Deer/Include",
 	  "../Deer/src",
 	  "../Deer/vendor/spdlog/include",
 	  "../Deer/vendor/imgui",

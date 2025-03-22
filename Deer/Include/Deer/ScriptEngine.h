@@ -1,6 +1,6 @@
 #pragma once
-#include "Deer/Core/Memory.h"
-#include "Deer/Scripting/ComponentScript.h"
+#include "Deer/Memory.h"
+#include "Deer/ComponentScript.h"
 
 #include <filesystem>
 #include <string>
@@ -23,11 +23,12 @@ namespace Deer {
 		extern asIScriptContext* m_context;
 		extern bool m_isCompilationValid;
 		extern ComponentScriptMap m_componentScripts;
+		extern Scene* m_scene;
 
 		void compileScriptEngine(const std::filesystem::path& scriptPath);
 		void shutdownScriptEngine();
 
-		void beginExecutionContext();
+		void beginExecutionContext(Scene* executingScene);
 		void endExecutionContext();
 
 		inline asIScriptContext* getExecutionContext() { return m_context; }

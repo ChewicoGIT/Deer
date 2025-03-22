@@ -2,12 +2,12 @@
 #include "imgui.h"
 #include "Icons.h"
 
-#include "Deer/DataStore/Path.h"
-#include "Deer/DataStore/DataStore.h"
+#include "Deer/Path.h"
+#include "Deer/DataStore.h"
 #include "DeerRender/Render/Texture.h"
-#include "Deer/Core/Project.h"
-#include "Deer/Scene/SceneDataStore.h"
-#include "Deer/Scene/Scene.h"
+#include "DeerStudio/Project.h"
+#include "Deer/SceneDataStore.h"
+#include "Deer/Scene.h"
 #include "DeerStudio/Editor/ActiveEntity.h"
 #include "Deer/Core/Log.h"
 

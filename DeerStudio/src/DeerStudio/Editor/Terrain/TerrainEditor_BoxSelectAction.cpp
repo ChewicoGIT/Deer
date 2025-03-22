@@ -1,13 +1,13 @@
 #include "TerrainEditor.h"
 
-#include "Deer/Core/Project.h"
+#include "DeerStudio/Project.h"
 #include "Deer/Core/Log.h"
 
-#include "Deer/Voxels/Voxel.h"
-#include "Deer/Voxels/VoxelWorld.h"
-#include "Deer/Scene/Scene.h"
+#include "Deer/Voxel.h"
+#include "Deer/VoxelWorld.h"
+#include "Deer/Scene.h"
 
-#include "DeerRender/Scene/GizmoRenderer.h"
+#include "DeerRender/GizmoRenderer.h"
 #include "DeerRender/Render/Texture.h"
 
 #include "DeerStudio/Editor/Viewport.h"

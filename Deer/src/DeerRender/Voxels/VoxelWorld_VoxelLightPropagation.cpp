@@ -1,5 +1,6 @@
-#include "Deer/Voxels/VoxelWorld.h"
+#include "Deer/VoxelWorld.h"
 #include "Deer/Voxels/Chunk.h"
+#include "DeerRender/Voxels/VoxelWorldRenderData.h"
 
 namespace Deer{
     void VoxelWorld::bakeVoxelLightFromPoint(int x, int y, int z) {
@@ -26,7 +27,7 @@ namespace Deer{
         extractChunkCordinates(minX + 1, minY + 1, minZ + 1, minChunkID, minChunkVoxelID);
         extractChunkCordinates(maxX - 1, maxY - 1, maxZ - 1, maxChunkID, maxChunkVoxelID);
 
-        tmp_voxelLightSource.clear();
+        m_renderData->tmp_voxelLightSource.clear();
 
         // We want to empty the voxel light of the section first
         ChunkID workingChunkID;
@@ -43,7 +44,7 @@ namespace Deer{
                         (workingChunkID.z == maxChunkID.z)? maxChunkVoxelID.z : CHUNK_SIZE_Z - 1);
 
                     Chunk& workingChunk = m_chunks[m_worldProps.getWorldChunkID(workingChunkID)];
-                    workingChunk.clearVoxelLightAndSaveSources(workingMinVoxelID, workingMaxVoxelID, workingChunkID, tmp_voxelLightSource);
+                    workingChunk.clearVoxelLightAndSaveSources(workingMinVoxelID, workingMaxVoxelID, workingChunkID, m_renderData->tmp_voxelLightSource);
                 }
             }
         }
@@ -58,9 +59,9 @@ namespace Deer{
                 VoxelLight maxZEdgeLight = readLight(maxZEdge.x, maxZEdge.y, maxZEdge.z);
 
                 if (minZEdgeLight.b_light || minZEdgeLight.g_light || minZEdgeLight.b_light)
-                    m_voxelLightPropagation.push(minZEdge);
+                    m_renderData->voxelLightPropagation.push(minZEdge);
                 if (maxZEdgeLight.b_light || maxZEdgeLight.g_light || maxZEdgeLight.b_light)
-                    m_voxelLightPropagation.push(maxZEdge);
+                    m_renderData->voxelLightPropagation.push(maxZEdge);
             }
         }
 
@@ -73,9 +74,9 @@ namespace Deer{
                 VoxelLight maxYEdgeLight = readLight(maxYEdge.x, maxYEdge.y, maxYEdge.z);
 
                 if (minYEdgeLight.b_light || minYEdgeLight.g_light || minYEdgeLight.b_light)
-                    m_voxelLightPropagation.push(minYEdge);
+                    m_renderData->voxelLightPropagation.push(minYEdge);
                 if (maxYEdgeLight.b_light || maxYEdgeLight.g_light || maxYEdgeLight.b_light)
-                    m_voxelLightPropagation.push(maxYEdge);
+                    m_renderData->voxelLightPropagation.push(maxYEdge);
             }
         }
 
@@ -88,13 +89,13 @@ namespace Deer{
                 VoxelLight maxXEdgeLight = readLight(maxXEdge.x, maxXEdge.y, maxXEdge.z);
 
                 if (minXEdgeLight.b_light || minXEdgeLight.g_light || minXEdgeLight.b_light)
-                    m_voxelLightPropagation.push(minXEdge);
+                    m_renderData->voxelLightPropagation.push(minXEdge);
                 if (maxXEdgeLight.b_light || maxXEdgeLight.g_light || maxXEdgeLight.b_light)
-                    m_voxelLightPropagation.push(maxXEdge);
+                    m_renderData->voxelLightPropagation.push(maxXEdge);
             }
         }
 
-        for (VoxelCordinates& cordinates : tmp_voxelLightSource) {
+        for (VoxelCordinates& cordinates : m_renderData->tmp_voxelLightSource) {
             VoxelLight& voxelLight = modLight(cordinates.x, cordinates.y, cordinates.z);
             Voxel voxel = readVoxel(cordinates.x, cordinates.y, cordinates.z);
 
@@ -103,17 +104,17 @@ namespace Deer{
             voxelLight.g_light = voxelAspect.definition.colorEmission.g_value;
             voxelLight.b_light = voxelAspect.definition.colorEmission.b_value;
 
-            m_voxelLightPropagation.push(cordinates);
+            m_renderData->voxelLightPropagation.push(cordinates);
         }
 
-		while (!m_voxelLightPropagation.empty()) {
+		while (!m_renderData->voxelLightPropagation.empty()) {
 			resolveNextVoxelLightPropagation();
 		}
     }
 
     void VoxelWorld::resolveNextVoxelLightPropagation() {
-        VoxelCordinates position = m_voxelLightPropagation.front();
-		m_voxelLightPropagation.pop();
+        VoxelCordinates position = m_renderData->voxelLightPropagation.front();
+		m_renderData->voxelLightPropagation.pop();
 
 		VoxelLight currentLight = readLight(position.x, position.y, position.z);
 		bool voxelCheck[6] = { false };
@@ -160,7 +161,7 @@ namespace Deer{
 			}
 
             if (nextVoxelModified)
-                m_voxelLightPropagation.push(VoxelCordinates(nextX, nextY, nextZ));
+                m_renderData->voxelLightPropagation.push(VoxelCordinates(nextX, nextY, nextZ));
 		}
 
 		return;
@@ -203,7 +204,7 @@ namespace Deer{
 			}
 
             if (nextVoxelModified)
-                m_voxelLightPropagation.push(VoxelCordinates(nextX, nextY, nextZ));
+                m_renderData->voxelLightPropagation.push(VoxelCordinates(nextX, nextY, nextZ));
 		}
     }
 }

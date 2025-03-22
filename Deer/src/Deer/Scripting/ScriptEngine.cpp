@@ -1,6 +1,5 @@
-#include "ScriptEngine.h"
+#include "Deer/ScriptEngine.h"
 #include "Deer/Core/Log.h"
-#include "Deer/Core/Project.h"
 
 #include "angelscript.h"
 #include "scriptbuilder.h"
@@ -9,8 +8,9 @@
 
 #include "ScriptEngineFunctions.h"
 
-#include "Deer/Scripting/ComponentScript.h"
+#include "Deer/ComponentScript.h"
 #include "Deer/Scene/Entity.h"
+#include "Deer/Scene.h"
 
 #include <filesystem>
 
@@ -20,6 +20,7 @@ namespace Deer {
 	namespace ScriptEngine {
 		asIScriptEngine* m_scriptEngine;
 		asIScriptModule* m_scriptModule;
+		Scene* m_scene;
 	
 		bool m_isCompilationValid = false;
 	
@@ -34,7 +35,8 @@ namespace Deer {
 		m_componentScripts.clear();
 	}
 
-	void ScriptEngine::beginExecutionContext() {
+	void ScriptEngine::beginExecutionContext(Scene* executingScene) {
+		m_scene = executingScene;
 		m_context = m_scriptEngine->CreateContext();
 	}
 

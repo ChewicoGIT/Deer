@@ -1,5 +1,5 @@
 #pragma once
-#include "Deer/Voxels/Voxel.h"
+#include "Deer/Voxel.h"
 
 namespace Deer {
 	class Layer {

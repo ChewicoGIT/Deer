@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Deer/DataStore/Path.h"
+#include "Deer/Path.h"
 
 namespace Deer {
 	class DataAccess {

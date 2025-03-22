@@ -1,8 +1,7 @@
 #pragma once
-#include "Deer/Core/Timestep.h"
+#include "Deer/Application.h"
 
 namespace Deer {
-
 	class Event;
 
 	class EditorPannel {

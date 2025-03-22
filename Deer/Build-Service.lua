@@ -13,6 +13,7 @@ project "DeerService"
    includedirs
    {
       "src",
+      "Include",
 	  "vendor/spdlog/include",
 	  "vendor/glm",
 	  "vendor/entt/include",

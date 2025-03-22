@@ -1,5 +1,5 @@
 #pragma once
-#include "Deer/Core/Memory.h"
+#include "Deer/Memory.h"
 
 #define ICON_MIN_SIZE 90
 #define ICON_MAX_SIZE 160

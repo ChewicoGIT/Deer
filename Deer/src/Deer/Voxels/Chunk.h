@@ -1,10 +1,10 @@
 #pragma once
-#include "Voxel.h"
+#include "Deer/Voxel.h"
+#include "Deer/VoxelData.h"
 
 #ifdef DEER_RENDER
-#include "DeerRender/Voxels/Voxel.h"
+#include "DeerRender/LightVoxel.h"
 #include "DeerRender/Voxels/VoxelAspect.h"
-#include "Deer/Voxels/VoxelData.h"
 #include <vector>
 #endif
 

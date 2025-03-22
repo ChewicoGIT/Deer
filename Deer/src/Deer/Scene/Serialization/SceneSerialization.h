@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Deer/Scene/Scene.h"
+#include "Deer/Scene.h"
 
 namespace Deer {
     template<class Archive>

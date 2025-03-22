@@ -1,11 +1,11 @@
 #include "AssetManagerPannel.h"
 #include "Deer/Core/Log.h"
-#include "Deer/Core/Project.h"
+#include "DeerStudio/Project.h"
 #include "DeerRender/Render/Texture.h"
 #include "Deer/Asset/AssetManager.h"
 #include "DeerStudio/Editor/ActiveEntity.h"
 
-#include "Deer/Core/Project.h"
+#include "DeerStudio/Project.h"
 
 #include "imgui.h"
 

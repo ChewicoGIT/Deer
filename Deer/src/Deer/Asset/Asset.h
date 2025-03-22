@@ -2,9 +2,9 @@
 #include "Deer/Core/Core.h"
 #include "Deer/Core/Log.h"
 
-#include "Deer/DataStore/Path.h"
+#include "Deer/Path.h"
 #include "Deer/DataStore/DataAccess.h"
-#include "Deer/DataStore/DataStore.h"
+#include "Deer/DataStore.h"
 
 #include <string>
 

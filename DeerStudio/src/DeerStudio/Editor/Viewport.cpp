@@ -1,12 +1,14 @@
 #include "Viewport.h"
 #include "DeerStudio/Editor/ActiveEntity.h"
 #include "DeerRender/Render/FrameBuffer.h"
-#include "DeerRender/Scene/GizmoRenderer.h"
+#include "DeerRender/GizmoRenderer.h"
 
+#include "DeerRender/Events/MouseEvent.h"
+#include "DeerRender/Events/KeyEvent.h"
 
 #include "DeerRender/Core/Input/Input.h"
-#include "Deer/Core/Project.h"
-#include "Deer/Scene/Scene.h"
+#include "DeerStudio/Project.h"
+#include "Deer/Scene.h"
 #include "Deer/Scene/Enviroment.h"
 #include "Deer/Scene/Entity.h"
 

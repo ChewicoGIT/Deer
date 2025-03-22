@@ -1,5 +1,5 @@
 #pragma once
-#include "Deer/Core/Memory.h"
+#include "Deer/Memory.h"
 #include "DeerRender/Render/RenderAPI.h"
 
 #include "glm/glm.hpp"

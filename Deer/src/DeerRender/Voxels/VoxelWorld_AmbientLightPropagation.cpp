@@ -1,13 +1,13 @@
-#include "Deer/Voxels/VoxelWorld.h"
+#include "Deer/VoxelWorld.h"
 #include "Deer/Voxels/Chunk.h"
-#include "Deer/Core/Application.h"
-#include "Deer/Core/Project.h"
+#include "Deer/Application.h"
 #include "Deer/Asset/AssetManager.h"
 #include "Deer/Scene/Entity.h"
 #include "Deer/Scene/Components.h"
 #include "DeerRender/Render/Render.h"
 #include "DeerRender/Render/RenderUtils.h"
 #include "DeerRender/Render/Texture.h"
+#include "DeerRender/Voxels/VoxelWorldRenderData.h"
 
 #include "Deer/Core/Log.h"
 #include "glm/glm.hpp"
@@ -70,7 +70,7 @@ namespace Deer {
 						VoxelLight voxelLight = chunk.readLight(chunkVoxelID);
 						
 						if (voxelLight.ambient_light > 0)
-							m_ambientLightPropagation.push(VoxelCordinates(xPos, yPos, zPos));
+							m_renderData->ambientLightPropagation.push(VoxelCordinates(xPos, yPos, zPos));
 					}
 				}
 
@@ -81,7 +81,7 @@ namespace Deer {
 					VoxelLight& voxelLight = chunk.modLight(chunkVoxelID);
 
 					voxelLight.ambient_light = 255;
-					m_ambientLightPropagation.push(VoxelCordinates(xPos, yPos, zPos));
+					m_renderData->ambientLightPropagation.push(VoxelCordinates(xPos, yPos, zPos));
 				}
 
 				modLayerVoxel(xPos, zPos).ambient_light_height = CHUNK_SIZE_Y * m_worldProps.chunkSizeY;
@@ -89,7 +89,7 @@ namespace Deer {
 		}
 
 		//Resolve ambient light propagation
-		while (!m_ambientLightPropagation.empty()) {
+		while (!m_renderData->ambientLightPropagation.empty()) {
 			resolveNextAmbientLightPropagation();
 		}
 	}
@@ -111,8 +111,8 @@ namespace Deer {
 	}
 
 	void VoxelWorld::resolveNextAmbientLightPropagation() {
-		VoxelCordinates position = m_ambientLightPropagation.front();
-		m_ambientLightPropagation.pop();
+		VoxelCordinates position = m_renderData->ambientLightPropagation.front();
+		m_renderData->ambientLightPropagation.pop();
 
 		LayerVoxel& layerVoxel = modLayerVoxel(position.x, position.z);
 
@@ -137,7 +137,7 @@ namespace Deer {
 
 			if (nextLight.ambient_light < nextLightMinValue) {
 				nextLight.ambient_light = nextLightMinValue;
-				m_ambientLightPropagation.push(VoxelCordinates(nextX, nextY, nextZ));
+				m_renderData->ambientLightPropagation.push(VoxelCordinates(nextX, nextY, nextZ));
 			}
 		}
 		
@@ -164,7 +164,7 @@ namespace Deer {
 
 			if (nextLight.ambient_light < nextLightMinValue) {
 				nextLight.ambient_light = nextLightMinValue;
-				m_ambientLightPropagation.push(VoxelCordinates(nextX, nextY, nextZ));
+				m_renderData->ambientLightPropagation.push(VoxelCordinates(nextX, nextY, nextZ));
 			}
 		}
 	}

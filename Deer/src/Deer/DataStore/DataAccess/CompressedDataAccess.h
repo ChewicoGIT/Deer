@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Deer/DataStore/DataAccess.h"
-#include "Deer/DataStore/Path.h"
+#include "Deer/Path.h"
 #include "Deer/DataStore/DataStructure.h"
 
 #include <unordered_map>

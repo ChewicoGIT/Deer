@@ -21,8 +21,7 @@ project "angelScript"
 
 	defines {
 	"ANGELSCRIPT_EXPORT",
-    "_LIB",
-	"AS_X64_MSVC"}
+    "_LIB"}
 
     filter "system:linux"
         toolset "gcc"
@@ -34,14 +33,15 @@ project "angelScript"
 
    filter "system:windows"
        systemversion "latest"
-       defines { }
+       defines {
+	    "AS_X64_MSVC" }
        files {
         "src/as_callfunc_x64_msvc_asm.asm"
         }
 
    filter "configurations:Debug"
        defines { "DEBUG" , 
-		--"AS_DEBUG",
+		"AS_DEBUG",
 		"_DEBUG" }
 		
        runtime "Debug"

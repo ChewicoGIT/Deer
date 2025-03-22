@@ -1,7 +1,11 @@
-#include "VoxelWorld.h"
+#include "Deer/VoxelWorld.h"
 #include "Deer/Core/Log.h"
 #include "Deer/Voxels/Chunk.h"
 #include "Deer/Voxels/Layer.h"
+
+#ifdef DEER_RENDER
+#include "DeerRender/Voxels/VoxelWorldRenderData.h"
+#endif
 
 #include <math.h>
 #include <cmath>
@@ -10,18 +14,10 @@
 namespace Deer {
 	VoxelWorld::VoxelWorld(const VoxelWorldProps& props) 
 		: m_worldProps(props) {
-		m_chunks = new Chunk[m_worldProps.getChunkCount()]();
-		m_layers = new Layer[m_worldProps.getLayerCount()]();
+		m_chunks = MakeScope<Chunk[]>(m_worldProps.getChunkCount());
+		m_layers = MakeScope<Layer[]>(m_worldProps.getLayerCount());
 #ifdef DEER_RENDER
-		m_chunksRender = new ChunkRender[m_worldProps.getChunkCount()]();
-#endif
-	}
-
-	VoxelWorld::~VoxelWorld() {
-		delete[] m_chunks;
-		delete[] m_layers;
-#ifdef DEER_RENDER
-		delete[] m_chunksRender;
+		m_renderData = MakeScope<VoxelWorldRenderData>(m_worldProps.getChunkCount());
 #endif
 	}
 
@@ -46,21 +42,21 @@ namespace Deer {
 			return;
 
 #ifdef DEER_RENDER
-		m_chunkQueue.addChunk(chunkID);
+		m_renderData->chunkQueue.addChunk(chunkID);
 		if (chunkVoxelID.x == 0 && chunkID.x != 0)
-			m_chunkQueue.addChunk(ChunkID(chunkID.x - 1, chunkID.y, chunkID.z));
+			m_renderData->chunkQueue.addChunk(ChunkID(chunkID.x - 1, chunkID.y, chunkID.z));
 		if (chunkVoxelID.x == CHUNK_SIZE_X - 1 && chunkID.x != m_worldProps.chunkSizeX - 1)
-			m_chunkQueue.addChunk(ChunkID(chunkID.x + 1, chunkID.y, chunkID.z));
+			m_renderData->chunkQueue.addChunk(ChunkID(chunkID.x + 1, chunkID.y, chunkID.z));
 
 		if (chunkVoxelID.y == 0 && chunkID.y != 0)
-			m_chunkQueue.addChunk(ChunkID(chunkID.x, chunkID.y - 1, chunkID.z));
+			m_renderData->chunkQueue.addChunk(ChunkID(chunkID.x, chunkID.y - 1, chunkID.z));
 		if (chunkVoxelID.y == CHUNK_SIZE_Y - 1 && chunkID.y != m_worldProps.chunkSizeY - 1)
-			m_chunkQueue.addChunk(ChunkID(chunkID.x, chunkID.y + 1, chunkID.z));
+			m_renderData->chunkQueue.addChunk(ChunkID(chunkID.x, chunkID.y + 1, chunkID.z));
 
 		if (chunkVoxelID.z == 0 && chunkID.z != 0)
-			m_chunkQueue.addChunk(ChunkID(chunkID.x, chunkID.y, chunkID.z - 1));
+			m_renderData->chunkQueue.addChunk(ChunkID(chunkID.x, chunkID.y, chunkID.z - 1));
 		if (chunkVoxelID.z == CHUNK_SIZE_Z - 1 && chunkID.z != m_worldProps.chunkSizeZ - 1)
-			m_chunkQueue.addChunk(ChunkID(chunkID.x, chunkID.y, chunkID.z + 1));
+			m_renderData->chunkQueue.addChunk(ChunkID(chunkID.x, chunkID.y, chunkID.z + 1));
 #endif
 		Chunk& chunk = m_chunks[m_worldProps.getWorldChunkID(chunkID)];
 		chunk.modVoxel(chunkVoxelID) = info;
@@ -120,7 +116,7 @@ namespace Deer {
 					workingLayer.fillVoxelLayerMaxHeight(workingMinLayer, workingMaxLayer, maxY);
 
 					#ifdef DEER_RENDER
-					m_chunkQueue.addChunk(workingChunkID);
+					m_renderData->chunkQueue.addChunk(workingChunkID);
 					#endif
 				}
 			}

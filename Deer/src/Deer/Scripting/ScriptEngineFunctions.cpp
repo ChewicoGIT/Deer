@@ -1,10 +1,9 @@
 #include "ScriptEngineFunctions.h"
 
 #include "Deer/Scene/Entity.h"
-#include "Deer/Scene/Scene.h"
+#include "Deer/Scene.h"
 #include "Deer/Scene/Enviroment.h"
-#include "Deer/Core/Project.h"
-#include "Deer/Scripting/ScriptEngine.h"
+#include "Deer/ScriptEngine.h"
 #include "angelscript.h"
 #include "Deer/Core/Log.h"
 #include "DeerRender/Core/Input/Input.h"
@@ -37,7 +36,7 @@ namespace Deer {
             return glm::vec3();
         }
 
-        Ref<Environment>& m_environment = Project::m_scene.getMainEnviroment();
+        Ref<Environment>& m_environment = ScriptEngine::m_scene->getMainEnviroment();
         Entity& entt = m_environment->getEntity(entityUID);
 
         return entt.getComponent<TransformComponent>().position;
@@ -49,7 +48,7 @@ namespace Deer {
             return;
         }
 
-        Ref<Environment>& m_environment = Project::m_scene.getMainEnviroment();
+        Ref<Environment>& m_environment = ScriptEngine::m_scene->getMainEnviroment();
         Entity& entt = m_environment->getEntity(entityUID);
 
         entt.getComponent<TransformComponent>().position = position;
@@ -61,7 +60,7 @@ namespace Deer {
             return glm::vec3();
         }
 
-        Ref<Environment>& m_environment = Project::m_scene.getMainEnviroment();
+        Ref<Environment>& m_environment = ScriptEngine::m_scene->getMainEnviroment();
         Entity& entt = m_environment->getEntity(entityUID);
 
         return entt.getComponent<TransformComponent>().scale;
@@ -73,7 +72,7 @@ namespace Deer {
             return;
         }
 
-        Ref<Environment>& m_environment = Project::m_scene.getMainEnviroment();
+        Ref<Environment>& m_environment = ScriptEngine::m_scene->getMainEnviroment();
         Entity& entt = m_environment->getEntity(entityUID);
 
         entt.getComponent<TransformComponent>().scale = scale;
@@ -85,7 +84,7 @@ namespace Deer {
             return 0;
         }
 
-        Ref<Environment>& m_environment = Project::m_scene.getMainEnviroment();
+        Ref<Environment>& m_environment = ScriptEngine::m_scene->getMainEnviroment();
         Entity& entt = m_environment->getEntity(entityUID);
 
         return entt.getParentUID();
@@ -95,7 +94,7 @@ namespace Deer {
         if (entityUID == 0 || entityUID == 1)
             return false;
 
-        Ref<Environment>& m_environment = Project::m_scene.getMainEnviroment();
+        Ref<Environment>& m_environment = ScriptEngine::m_scene->getMainEnviroment();
         Entity& entt = m_environment->getEntity(entityUID);
 
         return entt.isValid();

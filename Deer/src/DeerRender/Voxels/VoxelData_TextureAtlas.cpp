@@ -1,10 +1,10 @@
-#include "Deer/Voxels/VoxelData.h"
+#include "Deer/VoxelData.h"
 #include "Deer/Core/Log.h"
 #include "DeerRender/Voxels/VoxelAspect.h"
 
 #include "stb_image.h"
 #include "stb_image_write.h"
-#include "Deer/DataStore/DataStore.h"
+#include "Deer/DataStore.h"
 
 #include "DeerRender/Render/Texture.h"
 

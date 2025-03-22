@@ -1,6 +1,6 @@
-#include "DataStore.h"
+#include "Deer/DataStore.h"
 #include "Deer/Core/Log.h"
-#include "Deer/DataStore/Path.h"
+#include "Deer/Path.h"
 #include "Deer/DataStore/DataAccess.h"
 
 #include "cereal/cereal.hpp"

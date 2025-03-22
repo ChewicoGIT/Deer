@@ -1,18 +1,21 @@
-#include "Scene.h"
+#include "Deer/Scene.h"
+#include "Deer/Memory.h"
 #include "Deer/Core/Log.h"
-#include "Deer/Voxels/VoxelWorld.h"
+#include "Deer/VoxelWorld.h"
 #include "Deer/Scene/Enviroment.h"
+#include "Deer/Voxels/Chunk.h"
+#include "Deer/Voxels/Layer.h"
 
-#include "Deer/Scripting/ScriptEngine.h"
+#include "Deer/ScriptEngine.h"
 #include "Deer/Scene/Components.h"
+
+#ifdef DEER_RENDER
+#include "DeerRender/Voxels/VoxelWorldRenderData.h"
+#endif
 
 namespace Deer {
 	Scene::Scene() {
 		m_enviroment = Ref<Environment>(new Environment());
-		m_voxelWorld = nullptr;
-	}
-
-	Scene::~Scene() {
 	}
 
 	void Scene::beginExecution() {
@@ -20,7 +23,7 @@ namespace Deer {
 		m_isExecuting = true;
 
 		DEER_CORE_INFO("Executing Scene...");
-		ScriptEngine::beginExecutionContext();
+		ScriptEngine::beginExecutionContext(this);
 
 		// Instantiate all the scripts
 		auto view = m_enviroment->m_registry.view<ScriptComponent, TagComponent>();

@@ -1,5 +1,5 @@
 #pragma once
-#include "Deer/Core/Memory.h"
+#include "Deer/Memory.h"
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 

@@ -1,11 +1,11 @@
 #include "TerrainEditor.h"
 
-#include "Deer/Voxels/Voxel.h"
-#include "DeerRender/Voxels/Voxel.h"
+#include "Deer/Voxel.h"
+#include "DeerRender/LightVoxel.h"
 
-#include "Deer/Core/Project.h"
-#include "Deer/Scene/Scene.h"
-#include "Deer/Voxels/VoxelWorld.h"
+#include "DeerStudio/Project.h"
+#include "Deer/Scene.h"
+#include "Deer/VoxelWorld.h"
 
 #include "imgui.h"
 #include <string>

@@ -1,4 +1,4 @@
-#include "ChunkUpdateQueue.h"
+#include "DeerRender/Voxels/VoxelWorldRenderData.h"
 
 namespace Deer {
 	void ChunkUpdateQueue::addChunk(ChunkID chunkID) {

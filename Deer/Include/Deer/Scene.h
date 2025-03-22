@@ -1,9 +1,9 @@
 #pragma once
-#include "Deer/Core/Memory.h"
-#include "Deer/Voxels/VoxelWorldProps.h"
+#include "Deer/Memory.h"
+
 
 #ifdef DEER_RENDER
-#include "DeerRender/Scene/GizmoRenderer.h"
+#include "DeerRender/GizmoRenderer.h"
 #endif
 
 #include <vector>
@@ -11,12 +11,12 @@
 
 namespace Deer {
 	class VoxelWorld;
+	class VoxelWorldProps;
 	class Environment;
 
 	class Scene {
 	public:
 		Scene();
-		~Scene();
 
 		void createVoxelWorld(const VoxelWorldProps&);
 		void deleteVoxelWorld();

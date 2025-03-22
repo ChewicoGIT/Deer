@@ -1,10 +1,11 @@
-#include "Application.h"
+#include "Deer/Application.h"
 #include "Deer/Core/Log.h"
 
 #ifdef DEER_RENDER
 #include "DeerRender/Render/RenderCommand.h"
 #include "DeerRender/Render/Render.h"
 #include "DeerRender/Render/RenderUtils.h"
+#include "DeerRender/ImGui/ImGuiLayer.h"
 #include "imgui.h"
 
 #include <functional>
@@ -16,13 +17,17 @@ namespace Deer {
     Application::Application() : m_running(false) {
 #ifdef DEER_RENDER
         m_window = Scope<Window>(Window::create(m_windowProps));
+        m_imGuiLayer = MakeScope<ImGuiLayer>();
 #endif
     }
+
+    Application::~Application() { }
 
 #ifdef DEER_RENDER
     Application::Application(const WindowProps& props)
         : m_running(false), m_windowProps(props) {
         m_window = Scope<Window>(Window::create(m_windowProps));
+        m_imGuiLayer = MakeScope<ImGuiLayer>();
 	}
 
     void Application::initializeWindow() {
@@ -48,7 +53,7 @@ namespace Deer {
 
 #ifdef DEER_RENDER
         initializeWindow();
-        m_imGuiLayer.onAttach();
+        m_imGuiLayer->onAttach();
 		RenderUtils::initializeRenderUtils();
 		RenderCommand::init();
 #endif
@@ -57,7 +62,7 @@ namespace Deer {
         if (res != 0){
 
 #ifdef DEER_RENDER
-            m_imGuiLayer.onDetach();
+            m_imGuiLayer->onDetach();
 #endif
             return res;
         }
@@ -90,9 +95,9 @@ namespace Deer {
 
                 ImGuiIO& io = ImGui::GetIO();
                 io.DeltaTime = (float)targetRenderTime;
-                m_imGuiLayer.begin();
+                m_imGuiLayer->begin();
                 onImGUI();
-                m_imGuiLayer.end();
+                m_imGuiLayer->end();
 
                 accumulatedRenderTime -= targetRenderTime;
 
@@ -106,7 +111,7 @@ namespace Deer {
         }
 
 #ifdef DEER_RENDER
-        m_imGuiLayer.onDetach();
+        m_imGuiLayer->onDetach();
 #endif
         onShutdown();
         return 0;
@@ -115,7 +120,7 @@ namespace Deer {
 #ifdef DEER_RENDER
     void Application::onEventCallback(Event& e) {
         onEvent(e);
-        m_imGuiLayer.onEvent(e);
+        m_imGuiLayer->onEvent(e);
 
         EventDispatcher dispatcher(e);
         dispatcher.dispatch<WindowCloseEvent>(std::bind(&Application::onWindowClose, this, std::placeholders::_1));

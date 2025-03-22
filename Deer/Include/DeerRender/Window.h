@@ -1,6 +1,6 @@
 #pragma once
-#include "DeerRender/Core/Events/Event.h"
-#include "Deer/DataStore/Path.h"
+#include "DeerRender/Events/Event.h"
+#include "Deer/Path.h"
 
 #include <string>
 #include <functional>

@@ -1,7 +1,9 @@
-#include "GizmoRenderer.h"
+#include "DeerRender/GizmoRenderer.h"
 #include "DeerRender/Render/Render.h"
 #include "DeerRender/Render/RenderUtils.h"
+#include "DeerRender/Scene/SceneCamera.h"
 #include "Deer/Scene/Components.h"
+
 
 namespace Deer {
 	void GizmoRenderer::drawLine(glm::vec3 a, glm::vec3 b, glm::vec3 color) {
@@ -90,7 +92,7 @@ namespace Deer {
 		drawLine(points[1], points[3], color);
 	}
 
-	void GizmoRenderer::render(SceneCamera& camera) {
+	void GizmoRenderer::render(const SceneCamera& camera) {
 		glm::mat4 camMatrix = glm::inverse(camera.transform.getMatrix());
 		glm::mat4 projectionMatrix = camera.camera.getMatrix();
 		glm::mat4 invertZ = glm::scale(glm::mat4(1.0f), glm::vec3(1, 1, -1));

@@ -24,6 +24,7 @@ project "Deer"
    includedirs
    {
       "src",
+      "Include",
 	  "vendor/spdlog/include",
 	  "vendor/GLFW/include",
 	  "vendor/glad/include",

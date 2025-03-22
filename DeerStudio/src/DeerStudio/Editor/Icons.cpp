@@ -1,6 +1,6 @@
 #include "Icons.h"
 #include "DeerRender/Render/Texture.h"
-#include "Deer/DataStore/DataStore.h"
+#include "Deer/DataStore.h"
 
 namespace Deer {
 	Ref<Texture2D> Icons::scene_icon;

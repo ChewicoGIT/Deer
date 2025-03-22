@@ -1,9 +1,8 @@
-#include "ComponentScript.h"
+#include "Deer/ComponentScript.h"
 #include "angelscript.h"
 
 #include "Deer/Core/Log.h"
-#include "Deer/Core/Project.h"
-#include "Deer/Scripting/ScriptEngine.h"
+#include "Deer/ScriptEngine.h"
 
 namespace Deer {
 	ComponentScript::ComponentScript(asITypeInfo* typeInfo)

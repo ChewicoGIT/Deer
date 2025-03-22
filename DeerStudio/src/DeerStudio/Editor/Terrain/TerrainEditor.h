@@ -1,6 +1,6 @@
 #pragma once
 #include "Deer/Core/Core.h"
-#include "Deer/Voxels/Voxel.h"
+#include "Deer/Voxel.h"
 
 #define TERRAIN_EDITOR_CREATE_VOXEL_WORLD_POPUP_NAME "CREATE_VOXEL_WORLD"
 
