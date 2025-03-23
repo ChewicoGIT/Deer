@@ -31,7 +31,7 @@ namespace Deer {
         while (squareTextureSize * squareTextureSize < textureCount)
             squareTextureSize++;
 
-        int textureAtlasSize = squareTextureSize * VOXEL_TEXTURE_SIZE_X * squareTextureSize * VOXEL_TEXTURE_SIZE_Y  * 3;
+        int textureAtlasSize = squareTextureSize * VOXEL_TEXTURE_SIZE_X * squareTextureSize * VOXEL_TEXTURE_SIZE_Y  * 4;
         voxelColorTextureAtlasData = new uint8_t[textureAtlasSize]{};
 
         stbi_set_flip_vertically_on_load(true);
@@ -51,7 +51,7 @@ namespace Deer {
             }
 
             int width, height, channels;
-            uint8_t* textureData = stbi_load_from_memory(fileData, size, &width, &height, &channels, 3);
+            uint8_t* textureData = stbi_load_from_memory(fileData, size, &width, &height, &channels, 4);
 
             if (channels < 3) {
                 DEER_CORE_ERROR("{0}.png has {1} channels and it must be bigger than {2}",
@@ -59,7 +59,7 @@ namespace Deer {
             } else if (width != VOXEL_TEXTURE_SIZE_X) {
                 DEER_CORE_ERROR("{0}.png has a width of {1} and it must be {2}",
                     texture.first.c_str(), width, VOXEL_TEXTURE_SIZE_X);
-            } else if (height != VOXEL_TEXTURE_SIZE_X) {
+            } else if (height != VOXEL_TEXTURE_SIZE_Y) {
                 DEER_CORE_ERROR("{0}.png has a height of {1} and it must be {2}",
                     texture.first.c_str(), height, VOXEL_TEXTURE_SIZE_Y);
             } else {
@@ -71,12 +71,13 @@ namespace Deer {
 
                 for (int y = 0; y < VOXEL_TEXTURE_SIZE_Y; y++) {
                     for (int x = 0; x < VOXEL_TEXTURE_SIZE_X; x++) {
-                        int inputTextureIndex = (x + y * width) * 3;
-                        int outputTextureIndex = (x + xOffsetPixels + (y + yOffsetPixels) * VOXEL_TEXTURE_SIZE_X * squareTextureSize) * 3;
+                        int inputTextureIndex = (x + y * width) * 4;
+                        int outputTextureIndex = (x + xOffsetPixels + (y + yOffsetPixels) * VOXEL_TEXTURE_SIZE_X * squareTextureSize) * 4;
 
                         voxelColorTextureAtlasData[outputTextureIndex + 0] = textureData[inputTextureIndex + 0];
                         voxelColorTextureAtlasData[outputTextureIndex + 1] = textureData[inputTextureIndex + 1];
                         voxelColorTextureAtlasData[outputTextureIndex + 2] = textureData[inputTextureIndex + 2];
+                        voxelColorTextureAtlasData[outputTextureIndex + 3] = textureData[inputTextureIndex + 3];
                     }
                 }
 
@@ -86,12 +87,12 @@ namespace Deer {
             delete[] fileData;
         }
 
-        voxelColorTextureAtlas = Texture2D::create(voxelColorTextureAtlasData, squareTextureSize * VOXEL_TEXTURE_SIZE_X, squareTextureSize * VOXEL_TEXTURE_SIZE_Y, 3);
+        voxelColorTextureAtlas = Texture2D::create(voxelColorTextureAtlasData, squareTextureSize * VOXEL_TEXTURE_SIZE_X, squareTextureSize * VOXEL_TEXTURE_SIZE_Y, 4);
 
         // temp
         Path savePath = DataStore::rootPath / DEER_TEMP_PATH / "voxel_texture_atlas.png";
         DataStore::createFolder(DataStore::rootPath / DEER_TEMP_PATH);
-        stbi_write_png(savePath.generic_string().c_str(), squareTextureSize * VOXEL_TEXTURE_SIZE_X, squareTextureSize * VOXEL_TEXTURE_SIZE_Y, 3, voxelColorTextureAtlasData, squareTextureSize * VOXEL_TEXTURE_SIZE_X * 3);
+        stbi_write_png(savePath.generic_string().c_str(), squareTextureSize * VOXEL_TEXTURE_SIZE_X, squareTextureSize * VOXEL_TEXTURE_SIZE_Y, 4, voxelColorTextureAtlasData, squareTextureSize * VOXEL_TEXTURE_SIZE_X * 4);
 
     }
     

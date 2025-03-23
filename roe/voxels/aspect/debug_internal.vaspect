@@ -1,0 +1,18 @@
+{
+    "voxelAspect": {
+        "name": "debug_internal",
+        "textureFaces": {
+            "left": "debug_internal",
+            "right": "debug_internal",
+            "down": "debug_internal",
+            "up": "debug_internal",
+            "front": "debug_internal",
+            "back": "debug_internal"
+        },
+        "emission": {
+            "red": 0,
+            "green": 0,
+            "blue": 0
+        }
+    }
+}

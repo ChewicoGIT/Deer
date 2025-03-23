@@ -49,6 +49,10 @@ namespace Deer {
 					(xPos == minX) || (xPos == maxX) ||
 					(zPos == minZ) || (zPos == maxZ);
 
+				if (xPos == 0 || zPos == 0 || xPos == CHUNK_SIZE_X * m_worldProps.chunkSizeX - 1
+					|| zPos == CHUNK_SIZE_Z * m_worldProps.chunkSizeZ - 1)
+					isPositionEdge = false;
+
 				// All light voxelsInfo under the max height must be put to 0 ambient light and above to 255
 				// I think this is optional
 				

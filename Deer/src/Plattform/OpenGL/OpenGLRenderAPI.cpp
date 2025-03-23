@@ -19,6 +19,9 @@ namespace Deer {
 		glDepthFunc(GL_LESS);
 		glfwWindowHint(GLFW_SAMPLES, 4);
 		glEnable(GL_MULTISAMPLE);
+
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable( GL_BLEND );
 		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	}
@@ -36,6 +39,13 @@ namespace Deer {
 
 	void OpenGLRenderAPI::clear() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	}
+
+	void OpenGLRenderAPI::setBackfaceCulling(bool value) {
+		if (value)
+			glEnable(GL_CULL_FACE);
+		else
+			glDisable(GL_CULL_FACE);
 	}
 
 	void OpenGLRenderAPI::drawIndex(const Ref<VertexArray>& vertexArray) {

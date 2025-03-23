@@ -5,15 +5,13 @@ namespace Deer {
 	class VertexArray;
 	class Shader;
 
-	class RenderUtils {
-	public:
-		static Ref<VertexArray> m_lineVertexArray;
-		static Ref<Shader> m_lineShader;
+	namespace RenderUtils {
+		extern Ref<VertexArray> m_lineVertexArray;
+		extern Ref<VertexArray> m_faceVertexArray;
+		extern Ref<Shader> m_lineShader;
+		extern Ref<Shader> m_faceShader;
 
-		static void initializeRenderUtils();
-	private:
-		static Ref<VertexArray> genLineVertexArray();
-		static Ref<Shader> getLineShader();
-	};
+		void initializeRenderUtils();
+	}
 }
 
