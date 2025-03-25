@@ -56,8 +56,8 @@ namespace Deer{
                 VoxelCordinates minZEdge(x, y, minZ);
                 VoxelCordinates maxZEdge(x, y, maxZ);
 
-                VoxelLight minZEdgeLight = readLight(minZEdge.x, minZEdge.y, minZEdge.z);
-                VoxelLight maxZEdgeLight = readLight(maxZEdge.x, maxZEdge.y, maxZEdge.z);
+                VoxelLight minZEdgeLight = readLight(minZEdge);
+                VoxelLight maxZEdgeLight = readLight(maxZEdge);
 
                 if (minZEdgeLight.b_light || minZEdgeLight.g_light || minZEdgeLight.b_light)
                     m_renderData->voxelLightPropagation.push(minZEdge);
@@ -71,8 +71,8 @@ namespace Deer{
                 VoxelCordinates minYEdge(x, minY, z);
                 VoxelCordinates maxYEdge(x, maxY, z);
 
-                VoxelLight minYEdgeLight = readLight(minYEdge.x, minYEdge.y, minYEdge.z);
-                VoxelLight maxYEdgeLight = readLight(maxYEdge.x, maxYEdge.y, maxYEdge.z);
+                VoxelLight minYEdgeLight = readLight(minYEdge);
+                VoxelLight maxYEdgeLight = readLight(maxYEdge);
 
                 if (minYEdgeLight.b_light || minYEdgeLight.g_light || minYEdgeLight.b_light)
                     m_renderData->voxelLightPropagation.push(minYEdge);
@@ -86,8 +86,8 @@ namespace Deer{
                 VoxelCordinates minXEdge(minX, y, z);
                 VoxelCordinates maxXEdge(maxX, y, z);
 
-                VoxelLight minXEdgeLight = readLight(minXEdge.x, minXEdge.y, minXEdge.z);
-                VoxelLight maxXEdgeLight = readLight(maxXEdge.x, maxXEdge.y, maxXEdge.z);
+                VoxelLight minXEdgeLight = readLight(minXEdge);
+                VoxelLight maxXEdgeLight = readLight(maxXEdge);
 
                 if (minXEdgeLight.b_light || minXEdgeLight.g_light || minXEdgeLight.b_light)
                     m_renderData->voxelLightPropagation.push(minXEdge);
@@ -97,8 +97,8 @@ namespace Deer{
         }
 
         for (VoxelCordinates& cordinates : m_renderData->tmp_voxelLightSource) {
-            VoxelLight& voxelLight = modLight(cordinates.x, cordinates.y, cordinates.z);
-            Voxel voxel = readVoxel(cordinates.x, cordinates.y, cordinates.z);
+            VoxelLight& voxelLight = modLight(cordinates);
+            Voxel voxel = readVoxel(cordinates);
 
             VoxelAspect& voxelAspect = VoxelData::voxelsAspect[voxel.id];
             voxelLight.r_light = voxelAspect.definition.colorEmission.r_value;
@@ -117,7 +117,7 @@ namespace Deer{
         VoxelCordinates position = m_renderData->voxelLightPropagation.front();
 		m_renderData->voxelLightPropagation.pop();
 
-		VoxelLight currentLight = readLight(position.x, position.y, position.z);
+		VoxelLight currentLight = readLight(position);
 		bool voxelCheck[6] = { false };
 
         int highestRGBValue = currentLight.r_light;
@@ -134,16 +134,18 @@ namespace Deer{
 
 		// Check for every simple dir
 		for (int i = 0; i < 6; i++) {
-			int nextX = position.x + NORMAL_DIR(X_AXIS, i);
-			int nextY = position.y + NORMAL_DIR(Y_AXIS, i);
-			int nextZ = position.z + NORMAL_DIR(Z_AXIS, i);
+            VoxelCordinates next(
+                position.x + NORMAL_DIR(X_AXIS, i),
+                position.y + NORMAL_DIR(Y_AXIS, i),
+                position.z + NORMAL_DIR(Z_AXIS, i)
+            );
 
-			Voxel nextVoxel = readVoxel(nextX, nextY, nextZ);
+			Voxel nextVoxel = readVoxel(next);
 			voxelCheck[i] = nextVoxel.isVoxelType();
 			if (voxelCheck[i])
 				continue;
 
-			VoxelLight& nextLight = modLight(nextX, nextY, nextZ);
+			VoxelLight& nextLight = modLight(next);
 
             bool nextVoxelModified = false;
 			if (nextLight.r_light < nextLightRedMinValue) {
@@ -162,7 +164,7 @@ namespace Deer{
 			}
 
             if (nextVoxelModified)
-                m_renderData->voxelLightPropagation.push(VoxelCordinates(nextX, nextY, nextZ));
+                m_renderData->voxelLightPropagation.push(next);
 		}
 
 		return;
@@ -175,15 +177,17 @@ namespace Deer{
 			if (voxelCheck[cDir0] || voxelCheck[cDir1])
 				continue;
 
-			int nextX = position.x + NORMAL_DIR(X_AXIS, cDir0) + NORMAL_DIR(X_AXIS, cDir1);
-			int nextY = position.y + NORMAL_DIR(Y_AXIS, cDir0) + NORMAL_DIR(Y_AXIS, cDir1);
-			int nextZ = position.z + NORMAL_DIR(Z_AXIS, cDir0) + NORMAL_DIR(Z_AXIS, cDir1);
+            VoxelCordinates next(
+                position.x + NORMAL_DIR(X_AXIS, cDir0) + NORMAL_DIR(X_AXIS, cDir1),
+                position.y + NORMAL_DIR(Y_AXIS, cDir0) + NORMAL_DIR(Y_AXIS, cDir1),
+                position.z + NORMAL_DIR(Z_AXIS, cDir0) + NORMAL_DIR(Z_AXIS, cDir1)
+            );
 
-			Voxel nextVoxel = readVoxel(nextX, nextY, nextZ);
+			Voxel nextVoxel = readVoxel(next);
 			if (nextVoxel.isVoxelType())
 				continue;
 
-			VoxelLight& nextLight = modLight(nextX, nextY, nextZ);
+			VoxelLight& nextLight = modLight(next);
 			int nextLightRedMinValue = currentLight.r_light - LIGHT_PROPAGATION_COMPLEX_FALL;
 			int nextLightGreenMinValue = currentLight.g_light - LIGHT_PROPAGATION_COMPLEX_FALL;
 			int nextLightBlueMinValue = currentLight.b_light - LIGHT_PROPAGATION_COMPLEX_FALL;
@@ -205,7 +209,7 @@ namespace Deer{
 			}
 
             if (nextVoxelModified)
-                m_renderData->voxelLightPropagation.push(VoxelCordinates(nextX, nextY, nextZ));
+                m_renderData->voxelLightPropagation.push(next);
 		}
     }
 }

@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <vector>
+#include <array>
 #include <string>
 
 #ifdef DEER_RENDER
@@ -106,13 +107,16 @@ namespace Deer {
 	};
 
 	struct VoxelCordinates {
-		int32_t x = 0;
-		int32_t y = 0;
-		int32_t z = 0;
+		union {
+			struct {
+				int32_t x, y, z;
+			};
+			std::array<int32_t, 3> data;
+		};
 
-		VoxelCordinates() = default;
-		VoxelCordinates(int32_t _x, int32_t _y, int32_t _z) : x(_x), y(_y), z(_z) {}
+		VoxelCordinates(int32_t _x = 0, int32_t _y = 0, int32_t _z = 0) : x(_x), y(_y), z(_z) {}
 
+		inline int32_t& operator[](int id) { return data[id]; }
 		inline bool isNull() const { return x < 0 || y < 0 || z < 0; }
 		inline void makeNull() { x = -1; }
 	};
@@ -129,9 +133,7 @@ namespace Deer {
 
 	struct VoxelRayResult {
 		float distance = 0;
-		int32_t xPos = 0;
-		int32_t yPos = 0;
-		int32_t zPos = 0;
+		VoxelCordinates hitPos;
 		uint8_t face = 0;
 	};
 
@@ -188,6 +190,20 @@ namespace Deer {
 		uint16_t posX = x;
 		uint16_t posY = y;
 		uint16_t posZ = z;
+
+		_chunkID.x = posX >> 5;
+		_chunkID.y = posY >> 5;
+		_chunkID.z = posZ >> 5;
+
+		_chunkVoxelID.x = posX & 31;
+		_chunkVoxelID.y = posY & 31;
+		_chunkVoxelID.z = posZ & 31;
+	}
+
+	inline void extractChunkCordinates(VoxelCordinates coords, ChunkID& _chunkID, ChunkVoxelID& _chunkVoxelID) {
+		uint16_t posX = coords.x;
+		uint16_t posY = coords.y;
+		uint16_t posZ = coords.z;
 
 		_chunkID.x = posX >> 5;
 		_chunkID.y = posY >> 5;

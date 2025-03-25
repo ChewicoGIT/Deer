@@ -123,25 +123,27 @@ namespace Deer {
 		if (layerVoxel.ambient_light_height > position.y)
 			layerVoxel.ambient_light_height = position.y;
 
-		VoxelLight currentLight = readLight(position.x, position.y, position.z);
+		VoxelLight currentLight = readLight(position);
 		bool solidCheck[6] = { false };
 		// Check for every simple dir
 		for (int i = 0; i < 6; i++) {
-			int nextX = position.x + NORMAL_DIR(X_AXIS, i);
-			int nextY = position.y + NORMAL_DIR(Y_AXIS, i);
-			int nextZ = position.z + NORMAL_DIR(Z_AXIS, i);
-
-			Voxel nextVoxel = readVoxel(nextX, nextY, nextZ);
+			VoxelCordinates next(
+				position.x + NORMAL_DIR(X_AXIS, i),
+				position.y + NORMAL_DIR(Y_AXIS, i),
+				position.z + NORMAL_DIR(Z_AXIS, i)
+			);
+			
+			Voxel nextVoxel = readVoxel(next);
 			solidCheck[i] = nextVoxel.isVoxelType();
 			if (solidCheck[i])
 				continue;
 
-			VoxelLight& nextLight = modLight(nextX, nextY, nextZ);
+			VoxelLight& nextLight = modLight(next);
 			int nextLightMinValue = currentLight.ambient_light - LIGHT_PROPAGATION_SIMPLE_FALL;
 
 			if (nextLight.ambient_light < nextLightMinValue) {
 				nextLight.ambient_light = nextLightMinValue;
-				m_renderData->ambientLightPropagation.push(VoxelCordinates(nextX, nextY, nextZ));
+				m_renderData->ambientLightPropagation.push(next);
 			}
 		}
 		
@@ -155,20 +157,22 @@ namespace Deer {
 			if (solidCheck[cDir0] || solidCheck[cDir1])
 				continue;
 
-			int nextX = position.x + NORMAL_DIR(X_AXIS, cDir0) + NORMAL_DIR(X_AXIS, cDir1);
-			int nextY = position.y + NORMAL_DIR(Y_AXIS, cDir0) + NORMAL_DIR(Y_AXIS, cDir1);
-			int nextZ = position.z + NORMAL_DIR(Z_AXIS, cDir0) + NORMAL_DIR(Z_AXIS, cDir1);
-
-			Voxel nextVoxel = readVoxel(nextX, nextY, nextZ);
+			VoxelCordinates next(
+				NORMAL_DIR(X_AXIS, cDir0) + NORMAL_DIR(X_AXIS, cDir1),
+				NORMAL_DIR(Y_AXIS, cDir0) + NORMAL_DIR(Y_AXIS, cDir1),
+				NORMAL_DIR(Z_AXIS, cDir0) + NORMAL_DIR(Z_AXIS, cDir1)
+			);
+			
+			Voxel nextVoxel = readVoxel(next);
 			if (nextVoxel.isVoxelType())
 				continue;
 
-			VoxelLight& nextLight = modLight(nextX, nextY, nextZ);
+			VoxelLight& nextLight = modLight(next);
 			int nextLightMinValue = currentLight.ambient_light - LIGHT_PROPAGATION_COMPLEX_FALL;
 
 			if (nextLight.ambient_light < nextLightMinValue) {
 				nextLight.ambient_light = nextLightMinValue;
-				m_renderData->ambientLightPropagation.push(VoxelCordinates(nextX, nextY, nextZ));
+				m_renderData->ambientLightPropagation.push(next);
 			}
 		}
 	}

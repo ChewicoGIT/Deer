@@ -41,7 +41,7 @@ namespace Deer {
 			}
 		}
 
-		inline uint8_t getLayerVoxelHeight(LayerVoxelID layerVoxelID) {
+		inline uint8_t calculateLayerVoxelHeight(LayerVoxelID layerVoxelID) {
 			if (!m_voxels)
 				return 0;
 

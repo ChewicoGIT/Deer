@@ -83,12 +83,12 @@ namespace Deer {
 				NORMAL_DIR(Z_AXIS, i) + chunkVoxelID.z + CHUNK_SIZE_Z * chunkID.z
 			);
 			
-			Voxel frontVoxel = readVoxel(frontID.x, frontID.y, frontID.z);
+			Voxel frontVoxel = readVoxel(frontID);
 			// If the face is inside 2 Voxels we will not render it
 			if (frontVoxel.isVoxelType())
 				continue;
 
-			VoxelLight frontVoxelLight = readLight(frontID.x, frontID.y, frontID.z);
+			VoxelLight frontVoxelLight = readLight(frontID);
 
 			// front2ID means the front voxel in 2 voxels apart
 			VoxelCordinates front2ID(
@@ -97,8 +97,8 @@ namespace Deer {
 				NORMAL_DIR(Z_AXIS, i) * 2 + chunkVoxelID.z + CHUNK_SIZE_Z * chunkID.z
 			);
 			
-			Voxel front2Voxel = readVoxel(front2ID.x, front2ID.y, front2ID.z);
-			VoxelLight front2VoxelLight = readLight(front2ID.x, front2ID.y, front2ID.z);
+			Voxel front2Voxel = readVoxel(frontID);
+			VoxelLight front2VoxelLight = readLight(frontID);
 
 			// Face Shadow means that face is not in the direction of the light
 			bool isFaceShadow = frontVoxelLight.ambient_light != 255 && (frontVoxel.isVoxelType() || frontVoxelLight.ambient_light > front2VoxelLight.ambient_light);
@@ -137,8 +137,8 @@ namespace Deer {
 						frontID.z + AMBIENT_OCCLUSION_VERTEX(Z_AXIS, a, v, i)
 					);
 
-					Voxel checkChordsVoxel = readVoxel(checkChordsID.x, checkChordsID.y, checkChordsID.z);
-					VoxelLight checkChordsVoxelLight = readLight(checkChordsID.x, checkChordsID.y, checkChordsID.z);
+					Voxel checkChordsVoxel = readVoxel(checkChordsID);
+					VoxelLight checkChordsVoxelLight = readLight(checkChordsID);
 
 					// Check for the same chords but 2 voxels apart
 					airEdge[a] = !checkChordsVoxel.isVoxelType();
@@ -161,8 +161,8 @@ namespace Deer {
 						frontID.z + AMBIENT_OCCLUSION_VERTEX(Z_AXIS, 0, v, i) + AMBIENT_OCCLUSION_VERTEX(Z_AXIS, 1, v, i)
 					);
 
-					Voxel checkChordsVoxel = readVoxel(checkChordsID.x, checkChordsID.y, checkChordsID.z);
-					VoxelLight checkChordsVoxelLight = readLight(checkChordsID.x, checkChordsID.y, checkChordsID.z);
+					Voxel checkChordsVoxel = readVoxel(checkChordsID);
+					VoxelLight checkChordsVoxelLight = readLight(checkChordsID);
 
 					if (!checkChordsVoxel.isVoxelType()) {
 						sample_count++;

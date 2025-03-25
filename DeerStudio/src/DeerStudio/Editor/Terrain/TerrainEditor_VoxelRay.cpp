@@ -43,29 +43,31 @@ namespace Deer {
         voxelRayCoords.makeNull();
         voxelFaceRayCoords.makeNull();
         if (res.distance != 50) {
-            voxelRayCoords = VoxelCordinates(res.xPos, res.yPos, res.zPos);
+            voxelRayCoords = res.hitPos;
             voxelFaceRayCoords = VoxelCordinates(
-                res.xPos +  NORMAL_DIR(0, res.face),
-                res.yPos +  NORMAL_DIR(1, res.face),
-                res.zPos +  NORMAL_DIR(2, res.face)
+                res.hitPos.x +  NORMAL_DIR(0, res.face),
+                res.hitPos.y +  NORMAL_DIR(1, res.face),
+                res.hitPos.z +  NORMAL_DIR(2, res.face)
             );
-            Project::m_scene.getMainGizmoRenderer().drawVoxelLineFace(res.xPos, res.yPos, res.zPos, res.face);
+            Project::m_scene.getMainGizmoRenderer().drawVoxelLineFace(res.hitPos.x, res.hitPos.y, res.hitPos.z, res.face);
 
             if (viewport_isActive && ImGui::GetMouseClickedCount(0) > 0) {
                 if (terrainEditMode == TerrainEditMode_Substract) {
-                    if (res.yPos >= 0) {
-                        Project::m_scene.getVoxelWorld()->setVoxel(res.xPos, res.yPos, res.zPos, emptyVoxel);
-                        Project::m_scene.getVoxelWorld()->bakeAmbientLightFromPoint(res.xPos, res.zPos);
-                        Project::m_scene.getVoxelWorld()->bakeVoxelLightFromPoint(res.xPos, res.yPos, res.zPos);
+                    if (res.hitPos.y >= 0) {
+                        Project::m_scene.getVoxelWorld()->setVoxel(res.hitPos, emptyVoxel);
+                        Project::m_scene.getVoxelWorld()->bakeAmbientLightFromPoint(res.hitPos.x, res.hitPos.z);
+                        Project::m_scene.getVoxelWorld()->bakeVoxelLightFromPoint(res.hitPos.x, res.hitPos.y, res.hitPos.z);
                     }
                 } else if (terrainEditMode == TerrainEditMode_Add) {
-                    int xPos = res.xPos + NORMAL_DIR(0, res.face);
-                    int yPos = res.yPos + NORMAL_DIR(1, res.face);
-                    int zPos = res.zPos + NORMAL_DIR(2, res.face);
+                    VoxelCordinates position(
+                        res.hitPos.x + NORMAL_DIR(0, res.face),
+                        res.hitPos.y + NORMAL_DIR(1, res.face),
+                        res.hitPos.z + NORMAL_DIR(2, res.face)
+                    );
                     
-                    Project::m_scene.getVoxelWorld()->setVoxel(xPos, yPos, zPos, Voxel(selectedVoxelID));
-                    Project::m_scene.getVoxelWorld()->bakeAmbientLightFromPoint(xPos, zPos);
-                    Project::m_scene.getVoxelWorld()->bakeVoxelLightFromPoint(res.xPos, res.yPos, res.zPos);
+                    Project::m_scene.getVoxelWorld()->setVoxel(position, Voxel(selectedVoxelID));
+                    Project::m_scene.getVoxelWorld()->bakeAmbientLightFromPoint(position.x, position.y);
+                    Project::m_scene.getVoxelWorld()->bakeVoxelLightFromPoint(position.x, position.y, position.z);
                 }
             }
         }

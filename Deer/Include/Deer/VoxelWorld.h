@@ -81,26 +81,45 @@ namespace Deer {
 		inline int getMaxVoxelCount() {
 			return getChunkCount() * CHUNK_VOXELS;
 		}
+
+		inline void clampCordinates(VoxelCordinates& coords) {
+			if (coords.x < 0)
+				coords.x = 0;
+			else if (coords.x >= chunkSizeX * CHUNK_SIZE_X)
+				coords.x = chunkSizeX * CHUNK_SIZE_X - 1;
+
+			if (coords.y < 0)
+				coords.y = 0;
+			else if (coords.y >= chunkSizeY * CHUNK_SIZE_Y)
+				coords.y = chunkSizeY * CHUNK_SIZE_Y - 1;
+
+			if (coords.z < 0)
+				coords.z = 0;
+			else if (coords.z >= chunkSizeZ * CHUNK_SIZE_Z)
+				coords.z = chunkSizeZ * CHUNK_SIZE_Z - 1;
+		}
 	};
 
 	class VoxelWorld {
 		public:
 			VoxelWorld(const VoxelWorldProps& props);
+			VoxelWorld(const VoxelWorld&) = delete;
+			VoxelWorld& operator=(VoxelWorld&) = delete;
 	
 			// Voxel data
-			Voxel readVoxel(int x, int y, int z);
-			void setVoxel(int x, int y, int z, Voxel info);
-			void fillVoxels(int minX, int maxX, int minY, int maxY, int minZ, int maxZ, Voxel info);
+			Voxel readVoxel(VoxelCordinates);
+			void setVoxel(VoxelCordinates, Voxel info);
+			void fillVoxels(VoxelCordinates min, VoxelCordinates max, Voxel info);
 	
 			// Layer data
 			LayerVoxel readLayerVoxel(int x, int z);
-			uint16_t getLayerVoxelHeight(int x, int z);
+			uint16_t calculateLayerVoxelHeight(int x, int z);
 	
 			// Math operations
 			VoxelRayResult rayCast(glm::vec3 position, glm::vec3 dir, float maxDistance = 10.0f);
 			VoxelRayResult rayCast_editor(glm::vec3 position, glm::vec3 dir, float maxDistance = 10.0f);
 	
-			inline const VoxelWorldProps& getVoxelWorldProps() { return m_worldProps; }
+			inline const VoxelWorldProps& getVoxelWorldProps() const { return m_worldProps; }
 		private:
 			VoxelWorldProps m_worldProps;
 	
@@ -124,8 +143,8 @@ namespace Deer {
 			void bakeVoxelLightFromPoint(int x, int y, int z);
 	
 			// Light data
-			VoxelLight readLight(int x, int y, int z);
-			VoxelLight& modLight(int x, int y, int z);
+			VoxelLight readLight(VoxelCordinates);
+			VoxelLight& modLight(VoxelCordinates);
 		private:
 			Scope<VoxelWorldRenderData> m_renderData;
 	

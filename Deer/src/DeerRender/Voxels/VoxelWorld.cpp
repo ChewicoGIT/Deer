@@ -19,11 +19,11 @@
 #include "DeerRender/Voxels/VoxelWorldRenderData.h"
 
 namespace Deer {
-	VoxelLight VoxelWorld::readLight(int x, int y, int z) {
+	VoxelLight VoxelWorld::readLight(VoxelCordinates coords) {
 		ChunkID chunkID;
 		ChunkVoxelID chunkVoxelID;
 
-		extractChunkCordinates(x, y, z, chunkID, chunkVoxelID);
+		extractChunkCordinates(coords, chunkID, chunkVoxelID);
 		if (!m_worldProps.isValid(chunkID))
 			return lightVoxel;
 
@@ -31,11 +31,11 @@ namespace Deer {
 		return chunk.readLight(chunkVoxelID);
 	}
 
-	VoxelLight& VoxelWorld::modLight(int x, int y, int z) {
+	VoxelLight& VoxelWorld::modLight(VoxelCordinates coords) {
 		ChunkID chunkID;
 		ChunkVoxelID chunkVoxelID;
 
-		extractChunkCordinates(x, y, z, chunkID, chunkVoxelID);
+		extractChunkCordinates(coords, chunkID, chunkVoxelID);
 		if (!m_worldProps.isValid(chunkID))
 			return lightVoxel;
 

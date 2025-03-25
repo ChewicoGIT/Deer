@@ -26,9 +26,11 @@ namespace Deer {
         float selectedVoxel_maxX = (float)(selectedVoxel_posX + 1) / (float)textureSize;
         float selectedVoxel_maxY = (float)(selectedVoxel_posY + 1) / (float)textureSize;
 
+        ImGui::Spacing();
         ImGui::Text("Selected Voxel:");
         ImGui::SameLine();
         ImGui::TextColored(ImVec4(0.5f, 1.0f, 0.6f, 1.0f), "%s", selectedVoxelAspect.definition.voxelName.c_str());
+        
         iconButton(
             (ImTextureID)(uint64_t)VoxelData::getVoxelColorTextureAtlas()->getTextureID(),
             ICON_BTN_MIN_SIZE,
@@ -36,8 +38,9 @@ namespace Deer {
             ImVec2(selectedVoxel_minX, selectedVoxel_maxY),
             ImVec2(selectedVoxel_maxX, selectedVoxel_minY));
         
-        if (ImGui::CollapsingHeader("Voxel")) {
+        ImGui::Spacing();
 
+        if (ImGui::CollapsingHeader("Voxel")) {
             ImGui::Indent();
 
             ImGui::Text("Filter: ");

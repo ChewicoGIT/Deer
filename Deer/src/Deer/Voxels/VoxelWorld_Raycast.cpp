@@ -11,9 +11,9 @@ namespace Deer {
 	VoxelRayResult VoxelWorld::rayCast(glm::vec3 position, glm::vec3 dir, float maxDistance) {
 		VoxelRayResult result;
 
-		result.xPos = (int32_t)std::floor(position.x);
-		result.yPos = (int32_t)std::floor(position.y);
-		result.zPos = (int32_t)std::floor(position.z);
+		result.hitPos.x = (int32_t)std::floor(position.x);
+		result.hitPos.y = (int32_t)std::floor(position.y);
+		result.hitPos.z = (int32_t)std::floor(position.z);
 
 		result.distance = 0;
 
@@ -32,11 +32,11 @@ namespace Deer {
 			if (dir[i] < 0) {
 				stepAxis[i] = -1.0f / dir[i];
 				directionAxis[i] = -1;
-				distanceAxis[i] = stepAxis[i] * ((float)position[i] - (float)(&result.xPos)[i]);
+				distanceAxis[i] = stepAxis[i] * ((float)position[i] - (float)(&result.hitPos.x)[i]);
 			}
 			else if (dir[i] > 0) {
 				stepAxis[i] = 1.0f / dir[i];
-				distanceAxis[i] = stepAxis[i] * (1 - (float)position[i] + (float)(&result.xPos)[i]);
+				distanceAxis[i] = stepAxis[i] * (1 - (float)position[i] + (float)(&result.hitPos.x)[i]);
 			}
 		}
 
@@ -53,10 +53,10 @@ namespace Deer {
 
 			for (int i = 0; i < 3; i++) {
 				if (minDistance == distanceAxis[i]) {
-					(&result.xPos)[i] += directionAxis[i];
+					result.hitPos[i] += directionAxis[i];
 					distanceAxis[i] = minDistance + stepAxis[i];
 
-					Voxel hitVoxel = readVoxel(result.xPos, result.yPos, result.zPos);
+					Voxel hitVoxel = readVoxel(result.hitPos);
 
 					if (hitVoxel == nullVoxel)
 						continue;
@@ -80,9 +80,9 @@ namespace Deer {
 	VoxelRayResult VoxelWorld::rayCast_editor(glm::vec3 position, glm::vec3 dir, float maxDistance) {
 		VoxelRayResult result;
 
-		result.xPos = (int32_t)std::floor(position.x);
-		result.yPos = (int32_t)std::floor(position.y);
-		result.zPos = (int32_t)std::floor(position.z);
+		result.hitPos.x = (int32_t)std::floor(position.x);
+		result.hitPos.y = (int32_t)std::floor(position.y);
+		result.hitPos.z = (int32_t)std::floor(position.z);
 
 		result.distance = 0;
 
@@ -101,15 +101,15 @@ namespace Deer {
 			if (dir[i] < 0) {
 				stepAxis[i] = -1.0f / dir[i];
 				directionAxis[i] = -1;
-				distanceAxis[i] = stepAxis[i] * ((float)position[i] - (float)(&result.xPos)[i]);
+				distanceAxis[i] = stepAxis[i] * ((float)position[i] - (float)result.hitPos[i]);
 			}
 			else if (dir[i] > 0) {
 				stepAxis[i] = 1.0f / dir[i];
-				distanceAxis[i] = stepAxis[i] * (1 - (float)position[i] + (float)(&result.xPos)[i]);
+				distanceAxis[i] = stepAxis[i] * (1 - (float)position[i] + (float)result.hitPos[i]);
 			}
 		}
 
-		Voxel hitVoxel = readVoxel(result.xPos, result.yPos, result.zPos);
+		Voxel hitVoxel = readVoxel(result.hitPos);
 		bool has_exit_inner_walls = hitVoxel.id == 0;
 		while (result.distance < maxDistance) {
 			float minDistance = distanceAxis[0];
@@ -124,13 +124,13 @@ namespace Deer {
 
 			for (int i = 0; i < 3; i++) {
 				if (minDistance == distanceAxis[i]) {
-					(&result.xPos)[i] += directionAxis[i];
+					result.hitPos[i] += directionAxis[i];
 					distanceAxis[i] = minDistance + stepAxis[i];
 
-					Voxel hitVoxel = readVoxel(result.xPos, result.yPos, result.zPos);
+					Voxel hitVoxel = readVoxel(result.hitPos);
 
 					if (hitVoxel.id == 0) {
-						if (has_exit_inner_walls && result.yPos == -1 && directionAxis[1] == -1 && i == 1) {
+						if (has_exit_inner_walls && result.hitPos.y == -1 && directionAxis[1] == -1 && i == 1) {
 							result.face = NORMAL_UP;
 							return result;
 						}

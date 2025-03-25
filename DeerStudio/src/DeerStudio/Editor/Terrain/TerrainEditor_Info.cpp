@@ -66,15 +66,18 @@ namespace Deer {
 		// TEMP
 		if (ImGui::Button("Create Ceiling")) {
 			Project::m_scene.getVoxelWorld()->fillVoxels(
-				0, 32 * worldProps.chunkSizeX - 1,
-				0, 16,
-				0, 32 * worldProps.chunkSizeZ - 1, 
+        VoxelCordinates(), VoxelCordinates(
+          32 * worldProps.chunkSizeX - 1, 
+          16, 
+          32 * worldProps.chunkSizeZ - 1), 
 				Voxel(VoxelData::getVoxelID("wood")));
 			
 			Project::m_scene.getVoxelWorld()->fillVoxels(
-				1, 32 * worldProps.chunkSizeX - 2,
-				8, 15,
-				1, 32 * worldProps.chunkSizeZ - 2, 
+        VoxelCordinates(1, 8, 1),
+        VoxelCordinates(
+				  32 * worldProps.chunkSizeX - 2,
+          15,
+          32 * worldProps.chunkSizeZ - 2), 
 				Voxel(VoxelData::getVoxelID("air")));
 		}
 
