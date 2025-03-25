@@ -1,5 +1,4 @@
 #include "TerrainEditor.h"
-
 #include "DeerStudio/Project.h"
 
 #include "Deer/Scene.h"
@@ -22,8 +21,6 @@
 
 namespace Deer {
 	namespace TerrainEditor {
-		void deleteVoxelWorld();
-	
 		uint16_t selectedVoxelID = 1;
 		TerrainEditMode terrainEditMode = TerrainEditMode_Add;
 	}
@@ -45,6 +42,10 @@ namespace Deer {
 		ImGui::Text("Edit mode: ");
 
 		setupColumns(ICON_BTN_MIN_SIZE + 16);
+		if (iconButton((ImTextureID)(uint64_t)Icons::info_icon->getTextureID(), ICON_BTN_MIN_SIZE, terrainEditMode == TerrainEditMode_Info)) {
+			terrainEditMode = TerrainEditMode_Info;
+		}
+		ImGui::NextColumn();
 		if (iconButton((ImTextureID)(uint64_t)Icons::add_icon->getTextureID(), ICON_BTN_MIN_SIZE, terrainEditMode == TerrainEditMode_Add)) {
 			terrainEditMode = TerrainEditMode_Add;
 		}
@@ -53,47 +54,53 @@ namespace Deer {
 			terrainEditMode = TerrainEditMode_Substract;
 		}
 		ImGui::NextColumn();
-		if (iconButton((ImTextureID)(uint64_t)Icons::box_select->getTextureID(), ICON_BTN_MIN_SIZE, terrainEditMode == TerrainEditMode_box_select)) {
+		if (iconButton((ImTextureID)(uint64_t)Icons::fill_icon->getTextureID(), ICON_BTN_MIN_SIZE, terrainEditMode == TerrainEditMode_fill)) {
+			terrainEditMode = TerrainEditMode_fill;
+		}
+		ImGui::NextColumn();
+		if (iconButton((ImTextureID)(uint64_t)Icons::fill_empty_icon->getTextureID(), ICON_BTN_MIN_SIZE, terrainEditMode == TerrainEditMode_empty_fill)) {
+			terrainEditMode = TerrainEditMode_empty_fill;
+		}
+		ImGui::NextColumn();
+		if (iconButton((ImTextureID)(uint64_t)Icons::box_select_icon->getTextureID(), ICON_BTN_MIN_SIZE, terrainEditMode == TerrainEditMode_box_select)) {
 			terrainEditMode = TerrainEditMode_box_select;
 		}
 		ImGui::Columns();
 		ImGui::Separator();
 
-		if (terrainEditMode == TerrainEditMode_Add) {
+		switch (terrainEditMode) {
+			case TerrainEditMode_Info:
+			info();
+			break;
+
+			case TerrainEditMode_Add:
 			voxelSelector();
-		}
+			break;
 
-		if (terrainEditMode == TerrainEditMode_box_select){
+			case TerrainEditMode_Substract:
+
+			break;
+
+			case TerrainEditMode_fill:
+			fill();
+			break;
+
+			case TerrainEditMode_empty_fill:
+
+			break;
+
+			case TerrainEditMode_box_select:
 			TerrainEditor::boxSelect();
+			break;
 		}
+		
+		if (terrainEditMode == TerrainEditMode_Info) {
 
-		if (ImGui::Button("Delete voxel world")) {
-			ImGui::OpenPopup("DELETE_VOXEL_WORLD");
+		} else {
+			voxelRay();
+			boxSelect_Visuals();
 		}
-
-		if (ImGui::Button("Create Ceiling")) {
-			VoxelWorldProps worldProps = voxelWorld->getVoxelWorldProps();
-			Project::m_scene.getVoxelWorld()->fillVoxels(
-				0, 32 * worldProps.chunkSizeX - 1,
-				0, 16,
-				0, 32 * worldProps.chunkSizeZ - 1, 
-				Voxel(VoxelData::getVoxelID("wood")));
-			
-			Project::m_scene.getVoxelWorld()->fillVoxels(
-				1, 32 * worldProps.chunkSizeX - 2,
-				8, 15,
-				1, 32 * worldProps.chunkSizeZ - 2, 
-				Voxel(VoxelData::getVoxelID("air")));
-
-		}
-
-		deleteInputPopup<deleteVoxelWorld>("DELETE_VOXEL_WORLD", "Are you sure you want to delete voxel world?");
-		voxelRay();
-
 		ImGui::End();
 	}
 
-	void TerrainEditor::deleteVoxelWorld() {
-		Project::m_scene.deleteVoxelWorld();
-	}
 }

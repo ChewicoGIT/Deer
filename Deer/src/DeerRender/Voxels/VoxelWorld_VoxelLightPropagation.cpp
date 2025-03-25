@@ -24,6 +24,7 @@ namespace Deer{
         ChunkVoxelID minChunkVoxelID;
         ChunkVoxelID maxChunkVoxelID;
 
+        // TODO: Exclude borders
         extractChunkCordinates(minX + 1, minY + 1, minZ + 1, minChunkID, minChunkVoxelID);
         extractChunkCordinates(maxX - 1, maxY - 1, maxZ - 1, maxChunkID, maxChunkVoxelID);
 

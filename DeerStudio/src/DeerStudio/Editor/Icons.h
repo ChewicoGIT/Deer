@@ -1,5 +1,6 @@
 #pragma once
 #include "Deer/Memory.h"
+#include "DeerRender/Render/Texture.h"
 
 #define ICON_MIN_SIZE 90
 #define ICON_MAX_SIZE 160
@@ -16,9 +17,10 @@ namespace Deer {
 		extern Ref<Texture2D> substract_icon;
 		extern Ref<Texture2D> fill_icon;
 		extern Ref<Texture2D> fill_empty_icon;
-		extern Ref<Texture2D> box_select;
-		extern Ref<Texture2D> face_voxel_selection;
-		extern Ref<Texture2D> internal_voxel_selection;
+		extern Ref<Texture2D> box_select_icon;
+		extern Ref<Texture2D> face_voxel_selection_icon;
+		extern Ref<Texture2D> internal_voxel_selection_icon;
+		extern Ref<Texture2D> info_icon;
 		
 		void setupIcons();
 	}

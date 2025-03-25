@@ -12,11 +12,7 @@
 #include "DeerRender/GizmoRenderer.h"
 #include "DeerRender/Render/Texture.h"
 
-
 #include "imgui.h"
-#define FACE_VOXEL_SELECT 0
-#define INTERNAL_VOXEL_SELECT 1
-
 namespace Deer {
     namespace TerrainEditor {
         VoxelCordinates selectedVoxelStart_cache(-1, -1, -1);
@@ -30,25 +26,53 @@ namespace Deer {
         ImGui::Text("Select mode: ");
         ImGui::SameLine();
         if (voxelSelectMode == FACE_VOXEL_SELECT)
-            ImGui::Text("Face");
+            ImGui::TextColored(ImVec4(0.5f, 1.0f, 0.6f, 1.0f), "%s","Face");
         else
-            ImGui::Text("Voxel");
+            ImGui::TextColored(ImVec4(0.5f, 1.0f, 0.6f, 1.0f), "%s","Voxel");
         
+        ImGui::Separator();
+        ImGui::Spacing();
         setupColumns(ICON_BTN_MIN_SIZE + 16);
-        if (iconButton((ImTextureID)(uint64_t)Icons::face_voxel_selection->getTextureID(), ICON_BTN_MIN_SIZE, voxelSelectMode == FACE_VOXEL_SELECT)) {
+        if (iconButton((ImTextureID)(uint64_t)Icons::face_voxel_selection_icon->getTextureID(), ICON_BTN_MIN_SIZE, voxelSelectMode == FACE_VOXEL_SELECT)) {
             voxelSelectMode = FACE_VOXEL_SELECT;
         }
         ImGui::Text("Face");
         ImGui::NextColumn();
-        if (iconButton((ImTextureID)(uint64_t)Icons::internal_voxel_selection->getTextureID(), ICON_BTN_MIN_SIZE, voxelSelectMode == INTERNAL_VOXEL_SELECT)) {
+        if (iconButton((ImTextureID)(uint64_t)Icons::internal_voxel_selection_icon->getTextureID(), ICON_BTN_MIN_SIZE, voxelSelectMode == INTERNAL_VOXEL_SELECT)) {
             voxelSelectMode = INTERNAL_VOXEL_SELECT;
         }
         ImGui::Text("Voxel");
         ImGui::Columns();
 
+        if (!viewportIsActive()) {
+            if (selectedVoxelStart_cache.isNull())
+                selectedVoxelStart_cache.makeNull();
+            return;
+        }
+
+        if (ImGui::IsMouseDragging(ImGuiMouseButton_Left) || ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {
+            
+            if (voxelSelectMode == FACE_VOXEL_SELECT) {
+                selectedVoxelEnd_cache = voxelFaceRayCoords;
+            } else {
+                selectedVoxelEnd_cache = voxelRayCoords;
+            }
+        }
+
+        if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) == 1) {
+            selectedVoxelStart_cache = selectedVoxelEnd_cache;
+        }
+
+        if (ImGui::IsMouseClicked(ImGuiMouseButton_Middle) == 1) {
+            selectedVoxelStart_cache.makeNull();
+            selectedVoxelEnd_cache.makeNull();
+        }
+    }
+
+    void TerrainEditor::boxSelect_Visuals() {
+
         Ref<VoxelWorld>& voxelWorld = Project::m_scene.getVoxelWorld();
         GizmoRenderer& gizmo = Project::m_scene.getMainGizmoRenderer();
-
 
         if (!selectedVoxelStart_cache.isNull() && !selectedVoxelEnd_cache.isNull()) {
             VoxelCordinates min;
@@ -113,36 +137,5 @@ namespace Deer {
             }
         }
 
-        if (!viewportIsActive()) {
-            if (selectedVoxelStart_cache.isNull())
-                selectedVoxelStart_cache.makeNull();
-            return;
-        }
-
-        if (ImGui::IsMouseDragging(ImGuiMouseButton_Left) || ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {
-            
-            if (voxelSelectMode == FACE_VOXEL_SELECT) {
-                selectedVoxelEnd_cache = voxelFaceRayCoords;
-            } else {
-                selectedVoxelEnd_cache = voxelRayCoords;
-            }
-        }
-
-        if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) == 1) {
-            selectedVoxelStart_cache = selectedVoxelEnd_cache;
-        }
-
-        if (ImGui::IsMouseClicked(ImGuiMouseButton_Middle) == 1) {
-            selectedVoxelStart_cache.makeNull();
-            selectedVoxelEnd_cache.makeNull();
-        }
-
-        if (!selectedVoxelStart_cache.isNull() && !selectedVoxelEnd_cache.isNull() && ImGui::IsMouseDragging(ImGuiMouseButton_Left)) {
-            gizmo.drawVoxelLine(selectedVoxelStart_cache.x, selectedVoxelStart_cache.y, selectedVoxelStart_cache.z, glm::vec3(1, 0.7f, 0.7f));
-        }
-
-        if (ImGui::IsMouseReleased(ImGuiMouseButton_Left)) {
-            
-        }
     }
 }

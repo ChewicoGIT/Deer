@@ -130,9 +130,9 @@ namespace Deer {
 
         if (!Input::isKeyPressed(DEER_KEY_LEFT_CONTROL)) {
 
-            float vel = 6;
+            float vel = 1.5f;
             if (Input::isKeyPressed(DEER_KEY_LEFT_SHIFT))
-                vel = 14;
+                vel = 8;
             if (Input::isKeyPressed(DEER_KEY_LEFT_ALT))
                 vel = 1.0f;
 

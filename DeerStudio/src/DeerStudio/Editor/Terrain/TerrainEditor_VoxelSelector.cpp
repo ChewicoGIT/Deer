@@ -26,7 +26,9 @@ namespace Deer {
         float selectedVoxel_maxX = (float)(selectedVoxel_posX + 1) / (float)textureSize;
         float selectedVoxel_maxY = (float)(selectedVoxel_posY + 1) / (float)textureSize;
 
-        ImGui::Text("Selected Voxel: %s", selectedVoxelAspect.definition.voxelName.c_str());
+        ImGui::Text("Selected Voxel:");
+        ImGui::SameLine();
+        ImGui::TextColored(ImVec4(0.5f, 1.0f, 0.6f, 1.0f), "%s", selectedVoxelAspect.definition.voxelName.c_str());
         iconButton(
             (ImTextureID)(uint64_t)VoxelData::getVoxelColorTextureAtlas()->getTextureID(),
             ICON_BTN_MIN_SIZE,
@@ -34,61 +36,65 @@ namespace Deer {
             ImVec2(selectedVoxel_minX, selectedVoxel_maxY),
             ImVec2(selectedVoxel_maxX, selectedVoxel_minY));
         
-        ImGui::Spacing();
-        ImGui::Separator();
+        if (ImGui::CollapsingHeader("Voxel")) {
 
-        ImGui::Text("Filter: ");
-        ImGui::SameLine();
-        ImGui::InputText("##Filter", filterChar, 255);
-        if (filterChar[0] != 0) {
-            if (ImGui::Button("Clear filter")) {
-                filterChar[0] = 0;
-            }
-        }
+            ImGui::Indent();
 
-        ImGui::BeginChild("VOXEL_SELECTOR_CHILD", ImVec2(0, 124), ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_AlwaysVerticalScrollbar) ;
-
-        setupColumns(ICON_BTN_MIN_SIZE + 10);
-
-        for (int id = 0; id < VoxelData::voxelsInfo.size(); id ++) {
-            VoxelInfo& vi = VoxelData::voxelsInfo[id];
-            if (vi.type != VoxelInfoType::Voxel)
-                continue;
-
+            ImGui::Text("Filter: ");
+            ImGui::SameLine();
+            ImGui::InputText("##Filter", filterChar, 255);
             if (filterChar[0] != 0) {
-                if (vi.name.find(filterChar) == std::string::npos) 
-                continue;
+                if (ImGui::Button("Clear filter")) {
+                    filterChar[0] = 0;
+                }
+            }
+    
+            ImGui::BeginChild("VOXEL_SELECTOR_CHILD", ImVec2(0, 128), ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_AlwaysVerticalScrollbar) ;
+    
+            setupColumns(ICON_BTN_MIN_SIZE + 32);
+    
+            for (int id = 0; id < VoxelData::voxelsInfo.size(); id ++) {
+                VoxelInfo& vi = VoxelData::voxelsInfo[id];
+                if (vi.type != VoxelInfoType::Voxel)
+                    continue;
+    
+                if (filterChar[0] != 0) {
+                    if (vi.name.find(filterChar) == std::string::npos) 
+                    continue;
+                }
+    
+                ImGui::PushID(id);
+                VoxelAspect& va = VoxelData::voxelsAspect[id];
+                int textureID = va.textureFacesIDs[NORMAL_FRONT];
+    
+                int posY = textureID / textureSize;
+                int posX = textureID - posY * textureSize;
+    
+                float minX = (float)(posX + 0) / (float)textureSize;
+                float minY = (float)(posY + 0) / (float)textureSize;
+                float maxX = (float)(posX + 1) / (float)textureSize;
+                float maxY = (float)(posY + 1) / (float)textureSize;
+    
+                float wColor = (id == selectedVoxelID)? 1 : 0.6f;
+                if (iconButton(
+                    (ImTextureID)(uint64_t)VoxelData::getVoxelColorTextureAtlas()->getTextureID(),
+                    ICON_BTN_MIN_SIZE,
+                    selectedVoxelID == id,
+                    ImVec2(minX, maxY),
+                    ImVec2(maxX, minY))) {
+                        selectedVoxelID = id;
+                }
+                ImGui::Text("%s", va.definition.voxelName.c_str());
+    
+                ImGui::NextColumn();
+                ImGui::PopID();
             }
 
-            ImGui::PushID(id);
-            VoxelAspect& va = VoxelData::voxelsAspect[id];
-            int textureID = va.textureFacesIDs[NORMAL_FRONT];
-
-            int posY = textureID / textureSize;
-            int posX = textureID - posY * textureSize;
-
-            float minX = (float)(posX + 0) / (float)textureSize;
-            float minY = (float)(posY + 0) / (float)textureSize;
-            float maxX = (float)(posX + 1) / (float)textureSize;
-            float maxY = (float)(posY + 1) / (float)textureSize;
-
-            float wColor = (id == selectedVoxelID)? 1 : 0.6f;
-            if (iconButton(
-                (ImTextureID)(uint64_t)VoxelData::getVoxelColorTextureAtlas()->getTextureID(),
-                ICON_BTN_MIN_SIZE,
-                selectedVoxelID == id,
-                ImVec2(minX, maxY),
-                ImVec2(maxX, minY))) {
-                    selectedVoxelID = id;
-            }
-            ImGui::Text("%s", va.definition.voxelName.c_str());
-
-            ImGui::NextColumn();
-            ImGui::PopID();
+            ImGui::Columns();
+            ImGui::EndChild();
+            ImGui::Separator();
+            ImGui::Unindent();
         }
 
-        ImGui::Columns();
-        ImGui::EndChild();
-        ImGui::Separator();
     }
 }
