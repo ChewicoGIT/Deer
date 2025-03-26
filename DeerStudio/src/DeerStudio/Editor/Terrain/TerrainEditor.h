@@ -17,10 +17,13 @@ namespace Deer {
 
 	namespace TerrainEditor {
 		extern TerrainEditMode terrainEditMode;
-		extern uint16_t selectedVoxelID;
 		extern VoxelCordinates voxelRayCoords;
 		extern VoxelCordinates voxelFaceRayCoords;
+		extern uint16_t selectedVoxelID;
 		extern uint8_t voxelSelectMode; 
+
+        extern VoxelCordinates selectedVoxelStart;
+        extern VoxelCordinates selectedVoxelEnd;
 
 		void terrainEditor_onImGui();
 		void createVoxelWorldPopup();

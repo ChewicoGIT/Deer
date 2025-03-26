@@ -41,6 +41,23 @@ namespace Deer {
 			}
 		}
 
+		inline void remplaceVoxels(ChunkVoxelID min, ChunkVoxelID max, Voxel ref, Voxel value) {
+			if (!m_voxels)
+				loadVoxels();
+
+			ChunkVoxelID voxelID;
+			for (voxelID.x = min.x; voxelID.x <= max.x; voxelID.x++) {
+				for (voxelID.y = min.y; voxelID.y <= max.y; voxelID.y++) {
+					for (voxelID.z = min.z; voxelID.z <= max.z; voxelID.z++) {
+						Voxel& currentVoxel = m_voxels[VOXEL_POSITION(voxelID)];
+
+						if (currentVoxel.id == ref.id)
+							currentVoxel = value;
+					}
+				}
+			}
+		}
+
 		inline uint8_t calculateLayerVoxelHeight(LayerVoxelID layerVoxelID) {
 			if (!m_voxels)
 				return 0;

@@ -15,8 +15,8 @@
 #include "imgui.h"
 namespace Deer {
     namespace TerrainEditor {
-        VoxelCordinates selectedVoxelStart_cache(-1, -1, -1);
-        VoxelCordinates selectedVoxelEnd_cache(-1, -1, -1);
+        VoxelCordinates selectedVoxelStart(-1, -1, -1);
+        VoxelCordinates selectedVoxelEnd(-1, -1, -1);
         uint8_t voxelSelectMode = 0;
     }
 
@@ -45,28 +45,29 @@ namespace Deer {
         ImGui::Columns();
 
         if (!viewportIsActive()) {
-            if (selectedVoxelStart_cache.isNull())
-                selectedVoxelStart_cache.makeNull();
+            if (selectedVoxelStart.isNull())
+                selectedVoxelStart.makeNull();
             return;
         }
 
         if (ImGui::IsMouseDragging(ImGuiMouseButton_Left) || ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {
-            
             if (voxelSelectMode == FACE_VOXEL_SELECT) {
-                selectedVoxelEnd_cache = voxelFaceRayCoords;
+                selectedVoxelEnd = voxelFaceRayCoords;
             } else {
-                selectedVoxelEnd_cache = voxelRayCoords;
+                selectedVoxelEnd = voxelRayCoords;
             }
+            Project::m_scene.getVoxelWorld()->getVoxelWorldProps().clampCordinates(selectedVoxelEnd);
         }
 
         if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) == 1) {
-            selectedVoxelStart_cache = selectedVoxelEnd_cache;
+            selectedVoxelStart = selectedVoxelEnd;
         }
 
         if (ImGui::IsMouseClicked(ImGuiMouseButton_Middle) == 1) {
-            selectedVoxelStart_cache.makeNull();
-            selectedVoxelEnd_cache.makeNull();
+            selectedVoxelStart.makeNull();
+            selectedVoxelEnd.makeNull();
         }
+
     }
 
     void TerrainEditor::boxSelect_Visuals() {
@@ -74,32 +75,32 @@ namespace Deer {
         Ref<VoxelWorld>& voxelWorld = Project::m_scene.getVoxelWorld();
         GizmoRenderer& gizmo = Project::m_scene.getMainGizmoRenderer();
 
-        if (!selectedVoxelStart_cache.isNull() && !selectedVoxelEnd_cache.isNull()) {
+        if (!selectedVoxelStart.isNull() && !selectedVoxelEnd.isNull()) {
             VoxelCordinates min;
             VoxelCordinates max;
 
-            if (selectedVoxelEnd_cache.x < selectedVoxelStart_cache.x) {
-                min.x = selectedVoxelEnd_cache.x;
-                max.x = selectedVoxelStart_cache.x;
+            if (selectedVoxelEnd.x < selectedVoxelStart.x) {
+                min.x = selectedVoxelEnd.x;
+                max.x = selectedVoxelStart.x;
             } else {
-                max.x = selectedVoxelEnd_cache.x;
-                min.x = selectedVoxelStart_cache.x;
+                max.x = selectedVoxelEnd.x;
+                min.x = selectedVoxelStart.x;
             }
 
-            if (selectedVoxelEnd_cache.y < selectedVoxelStart_cache.y) {
-                min.y = selectedVoxelEnd_cache.y;
-                max.y = selectedVoxelStart_cache.y;
+            if (selectedVoxelEnd.y < selectedVoxelStart.y) {
+                min.y = selectedVoxelEnd.y;
+                max.y = selectedVoxelStart.y;
             } else {
-                max.y = selectedVoxelEnd_cache.y;
-                min.y = selectedVoxelStart_cache.y;
+                max.y = selectedVoxelEnd.y;
+                min.y = selectedVoxelStart.y;
             }
 
-            if (selectedVoxelEnd_cache.z < selectedVoxelStart_cache.z) {
-                min.z = selectedVoxelEnd_cache.z;
-                max.z = selectedVoxelStart_cache.z;
+            if (selectedVoxelEnd.z < selectedVoxelStart.z) {
+                min.z = selectedVoxelEnd.z;
+                max.z = selectedVoxelStart.z;
             } else {
-                max.z = selectedVoxelEnd_cache.z;
-                min.z = selectedVoxelStart_cache.z;
+                max.z = selectedVoxelEnd.z;
+                min.z = selectedVoxelStart.z;
             }
 
             int debugVoxel = VoxelData::getVoxelID("debug");

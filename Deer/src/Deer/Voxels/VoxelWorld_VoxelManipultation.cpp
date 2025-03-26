@@ -114,6 +114,60 @@ namespace Deer {
 
 	}
 
+	void VoxelWorld::remplaceVoxels(VoxelCordinates min, VoxelCordinates max, Voxel ref, Voxel value) {
+		ChunkID minChunkID;
+		ChunkID maxChunkID;
+		ChunkVoxelID minChunkVoxelID;
+		ChunkVoxelID maxChunkVoxelID;
+
+		extractChunkCordinates(min, minChunkID, minChunkVoxelID);
+		extractChunkCordinates(max, maxChunkID, maxChunkVoxelID);
+		for (int chunkX = minChunkID.x; chunkX <= maxChunkID.x; chunkX++) {
+			for (int chunkY = minChunkID.y; chunkY <= maxChunkID.y; chunkY++) {
+				for (int chunkZ = minChunkID.z; chunkZ <= maxChunkID.z; chunkZ++) {
+					ChunkID workingChunkID(chunkX, chunkY, chunkZ);
+					Chunk& workingChunk = m_chunks[m_worldProps.getWorldChunkID(workingChunkID)];
+
+					ChunkVoxelID workingMin(0, 0, 0);
+					ChunkVoxelID workingMax(CHUNK_SIZE_X - 1, CHUNK_SIZE_Y - 1, CHUNK_SIZE_Z - 1);
+
+					if (chunkX == minChunkID.x)
+						workingMin.x = minChunkVoxelID.x;
+					if (chunkY == minChunkID.y)
+						workingMin.y = minChunkVoxelID.y;
+					if (chunkZ == minChunkID.z)
+						workingMin.z = minChunkVoxelID.z;
+
+					if (chunkX == maxChunkID.x)
+						workingMax.x = maxChunkVoxelID.x;
+					if (chunkY == maxChunkID.y)
+						workingMax.y = maxChunkVoxelID.y;
+					if (chunkZ == maxChunkID.z)
+						workingMax.z = maxChunkVoxelID.z;
+
+					workingChunk.remplaceVoxels(workingMin, workingMax, ref, value);
+					
+					#ifdef DEER_RENDER
+					m_renderData->chunkQueue.addChunk(workingChunkID);
+					#endif
+				}
+			}
+		}
+		
+		for (int xPos = min.x; xPos <= max.x; xPos++) {
+			for (int zPos = min.z; zPos <= max.z; zPos++) {
+				LayerID layerID;
+				LayerVoxelID layerVoxelID;
+				
+				extractLayerCordinates(xPos, zPos, layerID, layerVoxelID);
+				int worldLayerID = m_worldProps.getWorldLayerID(layerID);
+
+				m_layers[worldLayerID].modLayerVoxel(layerVoxelID).height = calculateLayerVoxelHeight(xPos, zPos);
+			}
+		}
+
+	}
+
 	LayerVoxel VoxelWorld::readLayerVoxel(int x, int z) {
 		LayerID layerID;
 		LayerVoxelID layerVoxelID;

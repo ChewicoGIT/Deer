@@ -28,23 +28,23 @@ namespace Deer {
 			chunkSizeY(_chunkSizeY), 
 			chunkSizeZ(_chunkSizeZ) { }
 
-		inline int getChunkCount() {
+		inline int getChunkCount() const {
 			return chunkSizeX * chunkSizeY * chunkSizeZ;
 		}
 
-		inline int getLayerCount() {
+		inline int getLayerCount() const {
 			return chunkSizeX * chunkSizeZ;
 		}
 
-		inline int getWorldChunkID(ChunkID chunkID) {
+		inline int getWorldChunkID(ChunkID chunkID) const {
 			return chunkID.z + chunkID.y * chunkSizeZ + chunkID.x * chunkSizeZ * chunkSizeY;
 		}
 
-		inline int getWorldLayerID(LayerID layerID) {
+		inline int getWorldLayerID(LayerID layerID) const {
 			return layerID.z + layerID.x * chunkSizeZ;
 		}
 
-		inline LayerID getLayerID(int id) {
+		inline LayerID getLayerID(int id) const {
 			LayerID l_id;
 
 			l_id.x = id / chunkSizeZ;
@@ -54,7 +54,7 @@ namespace Deer {
 			return l_id;
 		}
 
-		inline ChunkID getChunkID(int id) {
+		inline ChunkID getChunkID(int id) const {
 			ChunkID c_id;
 			
 			c_id.x = id / (chunkSizeZ * chunkSizeY);
@@ -67,13 +67,13 @@ namespace Deer {
 			return c_id;
 		}
 
-		inline bool isValid(ChunkID chunkID) {
+		inline bool isValid(ChunkID chunkID) const {
 			return chunkID.x >= 0 && chunkID.x < chunkSizeX
 				&& chunkID.y >= 0 && chunkID.y < chunkSizeY
 				&& chunkID.z >= 0 && chunkID.z < chunkSizeZ;
 		}
 
-		inline bool isValid(LayerID layerID) {
+		inline bool isValid(LayerID layerID) const {
 			return layerID.x >= 0 && layerID.x < chunkSizeX
 				&& layerID.z >= 0 && layerID.z < chunkSizeZ;
 		}
@@ -82,7 +82,7 @@ namespace Deer {
 			return getChunkCount() * CHUNK_VOXELS;
 		}
 
-		inline void clampCordinates(VoxelCordinates& coords) {
+		inline void clampCordinates(VoxelCordinates& coords) const {
 			if (coords.x < 0)
 				coords.x = 0;
 			else if (coords.x >= chunkSizeX * CHUNK_SIZE_X)
@@ -98,6 +98,24 @@ namespace Deer {
 			else if (coords.z >= chunkSizeZ * CHUNK_SIZE_Z)
 				coords.z = chunkSizeZ * CHUNK_SIZE_Z - 1;
 		}
+
+		inline void clampAndSetMinMax(VoxelCordinates& min, VoxelCordinates& max) const {
+			VoxelCordinates a_cache = min;
+			VoxelCordinates b_cache = max;
+
+			for (int x = 0; x < 3; x++){
+				if (a_cache[x] > b_cache[x]){
+					max[x] = a_cache[x];
+					min[x] = b_cache[x];
+				} else {
+					min[x] = a_cache[x];
+					max[x] = b_cache[x];
+				}
+			}
+
+			clampCordinates(min);
+			clampCordinates(max);
+		}
 	};
 
 	class VoxelWorld {
@@ -108,8 +126,11 @@ namespace Deer {
 	
 			// Voxel data
 			Voxel readVoxel(VoxelCordinates);
-			void setVoxel(VoxelCordinates, Voxel info);
-			void fillVoxels(VoxelCordinates min, VoxelCordinates max, Voxel info);
+			void setVoxel(VoxelCordinates, Voxel value);
+
+			// Advanced manipulations
+			void fillVoxels(VoxelCordinates min, VoxelCordinates max, Voxel value);
+			void remplaceVoxels(VoxelCordinates min, VoxelCordinates max, Voxel ref, Voxel value);
 	
 			// Layer data
 			LayerVoxel readLayerVoxel(int x, int z);

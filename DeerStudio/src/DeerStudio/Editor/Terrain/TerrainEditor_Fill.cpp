@@ -1,9 +1,12 @@
 #include "TerrainEditor.h"
+#include "DeerStudio/Project.h"
 #include "DeerStudio/Editor/Icons.h"
+#include "DeerStudio/Editor/Viewport.h"
 #include "DeerStudio/Editor/EditorUtils.h"
 
 #include "Deer/Voxel.h"
 #include "Deer/VoxelWorld.h"
+#include "Deer/Scene.h"
 
 #include "DeerRender/GizmoRenderer.h"
 
@@ -35,5 +38,27 @@ namespace Deer {
         
 		voxelSelector();
 
+        if (!viewportIsActive())
+            return;
+
+        if (ImGui::GetMouseClickedCount(ImGuiMouseButton_Left)) {
+            VoxelCordinates selectVoxel;
+
+            if (voxelSelectMode == FACE_VOXEL_SELECT) {
+                selectVoxel = voxelFaceRayCoords;
+            } else {
+                selectVoxel = voxelRayCoords;
+            }
+
+            if (!selectedVoxelStart.isNull() && !selectedVoxelEnd.isNull()) {
+                VoxelCordinates min = selectedVoxelStart;
+                VoxelCordinates max = selectedVoxelEnd;
+
+                Project::m_scene.getVoxelWorld()->getVoxelWorldProps().clampAndSetMinMax(min, max);
+                
+                Voxel voxel = Project::m_scene.getVoxelWorld()->readVoxel(selectedVoxelEnd);
+                Project::m_scene.getVoxelWorld()->remplaceVoxels(min, max, voxel, Voxel(selectedVoxelID));
+            }
+        }
     }
 }
