@@ -110,30 +110,30 @@ namespace Deer {
             // Z Face
             for (int x = min.x; x <= max.x; x++) {
                 for (int y = min.y; y <= max.y; y++) {
-                    gizmo.drawVoxelFace(x, y, min.z, debugVoxel, NORMAL_BACK);
-                    gizmo.drawVoxelFace(x, y, max.z, debugVoxel, NORMAL_FRONT);
-                    gizmo.drawVoxelFaceInternal(x, y, min.z, debugInternal, NORMAL_BACK);
-                    gizmo.drawVoxelFaceInternal(x, y, max.z, debugInternal, NORMAL_FRONT);
+                    gizmo.drawVoxelFace(x, y, min.z, debugVoxel, NORMAL_BACK, 5);
+                    gizmo.drawVoxelFace(x, y, max.z, debugVoxel, NORMAL_FRONT, 5);
+                    gizmo.drawVoxelFaceInverted(x, y, min.z, debugInternal, NORMAL_BACK, 4);
+                    gizmo.drawVoxelFaceInverted(x, y, max.z, debugInternal, NORMAL_FRONT, 4);
                 }
             }
 
             // Y Face
             for (int x = min.x; x <= max.x; x++) {
                 for (int z = min.z; z <= max.z; z++) {
-                    gizmo.drawVoxelFace(x, min.y, z, debugVoxel, NORMAL_DOWN);
-                    gizmo.drawVoxelFace(x, max.y, z, debugVoxel, NORMAL_UP);
-                    gizmo.drawVoxelFaceInternal(x, min.y, z, debugInternal, NORMAL_DOWN);
-                    gizmo.drawVoxelFaceInternal(x, max.y, z, debugInternal, NORMAL_UP);
+                    gizmo.drawVoxelFace(x, min.y, z, debugVoxel, NORMAL_DOWN, 5);
+                    gizmo.drawVoxelFace(x, max.y, z, debugVoxel, NORMAL_UP, 5);
+                    gizmo.drawVoxelFaceInverted(x, min.y, z, debugInternal, NORMAL_DOWN, 4);
+                    gizmo.drawVoxelFaceInverted(x, max.y, z, debugInternal, NORMAL_UP, 4);
                 }
             }
 
             // X Face
             for (int y = min.y; y <= max.y; y++) {
                 for (int z = min.z; z <= max.z; z++) {
-                    gizmo.drawVoxelFace(min.x, y, z, debugVoxel, NORMAL_LEFT);
-                    gizmo.drawVoxelFace(max.x, y, z, debugVoxel, NORMAL_RIGHT);
-                    gizmo.drawVoxelFaceInternal(min.x, y, z, debugInternal, NORMAL_LEFT);
-                    gizmo.drawVoxelFaceInternal(max.x, y, z, debugInternal, NORMAL_RIGHT);
+                    gizmo.drawVoxelFace(min.x, y, z, debugVoxel, NORMAL_LEFT, 5);
+                    gizmo.drawVoxelFace(max.x, y, z, debugVoxel, NORMAL_RIGHT, 5);
+                    gizmo.drawVoxelFaceInverted(min.x, y, z, debugInternal, NORMAL_LEFT, 4);
+                    gizmo.drawVoxelFaceInverted(max.x, y, z, debugInternal, NORMAL_RIGHT, 4);
                 }
             }
         }

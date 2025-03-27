@@ -13,41 +13,13 @@
 #include "imgui.h"
 
 namespace Deer {
-    void TerrainEditor::fill() {
-        ImGui::Text("Select mode: ");
-        ImGui::SameLine();
-        if (voxelSelectMode == FACE_VOXEL_SELECT)
-            ImGui::TextColored(ImVec4(0.5f, 1.0f, 0.6f, 1.0f), "%s","Face");
-        else
-            ImGui::TextColored(ImVec4(0.5f, 1.0f, 0.6f, 1.0f), "%s","Voxel");
-
-        setupColumns(ICON_BTN_MIN_SIZE + 16);
-        if (iconButton((ImTextureID)(uint64_t)Icons::face_voxel_selection_icon->getTextureID(), ICON_BTN_MIN_SIZE, voxelSelectMode == FACE_VOXEL_SELECT)) {
-            voxelSelectMode = FACE_VOXEL_SELECT;
-        }
-        ImGui::Text("Face");
-        ImGui::NextColumn();
-        if (iconButton((ImTextureID)(uint64_t)Icons::internal_voxel_selection_icon->getTextureID(), ICON_BTN_MIN_SIZE, voxelSelectMode == INTERNAL_VOXEL_SELECT)) {
-            voxelSelectMode = INTERNAL_VOXEL_SELECT;
-        }
-        ImGui::Text("Voxel");
-        ImGui::Columns();
-
-        ImGui::Separator();
-        ImGui::Spacing();
-        
-		voxelSelector();
-
+    void TerrainEditor::empty() {
         if (!viewportIsActive())
             return;
 
         VoxelCordinates selectVoxel;
         VoxelCordinates clampedCordinates;
-        if (voxelSelectMode == FACE_VOXEL_SELECT) {
-            selectVoxel = voxelFaceRayCoords;
-        } else {
-            selectVoxel = voxelRayCoords;
-        }
+        selectVoxel = voxelRayCoords;
 
         clampedCordinates = selectVoxel;
         Project::m_scene.getVoxelWorld()->getVoxelWorldProps().clampCordinates(clampedCordinates);
@@ -71,12 +43,12 @@ namespace Deer {
 
         for (int i = 0; i < 6; i++) {
             Project::m_scene.getMainGizmoRenderer().drawVoxelFace(clampedCordinates.x, clampedCordinates.y, clampedCordinates.z,
-                selectedVoxelID, i, 0);
+                VoxelData::getVoxelID("debug"), i, 0);
         }
 
         if (ImGui::GetMouseClickedCount(ImGuiMouseButton_Left)) {
             Voxel voxel = Project::m_scene.getVoxelWorld()->readVoxel(selectVoxel);
-            Project::m_scene.getVoxelWorld()->remplaceVoxels(min, max, voxel, Voxel(selectedVoxelID));
+            Project::m_scene.getVoxelWorld()->remplaceVoxels(min, max, voxel, Voxel(0));
         }
     }
 }

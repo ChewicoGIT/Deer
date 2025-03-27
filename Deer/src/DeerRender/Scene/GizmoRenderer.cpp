@@ -1,6 +1,7 @@
 #include "DeerRender/GizmoRenderer.h"
 #include "DeerRender/Render/Render.h"
 #include "Deer/Voxel.h"
+#include "DeerRender/LightVoxel.h"
 #include "DeerRender/Render/RenderUtils.h"
 #include "DeerRender/SceneCamera.h"
 #include "Deer/Components.h"
@@ -44,49 +45,12 @@ namespace Deer {
 	void GizmoRenderer::drawVoxelLineFace(int x, int y, int z, uint8_t face, glm::vec3 color) {
 		glm::vec3 points[4];
 
-		switch (face)
-		{
-		case 0:
-			points[0] = glm::vec3(x + 0, y + 0, z + 0);
-			points[1] = glm::vec3(x + 0, y + 0, z + 1);
-			points[2] = glm::vec3(x + 0, y + 1, z + 0);
-			points[3] = glm::vec3(x + 0, y + 1, z + 1);
-			break;
-		case 1:
-			points[0] = glm::vec3(x + 1, y + 0, z + 0);
-			points[1] = glm::vec3(x + 1, y + 0, z + 1);
-			points[2] = glm::vec3(x + 1, y + 1, z + 0);
-			points[3] = glm::vec3(x + 1, y + 1, z + 1);
-			break;
-		case 2:
-			points[0] = glm::vec3(x + 0, y + 0, z + 0);
-			points[1] = glm::vec3(x + 1, y + 0, z + 0);
-			points[2] = glm::vec3(x + 0, y + 0, z + 1);
-			points[3] = glm::vec3(x + 1, y + 0, z + 1);
-			break;
-		case 3:
-			points[0] = glm::vec3(x + 0, y + 1, z + 0);
-			points[1] = glm::vec3(x + 1, y + 1, z + 0);
-			points[2] = glm::vec3(x + 0, y + 1, z + 1);
-			points[3] = glm::vec3(x + 1, y + 1, z + 1);
-			break;
-		case 4:
-			points[0] = glm::vec3(x + 0, y + 0, z + 0);
-			points[1] = glm::vec3(x + 1, y + 0, z + 0);
-			points[2] = glm::vec3(x + 0, y + 1, z + 0);
-			points[3] = glm::vec3(x + 1, y + 1, z + 0);
-			break;
-		case 5:
-			points[0] = glm::vec3(x + 0, y + 0, z + 1);
-			points[1] = glm::vec3(x + 1, y + 0, z + 1);
-			points[2] = glm::vec3(x + 0, y + 1, z + 1);
-			points[3] = glm::vec3(x + 1, y + 1, z + 1);
-			break;
-		default:
-			points[0] = glm::vec3(0);
-			points[1] = glm::vec3(0);
-			points[2] = glm::vec3(0);
-			points[3] = glm::vec3(0);
+		for (int i = 0; i < 4; i++) {
+			points[i] = {
+				x + NORMAL_VERTEX_POS(X_AXIS, i, face),
+				y + NORMAL_VERTEX_POS(Y_AXIS, i, face),
+				z + NORMAL_VERTEX_POS(Z_AXIS, i, face)
+			};
 		}
 
 		drawLine(points[0], points[1], color);
@@ -95,114 +59,56 @@ namespace Deer {
 		drawLine(points[1], points[3], color);
 	}
 
-	void GizmoRenderer::drawVoxelFace(int x, int y, int z, uint16_t voxelID, uint8_t faceID) {
+	void GizmoRenderer::drawVoxelFace(int x, int y, int z, uint16_t voxelID, uint8_t faceID, uint8_t priority) {
 		glm::vec3 points[4];
 		VoxelAspect& aspect = VoxelData::voxelsAspect[voxelID];
 		GizmoFace face;
 		face.textureID = aspect.textureFacesIDs[faceID];
 		face.face = faceID;
 		
-		switch (faceID)
-		{
-		case 0:
-			face.positions[0] = glm::vec3(x + 0, y + 0, z + 1);
-			face.positions[1] = glm::vec3(x + 0, y + 0, z + 0);
-			face.positions[2] = glm::vec3(x + 0, y + 1, z + 1);
-			face.positions[3] = glm::vec3(x + 0, y + 1, z + 0);
-			break;
-		case 1:
-			face.positions[0] = glm::vec3(x + 1, y + 0, z + 0);
-			face.positions[1] = glm::vec3(x + 1, y + 0, z + 1);
-			face.positions[2] = glm::vec3(x + 1, y + 1, z + 0);
-			face.positions[3] = glm::vec3(x + 1, y + 1, z + 1);
-			break;
-		case 2:
-			face.positions[0] = glm::vec3(x + 0, y + 0, z + 1);
-			face.positions[1] = glm::vec3(x + 1, y + 0, z + 1);
-			face.positions[2] = glm::vec3(x + 0, y + 0, z + 0);
-			face.positions[3] = glm::vec3(x + 1, y + 0, z + 0);
-			break;
-		case 3:
-			face.positions[0] = glm::vec3(x + 0, y + 1, z + 0);
-			face.positions[1] = glm::vec3(x + 1, y + 1, z + 0);
-			face.positions[2] = glm::vec3(x + 0, y + 1, z + 1);
-			face.positions[3] = glm::vec3(x + 1, y + 1, z + 1);
-			break;
-		case 4:
-			face.positions[0] = glm::vec3(x + 0, y + 0, z + 0);
-			face.positions[1] = glm::vec3(x + 1, y + 0, z + 0);
-			face.positions[2] = glm::vec3(x + 0, y + 1, z + 0);
-			face.positions[3] = glm::vec3(x + 1, y + 1, z + 0);
-			break;
-		case 5:
-			face.positions[0] = glm::vec3(x + 1, y + 0, z + 1);
-			face.positions[1] = glm::vec3(x + 0, y + 0, z + 1);
-			face.positions[2] = glm::vec3(x + 1, y + 1, z + 1);
-			face.positions[3] = glm::vec3(x + 0, y + 1, z + 1);
-			break;
-		default:
-			face.positions[0] = glm::vec3(0);
-			face.positions[1] = glm::vec3(0);
-			face.positions[2] = glm::vec3(0);
-			face.positions[3] = glm::vec3(0);
+		for (int i = 0; i < 4; i++) {
+			face.positions[i] = {
+				x + NORMAL_VERTEX_POS(X_AXIS, i, faceID),
+				y + NORMAL_VERTEX_POS(Y_AXIS, i, faceID),
+				z + NORMAL_VERTEX_POS(Z_AXIS, i, faceID)
+			};
 		}
 
-		m_faces.push_back(face);
+		m_faces[priority].push_back(face);
 	}
 
-	void GizmoRenderer::drawVoxelFaceInternal(int x, int y, int z, uint16_t voxelID, uint8_t faceID) {
+	void GizmoRenderer::drawVoxelFaceInverted(int x, int y, int z, uint16_t voxelID, uint8_t faceID, uint8_t priority) {
 		glm::vec3 points[4];
 		VoxelAspect& aspect = VoxelData::voxelsAspect[voxelID];
 		GizmoFace face;
 		face.textureID = aspect.textureFacesIDs[faceID];
 		face.face = faceID;
-		
-		switch (faceID)
-		{
-		case 0:
-			face.positions[0] = glm::vec3(x + 0, y + 0, z + 0);
-			face.positions[1] = glm::vec3(x + 0, y + 0, z + 1);
-			face.positions[2] = glm::vec3(x + 0, y + 1, z + 0);
-			face.positions[3] = glm::vec3(x + 0, y + 1, z + 1);
-			break;
-		case 1:
-			face.positions[0] = glm::vec3(x + 1, y + 0, z + 1);
-			face.positions[1] = glm::vec3(x + 1, y + 0, z + 0);
-			face.positions[2] = glm::vec3(x + 1, y + 1, z + 1);
-			face.positions[3] = glm::vec3(x + 1, y + 1, z + 0);
-			break;
-		case 2:
-			face.positions[0] = glm::vec3(x + 1, y + 0, z + 1);
-			face.positions[1] = glm::vec3(x + 0, y + 0, z + 1);
-			face.positions[2] = glm::vec3(x + 1, y + 0, z + 0);
-			face.positions[3] = glm::vec3(x + 0, y + 0, z + 0);
-			break;
-		case 3:
-			face.positions[0] = glm::vec3(x + 1, y + 1, z + 0);
-			face.positions[1] = glm::vec3(x + 0, y + 1, z + 0);
-			face.positions[2] = glm::vec3(x + 1, y + 1, z + 1);
-			face.positions[3] = glm::vec3(x + 0, y + 1, z + 1);
-			break;
-		case 4:
-			face.positions[0] = glm::vec3(x + 1, y + 0, z + 0);
-			face.positions[1] = glm::vec3(x + 0, y + 0, z + 0);
-			face.positions[2] = glm::vec3(x + 1, y + 1, z + 0);
-			face.positions[3] = glm::vec3(x + 0, y + 1, z + 0);
-			break;
-		case 5:
-			face.positions[0] = glm::vec3(x + 0, y + 0, z + 1);
-			face.positions[1] = glm::vec3(x + 1, y + 0, z + 1);
-			face.positions[2] = glm::vec3(x + 0, y + 1, z + 1);
-			face.positions[3] = glm::vec3(x + 1, y + 1, z + 1);
-			break;
-		default:
-			face.positions[0] = glm::vec3(0);
-			face.positions[1] = glm::vec3(0);
-			face.positions[2] = glm::vec3(0);
-			face.positions[3] = glm::vec3(0);
-		}
 
-		m_internalFaces.push_back(face);
+		face.positions[0] = {
+			x + NORMAL_VERTEX_POS(X_AXIS, 0, faceID),
+			y + NORMAL_VERTEX_POS(Y_AXIS, 0, faceID),
+			z + NORMAL_VERTEX_POS(Z_AXIS, 0, faceID)
+		};
+
+		face.positions[2] = {
+			x + NORMAL_VERTEX_POS(X_AXIS, 1, faceID),
+			y + NORMAL_VERTEX_POS(Y_AXIS, 1, faceID),
+			z + NORMAL_VERTEX_POS(Z_AXIS, 1, faceID)
+		};
+
+		face.positions[1] = {
+			x + NORMAL_VERTEX_POS(X_AXIS, 2, faceID),
+			y + NORMAL_VERTEX_POS(Y_AXIS, 2, faceID),
+			z + NORMAL_VERTEX_POS(Z_AXIS, 2, faceID)
+		};
+
+		face.positions[3] = {
+			x + NORMAL_VERTEX_POS(X_AXIS, 3, faceID),
+			y + NORMAL_VERTEX_POS(Y_AXIS, 3, faceID),
+			z + NORMAL_VERTEX_POS(Z_AXIS, 3, faceID)
+		};
+
+		m_faces[priority].push_back(face);
 	}
 
 	void GizmoRenderer::render(const SceneCamera& camera) {
@@ -225,26 +131,17 @@ namespace Deer {
 		RenderUtils::m_faceShader->uploadUniformInt("u_texture", 0);
 		RenderUtils::m_faceShader->uploadUniformInt("u_textureSize", VoxelData::getVoxelTextureAtlasSize());
 
-		for (GizmoFace& face : m_internalFaces) {
-			RenderUtils::m_faceShader->uploadUniformInt("u_textureID", face.textureID);
-
-			RenderUtils::m_faceShader->uploadUniformFloat3("u_posA", face.positions[0]);
-			RenderUtils::m_faceShader->uploadUniformFloat3("u_posB", face.positions[1]);
-			RenderUtils::m_faceShader->uploadUniformFloat3("u_posC", face.positions[2]);
-			RenderUtils::m_faceShader->uploadUniformFloat3("u_posD", face.positions[3]);
-
-			Render::submit(RenderUtils::m_faceVertexArray);
-		}
-
-		for (GizmoFace& face : m_faces) {
-			RenderUtils::m_faceShader->uploadUniformInt("u_textureID", face.textureID);
-
-			RenderUtils::m_faceShader->uploadUniformFloat3("u_posA", face.positions[0]);
-			RenderUtils::m_faceShader->uploadUniformFloat3("u_posB", face.positions[1]);
-			RenderUtils::m_faceShader->uploadUniformFloat3("u_posC", face.positions[2]);
-			RenderUtils::m_faceShader->uploadUniformFloat3("u_posD", face.positions[3]);
-
-			Render::submit(RenderUtils::m_faceVertexArray);
+		for (int i = 0; i < GIZMO_DEPTH; i++) {
+			for (GizmoFace& face : m_faces[i]) {
+				RenderUtils::m_faceShader->uploadUniformInt("u_textureID", face.textureID);
+	
+				RenderUtils::m_faceShader->uploadUniformFloat3("u_posA", face.positions[0]);
+				RenderUtils::m_faceShader->uploadUniformFloat3("u_posB", face.positions[1]);
+				RenderUtils::m_faceShader->uploadUniformFloat3("u_posC", face.positions[2]);
+				RenderUtils::m_faceShader->uploadUniformFloat3("u_posD", face.positions[3]);
+	
+				Render::submit(RenderUtils::m_faceVertexArray);
+			}
 		}
 
 		RenderCommand::setDepthBuffer(false);
@@ -263,7 +160,7 @@ namespace Deer {
 
 	void GizmoRenderer::refresh() {
 		m_lines.clear();
-		m_faces.clear();
-		m_internalFaces.clear();
+		for (int i = 0; i < GIZMO_DEPTH; i++) 
+			m_faces[i].clear();
 	}
 }

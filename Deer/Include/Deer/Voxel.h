@@ -117,6 +117,7 @@ namespace Deer {
 		VoxelCordinates(int32_t _x = 0, int32_t _y = 0, int32_t _z = 0) : x(_x), y(_y), z(_z) {}
 
 		inline int32_t& operator[](int id) { return data[id]; }
+		inline bool operator==(const VoxelCordinates& b) const { return x == b.x && y == b.y && z == b.z; }
 		inline bool isNull() const { return x < 0 || y < 0 || z < 0; }
 		inline void makeNull() { x = -1; }
 	};

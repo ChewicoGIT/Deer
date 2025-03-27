@@ -86,7 +86,7 @@ namespace Deer {
 			break;
 
 			case TerrainEditMode_empty_fill:
-
+			empty();
 			break;
 
 			case TerrainEditMode_box_select:

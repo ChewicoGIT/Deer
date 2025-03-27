@@ -33,5 +33,6 @@ namespace Deer {
 		void boxSelect_Visuals();
 		void fill();
 		void info();
+		void empty();
 	}
 }
