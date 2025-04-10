@@ -1,3 +1,13 @@
+/**
+ * @file Voxel.h
+ * @author your name (you@domain.com)
+ * @brief 
+ * @version 0.1
+ * @date 2025-04-10
+ * 
+ * @copyright Copyright (c) 2025
+ * 
+ */
 #pragma once
 #include "Deer/Memory.h"
 

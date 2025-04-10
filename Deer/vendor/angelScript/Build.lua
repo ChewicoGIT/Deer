@@ -41,7 +41,6 @@ project "angelScript"
 
    filter "configurations:Debug"
        defines { "DEBUG" , 
-		"AS_DEBUG",
 		"_DEBUG" }
 		
        runtime "Debug"

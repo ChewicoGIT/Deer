@@ -1,6 +1,6 @@
 #pragma once
-#include "Deer/Voxel.h"
 #include "Deer/Memory.h"
+#include "Deer/Voxel.h"
 
 #ifdef DEER_RENDER
 #include "DeerRender/LightVoxel.h"
@@ -22,27 +22,17 @@ namespace Deer {
 
 		VoxelWorldProps() = default;
 		VoxelWorldProps(uint8_t _chunkSizeX, 
-			uint8_t _chunkSizeY = 2, 
-			uint8_t _chunkSizeZ = 4)
-			: chunkSizeX(_chunkSizeX), 
-			chunkSizeY(_chunkSizeY), 
-			chunkSizeZ(_chunkSizeZ) { }
+			uint8_t _chunkSizeY, 
+			uint8_t _chunkSizeZ) : 
+				chunkSizeX(_chunkSizeX), 
+				chunkSizeY(_chunkSizeY), 
+				chunkSizeZ(_chunkSizeZ) { }
 
-		inline int getChunkCount() const {
-			return chunkSizeX * chunkSizeY * chunkSizeZ;
-		}
+		inline int getChunkCount() const { return chunkSizeX * chunkSizeY * chunkSizeZ; }
+		inline int getLayerCount() const { return chunkSizeX * chunkSizeZ; }
+		inline int getWorldChunkID(ChunkID chunkID) const { return chunkID.z + chunkID.y * chunkSizeZ + chunkID.x * chunkSizeZ * chunkSizeY; }
 
-		inline int getLayerCount() const {
-			return chunkSizeX * chunkSizeZ;
-		}
-
-		inline int getWorldChunkID(ChunkID chunkID) const {
-			return chunkID.z + chunkID.y * chunkSizeZ + chunkID.x * chunkSizeZ * chunkSizeY;
-		}
-
-		inline int getWorldLayerID(LayerID layerID) const {
-			return layerID.z + layerID.x * chunkSizeZ;
-		}
+		inline int getWorldLayerID(LayerID layerID) const { return layerID.z + layerID.x * chunkSizeZ; }
 
 		inline LayerID getLayerID(int id) const {
 			LayerID l_id;
