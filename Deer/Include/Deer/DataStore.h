@@ -1,9 +1,9 @@
 #pragma once
-#include "Deer/Path.h"
-
-#include <vector>
-#include <string>
 #include <filesystem>
+#include <string>
+#include <vector>
+
+#include "Deer/Path.h"
 
 #define DEER_SCENE_PATH "scenes"
 #define DEER_SCRIPT_PATH "scripts"
@@ -28,9 +28,10 @@ namespace Deer {
 
 		// Refactor----
 		void compressFiles(std::vector<Path> files, const Path& path);
-		std::vector<Path> getFiles(const Path& path, const std::string& extension);
+		std::vector<Path> getFiles(const Path& path,
+		                           const std::string& extension);
 		// Refactor----
 
 		extern Path rootPath;
-	}
-}
+	}  // namespace DataStore
+}  // namespace Deer

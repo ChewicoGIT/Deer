@@ -1,11 +1,11 @@
 #pragma once
-#include "Deer/Memory.h"
-#include "Deer/ComponentScript.h"
-
 #include <filesystem>
 #include <string>
 #include <unordered_map>
 #include <vector>
+
+#include "Deer/ComponentScript.h"
+#include "Deer/Memory.h"
 
 class asIScriptEngine;
 class asIScriptModule;
@@ -35,10 +35,15 @@ namespace Deer {
 		inline asIScriptContext* getExecutionContext() { return m_context; }
 		inline bool isCompilationValid() { return m_isCompilationValid; }
 
-		inline ComponentScriptMap& getComponentScripts() { return m_componentScripts; }
-		inline ComponentScript& getComponentScript(const std::string& scriptID) { return m_componentScripts[scriptID]; }
-		
-		Ref<ComponentScriptInstance> createComponentScriptInstance(const std::string& scriptID, Entity& scriptEntity);
-	}
-}
+		inline ComponentScriptMap& getComponentScripts() {
+			return m_componentScripts;
+		}
+		inline ComponentScript& getComponentScript(
+		    const std::string& scriptID) {
+			return m_componentScripts[scriptID];
+		}
 
+		Ref<ComponentScriptInstance> createComponentScriptInstance(
+		    const std::string& scriptID, Entity& scriptEntity);
+	}  // namespace ScriptEngine
+}  // namespace Deer

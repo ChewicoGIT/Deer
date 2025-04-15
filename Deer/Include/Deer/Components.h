@@ -2,12 +2,13 @@
 #include "Deer/Memory.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
-#include "glm/gtc/quaternion.hpp"
-#include "glm/glm.hpp"
+#include <stdint.h>
 
 #include <string>
 #include <vector>
-#include <stdint.h>
+
+#include "glm/glm.hpp"
+#include "glm/gtc/quaternion.hpp"
 
 namespace Deer {
 	class ComponentScriptInstance;
@@ -18,7 +19,8 @@ namespace Deer {
 
 		TagComponent() = default;
 		TagComponent(const TagComponent&) = default;
-		TagComponent(std::string name, uint32_t _id = 0) : tag(name), entityUID(_id) { }
+		TagComponent(std::string name, uint32_t _id = 0)
+		    : tag(name), entityUID(_id) {}
 	};
 
 	struct ScriptComponent {
@@ -27,7 +29,7 @@ namespace Deer {
 
 		ScriptComponent() = default;
 		ScriptComponent(const ScriptComponent&) = default;
-		ScriptComponent(std::string _scriptID) : scriptID(_scriptID) { }
+		ScriptComponent(std::string _scriptID) : scriptID(_scriptID) {}
 	};
 
 	struct RelationshipComponent {
@@ -36,7 +38,7 @@ namespace Deer {
 
 		RelationshipComponent() = default;
 		RelationshipComponent(const RelationshipComponent&) = default;
-		RelationshipComponent(uint32_t parent) : parent_UID(parent) { }
+		RelationshipComponent(uint32_t parent) : parent_UID(parent) {}
 	};
 
 	struct TransformComponent {
@@ -45,12 +47,16 @@ namespace Deer {
 		glm::quat rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
 
 		TransformComponent() = default;
-		TransformComponent(glm::vec3 _position) : position(_position) { }
+		TransformComponent(glm::vec3 _position) : position(_position) {}
 		TransformComponent(const TransformComponent&) = default;
 
-		inline const glm::vec3 getEulerAngles() { return glm::degrees(glm::eulerAngles(rotation)); }
-		inline void setEulerAngles(const glm::vec3& eulerAngles) { rotation = glm::quat(glm::radians(eulerAngles)); }
+		inline const glm::vec3 getEulerAngles() {
+			return glm::degrees(glm::eulerAngles(rotation));
+		}
+		inline void setEulerAngles(const glm::vec3& eulerAngles) {
+			rotation = glm::quat(glm::radians(eulerAngles));
+		}
 
 		glm::mat4 getMatrix() const;
 	};
-}
+}  // namespace Deer

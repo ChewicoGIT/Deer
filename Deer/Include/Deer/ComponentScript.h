@@ -1,6 +1,6 @@
 #pragma once
-#include <unordered_map>
 #include <string>
+#include <unordered_map>
 
 class asITypeInfo;
 class asIScriptObject;
@@ -18,34 +18,46 @@ namespace Deer {
 		int internalID;
 		bool isPrivate;
 
-		ScriptAttribute(const char* _name = "", int _type = 0, bool _isPrivate = 0, int _location = 0, int _internalID = 0)
-			: typeID(_type), name(_name), isPrivate(_isPrivate), location(_location), internalID(_internalID) { }
+		ScriptAttribute(const char* _name = "", int _type = 0,
+		                bool _isPrivate = 0, int _location = 0,
+		                int _internalID = 0)
+		    : typeID(_type),
+		      name(_name),
+		      isPrivate(_isPrivate),
+		      location(_location),
+		      internalID(_internalID) {}
 	};
 
 	class ComponentScriptInstance {
-	public:
+	   public:
 		ComponentScriptInstance() = default;
 		~ComponentScriptInstance();
 
 		void updateInternalVars();
 		void start();
-	
+
 		asIScriptObject* m_object;
 		asIScriptFunction* m_updateFunction;
 		asIScriptFunction* m_startFuction;
 	};
 
 	class ComponentScript {
-	public:
-		ComponentScript() : m_typeInfo(nullptr) { }
+	   public:
+		ComponentScript() : m_typeInfo(nullptr) {}
 		ComponentScript(asITypeInfo* typeInfo);
 
 		inline const std::string& getName() { return m_scriptID; }
-		inline const ScriptAttributeMap& getAttributes() { return m_attributes; }
-		inline const ScriptAttribute getAttribute(const std::string& attributeID) { return m_attributes[attributeID]; }
+		inline const ScriptAttributeMap& getAttributes() {
+			return m_attributes;
+		}
+		inline const ScriptAttribute getAttribute(
+		    const std::string& attributeID) {
+			return m_attributes[attributeID];
+		}
 
 		inline asITypeInfo* getTypeInfo() { return m_typeInfo; }
-	private:
+
+	   private:
 		asITypeInfo* m_typeInfo;
 
 		ScriptAttributeMap m_attributes;
@@ -53,5 +65,4 @@ namespace Deer {
 	};
 
 	ScriptAttributeMap extractAttributes(asITypeInfo* typeInfo);
-}
-
+}  // namespace Deer

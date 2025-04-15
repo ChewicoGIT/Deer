@@ -182,7 +182,7 @@ namespace Deer {
 				}
 
 				SolidVoxelVertexData vertex_data;
-				vertex_data.textureID = voxel.getVoxelTextureID(i);
+				vertex_data.textureID = VoxelData::voxelsAspect[voxel.id].getTextureID(i);
 				vertex_data.ambient_occlusion = voxel_count[v];
 				
 				vertex_data.xPos = chunkVoxelID.x + NORMAL_VERTEX_POS(X_AXIS, v, i);

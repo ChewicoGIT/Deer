@@ -1,6 +1,6 @@
 #pragma once
-#include "Deer/Log.h"
 #include "Deer/Application.h"
+#include "Deer/Log.h"
 
 extern Deer::Application* createApplication(int argc, char** argv);
 
@@ -22,8 +22,6 @@ namespace Deer {
 
 		return runResult;
 	}
-}
+}  // namespace Deer
 
-int main(int argc, char** argv) {
-	return Deer::Main(argc, argv);
-}
+int main(int argc, char** argv) { return Deer::Main(argc, argv); }

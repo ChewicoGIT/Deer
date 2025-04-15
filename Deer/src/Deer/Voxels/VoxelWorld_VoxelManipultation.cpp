@@ -1,5 +1,5 @@
-#include "Deer/VoxelWorld.h"
 #include "Deer/Log.h"
+#include "Deer/VoxelWorld.h"
 #include "Deer/Voxels/Chunk.h"
 #include "Deer/Voxels/Layer.h"
 
@@ -8,6 +8,7 @@
 #endif
 
 #include <math.h>
+
 #include <cmath>
 #include <vector>
 
@@ -17,8 +18,7 @@ namespace Deer {
 		ChunkVoxelID chunkVoxelID;
 
 		extractChunkCordinates(coords, chunkID, chunkVoxelID);
-		if (!m_worldProps.isValid(chunkID))
-			return emptyVoxel;
+		if (!m_worldProps.isValid(chunkID)) return emptyVoxel;
 
 		Chunk& chunk = m_chunks[m_worldProps.getWorldChunkID(chunkID)];
 		return chunk.readVoxel(chunkVoxelID);
@@ -29,26 +29,8 @@ namespace Deer {
 		ChunkVoxelID chunkVoxelID;
 
 		extractChunkCordinates(coords, chunkID, chunkVoxelID);
-		if (!m_worldProps.isValid(chunkID))
-			return;
+		if (!m_worldProps.isValid(chunkID)) return;
 
-#ifdef DEER_RENDER
-		m_renderData->chunkQueue.addChunk(chunkID);
-		if (chunkVoxelID.x == 0 && chunkID.x != 0)
-			m_renderData->chunkQueue.addChunk(ChunkID(chunkID.x - 1, chunkID.y, chunkID.z));
-		if (chunkVoxelID.x == CHUNK_SIZE_X - 1 && chunkID.x != m_worldProps.chunkSizeX - 1)
-			m_renderData->chunkQueue.addChunk(ChunkID(chunkID.x + 1, chunkID.y, chunkID.z));
-
-		if (chunkVoxelID.y == 0 && chunkID.y != 0)
-			m_renderData->chunkQueue.addChunk(ChunkID(chunkID.x, chunkID.y - 1, chunkID.z));
-		if (chunkVoxelID.y == CHUNK_SIZE_Y - 1 && chunkID.y != m_worldProps.chunkSizeY - 1)
-			m_renderData->chunkQueue.addChunk(ChunkID(chunkID.x, chunkID.y + 1, chunkID.z));
-
-		if (chunkVoxelID.z == 0 && chunkID.z != 0)
-			m_renderData->chunkQueue.addChunk(ChunkID(chunkID.x, chunkID.y, chunkID.z - 1));
-		if (chunkVoxelID.z == CHUNK_SIZE_Z - 1 && chunkID.z != m_worldProps.chunkSizeZ - 1)
-			m_renderData->chunkQueue.addChunk(ChunkID(chunkID.x, chunkID.y, chunkID.z + 1));
-#endif
 		Chunk& chunk = m_chunks[m_worldProps.getWorldChunkID(chunkID)];
 		chunk.modVoxel(chunkVoxelID) = info;
 
@@ -64,26 +46,56 @@ namespace Deer {
 			layerVoxel.height = calculateLayerVoxelHeight(coords.x, coords.z);
 		else if (coords.y >= layerVoxel.height)
 			layerVoxel.height = coords.y + 1;
+
+#ifdef DEER_RENDER
+		m_renderData->chunkQueue.addChunk(chunkID);
+		// For every axis, X & Y & Z
+		for (int i = 0; i < 3; i++) {
+			if (chunkVoxelID[i] == 0 && chunkID[i] != 0) {
+				ChunkID nextChunk = chunkID;
+				nextChunk[i]--;
+				m_renderData->chunkQueue.addChunk(nextChunk);
+			}
+
+			if (chunkVoxelID[i] == CHUNK_SIZE(i) &&
+			    chunkID[i] != m_worldProps[i] - 1) {
+				ChunkID nextChunk = chunkID;
+				nextChunk[i]++;
+				m_renderData->chunkQueue.addChunk(nextChunk);
+			}
+		}
+
+		// Check if we should update the lighting
+		bakeAmbientLightFromPoint(coords.x, coords.z);
+		bakeVoxelLightFromPoint(coords);
+#endif
 	}
 
-	void VoxelWorld::fillVoxels(VoxelCordinates min, VoxelCordinates max, Voxel info) {
+	void VoxelWorld::fillVoxels(VoxelCordinates min, VoxelCordinates max,
+	                            Voxel info) {
 		ChunkID minChunkID;
 		ChunkID maxChunkID;
 		ChunkVoxelID minChunkVoxelID;
 		ChunkVoxelID maxChunkVoxelID;
 
+		m_worldProps.clampAndSetMinMax(min, max);
+
 		extractChunkCordinates(min, minChunkID, minChunkVoxelID);
 		extractChunkCordinates(max, maxChunkID, maxChunkVoxelID);
 		for (int chunkX = minChunkID.x; chunkX <= maxChunkID.x; chunkX++) {
 			for (int chunkY = minChunkID.y; chunkY <= maxChunkID.y; chunkY++) {
-				for (int chunkZ = minChunkID.z; chunkZ <= maxChunkID.z; chunkZ++) {
+				for (int chunkZ = minChunkID.z; chunkZ <= maxChunkID.z;
+				     chunkZ++) {
 					ChunkID workingChunkID(chunkX, chunkY, chunkZ);
 					LayerID workingLayerID(chunkX, chunkZ);
-					Chunk& workingChunk = m_chunks[m_worldProps.getWorldChunkID(workingChunkID)];
-					Layer& workingLayer = m_layers[m_worldProps.getWorldLayerID(workingLayerID)];
+					Chunk& workingChunk =
+					    m_chunks[m_worldProps.getWorldChunkID(workingChunkID)];
+					Layer& workingLayer =
+					    m_layers[m_worldProps.getWorldLayerID(workingLayerID)];
 
 					ChunkVoxelID workingMin(0, 0, 0);
-					ChunkVoxelID workingMax(CHUNK_SIZE_X - 1, CHUNK_SIZE_Y - 1, CHUNK_SIZE_Z - 1);
+					ChunkVoxelID workingMax(CHUNK_SIZE_X - 1, CHUNK_SIZE_Y - 1,
+					                        CHUNK_SIZE_Z - 1);
 
 					if (chunkX == minChunkID.x)
 						workingMin.x = minChunkVoxelID.x;
@@ -103,33 +115,56 @@ namespace Deer {
 					LayerVoxelID workingMaxLayer(workingMax.x, workingMax.z);
 
 					workingChunk.fillVoxels(workingMin, workingMax, info);
-					workingLayer.fillVoxelLayerMaxHeight(workingMinLayer, workingMaxLayer, max.y);
+					workingLayer.fillVoxelLayerMaxHeight(
+					    workingMinLayer, workingMaxLayer, max.y);
 
-					#ifdef DEER_RENDER
+#ifdef DEER_RENDER
 					m_renderData->chunkQueue.addChunk(workingChunkID);
-					#endif
+#endif
 				}
 			}
 		}
 
+#ifdef DEER_RENDER
+		VoxelCordinates minLightModification = min;
+		VoxelCordinates maxLightModification = max;
+		// We want to add a 16 layer border
+		for (int i = 0; i < 3; i++) {
+			minLightModification[i] -= 16;
+			maxLightModification[i] += 16;
+		}
+
+		m_worldProps.clampCordinates(minLightModification);
+		m_worldProps.clampCordinates(maxLightModification);
+
+		bakeAmbientLight(minLightModification.x, maxLightModification.x,
+		                 minLightModification.z, maxLightModification.z);
+		bakeVoxelLight(minLightModification, maxLightModification);
+#endif
 	}
 
-	void VoxelWorld::remplaceVoxels(VoxelCordinates min, VoxelCordinates max, Voxel ref, Voxel value) {
+	void VoxelWorld::remplaceVoxels(VoxelCordinates min, VoxelCordinates max,
+	                                Voxel ref, Voxel value) {
 		ChunkID minChunkID;
 		ChunkID maxChunkID;
 		ChunkVoxelID minChunkVoxelID;
 		ChunkVoxelID maxChunkVoxelID;
 
+		m_worldProps.clampAndSetMinMax(min, max);
+
 		extractChunkCordinates(min, minChunkID, minChunkVoxelID);
 		extractChunkCordinates(max, maxChunkID, maxChunkVoxelID);
 		for (int chunkX = minChunkID.x; chunkX <= maxChunkID.x; chunkX++) {
 			for (int chunkY = minChunkID.y; chunkY <= maxChunkID.y; chunkY++) {
-				for (int chunkZ = minChunkID.z; chunkZ <= maxChunkID.z; chunkZ++) {
+				for (int chunkZ = minChunkID.z; chunkZ <= maxChunkID.z;
+				     chunkZ++) {
 					ChunkID workingChunkID(chunkX, chunkY, chunkZ);
-					Chunk& workingChunk = m_chunks[m_worldProps.getWorldChunkID(workingChunkID)];
+					Chunk& workingChunk =
+					    m_chunks[m_worldProps.getWorldChunkID(workingChunkID)];
 
 					ChunkVoxelID workingMin(0, 0, 0);
-					ChunkVoxelID workingMax(CHUNK_SIZE_X - 1, CHUNK_SIZE_Y - 1, CHUNK_SIZE_Z - 1);
+					ChunkVoxelID workingMax(CHUNK_SIZE_X - 1, CHUNK_SIZE_Y - 1,
+					                        CHUNK_SIZE_Z - 1);
 
 					if (chunkX == minChunkID.x)
 						workingMin.x = minChunkVoxelID.x;
@@ -145,27 +180,45 @@ namespace Deer {
 					if (chunkZ == maxChunkID.z)
 						workingMax.z = maxChunkVoxelID.z;
 
-					workingChunk.remplaceVoxels(workingMin, workingMax, ref, value);
-					
-					#ifdef DEER_RENDER
+					workingChunk.remplaceVoxels(workingMin, workingMax, ref,
+					                            value);
+
+#ifdef DEER_RENDER
 					m_renderData->chunkQueue.addChunk(workingChunkID);
-					#endif
+#endif
 				}
 			}
 		}
-		
+
 		for (int xPos = min.x; xPos <= max.x; xPos++) {
 			for (int zPos = min.z; zPos <= max.z; zPos++) {
 				LayerID layerID;
 				LayerVoxelID layerVoxelID;
-				
+
 				extractLayerCordinates(xPos, zPos, layerID, layerVoxelID);
 				int worldLayerID = m_worldProps.getWorldLayerID(layerID);
 
-				m_layers[worldLayerID].modLayerVoxel(layerVoxelID).height = calculateLayerVoxelHeight(xPos, zPos);
+				m_layers[worldLayerID].modLayerVoxel(layerVoxelID).height =
+				    calculateLayerVoxelHeight(xPos, zPos);
 			}
 		}
 
+#ifdef DEER_RENDER
+		VoxelCordinates minLightModification = min;
+		VoxelCordinates maxLightModification = max;
+		// We want to add a 16 layer border
+		for (int i = 0; i < 3; i++) {
+			minLightModification[i] -= 16;
+			maxLightModification[i] += 16;
+		}
+
+		m_worldProps.clampCordinates(minLightModification);
+		m_worldProps.clampCordinates(maxLightModification);
+
+		bakeAmbientLight(minLightModification.x, maxLightModification.x,
+		                 minLightModification.z, maxLightModification.z);
+		bakeVoxelLight(minLightModification, maxLightModification);
+#endif
 	}
 
 	LayerVoxel VoxelWorld::readLayerVoxel(int x, int z) {
@@ -173,8 +226,7 @@ namespace Deer {
 		LayerVoxelID layerVoxelID;
 
 		extractLayerCordinates(x, z, layerID, layerVoxelID);
-		if (!m_worldProps.isValid(layerID))
-			return LayerVoxel();
+		if (!m_worldProps.isValid(layerID)) return LayerVoxel();
 
 		Layer& layer = m_layers[m_worldProps.getWorldLayerID(layerID)];
 		return layer.readLayerVoxel(layerVoxelID);
@@ -185,11 +237,10 @@ namespace Deer {
 		LayerVoxelID layerVoxelID;
 
 		extractLayerCordinates(x, z, layerID, layerVoxelID);
-		if (!m_worldProps.isValid(layerID))
-			return nullLayerVoxel;
+		if (!m_worldProps.isValid(layerID)) return nullLayerVoxel;
 
 		Layer& layer = m_layers[m_worldProps.getWorldLayerID(layerID)];
 		return layer.modLayerVoxel(layerVoxelID);
 	}
 
-}
+}  // namespace Deer

@@ -2,8 +2,8 @@
 #include "Deer/Memory.h"
 
 #ifdef DEER_RENDER
-#include "DeerRender/Events/Event.h"
 #include "DeerRender/Events/ApplicationEvent.h"
+#include "DeerRender/Events/Event.h"
 #include "DeerRender/Window.h"
 #endif
 
@@ -11,26 +11,25 @@ namespace Deer {
 	class ImGuiLayer;
 	namespace Core {
 		extern int argc;
-		extern char **argv;
-	}
+		extern char** argv;
+	}  // namespace Core
 
 	class Timestep {
-	public:
-		Timestep(float time = 0.0f)
-			: m_time(time) { }
+	   public:
+		Timestep(float time = 0.0f) : m_time(time) {}
 
 		float getSeconds() const { return m_time; }
 		float getMilliseconds() const { return m_time * 1000; }
-	private:
+
+	   private:
 		float m_time;
 	};
 
-	class Application
-	{
-	public:
+	class Application {
+	   public:
 		Application();
 		~Application();
-		
+
 		static Application* s_application;
 
 		int run();
@@ -40,11 +39,11 @@ namespace Deer {
 		virtual void onShutdown() {}
 		virtual void onUpdate(Timestep delta) {}
 
-	private:
+	   private:
 		bool m_running;
 		float m_lastFrameTime = 0.0f;
 #ifdef DEER_RENDER
-	public:
+	   public:
 		Application(const WindowProps& props = WindowProps());
 
 		virtual void onRender(Timestep delta) {}
@@ -52,7 +51,8 @@ namespace Deer {
 		virtual void onEvent(Event& event) {}
 
 		Scope<Window> m_window;
-	private:
+
+	   private:
 		Scope<ImGuiLayer> m_imGuiLayer;
 		const WindowProps m_windowProps;
 
@@ -62,5 +62,4 @@ namespace Deer {
 #endif
 	};
 
-}
-
+}  // namespace Deer

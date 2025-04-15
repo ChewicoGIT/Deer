@@ -1,14 +1,14 @@
 #pragma once
-#include "Deer/Memory.h"
 #include "Deer/DataStore.h"
+#include "Deer/Memory.h"
 #include "Deer/Path.h"
 
 #ifdef DEER_RENDER
 #include "DeerRender/GizmoRenderer.h"
 #endif
 
-#include <vector>
 #include <string>
+#include <vector>
 
 namespace Deer {
 	class VoxelWorld;
@@ -16,7 +16,7 @@ namespace Deer {
 	class Environment;
 
 	class Scene {
-	public:
+	   public:
 		Scene();
 
 		void createVoxelWorld(const VoxelWorldProps&);
@@ -26,21 +26,24 @@ namespace Deer {
 		void beginExecution();
 		void updateInternalVars();
 		void endExecution();
-	public:
+
+	   public:
 		inline Ref<Environment>& getMainEnviroment() { return m_enviroment; }
 		inline Ref<VoxelWorld>& getVoxelWorld() { return m_voxelWorld; }
 		inline bool getExecutingState() { return m_isExecuting; }
-	private:
+
+	   private:
 		Ref<Environment> m_enviroment;
 		Ref<VoxelWorld> m_voxelWorld;
 
 		bool m_isExecuting = false;
 #ifdef DEER_RENDER
-	public:
+	   public:
 		void render();
 		void render(SceneCamera);
 		inline GizmoRenderer& getMainGizmoRenderer() { return m_gizmoRenderer; }
-	private:
+
+	   private:
 		GizmoRenderer m_gizmoRenderer;
 #endif
 	};
@@ -54,6 +57,5 @@ namespace Deer {
 
 		void exportRuntimeScene(Scene& scene);
 		Scene importRuntimeScene();
-	}
-}
-
+	}  // namespace SceneDataStore
+}  // namespace Deer
